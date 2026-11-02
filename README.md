@@ -6,6 +6,10 @@ GlossCode is a G-code editor that shows a plain-English line above every line of
 
 > **Status: early development.** The core (parser, mode tracking, English words and checks) is written in C and the program opens and saves files on Windows and Linux, using the UI from the clickable mockup in [`docs/mockup/`](docs/mockup/index.html). Downloads for Windows and Linux are on the [Releases page](https://github.com/one-moment-please/glosscode/releases), starting with 0.1.0, a preview. The screenshots below come from the mockup. To build it, see [`docs/building.md`](docs/building.md).
 
+> **Check every program on the machine.** GlossCode is new and hasn't been widely tested. Its checks can miss mistakes and can flag correct code. Before cutting a part, run the program on the machine's own graphics or simulation, or dry-run it with the tool clear of the part.
+>
+> **Supported controls.** The tables were checked against programming manuals for: Haas (NGC, classic and 1995 controls), Fanuc 0i-F/0i-D and Series 0, Okuma OSP mills and lathes, LinuxCNC, Tormach PathPilot, GRBL, Centroid CNC12, Mazak EIA/ISO, Hurco WinMax NC (ISNC), Mitsubishi M800/M80 mills and Siemens SINUMERIK ISO mode. Some features of each are still unchecked; the reviews in [`docs/manual-reviews/`](docs/manual-reviews/) list them. **Any other control** (for example Fagor, Heidenhain, native Siemens programs, wire EDM, plasma, laser or waterjet) **hasn't been checked against a manual.** On those, GlossCode uses generic Fanuc-style rules, which may not match what your control does.
+
 ![GlossCode editor mockup](docs/images/editor-overview.png)
 
 ## What it looks like
