@@ -31,3 +31,21 @@ The ISO mode is a Fanuc-compatible interpreter inside the Siemens control. Its G
 ## ISO turning (PGT 06/2009), not added
 
 The lathe G code system (A, B or C) is set by MD10881, and **the default is system B** (PGT 1.1.6), where Fanuc lathes are usually A. The cycles use the Fanuc formats: G71 U R / P Q U W, G72, G73, G70, G74/G75 X Z P Q R F, G76. A Siemens ISO lathe profile gets the Fanuc system A tables for now, so on a system B machine G90/G91 and G94/G95 would read wrongly.
+
+## Native Siemens language (not ISO mode), mapped only
+
+The manuals here are Programming Manual Fundamentals (12/2018, 614 pp; also 03/2013) and Job Planning (12/2018, 962 pp; also 07/2010 V4.3). The older editions have the same chapters on shifted pages, so the pages below are from 12/2018. Native Siemens is a separate language from ISO mode and would need its own dialect and parser work. It isn't planned.
+
+**Fundamentals 12/2018:** block rules, up to 512 characters per block (pp. 40–43); `;` comments and `/` skip (p. 44); tool offsets with D only, no H (pp. 67–90); work offsets G54–G57 and G505–G599, with G500, G53 and G153 (p. 151); tapping G331/G332 (p. 252); CHF/RND (p. 258); frames TRANS, ROT, SCALE and MIRROR, where G58/G59 are programmable offsets and not work offsets (pp. 323–364); M functions (p. 369); G4 dwell with F in seconds or S in revolutions (p. 393); address letters (p. 408, table p. 508); G code table with groups (pp. 519–536).
+
+**Job Planning 12/2018:** variables (p. 21); GOTOF, GOTOB and IF (p. 101); REPEAT (p. 107); loops (p. 113); subprograms with PROC (p. 162), return with M17, RET or RETB (pp. 176–187), and calls by name with P repeats, MCALL, CALL, ISOCALL, PCALL and EXTCALL (pp. 188–207); G290/G291 to switch between Siemens and ISO mode (p. 671); named cycles CYCLE81 (p. 736), CYCLE82 (p. 737), CYCLE83 (p. 740), CYCLE84 (p. 743), CYCLE85 (p. 746), CYCLE86 (p. 747), CYCLE830 (p. 772) and CYCLE840 (p. 781), plus pockets, slots, patterns and turning cycles (pp. 695–822).
+
+**What a native dialect would need:**
+- `;` comments.
+- D offsets without H.
+- G505–G599 work offsets.
+- Cycles called by name with parameter lists (`CYCLE81(…)`) instead of G81 with words.
+- Subprograms by name with PROC and RET/M17 instead of M98.
+- G4 with F or S.
+- Frames.
+- Typed variables, and GOTOF/GOTOB jumps.
