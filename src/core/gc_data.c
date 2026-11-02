@@ -291,12 +291,21 @@ const gc_json *gc_entry(const gc_ctx *c, const char *key)
     const gc_json *codes = gc_json_get(c->machine, "codes");
     const gc_json *mine = gc_json_get(codes, key);
     if (gc_json_truthy(mine)) return mine;
+    /* Overrides: this dialect's "<brand>.<type>" then "<brand>". A dialect with
+       "inheritWords": true then falls back to the words of the dialect it inherits. */
     const gc_json *ovs = gc_json_get(c->data->words, "machineOverrides");
-    char bt[64];
-    snprintf(bt, sizeof bt, "%s.%s", c->brand, c->type);
-    const gc_json *ov = gc_json_get(gc_json_get(ovs, bt), key);
-    if (!gc_json_truthy(ov)) ov = gc_json_get(gc_json_get(ovs, c->brand), key);
-    if (gc_json_truthy(ov)) return ov;
+    const gc_json *dialects = gc_json_get(c->data->rules, "dialects");
+    const char *b = c->brand;
+    for (int depth = 0; b && depth < 16; depth++) {
+        char bt[64];
+        snprintf(bt, sizeof bt, "%s.%s", b, c->type);
+        const gc_json *ov = gc_json_get(gc_json_get(ovs, bt), key);
+        if (!gc_json_truthy(ov)) ov = gc_json_get(gc_json_get(ovs, b), key);
+        if (gc_json_truthy(ov)) return ov;
+        const gc_json *d = gc_json_get(dialects, b);
+        if (!d || gc_json_get(d, "inheritWords") == NULL || gc_json_get(d, "inheritWords")->type != GC_JTRUE) break;
+        b = gc_json_get_str(d, "inherits");
+    }
     const gc_json *e = gc_json_get(gc_json_get(c->data->words, "codes"), key);
     if (!e) return NULL;
     if (gc_json_truthy(gc_json_get(e, "long"))) return e;

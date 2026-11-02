@@ -1378,8 +1378,8 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
-      "d": "Inch units"
+      "e": "INCHCHK",
+      "d": "Confirm inch input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
@@ -1470,8 +1470,8 @@
      },
      {
       "g": "G97",
-      "e": "MODERPM",
-      "d": "Constant RPM"
+      "e": "CRDRECALC",
+      "d": "Recalculate coordinates (Okuma)"
      },
      {
       "g": "S2400",
@@ -1488,8 +1488,8 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
-      "d": "Tool length offset on"
+      "e": "OFS3DOFF",
+      "d": "3-D tool offset off (Okuma)"
      },
      {
       "g": "H04",
@@ -1503,9 +1503,8 @@
      },
      {
       "g": "M88",
-      "e": "?M88",
-      "d": "M88 isn't in the dictionary or this machine's file.",
-      "unk": true
+      "e": "DUSTOFF",
+      "d": "Dust collector off (Okuma)"
      }
     ],
     [
@@ -1630,9 +1629,8 @@
      },
      {
       "g": "M89",
-      "e": "?M89",
-      "d": "M89 isn't in the dictionary or this machine's file.",
-      "unk": true
+      "e": "DUSTON",
+      "d": "Dust collector on (Okuma)"
      }
     ],
     [
@@ -1669,10 +1667,10 @@
      "msg": "On Okuma, G54 is the X-axis tool length offset, not work offset 1. Select work offsets with G15 H1."
     },
     {
-     "li": 6,
+     "li": 5,
      "id": "foreign-code",
-     "sev": "warning",
-     "msg": "Okuma calls the tool length offset with G56 H, not G43."
+     "sev": "info",
+     "msg": "On Okuma mills G97 recalculates coordinates, not RPM mode (that's G197)."
     },
     {
      "li": 6,
@@ -1682,15 +1680,15 @@
     },
     {
      "li": 6,
-     "id": "unknown-word",
+     "id": "foreign-code",
      "sev": "info",
-     "msg": "M88 isn't in the dictionary or this machine's file."
+     "msg": "On Okuma mills G43 cancels the 3-D tool offset. Tool length offset is G56 H, cancelled by G53."
     },
     {
-     "li": 11,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "M89 isn't in the dictionary or this machine's file."
+     "li": 7,
+     "id": "foreign-code",
+     "sev": "warning",
+     "msg": "Okuma mills set the cycle return level with M52, M53 or M54 (R level, the default), not G98."
     }
    ]
   }

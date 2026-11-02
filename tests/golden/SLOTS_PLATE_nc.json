@@ -1756,8 +1756,8 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
-      "d": "Inch units"
+      "e": "INCHCHK",
+      "d": "Confirm inch input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
@@ -1861,8 +1861,8 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
-      "d": "Tool length offset on"
+      "e": "OFS3DOFF",
+      "d": "3-D tool offset off (Okuma)"
      },
      {
       "g": "H06",
@@ -2133,21 +2133,39 @@
     },
     {
      "li": 7,
-     "id": "foreign-code",
-     "sev": "warning",
-     "msg": "Okuma calls the tool length offset with G56 H, not G43."
-    },
-    {
-     "li": 7,
      "id": "tlo-missing",
      "sev": "warning",
      "msg": "First Z move after the tool change on N20, but G56 H hasn't been called for this tool."
     },
     {
+     "li": 7,
+     "id": "foreign-code",
+     "sev": "info",
+     "msg": "On Okuma mills G43 cancels the 3-D tool offset. Tool length offset is G56 H, cancelled by G53."
+    },
+    {
+     "li": 8,
+     "id": "foreign-code",
+     "sev": "error",
+     "msg": "Okuma mills have no G65. Call a subprogram with CALL O_ and pass values as LA=, LB= and so on."
+    },
+    {
+     "li": 9,
+     "id": "foreign-code",
+     "sev": "error",
+     "msg": "Okuma mills have no G65. Call a subprogram with CALL O_ and pass values as LA=, LB= and so on."
+    },
+    {
+     "li": 10,
+     "id": "foreign-code",
+     "sev": "error",
+     "msg": "Okuma mills have no G65. Call a subprogram with CALL O_ and pass values as LA=, LB= and so on."
+    },
+    {
      "li": 13,
      "id": "foreign-code",
-     "sev": "warning",
-     "msg": "Okuma returns to a zero point with G30 P_, not G28. Check your machine's manual."
+     "sev": "error",
+     "msg": "Okuma mills have no G28. Return home with G30."
     }
    ]
   }
