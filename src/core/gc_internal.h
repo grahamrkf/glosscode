@@ -10,7 +10,8 @@ typedef struct gc_ctx {
     const gc_data *data;
     const gc_json *machine;
     const char *brand;
-    const char *type;  /* "mill" or "lathe" */
+    const char *type;  /* "mill", "lathe" or "plasma" */
+    const char *base_type; /* the type whose tables and words it starts from ("mill" for plasma), or NULL */
     int lathe;
     int okuma;
     int style;         /* GC_STYLE_LONG or GC_STYLE_SHORT */
@@ -18,6 +19,7 @@ typedef struct gc_ctx {
     gc_json *cycle_help_layers; /* owned array of borrowed pointers' clones: cycleHelp layers, base first */
     const gc_json *groups;      /* dialect.modalGroups */
     const gc_json *cycles;      /* dialect.cycles */
+    const gc_json *process;     /* dialect.process (a plasma torch in place of the spindle), or NULL */
     char feed_per_min[8], feed_per_rev[8];
     char tlen_off[16];
     const gc_doc *doc;

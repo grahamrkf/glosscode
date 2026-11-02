@@ -37,6 +37,8 @@ A machine definition file will be able to change any rule's severity or turn it 
 | `feed-plausibility` | info | A per-rev feed that's large (over 0.05 in or 1.5 mm) or a per-minute feed that's tiny |
 | `spindle-off-feed` | warning | A cutting move with the spindle stopped or never started (Haas taps start the spindle themselves, so they're exempt) |
 | `no-speed` | warning | M03/M04, or a tapping cycle, with no S set |
+| `torch-off-cut` | warning | Plasma: a feed move with the torch off or never turned on. Takes the place of `spindle-off-feed` on controls whose cut on and cut off codes are known |
+| `torch-on-at-end` | warning | Plasma: the program ends with the torch still on |
 | `missing-decimal` | warning | A distance word with no decimal point. `X1` is 0.0001 in on a Fanuc-style control |
 | `arc-no-center` | error | G02/G03 with no R and no I/J/K |
 | `arc-r-and-ijk` | warning | An arc with both R and I/J/K |
@@ -93,6 +95,20 @@ Other dialect keys the checks read: `unitCodes` (the codes that switch inch and 
 `cycleHelp` (beside `dialects`) feeds the canned cycle guide (F1). It's keyed `mill` and `lathe` for the Fanuc-style base, with `haas.mill`, `haas.lathe` and so on overriding by cycle. Each cycle has `about` (what it does), `sketch` (which drawing to use), optional `labels` (letters on the drawing, since Fanuc G76 calls the thread height P where Haas calls it K) and `words`. A word entry is `[example value, what it does]` or `[example value, what it does, English word]`. The English word, when given, is what the editor shows for that letter while the cycle is active, so Haas `G76 ... A60` reads `ANGLE60` instead of an unknown word. `common` holds words shared by every cycle of that type (X, Y, Z, R, F on a mill).
 
 The word list in the guide (and whether each word is required, one of a choice, or optional) comes from the dialect's `cycles` table, not from `cycleHelp`.
+
+### Plasma and other machine types
+
+`machineTypes` (beside `dialects`) lists the machine types. `mill` and `lathe` are the original two. `plasma` has `"base": "mill"`: a plasma machine starts from its control's mill tables along the whole inherits chain, then the control's `plasma` tables go on top, and a word not in `<control>.plasma` falls back to `<control>.mill` and the mill meaning in the dictionary. `fanuc.plasma` is the shared plasma base. It turns off canned cycles, tool changes, tool length offsets and spindle speed modes, and lays out the columns with a Torch column (the control's cut codes) and a Kerf column (D). A control with no mill tables, like Hypertherm, has only its plasma table.
+
+A plasma table's `process` names the torch: `on` and `off` are the cut on and cut off codes, which replace the spindle checks (`spindle-off-feed` and `no-speed` don't run on plasma), and `changes` lists codes that change the process or material, which the timeline marks. Controls whose cut codes aren't verified leave `on` empty, which turns the torch checks off. `timeline` in `machineTypes` lists what the timeline can plot for that type, the first being the default.
+
+| Control | Cut on | Cut off | Notes |
+|---|---|---|---|
+| Hypertherm Phoenix / EDGE Connect (`hypertherm`) | M07 (or M03/M04 when code mapping makes them cut on) | M08 (or M05/M06) | G59 sets variables, G97/G98 start and end a loop, G04 X dwell, G94/G95 flagged as unsupported, G41/G42 D kerf |
+| Centroid Acorn (`centroid`) | M61 touch off and pierce | M62 torch off and raise | M65 material profile; everything else as Centroid CNC12 mill |
+| Tormach PathPilot (`tormach`) | not checked yet | not checked yet | G15 probe and G16 pierce instead of polar coordinates; M200–M213 aren't in the dictionary yet |
+
+See [manual-reviews/plasma-hypertherm-tormach-centroid.md](manual-reviews/plasma-hypertherm-tormach-centroid.md).
 
 `verified: false` marks tables written from general knowledge that still need checking against the control's programming manual. The mockup shows a banner in the Problems panel for those.
 

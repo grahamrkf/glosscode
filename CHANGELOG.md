@@ -4,6 +4,15 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Machines
+- New plasma machine type. Hypertherm Phoenix/EDGE Connect (first draft), Centroid Acorn and Tormach plasma tables read M07/M08 (Hypertherm) or M61/M62 (Acorn) as cut on and off, D as the kerf offset, and Hypertherm's G59 as setting variables.
+- Plasma programs get torch checks instead of spindle checks: a feed move with the torch off, and a program that ends with the torch on. Canned cycle, tool length and spindle speed checks don't run on plasma.
+- PLASMA_BRACKET.nc joins the example programs.
+
+### Simulation
+- The timeline can show the feed rate or the spindle speed instead of Z. Pick it in the timeline's header; the choice is remembered for each machine type.
+- On a plasma table the timeline shows the feed rate by default, with a band where the torch is on and marks on lines that change the process or material.
+
 ### Linux
 - The menu entry is now under Development (Programming in the Linux Mint and Cinnamon menus) and Engineering, instead of Utility (Accessories).
 - The menu entry shows its icon right after installing, instead of a blank icon until you log out and back in (seen on Linux Mint).

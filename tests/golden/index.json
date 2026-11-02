@@ -82,6 +82,51 @@
    "yAxis": false,
    "macro": true
   },
+  "hyp_plasma": {
+   "name": "Hypertherm plasma table",
+   "control": "Hypertherm EDGE Connect",
+   "type": "plasma",
+   "brand": "hypertherm",
+   "travel": [
+    60,
+    120,
+    4
+   ],
+   "rpm": 0,
+   "feed": 600,
+   "tools": 0,
+   "eob": false
+  },
+  "acorn_plasma": {
+   "name": "Centroid Acorn plasma",
+   "control": "Centroid Acorn (CNC12)",
+   "type": "plasma",
+   "brand": "centroid",
+   "travel": [
+    48,
+    96,
+    4
+   ],
+   "rpm": 0,
+   "feed": 500,
+   "tools": 0,
+   "eob": false
+  },
+  "tormach_plasma": {
+   "name": "Tormach plasma",
+   "control": "Tormach PathPilot",
+   "type": "plasma",
+   "brand": "tormach",
+   "travel": [
+    44,
+    44,
+    4
+   ],
+   "rpm": 0,
+   "feed": 400,
+   "tools": 0,
+   "eob": false
+  },
   "okuma_lb3000": {
    "name": "Okuma LB3000",
    "control": "Okuma OSP",
@@ -136,6 +181,10 @@
    "golden": "tests/golden/OKUMA_PLATE_MIN.json"
   },
   {
+   "example": "examples/PLASMA_BRACKET.nc",
+   "golden": "tests/golden/PLASMA_BRACKET_nc.json"
+  },
+  {
    "example": "examples/POCKET_2X1.nc",
    "golden": "tests/golden/POCKET_2X1_nc.json"
   },
@@ -166,6 +215,14 @@
   {
    "example": "tests/cases/OKUMA_CALLS.MIN",
    "golden": "tests/golden/OKUMA_CALLS_MIN.json"
+  },
+  {
+   "example": "tests/cases/PLASMA_ACORN.nc",
+   "golden": "tests/golden/PLASMA_ACORN_nc.json"
+  },
+  {
+   "example": "tests/cases/PLASMA_HYPERTHERM.nc",
+   "golden": "tests/golden/PLASMA_HYPERTHERM_nc.json"
   }
  ]
 }

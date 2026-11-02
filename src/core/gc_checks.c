@@ -36,6 +36,8 @@ typedef struct cstate {
     onum S;
     char spin[24];
     int spinWarned;
+    char torch[24];
+    int torchWarned;
     char motion[24];
     char cycle[24];
     char cycleWords[128];
@@ -498,8 +500,24 @@ static void check_line(checker *ck, int li)
         }
     }
 
-    /* Spindle */
-    for (int i = 0; i < ln.nc; i++) {
+    /* Spindle, or the torch on a plasma table. A torch with known cut on and off codes takes the
+       spindle checks' place; one with none (Tormach) has no torch checks. */
+    const gc_json *P = c->process;
+    const gc_json *Pon = gc_json_get(P, "on"), *Poff = gc_json_get(P, "off");
+    int torchKnown = P && gc_json_len(Pon) > 0;
+    if (P) {
+        for (int i = 0; torchKnown && i < ln.nc; i++)
+            if (gc_json_has_str(Pon, ln.codes[i]) || gc_json_has_str(Poff, ln.codes[i])) {
+                snprintf(st->torch, sizeof st->torch, "%s", ln.codes[i]);
+                st->torchWarned = 0;
+            }
+        if (torchKnown && gc_is_end(l) && gc_json_has_str(Pon, st->torch)) {
+            V0();
+            var(&vs, "code", st->torch);
+            var(&vs, "off", js_or(gc_json_str(gc_json_at(Poff, 0))));
+            emit(ck, li, "torch-on-at-end", &vs, NULL);
+        }
+    } else for (int i = 0; i < ln.nc; i++) {
         const char *k = ln.codes[i];
         if (!strcmp(k, "M03") || !strcmp(k, "M04")) {
             if (!st->S.set) {
@@ -799,7 +817,16 @@ static void check_line(checker *ck, int li)
     }
     int cuts = isFeed || (isCycle && (gc_json_truthy(gc_json_get(cdef, "spindle")) || gc_json_truthy(gc_json_get(cdef, "feed"))) &&
                           !gc_json_truthy(gc_json_get(cdef, "startsSpindle")));
-    if (cuts && strcmp(st->spin, "M03") != 0 && strcmp(st->spin, "M04") != 0 && !st->spinWarned) {
+    if (cuts && torchKnown && !gc_json_has_str(Pon, st->torch) && !st->torchWarned) {
+        st->torchWarned = 1;
+        V0();
+        var(&vs, "move", moveName);
+        if (st->torch[0]) snprintf(tmp, sizeof tmp, "%s is active", st->torch);
+        else snprintf(tmp, sizeof tmp, "it was never turned on");
+        var(&vs, "state", tmp);
+        emit(ck, li, "torch-off-cut", &vs, NULL);
+    }
+    if (cuts && !P && strcmp(st->spin, "M03") != 0 && strcmp(st->spin, "M04") != 0 && !st->spinWarned) {
         st->spinWarned = 1;
         V0();
         var(&vs, "move", moveName);

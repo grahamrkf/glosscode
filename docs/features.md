@@ -54,9 +54,11 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Position line above the toolpath: X and Y (X and Z on a lathe), line number and N number
 - [ ] Expanded simulation view: large toolpath at the top left, a few program lines centered on the active line, Z by line and active modes on the right
 - [ ] Z-by-line timeline in execution order, centered on the selected line
+- [ ] Timeline value picker: Z (X radius on a lathe), feed rate or spindle speed; on plasma, feed rate or Z with a torch-on band and process change marks
 
 **Files and machines**
 - [ ] Machine selector (mill or lathe, with brand overrides): Haas, Fanuc and Okuma
+- [ ] Plasma machine type: torch on/off checks in place of the spindle checks, D as the kerf offset, no canned cycles or tool offsets (Hypertherm, Centroid Acorn, Tormach)
 - [ ] End of block: `;` at the end of every line for controls that need it, set per machine profile. Shown after an empty word space in the standard view and written on save. Files that already use `;` are read correctly on any machine
 - [ ] English numbers always show a decimal point; distance words without one show what the control reads (X1 → X0.0001)
 - [ ] F and S keep their letter with a small unit (ipm, ipr, mmpm, mmpr, rpm, sfm, smm)
