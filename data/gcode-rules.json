@@ -448,10 +448,23 @@
     },
 
     "mazak": {
-      "label": "Mazak EIA/ISO (Mazatrol M Plus, 640M, Matrix)",
+      "label": "Mazak EIA/ISO (Mazatrol M Plus, 640M, T-Plus, 640T, Matrix)",
       "inherits": "fanuc",
       "inheritWords": true,
       "verified": false,
+      "lathe": {
+        "source": { "manual": "Mazak EIA/ISO Programming Manual C734PBT018E (Mazatrol T-Plus, Fusion 640T Nexus and other Mazatrol turning)", "section": "Chapters 3, 5, 8, 9 and 13: G code lists, numbers, dwell, M codes, fixed cycles, subprograms. Tables are G code system A, standard mode" },
+        "mPerBlock": 4,
+        "cycles": {
+          "G70": { "name": "Finish contour", "requires": ["P", "Q"], "optional": ["A", "F", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G71": { "name": "OD/ID roughing", "requires": ["P", "Q"], "optional": ["A", "U", "W", "D", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Standard mode uses two blocks (G71 U R, then G71 A P Q U W F); T32 mode uses one block with D as the depth. A names the program that holds the finish shape." },
+          "G72": { "name": "Face roughing", "requires": ["P", "Q"], "optional": ["A", "U", "W", "D", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G73": { "name": "Pattern repeat", "requires": ["P", "Q"], "optional": ["A", "U", "W", "I", "K", "D", "R", "F", "S", "T"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G74": { "name": "Face peck or groove", "requires": ["Z"], "optional": ["X", "U", "W", "I", "K", "D", "P", "Q", "R", "F", "S", "T"], "meaning": {"Z": "the bottom of the peck"}, "modal": false, "feed": true, "spindle": true },
+          "G75": { "name": "OD/ID peck groove", "requires": ["X"], "optional": ["Z", "U", "W", "I", "K", "D", "P", "Q", "R", "F", "S", "T"], "meaning": {"X": "the groove bottom diameter"}, "modal": false, "feed": true, "spindle": true },
+          "G76": { "name": "Threading", "requires": ["X", "Z", "F"], "optional": ["U", "W", "P", "Q", "R", "I", "K", "D", "A", "E", "S", "T"], "modal": false, "spindle": true, "leadF": true, "note": "Standard mode uses two blocks (G76 P Q R, then G76 X Z R P Q F); T32 mode uses one block, G76 X Z I K D A F." }
+        }
+      },
       "mill": {
         "source": { "manual": "Mazak EIA/ISO Programming Manual C735PBT019E (Mazatrol M1, M2, M32, M Plus, Fusion 640M 5X/Nexus)", "revision": "2001", "section": "Chapters 3, 5, 8 and 13: G and M code lists, units, dwell, fixed cycles, subprograms" },
         "modalGroups": {
