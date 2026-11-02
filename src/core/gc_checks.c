@@ -262,7 +262,8 @@ static void check_line(checker *ck, int li)
         const char *t = l->tok[i];
         if (t[0] == '(' || t[0] == '/') continue;
         if (!first_all) first_all = t;
-        if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1])) continue; /* keyword */
+        if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1]) && t[0] != 'N') continue; /* keyword (not a name like NA1) */
+        if (gc_is_macro_tok(t)) continue;
         if (ln.nw >= 256) break;
         word_t *w = &ln.w[ln.nw++];
         w->t = t;
@@ -294,12 +295,31 @@ static void check_line(checker *ck, int li)
             var(&vs, "letter", Ls);
             emit(ck, li, "empty-value", &vs, NULL);
         }
+    /* N words after the first name lines to jump to (GOTO N90, G85 NA1) */
+    for (int i = 0, k = 0, pk = -1; i < l->ntok; pk = (l->tok[i][0] == '(' || l->tok[i][0] == '/') ? pk : i, i++) {
+        const char *t = l->tok[i];
+        if (t[0] == '(' || t[0] == '/') continue;
+        if (k++ == 0 || t[0] != 'N') continue;
+        char key[64];
+        if (t[1] && gc_all_digits(t + 1)) {
+            char n[32];
+            gc_js_num(gc_js_parse_int(t + 1), n, sizeof n);
+            snprintf(key, sizeof key, "N%s", n);
+        } else
+            snprintf(key, sizeof key, "%s", t);
+        if (gc_map_get(&c->labels, key, NULL)) continue;
+        V0();
+        snprintf(tmp2, sizeof tmp2, "%s %s", l->tok[pk], t);
+        var(&vs, "word", tmp2);
+        var(&vs, "label", t);
+        emit(ck, li, "missing-label", &vs, NULL);
+    }
     for (int i = 0; i < ln.nw; i++) {
         char L = ln.w[i].L;
         int firstOcc = 1;
         for (int j = 0; j < i; j++)
             if (ln.w[j].L == L) firstOcc = 0;
-        if (!firstOcc || L == 'G' || L == 'M') continue;
+        if (!firstOcc || L == 'G' || L == 'M' || L == 'N') continue;
         int n = count(&ln, L);
         if (n <= 1) continue;
         V0();
@@ -544,7 +564,7 @@ static void check_line(checker *ck, int li)
                 st->needTlo = 0;
                 const char *hw = gc_json_get_str(tl, "word");
                 const word_t *h = hw ? get(&ln, hw[0]) : NULL;
-                if (h && st->T.set) {
+                if (h && !gc_is_var_val(h->t) && st->T.set) {
                     double hv = gc_js_parse_int(h->v);
                     if (!(hv == st->T.v)) {
                         V0();
@@ -660,7 +680,7 @@ static void check_line(checker *ck, int li)
         for (size_t i = 0; i < gc_json_len(lblWords); i++) {
             const char *lw = gc_json_str(lblWords->items[i]);
             const word_t *w = lw ? get(&ln, lw[0]) : NULL;
-            if (!w) continue;
+            if (!w || gc_is_var_val(w->t)) continue;
             char n[64];
             gc_js_num(gc_js_parse_int(w->v), n, sizeof n);
             snprintf(tmp, sizeof tmp, "N%s", n);
@@ -689,7 +709,7 @@ static void check_line(checker *ck, int li)
         if (!target || strcmp(target, "label") != 0 || !has(&ln, subCalls->keys[i])) continue;
         const char *sw = gc_json_get_str(s, "word");
         const word_t *w = sw ? get(&ln, sw[0]) : NULL;
-        if (!w) continue;
+        if (!w || gc_is_var_val(w->t)) continue;
         char n[64];
         gc_js_num(gc_js_parse_int(w->v), n, sizeof n);
         snprintf(tmp, sizeof tmp, "N%s", n);
@@ -856,7 +876,12 @@ static void check_line(checker *ck, int li)
     for (int i = 0; i < 3; i++) p0[i] = p1[i] = st->pos[i];
     for (int i = 0; i < ln.nw; i++) {
         const word_t *w = &ln.w[i];
-        if (!strchr(axisL, w->L) || gc_isnan(w->n)) continue;
+        if (!strchr(axisL, w->L)) continue;
+        if (gc_is_var_val(w->t)) { /* known only when it runs */
+            p1[w->L == 'U' ? 0 : w->L == 'W' ? 2 : w->L - 'X'] = onull();
+            continue;
+        }
+        if (gc_isnan(w->n)) continue;
         double val = w->n * ((lathe && (w->L == 'X' || w->L == 'U')) ? 0.5 : 1);
         if (w->L == 'U' || w->L == 'W') {
             int ax = w->L == 'U' ? 0 : 2;
@@ -874,10 +899,13 @@ static void check_line(checker *ck, int li)
             a1 = 1;
             a2 = 2;
         }
-        const word_t *R = get(&ln, 'R');
+        const char *rLs = gc_json_get_str(D, "arcRadius");
+        char rL[2] = { rLs && *rLs ? rLs[0] : 'R', 0 };
+        const word_t *R = get(&ln, rL[0]);
         if (!R && !nCenters) {
             V0();
             var(&vs, "code", st->motion);
+            var(&vs, "radius", rL);
             snprintf(tmp, sizeof tmp, "%c and %c", centerL[0], centerL[1]);
             var(&vs, "centers", tmp);
             emit(ck, li, "arc-no-center", &vs, NULL);
@@ -892,6 +920,7 @@ static void check_line(checker *ck, int li)
                     gc_buf_putc(&b, ln.w[i].L);
                 }
             V0();
+            var(&vs, "radius", rL);
             var(&vs, "centers", gc_buf_str(&b));
             gc_buf_free(&b);
             emit(ck, li, "arc-r-and-ijk", &vs, NULL);
@@ -903,6 +932,7 @@ static void check_line(checker *ck, int li)
             int same = hypot(p1[a1].v - p0[a1].v, p1[a2].v - p0[a2].v) < tol;
             if (R && same) {
                 V0();
+                var(&vs, "radius", rL);
                 snprintf(tmp, sizeof tmp, "%c and %c", centerL[0], centerL[1]);
                 var(&vs, "centers", tmp);
                 emit(ck, li, "arc-full-circle-r", &vs, NULL);

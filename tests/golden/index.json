@@ -205,6 +205,10 @@
    "golden": "tests/golden/LATHE_EDGE_nc.json"
   },
   {
+   "example": "tests/cases/MACRO_VARS.nc",
+   "golden": "tests/golden/MACRO_VARS_nc.json"
+  },
+  {
    "example": "tests/cases/MILL_EDGE.nc",
    "golden": "tests/golden/MILL_EDGE_nc.json"
   },
@@ -215,6 +219,10 @@
   {
    "example": "tests/cases/OKUMA_CALLS.MIN",
    "golden": "tests/golden/OKUMA_CALLS_MIN.json"
+  },
+  {
+   "example": "tests/cases/OKUMA_LATHE.MIN",
+   "golden": "tests/golden/OKUMA_LATHE_MIN.json"
   },
   {
    "example": "tests/cases/PLASMA_ACORN.nc",

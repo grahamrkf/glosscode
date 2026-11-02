@@ -13,57 +13,248 @@ static int is_word_char(int c)
 
 static const char *const KEYWORDS[] = { "CALL", "RTS", "GOTO" };
 
+static int is_space(int c)
+{
+    return c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v';
+}
+
+/* Spaces go, except one between two letters or digits ("#2 MOD 3"); upper case. */
+static char *squeeze(const char *s, size_t len)
+{
+    char *out = gc_xmalloc(len + 1);
+    size_t n = 0, i = 0;
+    while (i < len && is_space((unsigned char)s[i])) i++;
+    while (len > i && is_space((unsigned char)s[len - 1])) len--;
+    for (; i < len; i++) {
+        unsigned char ch = (unsigned char)s[i];
+        if (is_space(ch)) {
+            size_t j = i;
+            while (j < len && is_space((unsigned char)s[j])) j++;
+            if (n && is_word_char((unsigned char)out[n - 1]) && j < len && is_word_char((unsigned char)s[j])) out[n++] = ' ';
+            i = j - 1;
+            continue;
+        }
+        out[n++] = (char)gc_to_upper(ch);
+    }
+    out[n] = '\0';
+    return out;
+}
+
+/* Up to a comment, runs of spaces made single, upper case (IF and WHILE statements). */
+static char *single_spaced(const char *s, size_t len)
+{
+    char *out = gc_xmalloc(len + 1);
+    size_t n = 0, i = 0;
+    while (i < len && is_space((unsigned char)s[i])) i++;
+    while (len > i && is_space((unsigned char)s[len - 1])) len--;
+    for (; i < len; i++) {
+        if (is_space((unsigned char)s[i])) {
+            if (n && out[n - 1] != ' ') out[n++] = ' ';
+            continue;
+        }
+        out[n++] = (char)gc_to_upper((unsigned char)s[i]);
+    }
+    out[n] = '\0';
+    return out;
+}
+
+/* The end of a [ ] group starting at s[from] (or a '(' that cuts it short). */
+static size_t group_end(const char *s, size_t len, size_t from)
+{
+    int d = 0;
+    for (size_t e = from; e < len; e++) {
+        if (s[e] == '[') d++;
+        else if (s[e] == ']' && --d == 0) return e + 1;
+        else if (s[e] == '(') return e;
+    }
+    return len;
+}
+
+/* s[i..] starts with word (any case) and the next character isn't a word character. */
+static size_t match_word(const char *s, size_t len, size_t i, const char *word)
+{
+    size_t kl = strlen(word), j;
+    if (i + kl > len) return 0;
+    for (j = 0; j < kl; j++)
+        if (gc_to_upper((unsigned char)s[i + j]) != word[j]) return 0;
+    if (i + kl < len && is_word_char((unsigned char)s[i + kl])) return 0;
+    return kl;
+}
+
+/* "NAME =" at s[k]: an Okuma variable (or extended address) being set. The length up to and including "=", or 0. */
+static size_t assign_at(const char *s, size_t len, size_t k)
+{
+    if (k >= len || !gc_is_alpha((unsigned char)s[k]) || (k && is_word_char((unsigned char)s[k - 1]))) return 0;
+    size_t e = k + 1;
+    while (e < len && is_word_char((unsigned char)s[e])) e++;
+    if (e - k < 2) return 0;
+    while (e < len && is_space((unsigned char)s[e])) e++;
+    return e < len && s[e] == '=' && !(e + 1 < len && s[e + 1] == '=') ? e + 1 - k : 0;
+}
+
+/* Where an expression starting at s[from] ends: a comment, or an address word (or assignment) outside [ ]
+   that follows a complete operand. */
+static size_t expr_end(const char *s, size_t len, size_t from)
+{
+    size_t e = from;
+    int d = 0;
+    char last = 0;
+    while (e < len && s[e] != '(') {
+        unsigned char ch = (unsigned char)s[e];
+        if (ch == '[') d++;
+        else if (ch == ']') d--;
+        else if (!d && gc_is_alpha(ch) && (!e || !is_word_char((unsigned char)s[e - 1]) || gc_is_digit((unsigned char)s[e - 1]) || s[e - 1] == '.') &&
+                 last && ((is_word_char((unsigned char)last) && last != '_') || last == '.' || last == ']')) {
+            size_t k = e + 1;
+            while (k < len && is_space((unsigned char)s[k])) k++;
+            if ((k < len && (s[k] == '-' || s[k] == '+' || s[k] == '.' || s[k] == '#' || s[k] == '=' || gc_is_digit((unsigned char)s[k]))) ||
+                assign_at(s, len, e))
+                break;
+        }
+        if (!is_space(ch)) last = (char)ch;
+        e++;
+    }
+    return e;
+}
+
+static void push_tok(char ***out, int *n, int *cap, char *t)
+{
+    if (*n == *cap) {
+        *cap = *cap ? *cap * 2 : 8;
+        *out = gc_xrealloc(*out, (size_t)*cap * sizeof **out);
+    }
+    (*out)[(*n)++] = t;
+}
+
 char **gc_tokenize(const char *s, size_t len, int *ntok)
 {
     char **out = NULL;
     int n = 0, cap = 0;
     size_t i = 0;
     /* A "/" at the start of a block is block delete (/1 to /9 on Fanuc-style controls): its own first word. */
-    while (i < len && (s[i] == ' ' || s[i] == '\t' || s[i] == '\n' || s[i] == '\r' || s[i] == '\f' || s[i] == '\v')) i++;
+    while (i < len && is_space((unsigned char)s[i])) i++;
     if (i < len && s[i] == '/') {
         size_t end = i + 1;
         if (end < len && gc_is_digit((unsigned char)s[end])) end++;
-        out = gc_xrealloc(out, 8 * sizeof *out);
-        cap = 8;
-        out[n++] = gc_strndup(s + i, end - i);
+        push_tok(&out, &n, &cap, gc_strndup(s + i, end - i));
         i = end;
     } else
         i = 0;
     while (i < len) {
-        size_t start = i, end = 0;
-        int comment = 0;
-        if (s[i] == '(') {
-            end = i + 1;
+        unsigned char ch = (unsigned char)s[i];
+        if (ch == '(') {
+            size_t end = i + 1;
             while (end < len && s[end] != ')') end++;
             if (end < len) end++; /* the closing ')' */
-            comment = 1;
-        } else if (gc_is_alpha((unsigned char)s[i])) {
-            if (i == 0 || !is_word_char((unsigned char)s[i - 1])) {
-                for (size_t k = 0; k < sizeof KEYWORDS / sizeof *KEYWORDS && !end; k++) {
-                    size_t kl = strlen(KEYWORDS[k]), j;
-                    if (i + kl > len) continue;
-                    for (j = 0; j < kl; j++)
-                        if (gc_to_upper((unsigned char)s[i + j]) != KEYWORDS[k][j]) break;
-                    if (j == kl && (i + kl == len || !is_word_char((unsigned char)s[i + kl]))) end = i + kl;
-                }
-            }
-            if (!end) {
-                end = i + 1;
-                if (end < len && (s[end] == '-' || s[end] == '+')) end++;
-                while (end < len && (gc_is_digit((unsigned char)s[end]) || s[end] == '.')) end++;
-            }
-        } else {
+            push_tok(&out, &n, &cap, gc_strndup(s + i, end - i));
+            i = end;
+            continue;
+        }
+        if (ch == '#') { /* an assignment: up to a comment, or an address word outside [ ] */
+            size_t e = expr_end(s, len, i + 1);
+            push_tok(&out, &n, &cap, squeeze(s + i, e - i));
+            i = e;
+            continue;
+        }
+        if (!gc_is_alpha(ch)) {
             i++;
             continue;
         }
-        char *t = gc_strndup(s + start, end - start);
-        if (!comment)
-            for (char *p = t; *p; p++) *p = (char)gc_to_upper((unsigned char)*p);
-        if (n == cap) {
-            cap = cap ? cap * 2 : 8;
-            out = gc_xrealloc(out, (size_t)cap * sizeof *out);
+        if (i == 0 || !is_word_char((unsigned char)s[i - 1])) {
+            int stmt = match_word(s, len, i, "IF") || match_word(s, len, i, "WHILE");
+            if (!stmt && match_word(s, len, i, "GOTO")) { /* "GOTO 100" (Fanuc) is a statement; "GOTO N90" is two words */
+                size_t k = i + 4;
+                while (k < len && (s[k] == ' ' || s[k] == '\t')) k++;
+                stmt = k < len && (gc_is_digit((unsigned char)s[k]) || s[k] == '#' || s[k] == '[');
+            }
+            if (stmt) {
+                size_t e = i;
+                while (e < len && s[e] != '(') e++;
+                push_tok(&out, &n, &cap, single_spaced(s + i, e - i));
+                i = e;
+                continue;
+            }
+            size_t kl = 0;
+            if (i + 3 < len && gc_to_upper((unsigned char)s[i]) == 'E' && gc_to_upper((unsigned char)s[i + 1]) == 'N' &&
+                gc_to_upper((unsigned char)s[i + 2]) == 'D' && gc_is_digit((unsigned char)s[i + 3])) {
+                size_t e = i + 3;
+                while (e < len && gc_is_digit((unsigned char)s[e])) e++;
+                if (e == len || !is_word_char((unsigned char)s[e])) kl = e - i;
+            }
+            for (size_t k = 0; k < sizeof KEYWORDS / sizeof *KEYWORDS && !kl; k++) kl = match_word(s, len, i, KEYWORDS[k]);
+            if (kl) {
+                char *t = gc_strndup(s + i, kl);
+                for (char *p = t; *p; p++) *p = (char)gc_to_upper((unsigned char)*p);
+                push_tok(&out, &n, &cap, t);
+                i += kl;
+                continue;
+            }
+            size_t as = assign_at(s, len, i);
+            if (as) {
+                size_t e = expr_end(s, len, i + as);
+                push_tok(&out, &n, &cap, squeeze(s + i, e - i));
+                i = e;
+                continue;
+            }
+            /* An Okuma sequence name: N, a letter, up to 3 more letters or digits ("NA1") */
+            if ((ch == 'N' || ch == 'n') && i + 1 < len && gc_is_alpha((unsigned char)s[i + 1])) {
+                size_t e = i + 2;
+                while (e < len && e < i + 5 && (gc_is_alpha((unsigned char)s[e]) || gc_is_digit((unsigned char)s[e]))) e++;
+                if (e == len || !is_word_char((unsigned char)s[e])) {
+                    char *t = gc_strndup(s + i, e - i);
+                    for (char *p = t; *p; p++) *p = (char)gc_to_upper((unsigned char)*p);
+                    push_tok(&out, &n, &cap, t);
+                    i = e;
+                    continue;
+                }
+            }
         }
-        out[n++] = t;
+        /* A letter, then a variable or [expression] (spaces and a sign allowed between), or else a plain number */
+        size_t j = i + 1;
+        while (j < len && is_space((unsigned char)s[j])) j++;
+        if (j < len && s[j] == '=' && !(j + 1 < len && s[j + 1] == '=')) { /* Okuma: X=expression */
+            size_t e = expr_end(s, len, j + 1);
+            char *v = squeeze(s + j + 1, e - j - 1);
+            char *t = gc_xmalloc(strlen(v) + 3);
+            t[0] = (char)gc_to_upper(ch);
+            t[1] = '=';
+            strcpy(t + 2, v);
+            free(v);
+            push_tok(&out, &n, &cap, t);
+            i = e;
+            continue;
+        }
+        char sign = 0;
+        if (j < len && (s[j] == '-' || s[j] == '+')) {
+            sign = s[j++];
+            while (j < len && is_space((unsigned char)s[j])) j++;
+        }
+        if (j < len && (s[j] == '#' || s[j] == '[')) {
+            size_t e = j;
+            if (s[e] == '#') {
+                e++;
+                if (e < len && s[e] == '[') e = group_end(s, len, e);
+                else
+                    while (e < len && gc_is_digit((unsigned char)s[e])) e++;
+            } else
+                e = group_end(s, len, e);
+            char *v = squeeze(s + j, e - j);
+            char *t = gc_xmalloc(strlen(v) + 3);
+            size_t k = 0;
+            t[k++] = (char)gc_to_upper(ch);
+            if (sign) t[k++] = sign;
+            strcpy(t + k, v);
+            free(v);
+            push_tok(&out, &n, &cap, t);
+            i = e;
+            continue;
+        }
+        size_t end = i + 1;
+        if (end < len && (s[end] == '-' || s[end] == '+')) end++;
+        while (end < len && (gc_is_digit((unsigned char)s[end]) || s[end] == '.')) end++;
+        char *t = gc_strndup(s + i, end - i);
+        for (char *p = t; *p; p++) *p = (char)gc_to_upper((unsigned char)*p);
+        push_tok(&out, &n, &cap, t);
         i = end;
     }
     *ntok = n;
@@ -109,11 +300,6 @@ void gc_doc_add_line(gc_doc *doc, const char *const *tok, int ntok, const char *
     char *r = raw ? gc_strdup(raw) : gc_buf_take(&b);
     gc_buf_free(&b);
     add_line_owned(doc, copy, ntok, r);
-}
-
-static int is_space(int c)
-{
-    return c == ' ' || c == '\t' || c == '\v' || c == '\f' || c == '\r' || c == '\n';
 }
 
 static int blank(const char *s, size_t n)

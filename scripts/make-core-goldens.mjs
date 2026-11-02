@@ -30,7 +30,7 @@ const A = ctx.__api;
 const MILLS = ["haas_vf2", "fanuc_0imf", "fanuc_0mc", "okuma_m560"], LATHES = ["haas_st10", "okuma_lb3000"];
 const PLASMAS = ["hyp_plasma", "acorn_plasma", "tormach_plasma"];
 const LATHE_FILES = ["LATHE_CHECKS.nc", "SHAFT_OD.nc", "LATHE_EDGE.nc"], PLASMA_FILES = ["PLASMA_BRACKET.nc", "PLASMA_HYPERTHERM.nc", "PLASMA_ACORN.nc"];
-const OKUMA_FILES = ["OKUMA_PLATE.MIN", "OKUMA_CALLS.MIN"];
+const OKUMA_FILES = ["OKUMA_PLATE.MIN", "OKUMA_CALLS.MIN"], OKUMA_LATHE_FILES = ["OKUMA_LATHE.MIN"];
 let changed = 0;
 const write = (file, out) => {
   if (existsSync(file) && readFileSync(file, "utf8")===out) return;
@@ -43,7 +43,7 @@ for (const { dir, name } of sources){
   const text = readFileSync(dir + "/" + name, "latin1");
   const lines = text.split(/\r\n|\n|\r/); if (lines.length > 1 && lines[lines.length-1]==="") lines.pop();
   const doc = []; for (const line of lines) A.splitBlocks(line).blocks.forEach(b => doc.push(A.tokenize(b)));
-  const machines = LATHE_FILES.includes(name) ? LATHES : PLASMA_FILES.includes(name) ? PLASMAS : OKUMA_FILES.includes(name) ? ["okuma_m560", ...MILLS.filter(m => m!=="okuma_m560")] : MILLS;
+  const machines = LATHE_FILES.includes(name) ? LATHES : OKUMA_LATHE_FILES.includes(name) ? ["okuma_lb3000", "haas_st10"] : PLASMA_FILES.includes(name) ? PLASMAS : OKUMA_FILES.includes(name) ? ["okuma_m560", ...MILLS.filter(m => m!=="okuma_m560")] : MILLS;
   const runs = [];
   for (const id of machines) for (const s of id===machines[0] ? ["long", "short"] : ["long"]){
     A.use(id, s); A.doc = doc.map(t => [...t]); A.translateAll();

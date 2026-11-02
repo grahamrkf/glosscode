@@ -49,7 +49,7 @@ int gc_call_target(const gc_line *l, char *out, size_t outsz);
 
 /* fmtNum(): the number as the English line shows it. */
 typedef struct gc_num {
-    char v[64];
+    char v[192];
     int implied;
     char intended[64];
 } gc_num;

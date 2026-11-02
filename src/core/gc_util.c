@@ -330,6 +330,34 @@ int gc_ends_with(const char *s, const char *suffix)
     return a >= b && strcmp(s + a - b, suffix) == 0;
 }
 
+int gc_is_var_val(const char *t)
+{
+    if (!t || !gc_is_alpha((unsigned char)t[0])) return 0;
+    const char *p = t + 1;
+    if (*p == '=') return 1;
+    if (*p == '-' || *p == '+') p++;
+    return *p == '#' || *p == '[';
+}
+
+int gc_is_macro_tok(const char *t)
+{
+    if (!t) return 0;
+    if (t[0] == '#') return 1;
+    if (gc_starts_with(t, "END") && gc_is_digit((unsigned char)t[3])) return 1;
+    if (gc_starts_with(t, "GOTO ")) return 1;
+    if (t[0] >= 'A' && t[0] <= 'Z') {
+        const char *p = t + 1;
+        while ((*p >= 'A' && *p <= 'Z') || gc_is_digit((unsigned char)*p)) p++;
+        if (p > t + 1 && *p == '=') return 1;
+    }
+    const char *kw[2] = { "IF", "WHILE" };
+    for (int k = 0; k < 2; k++) {
+        size_t n = strlen(kw[k]);
+        if (!strncmp(t, kw[k], n) && !gc_is_alpha((unsigned char)t[n]) && !gc_is_digit((unsigned char)t[n]) && t[n] != '_') return 1;
+    }
+    return 0;
+}
+
 int gc_all_digits(const char *s)
 {
     if (!*s) return 0;

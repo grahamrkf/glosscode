@@ -83,10 +83,33 @@ static void test_tokenize(void)
     tok_is("call o1000", "CALL|O1000");
     tok_is("XCALL", "X|C|A|L|L");
     tok_is("GOTO5", "G|O|T|O5");
-    tok_is("/N30 #100=1 G00 Z+1.", "/|N30|G00|Z+1.");   /* block delete stays the first word */
+    tok_is("/N30 #100=1 G00 Z+1.", "/|N30|#100=1|G00|Z+1.");   /* block delete stays the first word */
+    /* Macro variables and expressions stay whole, and an assignment ends at the next address word */
+    tok_is("N3000 G00 X - #101 Y#102 z#113", "N3000|G00|X-#101|Y#102|Z#113");
+    tok_is("#110= -0.0350 (DEPTH)", "#110=-0.0350|(DEPTH)");
+    tok_is("#1 = SIN[30] * #2 MOD 3", "#1=SIN[30]*#2 MOD 3");
+    tok_is("#1=1G00", "#1=1|G00");
+    tok_is("X[#1 + #2] Y-#[#3] F [#4*2]", "X[#1+#2]|Y-#[#3]|F[#4*2]");
+    tok_is("if [#1 gt 2]   goto 100 (C)", "IF [#1 GT 2] GOTO 100|(C)");
+    tok_is("WHILE[#1 LT 5]DO1", "WHILE[#1 LT 5]DO1");
+    tok_is("END1", "END1");
+    tok_is("ENDX1", "E|N|D|X1");
     tok_is("  /2 N40 M01", "/2|N40|M01");
     tok_is("N50 X1. / 2", "N50|X1.");                   /* a "/" later in the block isn't block delete */
     tok_is("X-", "X-");
+    /* Okuma: NAME= assignments, X=expression, sequence names, GOTO N.. */
+    tok_is("V1=3 (PARTS)", "V1=3|(PARTS)");
+    tok_is("N390 V2=V2+1", "N390|V2=V2+1");
+    tok_is("DIA1 = 160 + 2 X=DIA1 Z0", "DIA1=160+2|X=DIA1|Z0");
+    tok_is("VC1=VC2*2 VC3=1", "VC1=VC2*2|VC3=1");
+    tok_is("NA1 G81", "NA1|G81");
+    tok_is("N170 G85 na1 D0.3", "N170|G85|NA1|D0.3");
+    tok_is("NABCDE1", "N|A|B|C|D|E1");
+    tok_is("N430 GOTO N90", "N430|GOTO|N90");
+    tok_is("IF [V2 GE V1] N440", "IF [V2 GE V1] N440");
+    tok_is("#1=#2 X1.", "#1=#2|X1.");
+    tok_is("#1=2 MOD 3 Y1.", "#1=2 MOD 3|Y1.");
+    tok_is("X1.==", "X1.");
     tok_is("%", "");
 }
 

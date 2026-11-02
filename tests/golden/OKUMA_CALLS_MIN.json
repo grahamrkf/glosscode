@@ -245,7 +245,7 @@
      {
       "g": "N10",
       "e": "SEQ10",
-      "d": "Sequence number 10"
+      "d": "The line labeled N10"
      }
     ],
     [
@@ -339,12 +339,6 @@
      "id": "unknown-word",
      "sev": "info",
      "msg": "A1 isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 8,
-     "id": "dup-address",
-     "sev": "error",
-     "msg": "N appears twice on this line (N70, N10). The control uses one of them or alarms."
     }
    ]
   },
@@ -519,7 +513,7 @@
      {
       "g": "N10",
       "e": "N10",
-      "d": "Sequence number 10"
+      "d": "The line labeled N10"
      }
     ],
     [
@@ -613,12 +607,6 @@
      "id": "unknown-word",
      "sev": "info",
      "msg": "A1 isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 8,
-     "id": "dup-address",
-     "sev": "error",
-     "msg": "N appears twice on this line (N70, N10). The control uses one of them or alarms."
     }
    ]
   },
@@ -797,7 +785,7 @@
      {
       "g": "N10",
       "e": "SEQ10",
-      "d": "Sequence number 10"
+      "d": "The line labeled N10"
      }
     ],
     [
@@ -904,12 +892,6 @@
      "id": "unknown-word",
      "sev": "info",
      "msg": "CALL isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 8,
-     "id": "dup-address",
-     "sev": "error",
-     "msg": "N appears twice on this line (N70, N10). The control uses one of them or alarms."
     },
     {
      "li": 8,
@@ -1105,7 +1087,7 @@
      {
       "g": "N10",
       "e": "SEQ10",
-      "d": "Sequence number 10"
+      "d": "The line labeled N10"
      }
     ],
     [
@@ -1206,12 +1188,6 @@
      "id": "unknown-word",
      "sev": "info",
      "msg": "CALL isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 8,
-     "id": "dup-address",
-     "sev": "error",
-     "msg": "N appears twice on this line (N70, N10). The control uses one of them or alarms."
     },
     {
      "li": 8,
@@ -1407,7 +1383,7 @@
      {
       "g": "N10",
       "e": "SEQ10",
-      "d": "Sequence number 10"
+      "d": "The line labeled N10"
      }
     ],
     [
@@ -1508,12 +1484,6 @@
      "id": "unknown-word",
      "sev": "info",
      "msg": "CALL isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 8,
-     "id": "dup-address",
-     "sev": "error",
-     "msg": "N appears twice on this line (N70, N10). The control uses one of them or alarms."
     },
     {
      "li": 8,

@@ -52,6 +52,8 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Moves after the selected line greyed out, hidden, or shown normally
 - [ ] Simulation playback: restart, step back, play/pause, step forward, speed
 - [ ] Playback pauses at M00, and at M01 when optional stop is on; block delete skips lines that start with /
+- [ ] Hide rapid moves (the G00 button), to compare with the control's graphics screen
+- [ ] Drilling cycles plunge and retract at each hole, in the toolpath and the Z-by-line timeline; L0 on the cycle line stores it without drilling
 - [ ] Position line above the toolpath: X and Y (X and Z on a lathe), line number and N number
 - [ ] Expanded simulation view: large toolpath at the top left, a few program lines centered on the active line, Z by line and active modes on the right
 - [ ] Z-by-line timeline in execution order, centered on the selected line
@@ -78,7 +80,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 
 - [ ] Native Linux build
 - [ ] Machine definition file format and a few starter machines
-- [ ] Okuma checked against an OSP manual and real programs; LAP cycles, sequence names, User Task variables
+- [ ] Okuma checked against an OSP manual and real programs; LAP cycles, sequence names, User Task variables. Done for lathes: sequence names, V and named variables, G85/G87 LAP and G74 in the simulation, G50 zero shift
 - [ ] Macro programs (#vars, IF, WHILE) and 4th/5th axis checks. The subprogram library's reader already runs a subset (see subprogram-library.md)
 - [ ] Checks inside library calls, save called library programs with the program, re-insert written-in lines, Okuma CALL with variables
 - [ ] Machine limits (travel, max RPM and feed) and part/fixture models for rapid-into-part checks
@@ -88,7 +90,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Go to line or N number (Ctrl+G), and bookmarks
 - [ ] Tool list: every tool, its offsets, and the lines that use it
 - [ ] Program stats: travel extents, cut distance and a rough run time
-- [ ] Macro variables (#100, IF, WHILE) shown with their values
+- [ ] Macro variables (#100, IF, WHILE) shown with their values. Done for `#` assignments and words like `X-#101`: they're shown, and the simulation works them out and shows each word's values. IF, WHILE and GOTO are followed by the simulation, and Okuma V and named variables (`V1=3`, `X=DIA1`) are worked out too
 - [ ] Preview: zoom, pan, click a move to jump to its line, and measure between two points
 - [ ] Compare two programs side by side
 - [ ] Autosave and a backup copy before each save
