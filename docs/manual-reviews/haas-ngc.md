@@ -56,10 +56,12 @@ Lathe only:
 
 - **M99 P** jumps to that N in the current program instead of returning (mill p. 453, 1995 p. 97). The editor doesn't follow jumps.
 - **E on G81/G82** (chip-clean RPM) needs an address-letter entry before it can be an optional word, so it still reads as unknown.
-- **Lathe G71/G72 depth word.** The lathe manual lists U twice for G71 and W twice for G72; it may mean D or U (or W) sets the depth. Left as D required until the page is checked.
-- **Lathe G241–G246** radial cycles: the manual lists C, F, R and X as required. Only G241 and G243 are in our tables, without C required.
+- **Lathe G71/G72 depth word**: settled by the 2025 lathe manual (D in the one-block form). See [haas-ngc-lathe-2025.md](haas-ngc-lathe-2025.md).
+- **Lathe G241–G246** radial cycles: confirmed by the 2025 lathe manual; C is now required on G241 and G243. See [haas-ngc-lathe-2025.md](haas-ngc-lathe-2025.md).
+- **M39** rotates the side-mount changer in the 2020 mill manual (p. 417) and the umbrella changer in the 2025 one (p. 444). One of them is wrong.
+- **Model differences.** None of these manuals mention the VF-3 or any Super Speed (SS) model, and none has a travel, RPM or tool count table for VF models. They describe hardware differences only in general terms: gearbox or not (M41/M42), umbrella or side-mount tool changer (tool pre-call, heavy tools, broken tool detection), VR-only G143, and option-locked codes. Which machine has what is set by the user in their machine profile; see [Controls and machine profiles](../machine-definitions.md#controls-and-machine-profiles).
 - **G268/G269** are group 14 in the 2025 mill manual and group 02 in 2020. One of them is wrong.
-- **G114–G129 on the lathe**: p. 361 maps them to G154 P3–P18, which contradicts p. 362 (G110–G129 = P1–P20). The dictionary follows p. 362, which the workbook also matches (G114 is offset 11).
+- **G114–G129 on the lathe**: p. 361 maps them to G154 P3–P18, which contradicts p. 362 (G110–G129 = P1–P20). The dictionary follows p. 362, which the workbook also matches (G114 is offset 11). The 2025 lathe manual has the same contradiction (pp. 396–397).
 - **The workbook says a fraction on G04 P is milliseconds** (p. 47), the reverse of every other Haas manual. Treated as an error in the workbook.
 - **Workbook M110/M111** are the tailstock chuck on the classic lathe but the sub-spindle chuck on NGC. The dictionary uses NGC.
 - **The dictionary doesn't follow dialect inheritance**, so `haas1995` doesn't get the `haas.mill` words (it has its own list).

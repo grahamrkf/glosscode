@@ -118,7 +118,7 @@ G, L, N, O and P can't be variables (P is the program number and L is the repeat
 
 ### Which machines it works on
 
-`machines` lists machine definition ids, matched the same way `extends` works in [machine definitions](machine-definitions.md#layers): a subprogram for `fanuc.mill` works on `haas.mill` (which extends it) and on any shop machine built on either. A subprogram that uses a control's own codes lists that control (`haas.mill` for one that uses `M97`).
+`machines` lists machine definition ids, matched the same way `extends` works in [machine definitions](machine-definitions.md#layers): a subprogram for `fanuc.mill` works on `haas.ngc.mill` (which extends it) and on any shop machine built on either. A subprogram that uses a control's own codes lists that control (`haas` for one that uses `M97`).
 
 Calling needs the machine's **macro option** (`machine.options.macro` in the definition file; **Custom macro** in the mockup's Machine profiles window). Many controls include it; on others it's a paid option, and some older ones don't have it at all. A machine without it, like the 1990 Fanuc 0-MC sample profile, only gets **Write the lines in**.
 

@@ -187,7 +187,8 @@
         "foreign": { "M97": null, "M88": null, "M89": null }
       },
       "lathe": {
-        "modalGroups": { "work offset": ["G54", "G55", "G56", "G57", "G58", "G59", "G110", "G111", "G114", "G115", "G116", "G117", "G118", "G119", "G120", "G121", "G122", "G123", "G124", "G125", "G126", "G127", "G128", "G129", "G154"] },
+        "modalGroups": { "work offset": ["G54", "G55", "G56", "G57", "G58", "G59", "G110", "G111", "G114", "G115", "G116", "G117", "G118", "G119", "G120", "G121", "G122", "G123", "G124", "G125", "G126", "G127", "G128", "G129", "G154"],
+                         "x mode": ["G170", "G171", "G172"], "position mode": ["G390", "G391"], "rotation": ["G68", "G69"], "scaling": ["G250", "G251"], "feature coordinates": ["G268", "G269"] },
         "mPerBlock": 1,
         "dwellNoDecimal": "ms",
         "subCalls": { "M97": { "word": "P", "target": "label" }, "M98": { "word": "P", "target": "program" } },
@@ -201,9 +202,10 @@
           "G81": { "name": "Drill on center",      "requires": ["Z", "R"], "optional": ["X", "Y", "C", "W", "F"], "feed": true, "spindle": true },
           "G82": { "name": "Spot drill on center", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "C", "W", "F"], "feed": true, "spindle": true },
           "G83": { "name": "Peck drill on center", "requires": ["Z", "R"], "choices": [["Q"], ["I", "J", "K"]], "optional": ["X", "Y", "C", "W", "F", "P"], "feed": true, "spindle": true },
-          "G84": { "name": "Tap on center",        "requires": ["Z", "R", "F"], "optional": ["X", "Y", "C", "W"], "speed": true, "startsSpindle": true, "leadF": true },
-          "G241": { "name": "Radial drill",        "requires": ["X", "R"], "optional": ["Z", "C", "Y", "F"], "feed": true, "spindle": true, "needs": ["liveTooling"] },
-          "G243": { "name": "Radial peck drill",   "requires": ["X", "R"], "choices": [["Q"], ["I", "J", "K"]], "optional": ["Z", "C", "Y", "F", "P"], "feed": true, "spindle": true, "needs": ["liveTooling"] }
+          "G84": { "name": "Tap on center",        "requires": ["Z", "F"], "optional": ["R", "X", "Y", "C", "W", "Q"], "speed": true, "startsSpindle": true, "leadF": true },
+          "G184": { "name": "Left-hand tap",       "requires": ["Z", "R", "F"], "optional": ["X", "W", "Q"], "speed": true, "startsSpindle": true, "leadF": true },
+          "G241": { "name": "Radial drill",        "requires": ["X", "R", "C"], "optional": ["Z", "Y", "F"], "feed": true, "spindle": true, "needs": ["liveTooling"] },
+          "G243": { "name": "Radial peck drill",   "requires": ["X", "R", "C"], "choices": [["Q"], ["I", "J", "K"]], "optional": ["Z", "Y", "F", "P"], "feed": true, "spindle": true, "needs": ["liveTooling"] }
         },
         "foreign": { "M97": null }
       }
@@ -431,7 +433,9 @@
       "G83": { "sketch": "peck", "about": "Peck drills on center, coming back out to R after each peck of Q to clear the chips. I, J and K give shrinking pecks instead of Q.",
         "words": { "Z": ["-0.5", "Bottom of the hole."], "R": ["0.1", "Z position where the feed starts. The tool rapids to R first."], "X": ["0.", "Hole position as a diameter. X0. is on center; off center needs live tooling and C."], "C": ["90.", "Spindle angle for an off-center hole (live tooling with a C axis).", "ANGLEC"], "Y": ["0.", "Y position, on lathes with a Y axis."], "W": ["-0.6", "Incremental Z distance to the bottom, used instead of Z."], "F": ["0.004", "Feed per rev."], "Q": ["0.1", "Depth of each peck.", "PECK"], "I": ["0.15", "First peck depth (use I, J and K instead of Q).", "PECK1"], "J": ["0.02", "How much shorter each peck gets.", "PECKLESS"], "K": ["0.05", "Shortest peck allowed.", "PECKMIN"], "P": ["0.", "Dwell at the bottom, in seconds."] } },
       "G84": { "sketch": "tap", "about": "Taps on center. Under G99 (feed per rev) F is the thread pitch: a 1/4-20 tap is F0.05.",
-        "words": { "Z": ["-0.5", "Bottom of the hole."], "R": ["0.1", "Z position where the feed starts. The tool rapids to R first."], "X": ["0.", "Hole position as a diameter. X0. is on center; off center needs live tooling and C."], "C": ["90.", "Spindle angle for an off-center hole (live tooling with a C axis).", "ANGLEC"], "Y": ["0.", "Y position, on lathes with a Y axis."], "W": ["-0.6", "Incremental Z distance to the bottom, used instead of Z."], "F": ["0.05", "Feed per rev, equal to the thread pitch."] } },
+        "words": { "Z": ["-0.5", "Bottom of the hole."], "R": ["0.1", "Z position where the feed starts. The tool rapids to R first."], "X": ["0.", "Hole position as a diameter. X0. is on center; off center needs live tooling and C."], "C": ["90.", "Spindle angle for an off-center hole (live tooling with a C axis).", "ANGLEC"], "Y": ["0.", "Y position, on lathes with a Y axis."], "W": ["-0.6", "Incremental Z distance to the bottom, used instead of Z."], "F": ["0.05", "Feed per rev, equal to the thread pitch."], "Q": ["0.1", "Peck depth, for pecking taps. Each peck is this much deeper.", "PECK"] } },
+      "G184": { "sketch": "tap", "about": "Taps a left-hand thread on center. Starts the spindle in reverse by itself. Under G99 (feed per rev) F is the thread pitch. Give S before the cycle.",
+        "words": { "Z": ["-0.5", "Bottom of the hole."], "R": ["0.1", "Z position where the feed starts. The tool rapids to R first."], "X": ["0.", "Hole position as a diameter."], "W": ["-0.6", "Incremental Z distance to the bottom, used instead of Z."], "F": ["0.05", "Feed per rev, equal to the thread pitch."], "Q": ["0.1", "Peck depth, for pecking taps.", "PECK"] } },
       "G241": { "sketch": "drill", "labels": { "axis": "X", "Z": "X" }, "about": "Drills in toward the centerline with a live tool, from diameter R down to diameter X. Z and C place the hole. Needs live tooling.",
         "words": { "X": ["0.75", "Bottom of the radial hole, as a diameter."], "R": ["2.1", "Diameter where the feed starts. The tool rapids to R first."], "Z": ["-0.5", "Z position of the hole along the part."], "C": ["0.", "Spindle angle of the hole.", "ANGLEC"], "Y": ["0.", "Y position, on lathes with a Y axis."], "F": ["3.", "Feed per minute (live tools usually run under G98)."] } },
       "G243": { "sketch": "peck", "labels": { "axis": "X", "Z": "X" }, "about": "Peck drills in toward the centerline with a live tool, backing out to R after each peck of Q. Needs live tooling.",

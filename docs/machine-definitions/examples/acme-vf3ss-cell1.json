@@ -1,16 +1,21 @@
 {
   "glosscode": "machine/1",
-  "id": "acme.vf2-cell3",
-  "name": "Haas VF-2 (cell 3)",
+  "id": "acme.vf3ss-cell1",
+  "name": "VF-3SS (cell 1)",
   "layer": "machine",
-  "extends": ["haas.vf2"],
+  "extends": ["haas.ngc.mill"],
   "private": true,
   "verified": true,
   "author": "Acme Machine, programming group",
-  "about": "A made-up shop machine. Lives in the shop folder, so only Acme sees it. Export asks first because private is true, and leaves out notes and shop.",
+  "about": "A made-up machine profile. Lives in the shop folder, so only Acme sees it. Export asks first because private is true, and leaves out notes and shop.",
 
   "machine": {
-    "options": { "rotary": "A", "tsc": true, "probe": true }
+    "travel": { "X": 40, "Y": 20, "Z": 25 },
+    "spindle": { "max": 12000, "limit": 8000 },
+    "rapid": 1400,
+    "feed": { "max": 833 },
+    "tools": 30,
+    "options": { "toolChanger": "side-mount", "gearbox": false, "rotary": "A", "tsc": true, "probe": true }
   },
 
   "addresses": {
@@ -46,6 +51,6 @@
     }
   ],
 
-  "notes": "Vise valves on M51/M52 since the 2025 rewire.",
-  "shop": { "asset": "VF2-0331", "cell": "3" }
+  "notes": "Spindle kept under 8,000 rpm to make it last. Numbers from the spec sheet in the office. Vise valves on M51/M52 since the 2025 rewire.",
+  "shop": { "asset": "VF3SS-0412", "cell": "1" }
 }

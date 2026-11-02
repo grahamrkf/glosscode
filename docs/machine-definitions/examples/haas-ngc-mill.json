@@ -1,12 +1,12 @@
 {
   "glosscode": "machine/1",
-  "id": "haas.mill",
+  "id": "haas.ngc.mill",
   "name": "Haas NGC mill",
-  "layer": "control",
-  "extends": ["fanuc.mill", "haas.common"],
+  "layer": "type",
+  "extends": ["fanuc.mill", "haas.ngc"],
   "verified": true,
   "source": { "manual": "Haas Mill Operator's Manual", "section": "G-codes" },
-  "about": "Excerpt. Only what Haas mills do differently from a Fanuc-style mill. M97 local subprograms come from haas.common, which haas.lathe also extends.",
+  "about": "Excerpt. Only what Haas mills do differently from a Fanuc-style mill. M97 local subprograms come from haas.ngc (and haas above it), which haas.ngc.lathe also extends.",
 
   "machine": { "control": "Haas NGC" },
 

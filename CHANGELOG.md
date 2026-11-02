@@ -8,6 +8,11 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - Clicking a recent program that was moved, renamed or deleted now asks what to do: **Locate…** opens the Open dialog in the nearest folder that's still there, and the file you pick takes the old one's place in the list with the same machine; **Remove from list** takes it off.
 - A program opened from the command line or with **Open with** is remembered by its full path, so it opens from the recent list later no matter which folder GlossCode starts in.
 
+### Linux
+- The menu entry is now under Development (Programming in the Linux Mint and Cinnamon menus) and Engineering, instead of Utility (Accessories).
+- The menu entry shows its icon right after installing, instead of a blank icon until you log out and back in (seen on Linux Mint).
+- GlossCode is offered in Open With for `.gcode` files (the standard G-code file type), as well as plain text files.
+
 ## [0.1.2] - 2026-11-01
 
 ### Editor

@@ -36,6 +36,10 @@ contents:
   - src: copyright
     dst: /usr/share/doc/glosscode/copyright
 
+# Refreshes the icon cache and the menu entry once everything is unpacked (see the script).
+scripts:
+  postinstall: postinstall.sh
+
 overrides:
   deb:
     depends:

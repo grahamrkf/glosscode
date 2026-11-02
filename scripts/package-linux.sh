@@ -32,6 +32,7 @@ cat "$src/LICENSE" - "$src/THIRD_PARTY_NOTICES.md" > copyright <<'TXT'
 ----------------------------------------------------------------------
 
 TXT
+cp "$src/packaging/linux/postinstall.sh" postinstall.sh
 nfpm package --config "$src/packaging/linux/nfpm.yaml" --packager deb --target "$out/GlossCode-$version-linux-amd64.deb"
 nfpm package --config "$src/packaging/linux/nfpm.yaml" --packager rpm --target "$out/GlossCode-$version-linux-x86_64.rpm"
 
