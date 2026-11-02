@@ -47,7 +47,7 @@ One file per OS with the same small set of functions:
 
 ### UI
 
-The UI is plain HTML, CSS and JavaScript loaded into the webview. It talks to the core through the webview library's bind calls, passing JSON (`window.GlossCodeNative`, listed in [building.md](building.md#how-the-ui-talks-to-the-program)). For now the program shows the clickable mockup in [`mockup/index.html`](mockup/index.html) itself: in the program, the page around the window is hidden and the window fills the screen.
+The UI is plain HTML, CSS and JavaScript loaded into the webview. It talks to the core through the webview library's bind calls, passing JSON (`window.GlossCodeNative`, listed in [building.md](building.md#how-the-ui-talks-to-the-program)). The page is [`src/ui/index.html`](../src/ui/index.html). The program compiles it in (without the sample programs) and shows it filling the window; opened in a browser, it runs the same screen with the sample programs and a pretend Open dialog.
 
 ## Build
 

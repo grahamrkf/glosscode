@@ -1,5 +1,5 @@
 /* Runs in the webview before the page's own scripts. It puts the app's functions under
-   window.GlossCodeNative for the UI (docs/mockup/index.html) and keeps links from navigating the
+   window.GlossCodeNative for the UI (src/ui/index.html) and keeps links from navigating the
    window away from the editor: they open in the default browser instead. main.c fills in the
    values in GC_INFO before injecting this. */
 (function () {
@@ -30,7 +30,7 @@
     setTitle: function (title) { return call("gcSetTitle", [String(title)]); },
     quit: function () { return call("gcQuit", []); }
   };
-  document.documentElement.classList.add("native");
+  // This runs before the <html> element exists in WebView2, so nothing here may touch the page itself.
   window.open = function (url) { if (url) window.GlossCodeNative.openUrl(url); return null; };
   document.addEventListener("click", function (e) {
     var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;

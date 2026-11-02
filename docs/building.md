@@ -4,7 +4,7 @@ GlossCode is one program built from three parts:
 
 - **The core** (`src/core/`): portable C99, standard library only. It reads G-code, tracks modes in the order the control runs the lines, gives each word its English word, and runs the checks. Everything it knows about codes and controls comes from `data/`.
 - **The platform file** (`src/platform/`): `platform_win32.c` on Windows, `platform_posix.c` on Linux. Reading and writing files, the settings and cache folders, portable mode, opening links.
-- **The shell** (`src/app/`): opens a [webview](https://github.com/webview/webview) window, shows the UI (`docs/mockup/index.html`, compiled in), and connects it to the core and the system file dialogs ([nativefiledialog-extended](https://github.com/btzy/nativefiledialog-extended)).
+- **The shell** (`src/app/`): opens a [webview](https://github.com/webview/webview) window, shows the UI (`src/ui/index.html`, compiled in), and connects it to the core and the system file dialogs ([nativefiledialog-extended](https://github.com/btzy/nativefiledialog-extended)).
 
 CMake downloads webview 0.12.0 and nativefiledialog-extended 1.4.1 (pinned to their release commits) the first time it configures, so the build needs network access once.
 
@@ -63,7 +63,7 @@ GlossCode.exe [--data <folder>] [--ui <file.html>] [--debug] [file]
 ```
 
 - `--data <folder>` loads `gcode-words.json`, `gcode-rules.json` and `library/` from a folder instead of the copies inside the program, so the tables can be edited without rebuilding (`--data data`).
-- `--ui <file.html>` loads the UI from a file instead (`--ui docs/mockup/index.html`).
+- `--ui <file.html>` loads the UI from a file instead (`--ui src/ui/index.html`).
 - `--debug` turns on the webview's developer tools.
 - A file name opens that file at start-up.
 
@@ -86,7 +86,7 @@ Saving keeps every line that wasn't changed exactly as it was read (spacing, `%`
 
 The UI still draws its English words and problems with its own JavaScript, which `test_golden` keeps identical to the core. Moving the drawing over to `GlossCodeNative.core("analyze", …)` is the next step.
 
-The sample programs aren't built into the program. In `docs/mockup/index.html` they sit between `/* samples */` and `/* end samples */` markers, and `cmake/strip-samples.cmake` replaces everything between them with `null` in the copy that gets embedded, so the program starts on its home page with no samples. `scripts/package-examples.sh` puts `examples/` and the example library files in their own download, `GlossCode-<version>-examples.zip`.
+The sample programs aren't built into the program. In `src/ui/index.html` they sit between `/* samples */` and `/* end samples */` markers, and `cmake/strip-samples.cmake` replaces everything between them with `null` in the copy that gets embedded, so the program starts on its home page with no samples. `scripts/package-examples.sh` puts `examples/` and the example library files in their own download, `GlossCode-<version>-examples.zip`.
 
 ## Packages
 

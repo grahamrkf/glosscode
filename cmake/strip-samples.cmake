@@ -1,7 +1,7 @@
 # Copies the UI page, leaving out the sample programs and example library entries: everything between
 # "/* samples */" and "/* end samples */" becomes null. The samples are a separate download
-# (docs/releasing.md); the mockup in a browser keeps them.
-# cmake -DIN=<docs/mockup/index.html> -DOUT=<file> -P strip-samples.cmake
+# (docs/releasing.md); the page opened in a browser keeps them.
+# cmake -DIN=<src/ui/index.html> -DOUT=<file> -P strip-samples.cmake
 cmake_minimum_required(VERSION 3.21)
 
 file(READ "${IN}" text)

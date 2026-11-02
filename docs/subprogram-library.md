@@ -1,6 +1,6 @@
 # Subprogram library
 
-> **Status: in the mockup.** Insert › Subprogram library… works in [the mockup](mockup/index.html). Try it on **SLOTS_PLATE.nc**.
+> **Status: in the mockup.** Insert › Subprogram library… works in [the UI](../src/ui/index.html). Try it on **SLOTS_PLATE.nc**.
 
 Some operations get reused across many programs, and only a few numbers change between parts. A slotting routine is a good example: the moves are the same every time, and only the slot's position, depth and feed change. The subprogram library keeps routines like that in one place. Each one has named variables. You can find it from the Insert menu, fill in the values for this part, and put it in the program.
 

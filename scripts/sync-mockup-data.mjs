@@ -6,7 +6,7 @@
 //   node scripts/sync-mockup-data.mjs
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 
-const page = "docs/mockup/index.html";
+const page = "src/ui/index.html";
 let html = readFileSync(page, "utf8");
 const embed = (name, file) => {
   const json = JSON.stringify(JSON.parse(readFileSync(file, "utf8")));
