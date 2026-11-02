@@ -3004,6 +3004,12 @@
      "msg": "G04 needs P or X for the dwell time."
     },
     {
+     "li": 16,
+     "id": "dwell-milliseconds",
+     "sev": "info",
+     "msg": "P500 has no decimal point, so this control reads it as 500 milliseconds (0.5 s). Write P500. if you mean 500 seconds."
+    },
+    {
      "li": 17,
      "id": "comp-start-on-arc",
      "sev": "error",
@@ -3968,6 +3974,12 @@
      "msg": "G04 needs P or X for the dwell time."
     },
     {
+     "li": 16,
+     "id": "dwell-milliseconds",
+     "sev": "info",
+     "msg": "P500 has no decimal point, so this control reads it as 500 milliseconds (0.5 s). Write P500. if you mean 500 seconds."
+    },
+    {
      "li": 17,
      "id": "comp-start-on-arc",
      "sev": "error",
@@ -4085,8 +4097,8 @@
      },
      {
       "g": "G21",
-      "e": "METRIC",
-      "d": "Millimeter units"
+      "e": "MMCHK",
+      "d": "Confirm metric input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
@@ -4149,21 +4161,18 @@
      },
      {
       "g": "X10",
-      "e": "X0.010",
-      "d": "No decimal point, so this reads as 0.010 mm. Write X10. for 10 mm.",
-      "imp": true
+      "e": "X10",
+      "d": "X position 10"
      },
      {
       "g": "Y-5",
-      "e": "Y-0.005",
-      "d": "No decimal point, so this reads as -0.005 mm. Write Y-5. for -5 mm.",
-      "imp": true
+      "e": "Y-5",
+      "d": "Y position -5"
      },
      {
       "g": "Z100",
-      "e": "Z0.100",
-      "d": "No decimal point, so this reads as 0.100 mm. Write Z100. for 100 mm.",
-      "imp": true
+      "e": "Z100",
+      "d": "Z position 100"
      }
     ],
     [
@@ -4192,8 +4201,8 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
-      "d": "Tool length offset on"
+      "e": "OFS3DOFF",
+      "d": "3-D tool offset off (Okuma)"
      },
      {
       "g": "H5",
@@ -4230,8 +4239,8 @@
      {
       "g": "F",
       "e": "F",
-      "u": "mmpm",
-      "d": "Feed rate  mm per minute"
+      "u": "ipm",
+      "d": "Feed rate  inches per minute"
      }
     ],
     [
@@ -4317,8 +4326,8 @@
      {
       "g": "F300.",
       "e": "F300.0",
-      "u": "mmpm",
-      "d": "Feed rate 300.0 mm per minute"
+      "u": "ipm",
+      "d": "Feed rate 300.0 inches per minute"
      }
     ],
     [
@@ -4350,8 +4359,8 @@
      {
       "g": "F.1",
       "e": "F0.1",
-      "u": "mmpr",
-      "d": "Feed rate 0.1 mm per rev"
+      "u": "ipr",
+      "d": "Feed rate 0.1 inches per rev"
      }
     ],
     [
@@ -4398,8 +4407,8 @@
      {
       "g": "F200.",
       "e": "F200.0",
-      "u": "mmpm",
-      "d": "Feed rate 200.0 mm per minute"
+      "u": "ipm",
+      "d": "Feed rate 200.0 inches per minute"
      }
     ],
     [
@@ -4552,9 +4561,8 @@
      },
      {
       "g": "Q1",
-      "e": "PECK0.001",
-      "d": "No decimal point, so this reads as 0.001 mm. Write Q1. for 1 mm.",
-      "imp": true
+      "e": "PECK1",
+      "d": "Peck depth 1"
      },
      {
       "g": "P2",
@@ -4693,9 +4701,8 @@
      },
      {
       "g": "J1",
-      "e": "ENY0.001",
-      "d": "Y at the end of the slot: 0.001 (#5 in O9101)",
-      "imp": true
+      "e": "ENY1",
+      "d": "Y at the end of the slot: 1 (#5 in O9101)"
      },
      {
       "g": "Z-0.5",
@@ -4710,14 +4717,14 @@
      {
       "g": "F100.",
       "e": "FEED100.0",
-      "u": "mmpm",
-      "d": "Cutting feed along the slot: 100.0 mmpm (#9 in O9101)"
+      "u": "ipm",
+      "d": "Cutting feed along the slot: 100.0 ipm (#9 in O9101)"
      },
      {
       "g": "E50.",
       "e": "RAMP50.0",
-      "u": "mmpm",
-      "d": "Feed for the ramp passes (defaults to half of FEED): 50.0 mmpm (#8 in O9101)"
+      "u": "ipm",
+      "d": "Feed for the ramp passes (defaults to half of FEED): 50.0 ipm (#8 in O9101)"
      },
      {
       "g": "W3",
@@ -4734,8 +4741,8 @@
      },
      {
       "g": "M98",
-      "e": "SUBCALL",
-      "d": "Call subprogram"
+      "e": "OILMISTH",
+      "d": "Horizontal-spindle oil-mist coolant mode (Okuma)"
      },
      {
       "g": "P1234",
@@ -4828,8 +4835,8 @@
      {
       "g": "F10",
       "e": "F10.0",
-      "u": "mmpm",
-      "d": "Feed rate 10.0 mm per minute"
+      "u": "ipm",
+      "d": "Feed rate 10.0 inches per minute"
      }
     ],
     [
@@ -4849,24 +4856,6 @@
     },
     {
      "li": 4,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "X10 has no decimal point, so the control reads it as X0.010 mm. Write X10. if you mean 10 mm."
-    },
-    {
-     "li": 4,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Y-5 has no decimal point, so the control reads it as Y-0.005 mm. Write Y-5. if you mean -5 mm."
-    },
-    {
-     "li": 4,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Z100 has no decimal point, so the control reads it as Z0.100 mm. Write Z100. if you mean 100 mm."
-    },
-    {
-     "li": 4,
      "id": "tlo-missing",
      "sev": "warning",
      "msg": "First Z move after the tool change on N20, but G56 H hasn't been called for this tool."
@@ -4874,8 +4863,8 @@
     {
      "li": 6,
      "id": "foreign-code",
-     "sev": "warning",
-     "msg": "Okuma calls the tool length offset with G56 H, not G43."
+     "sev": "info",
+     "msg": "On Okuma mills G43 cancels the 3-D tool offset. Tool length offset is G56 H, cancelled by G53."
     },
     {
      "li": 7,
@@ -4908,6 +4897,12 @@
      "msg": "The arc starts and ends at the same point, which R can't describe. Use I and J."
     },
     {
+     "li": 11,
+     "id": "feed-plausibility",
+     "sev": "info",
+     "msg": "F0.1 ipr is unusually large for a per-rev feed. Check that G95 (feed per rev) is the mode you meant."
+    },
+    {
      "li": 12,
      "id": "arc-r-and-ijk",
      "sev": "warning",
@@ -4935,7 +4930,7 @@
      "li": 15,
      "id": "dwell-no-time",
      "sev": "error",
-     "msg": "G04 needs P or X for the dwell time."
+     "msg": "G04 needs F or P for the dwell time."
     },
     {
      "li": 17,
@@ -4957,18 +4952,6 @@
     },
     {
      "li": 18,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Q1 has no decimal point, so the control reads it as Q0.001 mm. Write Q1. if you mean 1 mm."
-    },
-    {
-     "li": 18,
-     "id": "cycle-stray-word",
-     "sev": "info",
-     "msg": "G83 (Peck drill) doesn't use P2, so it is ignored or alarms."
-    },
-    {
-     "li": 18,
      "id": "cycle-stray-word",
      "sev": "info",
      "msg": "G83 (Peck drill) doesn't use A3, so it is ignored or alarms."
@@ -4982,8 +4965,8 @@
     {
      "li": 21,
      "id": "foreign-code",
-     "sev": "warning",
-     "msg": "Okuma returns to a zero point with G30 P_, not G28. Check your machine's manual."
+     "sev": "error",
+     "msg": "Okuma mills have no G28. Return home with G30."
     },
     {
      "li": 22,
@@ -4999,15 +4982,9 @@
     },
     {
      "li": 24,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "J1 has no decimal point, so the control reads it as J0.001 mm. Write J1. if you mean 1 mm."
-    },
-    {
-     "li": 24,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "W3 has no decimal point, so the control reads it as W0.003 mm. Write W3. if you mean 3 mm."
+     "id": "foreign-code",
+     "sev": "error",
+     "msg": "Okuma mills have no G65. Call a subprogram with CALL O_ and pass values as LA=, LB= and so on."
     },
     {
      "li": 24,
@@ -5019,7 +4996,7 @@
      "li": 25,
      "id": "foreign-code",
      "sev": "warning",
-     "msg": "Okuma calls subprograms with CALL O_ and returns with RTS."
+     "msg": "On Okuma mills M98 is the horizontal-spindle oil-mist coolant mode, not a subprogram call. Call subprograms with CALL O_."
     },
     {
      "li": 27,
@@ -5031,7 +5008,7 @@
      "li": 29,
      "id": "foreign-code",
      "sev": "warning",
-     "msg": "Okuma subprograms end with RTS. M99 is for repeating a main program."
+     "msg": "Okuma mills have no M99. Subprograms end with RTS."
     },
     {
      "li": 31,
@@ -5043,7 +5020,7 @@
      "li": 32,
      "id": "foreign-code",
      "sev": "warning",
-     "msg": "Okuma subprograms end with RTS. M99 is for repeating a main program."
+     "msg": "Okuma mills have no M99. Subprograms end with RTS."
     }
    ]
   }

@@ -122,8 +122,8 @@
      },
      {
       "g": "G21",
-      "e": "METRIC",
-      "d": "Millimeter units"
+      "e": "MMCHK",
+      "d": "Confirm metric input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
@@ -308,8 +308,8 @@
      {
       "g": "F100",
       "e": "F100.0",
-      "u": "mmpm",
-      "d": "Feed rate 100.0 mm per minute"
+      "u": "ipm",
+      "d": "Feed rate 100.0 inches per minute"
      }
     ],
     [
@@ -396,8 +396,8 @@
      },
      {
       "g": "G21",
-      "e": "MM",
-      "d": "Millimeter units"
+      "e": "MMCK",
+      "d": "Confirm metric input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
@@ -582,8 +582,8 @@
      {
       "g": "F100",
       "e": "F100.0",
-      "u": "mmpm",
-      "d": "Feed rate 100.0 mm per minute"
+      "u": "ipm",
+      "d": "Feed rate 100.0 inches per minute"
      }
     ],
     [
@@ -957,9 +957,8 @@
      },
      {
       "g": "G15",
-      "e": "?G15",
-      "d": "G15 isn't in the dictionary or this machine's file.",
-      "unk": true
+      "e": "POLAROFF",
+      "d": "Polar coordinates off"
      },
      {
       "g": "H2",
@@ -1184,12 +1183,6 @@
     []
    ],
    "problems": [
-    {
-     "li": 2,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "G15 isn't in the dictionary or this machine's file."
-    },
     {
      "li": 5,
      "id": "empty-value",
@@ -1266,9 +1259,8 @@
      },
      {
       "g": "G15",
-      "e": "?G15",
-      "d": "G15 isn't in the dictionary or this machine's file.",
-      "unk": true
+      "e": "POLAROFF",
+      "d": "Polar coordinates off"
      },
      {
       "g": "H2",
@@ -1493,12 +1485,6 @@
     []
    ],
    "problems": [
-    {
-     "li": 2,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "G15 isn't in the dictionary or this machine's file."
-    },
     {
      "li": 5,
      "id": "empty-value",

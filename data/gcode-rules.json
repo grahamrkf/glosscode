@@ -42,6 +42,7 @@
       "label": "Fanuc-style (0i, 30i and compatibles)",
       "verified": true,
       "mill": {
+        "source": { "manual": "FANUC Series 0i-MODEL F Operator's Manual, Machining Center System B-64604EN-2/01", "revision": "1st edition", "section": "Part II Programming: G code list, canned cycles, compensation, Series 10/11 format" },
         "modalGroups": {
           "motion":      ["G00", "G01", "G02", "G03"],
           "plane":       ["G17", "G18", "G19"],
@@ -53,7 +54,13 @@
           "canned cycle":["G73", "G74", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"],
           "cycle return":["G98", "G99"],
           "work offset": ["G54", "G55", "G56", "G57", "G58", "G59"],
-          "speed mode":  ["G96", "G97"]
+          "speed mode":  ["G96", "G97"],
+          "stroke check":["G22", "G23"],
+          "scaling":     ["G50", "G51"],
+          "macro modal": ["G66", "G67"],
+          "exact stop":  ["G61", "G62", "G63", "G64"],
+          "rotation":    ["G68", "G69"],
+          "polar":       ["G15", "G16"]
         },
         "numbers": { "noDecimal": "leastIncrement", "increment": { "inch": 0.0001, "mm": 0.001 }, "words": ["X", "Y", "Z", "U", "W", "I", "J", "K", "R", "Q"] },
         "columns": [
@@ -79,6 +86,7 @@
         "toolLength": { "on": ["G43", "G44"], "word": "H", "label": "G43 H" },
         "toolChange": "M06",
         "dwellWords": ["P", "X"],
+        "dwellNoDecimal": "ms",
         "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": { "word": "P", "target": "program" } },
         "subReturn": ["M99"],
         "arcTolerance": { "inch": 0.001, "mm": 0.025 },
@@ -93,7 +101,8 @@
           "G84": { "name": "Tap",             "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "K"], "feed": true, "spindle": true, "speed": true },
           "G85": { "name": "Bore, feed out",  "requires": ["Z", "R"], "optional": ["X", "Y", "F", "K"], "feed": true, "spindle": true },
           "G86": { "name": "Bore, rapid out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "K"], "feed": true, "spindle": true },
-          "G87": { "name": "Back bore",       "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "K"], "feed": true, "spindle": true },
+          "G87": { "name": "Back bore",       "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P", "K"], "feed": true, "spindle": true },
+          "G88": { "name": "Bore, dwell, stop, jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "K"], "feed": true, "spindle": true },
           "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "K"], "feed": true, "spindle": true }
         },
         "wordMeaning": { "Z": "the hole bottom", "R": "the retract plane", "Q": "the peck depth or shift", "P": "the dwell time", "F": "the feed rate" },
@@ -137,6 +146,7 @@
         "programEnds": ["M02", "M30"],
         "speedClamp": { "code": "G50", "word": "S" },
         "dwellWords": ["P", "X", "U"],
+        "dwellNoDecimal": "ms",
         "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": { "word": "P", "target": "program" } },
         "subReturn": ["M99"],
         "diameterX": true,
@@ -144,8 +154,11 @@
         "feedPlausible": { "perRev": { "inch": 0.05, "mm": 1.5 }, "perMin": { "inch": 0.5, "mm": 10 } },
         "cycles": {
           "G70": { "name": "Finish contour",       "requires": ["P", "Q"], "optional": ["F", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
-          "G71": { "name": "OD/ID roughing",       "requires": ["P", "Q", "U", "W", "F"], "optional": ["R", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Two-block format on most Fanuc controls; this table checks the second block." },
-          "G72": { "name": "Face roughing",        "requires": ["P", "Q", "U", "W", "F"], "optional": ["R", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G71": { "name": "OD/ID roughing",       "requires": ["P", "Q"], "optional": ["U", "W", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Two-block format on most Fanuc controls; this table checks the second block." },
+          "G72": { "name": "Face roughing",        "requires": ["P", "Q"], "optional": ["U", "W", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G73": { "name": "Pattern repeat",       "requires": ["P", "Q"], "optional": ["U", "W", "R", "F", "S", "T"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G74": { "name": "Face peck or groove",  "requires": ["Z"], "optional": ["X", "U", "W", "P", "Q", "R", "F"], "meaning": { "Z": "the bottom of the peck" }, "modal": false, "feed": true, "spindle": true },
+          "G75": { "name": "OD/ID peck groove",    "requires": ["X"], "optional": ["Z", "U", "W", "P", "Q", "R", "F"], "meaning": { "X": "the groove bottom diameter" }, "modal": false, "feed": true, "spindle": true },
           "G76": { "name": "Threading",            "requires": ["X", "Z", "P", "Q", "F"], "optional": ["R", "U", "W"], "modal": false, "spindle": true, "leadF": true },
           "G90": { "name": "OD/ID turning cycle",  "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
           "G92": { "name": "Thread cycle",         "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
@@ -181,7 +194,7 @@
           "G84": { "name": "Tap",             "requires": ["Z", "R"], "optional": ["X", "Y", "F", "J", "L"], "feed": true, "speed": true, "startsSpindle": true },
           "G85": { "name": "Bore, feed out",  "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
           "G86": { "name": "Bore, rapid out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
-          "G87": null,
+          "G87": null, "G88": null,
           "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
         },
         "foreign": { "M97": null, "M88": null, "M89": null }
@@ -208,6 +221,20 @@
           "G243": { "name": "Radial peck drill",   "requires": ["X", "R", "C"], "choices": [["Q"], ["I", "J", "K"]], "optional": ["Z", "Y", "F", "P"], "feed": true, "spindle": true, "needs": ["liveTooling"] }
         },
         "foreign": { "M97": null }
+      }
+    },
+
+    "haasclassic": {
+      "label": "Haas mill (classic control, 2008 to 2016)",
+      "inherits": "haas",
+      "inheritWords": true,
+      "verified": true,
+      "source": { "manual": "Haas Mill Operator's Manual 96-8000", "revision": "Rev Y, Dec. 2009", "section": "G codes, M codes and settings (p. 129 on)" },
+      "mill": {
+        "cycles": {
+          "G87": { "name": "Bore, stop and jog out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G88": { "name": "Bore, dwell and jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+        }
       }
     },
 
@@ -244,35 +271,441 @@
       }
     },
 
+    "linuxcnc": {
+      "label": "LinuxCNC (2.9)",
+      "inherits": "fanuc",
+      "verified": true,
+      "source": { "manual": "LinuxCNC Documentation V2.9.7", "revision": "22 Oct. 2025", "section": "Chapter 11 G-code Programming (11.4 to 11.8)" },
+      "mill": {
+        "numbers": { "noDecimal": "asWritten" },
+        "modalGroups": {
+          "motion":       ["G00", "G01", "G02", "G03", "G33", "G73", "G74", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"],
+          "canned cycle": null,
+          "tool length":  ["G43", "G49"],
+          "exact stop":   ["G61", "G64"],
+          "stroke check": null, "scaling": null, "macro modal": null, "rotation": null, "polar": null
+        },
+        "mPerBlock": 4,
+        "dwellWords": ["P"],
+        "dwellNoDecimal": null,
+        "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": null },
+        "cycles": {
+          "G73": { "name": "High-speed peck",  "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G74": { "name": "Left-hand tap, floating holder", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+          "G76": null,
+          "G81": { "name": "Drill",            "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G83": { "name": "Peck drill",       "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G84": { "name": "Tap, floating holder", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+          "G85": { "name": "Bore, feed out",   "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G86": { "name": "Bore, stop, rapid out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G87": null, "G88": null,
+          "G89": { "name": "Bore with dwell",  "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+        },
+        "wordHints": { "G43": null, "G44": null, "G41": null, "G42": null },
+        "foreign": {
+          "G76": { "severity": "error",   "text": "On LinuxCNC G76 is lathe threading (G76 P Z I J K in the ZX plane), not fine boring." },
+          "G87": { "severity": "warning", "text": "LinuxCNC accepts G87 but doesn't implement it, so what it does is undefined." },
+          "G88": { "severity": "warning", "text": "LinuxCNC accepts G88 but doesn't implement it, so what it does is undefined." },
+          "G44": { "severity": "error",   "text": "LinuxCNC has no G44. Use G43 with a negative offset, or G43.1." },
+          "G50": { "severity": "error",   "text": "LinuxCNC has no scaling (G50/G51)." },
+          "G51": { "severity": "error",   "text": "LinuxCNC has no scaling (G50/G51)." },
+          "G68": { "severity": "error",   "text": "LinuxCNC has no G68 rotation. Rotate with G10 L2 R on the work offset." },
+          "G69": { "severity": "error",   "text": "LinuxCNC has no G69. Rotation is set on the work offset with G10 L2 R." },
+          "G15": { "severity": "error",   "text": "LinuxCNC has no G15/G16 polar mode. Polar moves use @ for the distance and ^ for the angle." },
+          "G16": { "severity": "error",   "text": "LinuxCNC has no G15/G16 polar mode. Polar moves use @ for the distance and ^ for the angle." },
+          "G65": { "severity": "error",   "text": "LinuxCNC has no G65 macro call. Call a subroutine with O100 CALL [args]." },
+          "G66": { "severity": "error",   "text": "LinuxCNC has no modal macro call (G66)." },
+          "G67": { "severity": "error",   "text": "LinuxCNC has no G67." },
+          "G31": { "severity": "error",   "text": "LinuxCNC probes with G38.2 to G38.5, not G31." },
+          "G12": { "severity": "error",   "text": "LinuxCNC has no circular pocket cycle G12." },
+          "G13": { "severity": "error",   "text": "LinuxCNC has no circular pocket cycle G13." },
+          "M29": { "severity": "error",   "text": "LinuxCNC rigid taps with G33.1, not M29." }
+        }
+      },
+      "lathe": {
+        "numbers": { "noDecimal": "asWritten" },
+        "modalGroups": {
+          "motion":       ["G00", "G01", "G02", "G03", "G33", "G70", "G71", "G72", "G76", "G80"],
+          "distance":     ["G90", "G91"],
+          "feed mode":    ["G93", "G94", "G95"],
+          "cycle return": ["G98", "G99"],
+          "diameter mode":["G07", "G08"]
+        },
+        "mPerBlock": 4,
+        "dwellWords": ["P"],
+        "dwellNoDecimal": null,
+        "speedClamp": null,
+        "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": null },
+        "cycles": {
+          "G90": null, "G92": null, "G94": null, "G73": null, "G74": null, "G75": null,
+          "G70": { "name": "Finish a profile", "requires": ["Q"], "meaning": { "Q": "the O-subroutine that holds the profile" }, "optional": ["X", "Z", "D", "E", "P"], "modal": false, "spindle": true },
+          "G71": { "name": "Rough a profile along Z", "requires": ["Q"], "meaning": { "Q": "the O-subroutine that holds the profile" }, "optional": ["X", "Z", "D", "I", "R"], "modal": false, "spindle": true },
+          "G72": { "name": "Rough a profile on the face", "requires": ["Q"], "meaning": { "Q": "the O-subroutine that holds the profile" }, "optional": ["X", "Z", "D", "I", "R"], "modal": false, "spindle": true },
+          "G76": { "name": "Threading", "requires": ["P", "Z", "I", "J", "K"], "meaning": { "P": "the thread pitch", "I": "the thread peak offset", "J": "the first cut depth", "K": "the full thread depth" }, "optional": ["R", "Q", "H", "E", "L"], "modal": false, "spindle": true }
+        },
+        "wordHints": { "G32": null, "G33": { "requires": ["Z", "K"] } },
+        "foreign": {
+          "G91": null,
+          "G32": { "severity": "error",   "text": "LinuxCNC has no G32. Cut a thread pass with G33 K (the pitch) or the G76 cycle." },
+          "G50": { "severity": "error",   "text": "LinuxCNC has no G50. Clamp the spindle speed in constant surface speed with G96 D." },
+          "G65": { "severity": "error",   "text": "LinuxCNC has no G65 macro call. Call a subroutine with O100 CALL [args]." },
+          "G98": { "severity": "info",    "text": "On LinuxCNC G98 is the canned-cycle return to the start level, not feed per minute (that's G94)." },
+          "G99": { "severity": "info",    "text": "On LinuxCNC G99 is the canned-cycle return to R, not feed per revolution (that's G95)." }
+        }
+      }
+    },
+
+    "tormach": {
+      "label": "Tormach PathPilot",
+      "inherits": "linuxcnc",
+      "inheritWords": true,
+      "verified": false,
+      "mill": {
+        "source": { "manual": "Tormach 1500MX Operator's Manual UM10811 (0423A), PCNC 1100 UM10349 (0525A), PCNC 440 UM10372 (0124A)", "section": "1500MX chapter 9, PCNC 1100 and 440 chapter 7" },
+        "cycles": {
+          "G84": { "name": "Tap, floating holder", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "speed": true, "startsSpindle": true },
+          "G88": { "name": "Bore, dwell, stop, jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+        },
+        "foreign": {
+          "G88": null,
+          "G76": { "severity": "error", "text": "Tormach mills have no G76. The 1500MX code table lists it as threading, copied from the lathe; use G33.1 or G84 instead." }
+        }
+      },
+      "lathe": {
+        "source": { "manual": "Tormach PathPilot User Guide for Lathes UM10751", "revision": "Dec. 2020, PathPilot 2.7.1", "section": "Programming, pp. 129 to 176" },
+        "modalGroups": {
+          "motion":        ["G00", "G01", "G02", "G03", "G33", "G76", "G80", "G84"],
+          "diameter mode": null
+        },
+        "toolChange": null,
+        "cycles": {
+          "G70": null, "G71": null, "G72": null,
+          "G84": { "name": "Tap, floating holder", "requires": ["Z", "R"], "optional": ["X", "P", "F"], "feed": true, "speed": true, "startsSpindle": true }
+        },
+        "foreign": {
+          "G08": { "severity": "error", "text": "PathPilot lathes are always in diameter mode (G07). There's no G08." },
+          "G70": { "severity": "error", "text": "PathPilot lathes have no G70 to G72 profile cycles." },
+          "G71": { "severity": "error", "text": "PathPilot lathes have no G70 to G72 profile cycles." },
+          "G72": { "severity": "error", "text": "PathPilot lathes have no G70 to G72 profile cycles." },
+          "G74": { "severity": "error", "text": "PathPilot lathes have no G74." },
+          "G87": { "severity": "error", "text": "PathPilot lathes have no G87." },
+          "G52": { "severity": "error", "text": "PathPilot lathes have no G52." },
+          "M06": { "severity": "info",  "text": "PathPilot lathes change tools with the T word alone (T0303). M06 isn't needed." }
+        }
+      }
+    },
+
+    "centroid": {
+      "label": "Centroid CNC12",
+      "inherits": "fanuc",
+      "verified": true,
+      "source": { "manual": "Centroid CNC12 Mill, Lathe and Router Operator's Manuals", "revision": "v5.42 and later (lathe also checked against v3.16, v4.14 and v4.20)", "section": "Program codes, G codes and M codes chapters" },
+      "mill": {
+        "modalGroups": {
+          "feed mode":   ["G93", "G94"],
+          "canned cycle":["G73", "G74", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G89"],
+          "exact stop":  ["G61", "G64"],
+          "macro modal": null, "polar": null, "speed mode": null
+        },
+        "programEnds": ["M02", "M99"],
+        "dwellNoDecimal": null,
+        "cycles": {
+          "G73": { "name": "High-speed peck", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+          "G74": { "name": "Left-hand tap",   "requires": ["Z", "R"], "optional": ["X", "Y", "F", "Q"], "meaning": { "Q": "the pitch, in rigid tapping" }, "feed": true, "spindle": true },
+          "G76": { "name": "Fine bore",       "requires": ["Z", "R"], "optional": ["X", "Y", "F", "Q"], "meaning": { "Q": "the pull-off distance" }, "feed": true, "spindle": true },
+          "G81": { "name": "Drill",           "requires": ["Z", "R"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+          "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+          "G83": { "name": "Peck drill",      "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+          "G84": { "name": "Tap",             "requires": ["Z", "R"], "optional": ["X", "Y", "F", "Q"], "meaning": { "Q": "the pitch, in rigid tapping" }, "feed": true, "spindle": true },
+          "G85": { "name": "Bore, feed out",  "requires": ["Z", "R"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+          "G86": null, "G87": null, "G88": null,
+          "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true }
+        },
+        "foreign": {
+          "G95": { "severity": "error",   "text": "Centroid mills have no feed per revolution. F is always per minute; G94 only turns inverse time (G93) off." },
+          "G86": { "severity": "error",   "text": "Centroid mills have no G86. The boring cycles are G76, G85 and G89." },
+          "G87": { "severity": "error",   "text": "Centroid mills have no G87." },
+          "G88": { "severity": "error",   "text": "Centroid mills have no G88." },
+          "G96": { "severity": "error",   "text": "Centroid mills have no constant surface speed." },
+          "G66": { "severity": "error",   "text": "Centroid has no modal macro call (G66). Use G65." },
+          "M30": { "severity": "info",    "text": "On Centroid, M30 is a custom M code that does nothing unless the machine defines it. M02 ends and restarts the program." }
+        }
+      },
+      "lathe": {
+        "programEnds": ["M02", "M99"],
+        "dwellNoDecimal": null,
+        "cycles": {
+          "G71": { "name": "OD/ID roughing", "requires": ["P", "Q"], "optional": ["D", "U", "W", "I", "K", "A", "F", "R", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Centroid takes the Fanuc two-line form or a one-line form with D as the depth of cut." },
+          "G72": { "name": "Face roughing",  "requires": ["P", "Q"], "optional": ["D", "U", "W", "I", "K", "A", "F", "R", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G76": { "name": "Threading", "requires": ["X", "Z"], "choices": [["P", "Q"], ["K", "D"]], "optional": ["R", "U", "W", "A", "I", "F", "E"], "modal": false, "spindle": true, "leadF": true, "note": "Centroid takes the Fanuc two-line form (P Q) or a one-line form (K D A)." },
+          "G90": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F", "P", "L"], "feed": true, "spindle": true }
+        },
+        "foreign": {
+          "M30": { "severity": "info", "text": "On Centroid, M30 is a custom M code that does nothing unless the machine defines it. M02 ends and restarts the program." }
+        }
+      }
+    },
+
+    "mazak": {
+      "label": "Mazak EIA/ISO (Mazatrol M Plus, 640M, T-Plus, 640T, Matrix)",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "verified": false,
+      "lathe": {
+        "source": { "manual": "Mazak EIA/ISO Programming Manual C734PBT018E (Mazatrol T-Plus, Fusion 640T Nexus and other Mazatrol turning)", "section": "Chapters 3, 5, 8, 9 and 13: G code lists, numbers, dwell, M codes, fixed cycles, subprograms. Tables are G code system A, standard mode" },
+        "mPerBlock": 4,
+        "cycles": {
+          "G70": { "name": "Finish contour", "requires": ["P", "Q"], "optional": ["A", "F", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G71": { "name": "OD/ID roughing", "requires": ["P", "Q"], "optional": ["A", "U", "W", "D", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Standard mode uses two blocks (G71 U R, then G71 A P Q U W F); T32 mode uses one block with D as the depth. A names the program that holds the finish shape." },
+          "G72": { "name": "Face roughing", "requires": ["P", "Q"], "optional": ["A", "U", "W", "D", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G73": { "name": "Pattern repeat", "requires": ["P", "Q"], "optional": ["A", "U", "W", "I", "K", "D", "R", "F", "S", "T"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G74": { "name": "Face peck or groove", "requires": ["Z"], "optional": ["X", "U", "W", "I", "K", "D", "P", "Q", "R", "F", "S", "T"], "meaning": {"Z": "the bottom of the peck"}, "modal": false, "feed": true, "spindle": true },
+          "G75": { "name": "OD/ID peck groove", "requires": ["X"], "optional": ["Z", "U", "W", "I", "K", "D", "P", "Q", "R", "F", "S", "T"], "meaning": {"X": "the groove bottom diameter"}, "modal": false, "feed": true, "spindle": true },
+          "G76": { "name": "Threading", "requires": ["X", "Z", "F"], "optional": ["U", "W", "P", "Q", "R", "I", "K", "D", "A", "E", "S", "T"], "modal": false, "spindle": true, "leadF": true, "note": "Standard mode uses two blocks (G76 P Q R, then G76 X Z R P Q F); T32 mode uses one block, G76 X Z I K D A F." }
+        }
+      },
+      "mill": {
+        "source": { "manual": "Mazak EIA/ISO Programming Manual C735PBT019E (Mazatrol M1, M2, M32, M Plus, Fusion 640M 5X/Nexus)", "revision": "2001", "section": "Chapters 3, 5, 8 and 13: G and M code lists, units, dwell, fixed cycles, subprograms" },
+        "modalGroups": {
+          "canned cycle":["G73", "G74", "G75", "G76", "G77", "G78", "G79", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"]
+        },
+        "cycles": {
+          "G73": { "name": "High-speed peck", "requires": ["Z", "Q", "R", "F"], "optional": ["X", "Y", "P", "D", "K", "I", "J", "L"], "feed": true, "spindle": true },
+          "G74": { "name": "Left-hand tap", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "D", "J", "H", "L"], "feed": true, "spindle": true },
+          "G75": { "name": "Boring", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "K", "I", "J", "L"], "feed": true, "spindle": true },
+          "G76": { "name": "Fine bore", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "J", "L"], "feed": true, "spindle": true },
+          "G77": { "name": "Back spot facing", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "E", "J", "L"], "feed": true, "spindle": true },
+          "G78": { "name": "Boring", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "K", "L"], "feed": true, "spindle": true },
+          "G79": { "name": "Boring", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "K", "E", "L"], "feed": true, "spindle": true },
+          "G81": { "name": "Drill", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "L"], "feed": true, "spindle": true },
+          "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "D", "I", "J", "L"], "feed": true, "spindle": true },
+          "G83": { "name": "Peck drill", "requires": ["Z", "Q", "R", "F"], "optional": ["X", "Y", "P", "D", "K", "I", "J", "L"], "feed": true, "spindle": true },
+          "G84": { "name": "Tap", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "D", "J", "H", "L"], "feed": true, "spindle": true },
+          "G85": { "name": "Ream", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "D", "E", "L"], "feed": true, "spindle": true },
+          "G86": { "name": "Bore, stop, rapid out", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "L"], "feed": true, "spindle": true },
+          "G87": { "name": "Back bore", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "J", "L"], "feed": true, "spindle": true },
+          "G88": { "name": "Bore, dwell, stop", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "L"], "feed": true, "spindle": true },
+          "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "L"], "feed": true, "spindle": true }
+        }
+      }
+    },
+
+    "hurco": {
+      "label": "Hurco WinMax NC (ISNC)",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "verified": true,
+      "source": { "manual": "Hurco WinMax Mill NC Programming 704-0116-310 Rev B and WinMax Mill Programming 704-0116-501 Rev D", "revision": "2010 (v8) and 2015 (v9.1/10.1)", "section": "NC programming: G code groups, canned cycles, subprograms, M codes (ISNC)" },
+      "lathe": {
+        "source": { "manual": "Hurco WinMax Lathe NC Programming v546NC", "revision": "Jan. 2018", "section": "Chapters 1 to 3: numbers, G code table 2-4 to 2-5, cycles 2-46 to 2-82, subprograms, M codes (ISNC only)" },
+        "numbers": { "noDecimal": "asWritten" },
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G32", "G76", "G77", "G78", "G79"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G93", "G94", "G95"],
+          "radius mode": ["G07", "G08"]
+        },
+        "cycles": {
+          "G90": null, "G92": null, "G94": null,
+          "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "foreign": {
+          "G91": null
+        }
+      },
+      "mill": {
+        "numbers": { "noDecimal": "asWritten" },
+        "modalGroups": {
+          "feed mode":  ["G93", "G94"],
+          "speed mode": null
+        },
+        "cycles": {
+          "G73": { "name": "High-speed peck", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+          "G74": { "name": "Left-hand tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "K", "L"], "feed": true, "spindle": true },
+          "G76": { "name": "Fine bore", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P", "K", "L"], "feed": true, "spindle": true },
+          "G81": { "name": "Drill", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+          "G82": { "name": "Spot drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+          "G83": { "name": "Peck drill", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+          "G84": { "name": "Tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "K", "L"], "feed": true, "spindle": true, "speed": true },
+          "G85": { "name": "Bore, feed out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+          "G86": { "name": "Bore, rapid out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+          "G87": { "name": "Back bore", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P", "K", "L"], "feed": true, "spindle": true },
+          "G88": { "name": "Bore, dwell, stop, jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+          "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true }
+        },
+        "foreign": {
+          "G95": { "severity": "error", "text": "Hurco mills have no feed per revolution. F is per minute (or inverse time with G93)." },
+          "G96": { "severity": "error", "text": "Hurco mills have no constant surface speed." },
+          "G97": { "severity": "info",  "text": "Hurco mills have no G97. S is always RPM, so it can be left out." }
+        }
+      }
+    },
+
+    "mitsubishi": {
+      "label": "Mitsubishi M800/M80 (and M700/M70)",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "verified": false,
+      "mill": {
+        "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Machining Center System IB-1501277", "revision": "P", "section": "G code list, dwell, fixed cycles, subprograms" },
+        "modalGroups": {
+          "canned cycle":["G73", "G74", "G75", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"]
+        },
+        "cycles": {
+          "G73": { "name": "High-speed peck", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+          "G74": { "name": "Left-hand tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "E", "Q", "P", "S", "L"], "feed": true, "spindle": true },
+          "G75": { "name": "Circle cutting", "requires": ["Z", "R"], "optional": ["X", "Y", "Q", "P", "F", "L"], "feed": true, "spindle": true },
+          "G76": { "name": "Fine bore", "requires": ["Z", "R"], "optional": ["X", "Y", "I", "J", "K", "F", "P", "L"], "feed": true, "spindle": true },
+          "G81": { "name": "Drill", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G83": { "name": "Peck drill", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G84": { "name": "Tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "E", "Q", "P", "S", "L"], "feed": true, "spindle": true },
+          "G85": { "name": "Bore, feed out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+          "G86": { "name": "Bore, rapid out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+          "G87": { "name": "Back bore", "requires": ["Z", "R"], "optional": ["X", "Y", "I", "J", "K", "F", "L"], "feed": true, "spindle": true },
+          "G88": { "name": "Bore, dwell, stop", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+          "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+        }
+      }
+    },
+
+    "grbl": {
+      "label": "GRBL 1.1",
+      "inherits": "linuxcnc",
+      "inheritWords": true,
+      "verified": true,
+      "source": { "manual": "GRBL v1.1 README (supported G codes) and grbl/gcode.c", "revision": "gnea/grbl master", "section": "List of Supported G-Codes in Grbl v1.1; the gc_execute_line parser" },
+      "mill": {
+        "mPerBlock": null,
+        "toolChange": null,
+        "cycles": { "G73": null, "G74": null, "G76": null, "G81": null, "G82": null, "G83": null, "G84": null, "G85": null, "G86": null, "G87": null, "G88": null, "G89": null },
+        "subCalls": { "M98": null, "G65": null },
+        "subReturn": [],
+        "foreign": {
+          "G73": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G74": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G76": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G81": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G82": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G83": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G84": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G85": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G86": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G87": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G88": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G89": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+          "G41": { "severity": "error", "text": "GRBL has no cutter compensation; only G40 is accepted." },
+          "G42": { "severity": "error", "text": "GRBL has no cutter compensation; only G40 is accepted." },
+          "G43": { "severity": "error", "text": "GRBL has no G43 H. Its tool length offset is G43.1 Z (dynamic), cancelled by G49." },
+          "G64": { "severity": "error", "text": "GRBL accepts only G61 for path control." },
+          "G96": { "severity": "error", "text": "GRBL has no constant surface speed." },
+          "G95": { "severity": "error", "text": "GRBL has no feed per revolution (G93 and G94 only)." },
+          "M06": { "severity": "warning", "text": "GRBL has no M6 tool change. Most senders pause or strip it; check yours." },
+          "M98": { "severity": "error", "text": "GRBL has no subprograms (M98/M99)." },
+          "M99": { "severity": "error", "text": "GRBL has no subprograms (M98/M99)." },
+          "M01": { "severity": "info", "text": "GRBL accepts M1 but ignores it (optional stop isn't supported)." }
+        }
+      }
+    },
+
+    "siemensiso": {
+      "label": "Siemens SINUMERIK ISO mode (840D sl, 828D)",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "verified": false,
+      "lathe": {
+        "source": { "manual": "SINUMERIK 840D sl/828D ISO Turning Programming Manual PGT", "revision": "02/2012, CNC software 4.5", "section": "G code system, dwell, M functions, subprograms, cycles G70 to G76, appendix B G code list. Tables are G code system B, the default (MD10881 = 0)" },
+        "mPerBlock": 5,
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G33", "G34", "G35", "G36", "G77", "G78", "G79"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G94", "G95"]
+        },
+        "speedClamp": { "code": "G92", "word": "S" },
+        "cycles": {
+          "G90": null, "G92": null, "G94": null,
+          "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+        "foreign": {
+          "G91": null,
+          "G32": { "severity": "error", "text": "In G code system B (the Siemens default) threading is G33, not G32." },
+          "G50": { "severity": "warning", "text": "In G code system B (the Siemens default) G92 sets coordinates and the spindle limit; G50 is system A." },
+          "G98": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level, not feed per minute or per rev (G94/G95)." },
+          "G99": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level, not feed per minute or per rev (G94/G95)." }
+        }
+      },
+      "mill": {
+        "source": { "manual": "SINUMERIK ONE / 840D sl / 828D ISO Milling Programming Manual", "revision": "07/2021, CNC 4.95/6.15", "section": "3 Programming principles, 5 Auxiliary functions, 6 Cycles and subprograms, appendix B G code groups" },
+        "mPerBlock": 5,
+        "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": { "word": "P", "target": "program" } }
+      }
+    },
+
     "okuma": {
       "label": "Okuma OSP (P300 and later)",
       "inherits": "fanuc",
-      "verified": false,
+      "verified": true,
       "keywords": ["CALL", "RTS", "GOTO", "IF", "NAT", "MODIN", "MODOUT"],
       "mill": {
+        "source": { "manual": "Okuma OSP-P300S/P300M Programming Manual 6087-E-R1 (ME33-022-R2)", "revision": "2nd edition, Aug. 2014", "section": "Program format, coordinates, offsets, fixed cycles, User Task, G and M code tables" },
+        "numbers": { "noDecimal": "asWritten" },
+        "dwellNoDecimal": null,
+        "dwellWords": ["F", "P"],
+        "unitCodes": null,
         "modalGroups": {
+          "units":       null,
           "work offset": ["G15"],
           "tool length": ["G53", "G54", "G55", "G56", "G57", "G58", "G59"],
-          "canned cycle":["G73", "G74", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G89"]
+          "canned cycle":["G73", "G74", "G76", "G79", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"],
+          "cycle return":null,
+          "speed mode":  ["G196", "G197"],
+          "3-D offset":  ["G43", "G44"]
         },
         "toolLength": { "on": ["G56"], "word": "H", "label": "G56 H" },
         "subCalls": { "CALL": { "word": "O", "target": "program" } },
         "subReturn": ["RTS"],
         "cycles": {
-          "G87": { "name": "Back bore", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true }
+          "G73": { "name": "High-speed peck", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P"], "feed": true, "spindle": true },
+          "G74": { "name": "Left-hand tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "Q"], "meaning": { "Q": "the dwell at the R level" }, "feed": true, "spindle": true },
+          "G76": { "name": "Fine bore", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "Q", "I", "J", "K"], "feed": true, "spindle": true },
+          "G81": { "name": "Drill", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P"], "feed": true, "spindle": true },
+          "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+          "G83": { "name": "Peck drill", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P"], "feed": true, "spindle": true },
+          "G84": { "name": "Tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "Q"], "meaning": { "Q": "the dwell at the R level" }, "feed": true, "spindle": true },
+          "G85": { "name": "Bore, feed out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P"], "feed": true, "spindle": true },
+          "G86": { "name": "Bore, rapid out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P"], "feed": true, "spindle": true },
+          "G87": { "name": "Back bore", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "Q", "I", "J", "K"], "feed": true, "spindle": true },
+          "G88": { "name": "Multi-step boring", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "Q", "I", "J", "K"], "feed": true, "spindle": true },
+          "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true }
         },
-        "wordHints": { "G43": null, "G44": null, "G56": { "requires": ["H"] }, "G15": { "requires": ["H"] } },
+        "wordHints": { "G43": null, "G44": null, "G56": { "requires": ["H"] }, "G15": { "requires": ["H"] }, "G16": { "requires": ["H"] } },
         "foreign": {
-          "G43": { "severity": "warning", "text": "Okuma calls the tool length offset with G56 H, not G43." },
+          "G43": { "severity": "info",    "text": "On Okuma mills G43 cancels the 3-D tool offset. Tool length offset is G56 H, cancelled by G53." },
+          "G44": { "severity": "info",    "text": "On Okuma mills G44 turns the 3-D tool offset on. Tool length offset is G56 H." },
           "G54": { "severity": "error",   "text": "On Okuma, G54 is the X-axis tool length offset, not work offset 1. Select work offsets with G15 H1." },
           "G55": { "severity": "error",   "text": "On Okuma, G55 is the Y-axis tool length offset, not work offset 2. Select work offsets with G15 H2." },
           "G57": { "severity": "error",   "text": "On Okuma, G57 is a 4th-axis tool length offset, not a work offset. Select work offsets with G15 H." },
           "G58": { "severity": "error",   "text": "On Okuma, G58 is a 5th-axis tool length offset, not a work offset. Select work offsets with G15 H." },
           "G59": { "severity": "error",   "text": "On Okuma, G59 is a 6th-axis tool length offset, not a work offset. Select work offsets with G15 H." },
-          "G28": { "severity": "warning", "text": "Okuma returns to a zero point with G30 P_, not G28. Check your machine's manual." },
+          "G28": { "severity": "error",   "text": "Okuma mills have no G28. Return home with G30." },
+          "G29": { "severity": "error",   "text": "Okuma mills have no G29." },
+          "G52": { "severity": "error",   "text": "Okuma mills have no G52. A local coordinate system is G96." },
+          "G65": { "severity": "error",   "text": "Okuma mills have no G65. Call a subprogram with CALL O_ and pass values as LA=, LB= and so on." },
+          "G66": { "severity": "error",   "text": "Okuma mills have no G66. Use MODIN to call a subprogram after each move." },
+          "G67": { "severity": "error",   "text": "Okuma mills have no G67. MODOUT cancels MODIN." },
+          "G96": { "severity": "info",    "text": "On Okuma mills G96 sets a local coordinate system, not constant surface speed (that's G196)." },
+          "G97": { "severity": "info",    "text": "On Okuma mills G97 recalculates coordinates, not RPM mode (that's G197)." },
+          "G98": { "severity": "warning", "text": "Okuma mills set the cycle return level with M52, M53 or M54 (R level, the default), not G98." },
+          "G99": { "severity": "warning", "text": "Okuma mills set the cycle return level with M52, M53 or M54 (R level, the default), not G99." },
           "M97": { "severity": "error",   "text": "Okuma has no M97. Put the subprogram in its own O block and call it with CALL O_, ending it with RTS." },
-          "M98": { "severity": "warning", "text": "Okuma calls subprograms with CALL O_ and returns with RTS." },
-          "M99": { "severity": "warning", "text": "Okuma subprograms end with RTS. M99 is for repeating a main program." },
+          "M98": { "severity": "warning", "text": "On Okuma mills M98 is the horizontal-spindle oil-mist coolant mode, not a subprogram call. Call subprograms with CALL O_." },
+          "M99": { "severity": "warning", "text": "Okuma mills have no M99. Subprograms end with RTS." },
           "M88": null, "M89": null
         }
       },
@@ -287,13 +720,14 @@
         },
         "unitCodes": null,
         "mPerBlock": 8,
+        "dwellNoDecimal": null,
         "leadCodes": ["G31", "G32", "G33", "G34", "G35"],
-        "mConflicts": [["M03", "M04", "M05"], ["M08", "M09"], ["M12", "M13", "M14"], ["M22", "M23"], ["M83", "M84"], ["M88", "M89"]],
+        "mConflicts": [["M03", "M04", "M05"], ["M08", "M09"], ["M12", "M13", "M14"], ["M22", "M23"], ["M83", "M84"], ["M88", "M89"], ["M20", "M21"], ["M24", "M25"], ["M26", "M27"], ["M32", "M33", "M34"], ["M40", "M41", "M42", "M43", "M44"], ["M86", "M87"], ["M109", "M110"], ["M146", "M147"]],
         "subCalls": { "CALL": { "word": "O", "target": "program" } },
         "subReturn": ["RTS"],
         "dwellWords": ["F"],
         "cycles": {
-          "G70": null, "G76": null, "G90": null, "G92": null, "G94": null,
+          "G70": null, "G75": null, "G76": null, "G90": null, "G92": null, "G94": null,
           "G71": { "name": "Thread cutting, compound, along Z", "requires": ["X", "Z", "D", "H", "F"], "meaning": { "D": "the first depth of cut", "H": "the thread height", "F": "the thread lead" }, "optional": ["I", "A", "B", "U", "L", "E", "J", "M", "Q"], "modal": false, "leadF": true, "spindle": true },
           "G72": { "name": "Thread cutting, compound, on a face", "requires": ["X", "Z", "D", "H", "F"], "meaning": { "D": "the first depth of cut", "H": "the thread height", "F": "the thread lead" }, "optional": ["K", "A", "B", "U", "L", "E", "J", "M", "Q"], "modal": false, "leadF": true, "spindle": true },
           "G73": { "name": "Grooving along Z", "requires": ["X", "Z", "D"], "meaning": { "D": "the depth of each plunge" }, "optional": ["I", "K", "L", "F", "E", "T"], "modal": false, "feed": true, "spindle": true },
@@ -440,6 +874,12 @@
         "words": { "X": ["0.75", "Bottom of the radial hole, as a diameter."], "R": ["2.1", "Diameter where the feed starts. The tool rapids to R first."], "Z": ["-0.5", "Z position of the hole along the part."], "C": ["0.", "Spindle angle of the hole.", "ANGLEC"], "Y": ["0.", "Y position, on lathes with a Y axis."], "F": ["3.", "Feed per minute (live tools usually run under G98)."] } },
       "G243": { "sketch": "peck", "labels": { "axis": "X", "Z": "X" }, "about": "Peck drills in toward the centerline with a live tool, backing out to R after each peck of Q. Needs live tooling.",
         "words": { "X": ["0.75", "Bottom of the radial hole, as a diameter."], "R": ["2.1", "Diameter where the feed starts. The tool rapids to R first."], "Z": ["-0.5", "Z position of the hole along the part."], "C": ["0.", "Spindle angle of the hole.", "ANGLEC"], "Y": ["0.", "Y position, on lathes with a Y axis."], "F": ["3.", "Feed per minute (live tools usually run under G98)."], "Q": ["0.1", "Depth of each peck.", "PECK"], "I": ["0.15", "First peck depth (use I, J and K instead of Q).", "PECK1"], "J": ["0.02", "How much shorter each peck gets.", "PECKLESS"], "K": ["0.05", "Shortest peck allowed.", "PECKMIN"], "P": ["0.", "Dwell at the bottom, in seconds."] } }
+    },
+    "linuxcnc.lathe": {
+      "G76": { "sketch": "thread", "about": "Cuts a whole thread in one line. Passes get shallower until the full depth K is reached. All the words are distances as written; there are no packed digit codes.", "labels": { "height": "K", "first": "J" }, "words": { "P": ["0.0625", "Thread pitch: the distance per turn.", "PITCH"], "Z": ["-1.", "Where the thread ends."], "I": ["-0.01", "Thread peak offset from the start X. Negative for an outside thread.", "PEAK"], "J": ["0.005", "Depth of the first cut.", "CUT1"], "K": ["0.04", "Full thread depth.", "THDDEPTH"], "R": ["1.5", "Depth degression: how fast the cuts get shallower.", "DEGRESS"], "Q": ["29.5", "Compound slide angle, in degrees.", "COMPOUND"], "H": ["1", "Number of spring passes.", "SPRING"], "E": ["0.05", "Taper distance at each end.", "TAPERLEN"], "L": ["3", "Which ends get the taper: 0 none, 1 entry, 2 exit, 3 both.", "TAPEREND"] } },
+      "G70": { "sketch": "finish", "about": "Finishes the profile in an O-subroutine named by Q, after roughing with G71 or G72.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0", "Starting offset from the profile.", "OFFSET"], "E": ["0", "Finishing pass offset.", "FINOFS"], "P": ["1", "Number of finishing passes.", "PASSES"] } },
+      "G71": { "sketch": "rough", "about": "Roughs along Z to the profile in an O-subroutine named by Q, leaving D for finishing.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0.01", "Finishing allowance left on the profile.", "ALLOW"], "I": ["0.05", "Depth of each roughing pass.", "CUTDEPTH"], "R": ["0.01", "Retract distance after each pass.", "RETRACT"] } },
+      "G72": { "sketch": "face-rough", "about": "Like G71, but roughs on the face, along X.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0.01", "Finishing allowance left on the profile.", "ALLOW"], "I": ["0.05", "Depth of each roughing pass.", "CUTDEPTH"], "R": ["0.01", "Retract distance after each pass.", "RETRACT"] } }
     },
     "okuma.lathe": {
       "G71": { "sketch": "thread", "about": "Cuts a whole thread along Z in one block: passes get shallower until the thread height H is reached, then an optional finishing pass removes U.", "words": { "X": ["28.", "Final thread diameter."], "Z": ["5.", "Z where the thread ends."], "D": ["0.5", "Depth of the first pass, as a diameter.", "CUT1"], "H": ["1.8", "Thread height, as a diameter.", "THDHT"], "F": ["1.5", "Thread lead.", "LEAD"], "B": ["60", "Infeed angle, usually the insert's point angle (0 if left out).", "INFEED"], "A": ["30", "Taper angle (use A or the taper word, not both).", "TAPER"], "U": ["0.1", "Finishing allowance, as a diameter. No finishing pass without it.", "ALLOW"], "L": ["1.5", "Chamfer length on the last pass (with M23 on).", "CHAMF"], "E": ["0.2", "Lead change per lead, for a variable-lead thread.", "LEADCHG"], "J": ["1", "Number of threads within the F distance (1 if left out).", "THDS"], "M": ["32", "Picks the infeed mode and pattern (M32 to M34, M73 to M75)."], "Q": ["2", "Number of starts for a multi-start thread.", "STARTS"], "I": ["7.", "Taper as a difference in radius from start to end.", "TAPERR"] } },

@@ -617,8 +617,8 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
-      "d": "Inch units"
+      "e": "INCHCHK",
+      "d": "Confirm inch input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",

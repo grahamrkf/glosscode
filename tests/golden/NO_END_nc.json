@@ -1234,8 +1234,8 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
-      "d": "Inch units"
+      "e": "INCHCHK",
+      "d": "Confirm inch input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
@@ -1290,8 +1290,8 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
-      "d": "Tool length offset on"
+      "e": "OFS3DOFF",
+      "d": "3-D tool offset off (Okuma)"
      },
      {
       "g": "H1",
@@ -1471,8 +1471,8 @@
     {
      "li": 4,
      "id": "foreign-code",
-     "sev": "warning",
-     "msg": "Okuma calls the tool length offset with G56 H, not G43."
+     "sev": "info",
+     "msg": "On Okuma mills G43 cancels the 3-D tool offset. Tool length offset is G56 H, cancelled by G53."
     },
     {
      "li": 6,
