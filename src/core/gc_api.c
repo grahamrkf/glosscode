@@ -103,6 +103,7 @@ static void write_modes(gc_buf *b, const gc_modes *m)
     kv(b, "wcs", m->wcs, &first);
     kv(b, "spinDir", m->spin_dir, &first);
     kv(b, "cool", m->cool, &first);
+    kv(b, "torch", m->torch, &first);
     kv(b, "cycleCode", m->cycle, &first);
     kv(b, "F", m->F, &first);
     kv(b, "S", m->S, &first);
@@ -116,7 +117,7 @@ static void write_modes(gc_buf *b, const gc_modes *m)
     }
     gc_buf_puts(b, "],\"changed\":[");
     static const char *const NAMES[] = { "F", "S", "T", "H", "wcs", "motion", "plane", "unitCode", "distCode",
-                                         "feedCode", "spinCode", "comp", "tlen", "cycleCode", "spinDir", "cool" };
+                                         "feedCode", "spinCode", "comp", "tlen", "cycleCode", "spinDir", "cool", "torch" };
     int n = 0;
     for (unsigned i = 0; i < sizeof NAMES / sizeof *NAMES; i++)
         if (m->changed & (1u << i)) {

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | Source | Hypertherm Phoenix 9.1 and EDGE Connect R6.1 programmer's references, the Tormach plasma section of the PathPilot documentation, and the Centroid Acorn plasma notes |
-| Reviewed | 2026-11-01. No dialect yet; this review records what a plasma machine type would need |
+| Reviewed | 2026-11-01. The plasma machine type and the tables below were added 2026-11-02 |
 | Result | Plasma needs its own machine type (not mill, not lathe) with per-control M codes and no spindle checks |
 
 ## Why it isn't a dialect yet
@@ -45,7 +45,15 @@ The M codes also differ by control, more than they do between mill brands, so a 
 - Kerf compensation (G41/G42 with D) checked like cutter compensation, without the tool radius.
 - Hypertherm's G59 marked as "variables", not a work offset.
 
+## What was built (2026-11-02)
+
+- A `plasma` machine type (`machineTypes` in gcode-rules.json) that starts from the control's mill tables, with `fanuc.plasma` as the shared base: no canned cycles, tool changes, tool length offsets or spindle speed modes, and Torch and Kerf columns.
+- `hypertherm.plasma`, `centroid.plasma` and `tormach.plasma`, with only the codes listed above. Hypertherm is marked `verified: false` because its motion, positions and units groups are the EIA-274 basics, not a checked code list.
+- `torch-off-cut` and `torch-on-at-end` in place of the spindle checks, D read as the kerf offset, and Hypertherm's G59, G97/G98 and M codes in the dictionary.
+- The timeline can show the feed rate, with a band where the torch is on and a mark on lines that change the process or material (Hypertherm M36, G59, G82–G85; Acorn M65). Plasma power is set on the power supply, so there's no power value to plot.
+
 ## Not handled yet
 
-- Everything above. Plasma programs open today as mill programs and will show spindle and tool warnings.
-- Lasers and waterjets were ranked below plasma; Omax waterjets don't use G code.
+- Tormach's cut on and cut off codes. The review lists M200–M213 for the torch and THC without saying which is which, so the torch checks are off on Tormach until that's checked.
+- Hypertherm's full code list: units (G20/G21 or G70/G71), program end, M36 and M40 arguments, and the difference between G82 and G83 (and G84 and G85).
+- Lasers and waterjets were ranked below plasma; Omax waterjets don't use G code. A laser type would reuse `process` with its beam codes and add a power timeline (S as a percentage of maximum power).

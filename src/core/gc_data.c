@@ -172,8 +172,12 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
     c->style = style;
     c->brand = gc_json_get_str(machine, "brand");
     if (!c->brand) c->brand = "fanuc";
+    /* The machine type: mill, lathe, or one of the extra types in rules.machineTypes (plasma). A type
+       with a "base" starts from the base type's tables and words (baseType() in the mockup). */
+    const gc_json *types = gc_json_get(data->rules, "machineTypes");
     c->type = gc_json_get_str(machine, "type");
-    if (!c->type || strcmp(c->type, "lathe") != 0) c->type = "mill";
+    if (!c->type || (strcmp(c->type, "lathe") != 0 && !gc_json_is_obj(gc_json_get(types, c->type)))) c->type = "mill";
+    c->base_type = gc_json_get_str(gc_json_get(types, c->type), "base");
     c->lathe = strcmp(c->type, "lathe") == 0;
     c->okuma = strcmp(c->brand, "okuma") == 0;
 
@@ -182,12 +186,18 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
     int n = dialect_chain(dialects, c->brand, chain, 16);
     gc_json *out = gc_json_new(GC_JOBJ);
     int verified = n > 0;
+    const char *layers[2] = { c->base_type, c->type };
+    for (int t = 0; t < 2; t++) {
+        if (!layers[t]) continue;
+        for (int i = 0; i < n; i++) {
+            const gc_json *d = gc_json_get(dialects, chain[i]);
+            merge_layer(out, gc_json_get(d, layers[t]));
+            const gc_json *kw = gc_json_get(d, "keywords");
+            if (kw) gc_json_set(out, "keywords", gc_json_clone(kw));
+        }
+    }
     for (int i = 0; i < n; i++) {
-        const gc_json *d = gc_json_get(dialects, chain[i]);
-        merge_layer(out, gc_json_get(d, c->type));
-        const gc_json *kw = gc_json_get(d, "keywords");
-        if (kw) gc_json_set(out, "keywords", gc_json_clone(kw));
-        const gc_json *ver = gc_json_get(d, "verified");
+        const gc_json *ver = gc_json_get(gc_json_get(dialects, chain[i]), "verified");
         if (ver && ver->type == GC_JFALSE) verified = 0;
     }
     gc_json *groups = gc_json_get(out, "modalGroups");
@@ -243,9 +253,13 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
     c->dialect = out;
     c->groups = gc_json_get(out, "modalGroups");
     c->cycles = gc_json_get(out, "cycles");
+    c->process = gc_json_get(out, "process");
+    if (!gc_json_is_obj(c->process)) c->process = NULL;
     const gc_json *feedmode = gc_json_get(c->groups, "feed mode");
-    strcpy(c->feed_per_min, gc_json_has_str(feedmode, "G94") ? "G94" : "G98");
-    strcpy(c->feed_per_rev, gc_json_has_str(feedmode, "G95") ? "G95" : "G99");
+    /* A plasma control with no feed mode codes has none (Hypertherm's G98 ends a loop). */
+    int none = c->process && gc_json_len(feedmode) == 0;
+    strcpy(c->feed_per_min, gc_json_has_str(feedmode, "G94") ? "G94" : none ? "" : "G98");
+    strcpy(c->feed_per_rev, gc_json_has_str(feedmode, "G95") ? "G95" : none ? "" : "G99");
     const char *off = gc_json_get_str(gc_json_get(out, "toolLength"), "off");
     snprintf(c->tlen_off, sizeof c->tlen_off, "%s", off ? off : "G49");
 
@@ -300,6 +314,10 @@ const gc_json *gc_entry(const gc_ctx *c, const char *key)
         char bt[64];
         snprintf(bt, sizeof bt, "%s.%s", b, c->type);
         const gc_json *ov = gc_json_get(gc_json_get(ovs, bt), key);
+        if (!gc_json_truthy(ov) && c->base_type) {
+            snprintf(bt, sizeof bt, "%s.%s", b, c->base_type);
+            ov = gc_json_get(gc_json_get(ovs, bt), key);
+        }
         if (!gc_json_truthy(ov)) ov = gc_json_get(gc_json_get(ovs, b), key);
         if (gc_json_truthy(ov)) return ov;
         const gc_json *d = gc_json_get(dialects, b);
@@ -310,6 +328,7 @@ const gc_json *gc_entry(const gc_ctx *c, const char *key)
     if (!e) return NULL;
     if (gc_json_truthy(gc_json_get(e, "long"))) return e;
     const gc_json *t = gc_json_get(e, c->type);
+    if ((!t || t->type == GC_JNULL) && c->base_type) t = gc_json_get(e, c->base_type);
     return (t && t->type != GC_JNULL) ? t : NULL;
 }
 

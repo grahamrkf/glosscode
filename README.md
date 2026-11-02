@@ -90,10 +90,10 @@ The English words come from a dictionary of consistent abbreviations ([`data/gco
 **Previews**
 - XY toolpath view that follows subprogram calls, colored by move type or by tool. Moves after the selected line can be greyed out, hidden, or shown normally.
 - Simulation playback that draws the tool moves one line at a time, with step, play and speed controls. It pauses at M00 (and M01 with optional stop on), can skip block delete (/) lines, and has an expanded view with a large toolpath.
-- A "Z by line" timeline in execution order that keeps the selected line centered.
+- A timeline in execution order that keeps the selected line centered. It shows Z by line (X radius on a lathe), the feed rate or the spindle speed. On a plasma table it shows the feed rate or Z, with a band where the torch is on and marks where the process or material changes.
 
 **Machines**
-- Mill and lathe modes, since some codes mean different things on each (G50, G76, G98, G99).
+- Mill, lathe and plasma modes, since some codes mean different things on each (G50, G76, G98, G99, and M07/M08 as cut on and off on a Hypertherm plasma control). Plasma checks the torch instead of the spindle: Hypertherm Phoenix/EDGE Connect (first draft), Centroid Acorn and Tormach plasma.
 - Per-machine definition files that override dictionary entries (for example Haas M88/M89 and M97).
 - An end-of-block setting per machine profile for older controls that need `;` at the end of every line.
 - Haas and Fanuc mills and lathes, plus a first draft of Okuma OSP (G15 H work offsets, G56 H length offsets, CALL and RTS). [`docs/checks.md`](docs/checks.md) lists what each control covers so far.

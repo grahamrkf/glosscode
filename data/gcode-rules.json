@@ -15,6 +15,8 @@
     "feed-mode-changed":    { "severity": "warning", "title": "Feed rate from the other feed mode", "message": "F{f} was set under {old} but {new} is active now, so it reads as {reading}.", "why": "F is not cleared when G94/G95 changes." },
     "feed-plausibility":    { "severity": "info",    "title": "Feed rate looks like the wrong mode", "message": "F{f} {unit} is unusually {size}. Check that {mode} is the mode you meant." },
     "spindle-off-feed":     { "severity": "warning", "title": "Cutting with the spindle stopped",   "message": "This {move} cuts while the spindle is stopped ({spin})." },
+    "torch-off-cut":        { "severity": "warning", "title": "Feed move with the torch off",       "message": "This {move} runs at feed rate while the torch is off ({state}).", "why": "A plasma program turns the torch on before each cut and off after it, and travels between cuts with G00. A feed move with the torch off usually means the cut on code is missing." },
+    "torch-on-at-end":      { "severity": "warning", "title": "Torch on at program end",            "message": "The program ends with the torch on ({code} is active). Turn it off with {off} first." },
     "no-speed":             { "severity": "warning", "title": "Spindle started with no speed",      "message": "{code} starts the spindle but no S has been set." },
     "arc-no-center":        { "severity": "error",   "title": "Arc with no center or radius",       "message": "{code} needs R or {centers} to define the arc." },
     "arc-r-and-ijk":        { "severity": "warning", "title": "Arc with both R and center",         "message": "This arc has both R and {centers}. Most controls use R and ignore the others." },
@@ -35,6 +37,12 @@
     "no-program-end":       { "severity": "warning", "title": "No program end",                     "message": "The file has no {ends}." },
     "missing-decimal":      { "severity": "warning", "title": "Number with no decimal point",       "message": "{word} has no decimal point, so the control reads it as {letter}{value} {unit}. Write {letter}{intended} if you mean {amount} {unit}.", "why": "Fanuc-style controls read a whole number on a distance word as the smallest increment (0.0001 in or 0.001 mm)." },
     "unknown-word":         { "severity": "info",    "title": "Word not in the dictionary",         "message": "{word} isn't in the dictionary or this machine's file." }
+  },
+
+  "machineTypes": {
+    "mill":   { "label": "Mill",   "timeline": ["z", "feed", "speed"] },
+    "lathe":  { "label": "Lathe",  "timeline": ["x", "feed", "speed"] },
+    "plasma": { "label": "Plasma", "base": "mill", "timeline": ["feed", "z"], "about": "A plasma machine starts from its control's mill tables and words, then the control's plasma table on top (fanuc.plasma for the Fanuc-style chain). A control with no mill tables (Hypertherm) has only its plasma table. timeline lists the values the Z-by-line timeline can plot, the first being the default: z (or x, the lathe radius), feed (the feed rate) and speed (the spindle speed while it turns). A machine with a process (process.on) also shows a band where the torch is on and marks the lines with a process.changes code (a material or process change, since plasma power is set on the power supply, not in the program)." }
   },
 
   "dialects": {
@@ -170,6 +178,33 @@
           "G91": { "severity": "warning", "text": "Fanuc-style lathes use U and W for incremental moves; G91 needs the optional G-code system B or C." },
           "M97": { "severity": "error",   "text": "M97 (local subprogram) is a Haas code. On Fanuc, call a separate O program with M98 P." }
         }
+      },
+      "plasma": {
+        "about": "Shared plasma base for controls that otherwise read G code the way their mill does (Tormach PathPilot, Centroid CNC12). The plasma type starts from the mill tables of the same chain, then these. There are no cut on or cut off codes here, because they differ by control; each control's plasma table lists its own under process.",
+        "process": { "name": "torch", "on": [], "off": [] },
+        "cycles": null,
+        "toolChange": null,
+        "toolLength": null,
+        "speedClamp": null,
+        "modalGroups": { "canned cycle": null, "cycle return": null, "tool length": null, "speed mode": null },
+        "wordHints": { "G43": null, "G44": null },
+        "mConflicts": [],
+        "columns": [
+          { "id": "N",     "label": "N",         "letters": ["N"] },
+          { "id": "MOT",   "label": "G",         "groups": ["motion"], "carry": "motion", "aligns": true, "about": "Motion (G00-G03)" },
+          { "id": "X",     "label": "X",         "letters": ["X"], "carry": "position", "aligns": true },
+          { "id": "Y",     "label": "Y",         "letters": ["Y"], "carry": "position", "aligns": true },
+          { "id": "Z",     "label": "Z",         "letters": ["Z"], "carry": "position", "aligns": true },
+          { "id": "ARC",   "label": "I J R",     "letters": ["I", "J", "R"], "aligns": true },
+          { "id": "F",     "label": "F",         "letters": ["F"], "carry": "value", "aligns": true },
+          { "id": "TORCH", "label": "Torch",     "process": true, "carry": "torch", "aligns": true, "about": "The control's cut on and cut off codes" },
+          { "id": "KERF",  "label": "Kerf",      "letters": ["D"], "about": "Kerf compensation offset (D)" },
+          { "id": "G",     "label": "Other G",   "letters": ["G"], "about": "Other G-codes: kerf compensation, units, positions and so on" },
+          { "id": "M",     "label": "M",         "letters": ["M"] },
+          { "id": "OTHER", "label": "Other",     "other": true },
+          { "id": "NOTE",  "label": "Comment",   "comments": true }
+        ],
+        "programOrderCodes": ["M00", "M01", "M02", "M30", "M98", "M99", "G65", "G04", "G10", "G28", "G30", "G53", "G92"]
       }
     },
 
@@ -393,6 +428,12 @@
           "G52": { "severity": "error", "text": "PathPilot lathes have no G52." },
           "M06": { "severity": "info",  "text": "PathPilot lathes change tools with the T word alone (T0303). M06 isn't needed." }
         }
+      },
+      "plasma": {
+        "source": { "manual": "Tormach PathPilot documentation, plasma section", "section": "Plasma G and M codes (see docs/manual-reviews/plasma-hypertherm-tormach-centroid.md)" },
+        "about": "G15 and G16 are the plasma probe and pierce codes here, not polar coordinates. M200 to M213 handle the torch and THC, but their single meanings aren't checked yet, so there are no cut on or cut off codes and the torch checks are off.",
+        "modalGroups": { "polar": null },
+        "foreign": { "G15": null, "G16": null }
       }
     },
 
@@ -444,6 +485,11 @@
         "foreign": {
           "M30": { "severity": "info", "text": "On Centroid, M30 is a custom M code that does nothing unless the machine defines it. M02 ends and restarts the program." }
         }
+      },
+      "plasma": {
+        "source": { "manual": "Centroid Acorn plasma notes (CNC12)", "section": "Plasma M codes (see docs/manual-reviews/plasma-hypertherm-tormach-centroid.md)" },
+        "process": { "name": "torch", "on": ["M61"], "off": ["M62"], "changes": ["M65"] },
+        "mConflicts": [["M61", "M62"]]
       }
     },
 
@@ -644,6 +690,44 @@
         "source": { "manual": "SINUMERIK ONE / 840D sl / 828D ISO Milling Programming Manual", "revision": "07/2021, CNC 4.95/6.15", "section": "3 Programming principles, 5 Auxiliary functions, 6 Cycles and subprograms, appendix B G code groups" },
         "mPerBlock": 5,
         "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": { "word": "P", "target": "program" } }
+      }
+    },
+
+    "hypertherm": {
+      "label": "Hypertherm Phoenix / EDGE Connect",
+      "verified": false,
+      "source": { "manual": "Hypertherm Phoenix 9.1 and EDGE Connect R6.1 programmer's references", "section": "EIA-274 program codes (see docs/manual-reviews/plasma-hypertherm-tormach-centroid.md)" },
+      "plasma": {
+        "about": "Plasma only. Not checked against the whole code list yet: the motion, positions and units groups are the EIA-274 basics, and only the codes the review lists have their own words. G59 sets variables, G97/G98 start and end a loop, and M07/M08 turn the cut on and off.",
+        "modalGroups": {
+          "motion":      ["G00", "G01", "G02", "G03"],
+          "distance":    ["G90", "G91"],
+          "cutter comp": ["G40", "G41", "G42"]
+        },
+        "process": { "name": "torch", "on": ["M07", "M03", "M04"], "off": ["M08", "M05", "M06"], "changes": ["M36", "G59", "G82", "G83", "G84", "G85"] },
+        "dwellWords": ["X"],
+        "mConflicts": [["M07", "M08"], ["M09", "M10"], ["M50", "M51"]],
+        "wordHints": { "G02": { "arc": true }, "G03": { "arc": true }, "G41": { "requires": ["D"] }, "G42": { "requires": ["D"] } },
+        "columns": [
+          { "id": "N",     "label": "N",         "letters": ["N"] },
+          { "id": "MOT",   "label": "G",         "groups": ["motion"], "carry": "motion", "aligns": true, "about": "Motion (G00-G03)" },
+          { "id": "X",     "label": "X",         "letters": ["X"], "carry": "position", "aligns": true },
+          { "id": "Y",     "label": "Y",         "letters": ["Y"], "carry": "position", "aligns": true },
+          { "id": "Z",     "label": "Z",         "letters": ["Z"], "carry": "position", "aligns": true },
+          { "id": "ARC",   "label": "I J R",     "letters": ["I", "J", "R"], "aligns": true },
+          { "id": "F",     "label": "F",         "letters": ["F"], "carry": "value", "aligns": true },
+          { "id": "TORCH", "label": "Torch",     "process": true, "carry": "torch", "aligns": true, "about": "The control's cut on and cut off codes" },
+          { "id": "KERF",  "label": "Kerf",      "letters": ["D"], "about": "Kerf compensation offset (D)" },
+          { "id": "G",     "label": "Other G",   "letters": ["G"], "about": "Other G-codes: kerf compensation, units, positions and so on" },
+          { "id": "M",     "label": "M",         "letters": ["M"] },
+          { "id": "OTHER", "label": "Other",     "other": true },
+          { "id": "NOTE",  "label": "Comment",   "comments": true }
+        ],
+        "programOrderCodes": ["M00", "M01", "M02", "M30", "M40", "M41", "G04", "G08", "G59", "G97", "G98"],
+        "foreign": {
+          "G94": { "severity": "error", "text": "Hypertherm controls don't support G94. The feed rate is always per minute." },
+          "G95": { "severity": "error", "text": "Hypertherm controls don't support G95. The feed rate is always per minute." }
+        }
       }
     },
 
