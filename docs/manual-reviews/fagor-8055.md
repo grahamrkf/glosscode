@@ -1,4 +1,4 @@
-# Fagor 8055 and 8055i (mill and lathe)
+# Fagor 8055, 8055i, 8060 and 8065 (mill and lathe)
 
 | | |
 |---|---|
@@ -72,3 +72,19 @@ Apart from the usual M00–M06, M08/M09 and M30, Fagor leaves M codes to the mac
 2. Its own G tables (not inheriting `fanuc`): G70/G71 as units (`unitCodes`), G44 as tool length off, the renumbered cycles, and every Fanuc meaning above in `foreign`.
 3. Cycle words Z/I/K with no R, and `dwellWords` K in hundredths.
 4. `subCalls` for CALL/PCALL/MCALL and `subReturn` RET, which needs statement parsing.
+
+## Fagor 8060 and 8065 (the current control), mapped only
+
+Programming Manual Ref. 2008 (498 pp) is the main source. Ref. 1402 (750 pp) is older and numbers its chapters differently. The M examples manuals (Ref. 2102 and 1402) and the MC operating manual (Ref. 2102) are of little use here. **The canned cycles aren't in the programming manual.** Its G80–G89 rows point to a separate M/T cycles manual, which we don't have.
+
+**Chapter map (Ref. 2008, printed pages):** block structure 1.3 (p. 43); G list 1.5 (pp. 48–50); M list 1.6 (p. 51); statements 1.7 (p. 52); labels 1.8 (p. 55); comments 1.9 (p. 56); units G70/G71 (p. 71); planes ch. 4 (p. 84); zero offsets ch. 5 (p. 92); feed ch. 6 (p. 107); spindle ch. 7 (p. 130); path control ch. 8 (p. 147); threading and rigid tapping ch. 10 (p. 189); geometric assistance ch. 11 (p. 205); dwell 12.1 (p. 245); radius compensation ch. 13 (p. 261); block skip, NR repetition, #RPT, $GOTO, $FOR and $WHILE ch. 14 (pp. 285–307); subroutines ch. 15 (pp. 311–334); C axis, kinematics and HSC chs. 17–22; statements ch. 26; variables ch. 27.
+
+**How it differs from the 8055:**
+1. **Comments can use `( )` or `;`**, and #COMMENT BEGIN/END marks a block of them (p. 56). On the 8055, parentheses hold statements.
+2. **High-level statements start with $ or #** ($IF, $GOTO, $FOR, #CALL, #MSG, #TIME), not parentheses. Empty lines are allowed (p. 43).
+3. **Repeats use NR** (… F150 NR4; NR0 runs the line once), not an N count at the end of the line (p. 289).
+4. **Dwell is in seconds:** G04 K0.5, or the time alone (G04 8.5). #TIME does the same (p. 245). The 8055 counts in hundredths.
+5. **Subroutines** start with `%L name` (local) or `%name` (global) and end with M17, M29 or #RET. They're called with LL, #CALL, #PCALL or #MCALL, and G500–G599 can be user subroutines (pp. 312–324).
+6. **G codes that changed** (pp. 48–50): work zones moved to G120–G123, and G20 sets the plane from two directions; G30/G31 set the polar origin; G93 is machining time (the 8055 uses G32 for inverse time); G58/G59 are absolute offsets 5 and 6 (additive on the 8055); G60/G61 are one-block corner modes (patterns on the 8055); G63 is rigid tapping; G100–G104 are probing; G151 is diameter mode. G43/G44 aren't listed. G05/G07, G06/G08/G09, G10–G14, G36, G38, G50, G70/G71, G72, G73 and G74 mean the same as on the 8055, and the cycle numbers match too.
+
+**For a Fagor dialect:** build it for the 8060/8065, since that's the current control. Its G codes are close to the 8055's, but the syntax (comments, $ and # statements, NR, dwell in seconds, %L and #CALL subroutines) is different. Checking cycle words needs the 8060/8065 canned cycles manual.
