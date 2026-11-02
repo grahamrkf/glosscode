@@ -101,6 +101,16 @@ int plat_file_exists(const char *path)
     return stat(path, &st) == 0;
 }
 
+char *plat_full_path(const char *path)
+{
+    char *r = realpath(path, NULL);
+    if (r) return r;
+    if (path[0] == '/') return strdup(path);
+    char cwd[PATH_MAX];
+    if (!getcwd(cwd, sizeof cwd)) return strdup(path);
+    return join(cwd, path);
+}
+
 int plat_make_dirs(const char *path)
 {
     char *p = strdup(path);

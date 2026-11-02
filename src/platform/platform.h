@@ -21,6 +21,8 @@ int plat_write_file(const char *path, const char *data, size_t len, char *err, s
 /* Creates a folder and any missing parents. Returns 0 when it exists afterwards. */
 int plat_make_dirs(const char *path);
 int plat_file_exists(const char *path);
+/* The absolute form of a path (relative paths are taken from the current folder). Returns a malloc'd string. */
+char *plat_full_path(const char *path);
 
 /* Calls fn for each file in dir whose name ends with ext (".json"), in name order. */
 typedef void (*plat_dir_fn)(const char *path, const char *name, void *arg);

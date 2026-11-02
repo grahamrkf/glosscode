@@ -21,6 +21,8 @@
     startup: function () { return call("gcStartup", []); },
     // Opens a file by path (from the recent list), like open() without the dialog.
     openPath: function (path) { return call("gcOpenPath", [String(path)]); },
+    // Whether a file is still there (true or false).
+    exists: function (path) { return call("gcExists", [String(path)]); },
     // The saved settings object (recent files, default machines by file type), or null; and saving it.
     settings: function () { return call("gcSettings", []); },
     saveSettings: function (obj) { return call("gcSaveSettings", [obj]); },

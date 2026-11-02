@@ -198,6 +198,12 @@ static void bind_open(const char *id, const char *req, void *arg)
     gc_json *a = args_of(req);
     char *dir = folder_of(gc_json_str(gc_json_at(a, 0)));
     gc_json_free(a);
+    /* A file from the recent list may be gone, and its folder too: start in the nearest folder that's left. */
+    while (dir && !plat_file_exists(dir)) {
+        char *up = folder_of(dir);
+        free(dir);
+        dir = up;
+    }
     nfdopendialogu8args_t args;
     memset(&args, 0, sizeof args);
     args.filterList = FILTERS;
@@ -322,6 +328,16 @@ static void bind_open_path(const char *id, const char *req, void *arg)
     if (json) reply(id, 1, json);
     else reply_error(id, err);
     free(json);
+}
+
+/* gcExists(path): whether a file is still there, so the UI can tell a missing file from one it can't read. */
+static void bind_exists(const char *id, const char *req, void *arg)
+{
+    (void)arg;
+    gc_json *a = args_of(req);
+    const char *path = gc_json_str(gc_json_at(a, 0));
+    reply(id, 1, path && *path && plat_file_exists(path) ? "true" : "false");
+    gc_json_free(a);
 }
 
 /* Settings (recent files, default machines by file type) live in settings.json in the settings folder.
@@ -469,7 +485,7 @@ int gc_main(int argc, char **argv)
         } else if (!strcmp(argv[i], "--help") || !strcmp(argv[i], "-h")) {
             usage();
             return 0;
-        } else if (argv[i][0] != '-' && !STARTUP_FILE) STARTUP_FILE = gc_strdup(argv[i]);
+        } else if (argv[i][0] != '-' && !STARTUP_FILE) STARTUP_FILE = plat_full_path(argv[i]);
     }
 
     const plat_dirs *dirs = plat_get_dirs();
@@ -507,6 +523,7 @@ int gc_main(int argc, char **argv)
     webview_bind(W, "gcSave", bind_save, NULL);
     webview_bind(W, "gcStartup", bind_startup, NULL);
     webview_bind(W, "gcOpenPath", bind_open_path, NULL);
+    webview_bind(W, "gcExists", bind_exists, NULL);
     webview_bind(W, "gcSettings", bind_settings, NULL);
     webview_bind(W, "gcSaveSettings", bind_save_settings, NULL);
     webview_bind(W, "gcOpenUrl", bind_open_url, NULL);

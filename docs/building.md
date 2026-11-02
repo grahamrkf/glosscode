@@ -78,6 +78,7 @@ In the program, `window.GlossCodeNative` is set before the page loads (`src/app/
 | `GlossCodeNative.core(method, params)` | Runs a core method: `parse`, `serialize`, `analyze` or `tokenize` (see `src/core/gc_api.c`) |
 | `GlossCodeNative.startup()` | The file named on the command line, read like `open()` |
 | `GlossCodeNative.openPath(path)` | Reads a file from the recent list, like `open()` without the dialog |
+| `GlossCodeNative.exists(path)` | Whether a file is still there, so a recent program that was moved or deleted can ask to be located or removed |
 | `GlossCodeNative.settings()`, `saveSettings(obj)` | Reads and writes `settings.json` in the settings folder (recent files, default machines by file type) |
 | `GlossCodeNative.openUrl(url)`, `setTitle(text)`, `quit()` | Open a link in the browser, set the window title, close the window |
 

@@ -146,6 +146,21 @@ int plat_file_exists(const char *path)
     return a != INVALID_FILE_ATTRIBUTES;
 }
 
+char *plat_full_path(const char *path)
+{
+    wchar_t *w = to_wide(path);
+    DWORD n = GetFullPathNameW(w, 0, NULL, NULL);
+    char *r = NULL;
+    if (n) {
+        wchar_t *full = malloc(n * sizeof *full);
+        if (full && GetFullPathNameW(w, n, full, NULL)) r = to_utf8(full);
+        free(full);
+    }
+    free(w);
+    if (!r && (r = malloc(strlen(path) + 1)) != NULL) strcpy(r, path);
+    return r;
+}
+
 int plat_make_dirs(const char *path)
 {
     wchar_t *w = to_wide(path);

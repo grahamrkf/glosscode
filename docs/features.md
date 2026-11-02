@@ -25,6 +25,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Sort the words on each line into a consistent order
 - [ ] Menu bar: File, Edit, View, Insert, Program, Simulate
 - [ ] Starts on a home page: recent programs (each with the machine it was opened for), New program, Open, and default machines by file type. Sample programs are a separate download, not part of the program
+- [ ] Clicking a recent program opens it. If it was moved, renamed or deleted, GlossCode asks: **Locate…** finds it with the Open dialog (it keeps its place in the list and its machine), or **Remove from list**
 - [ ] One tab per open program. Menus, panels and checks act on the active tab; each tab keeps its own machine, selected line and word, undo history and scroll position. Ctrl+Tab switches, Ctrl+W closes (asking first if there are unsaved changes)
 - [ ] File › New… asks which machine the program is for, then opens a blank program in a new tab
 - [ ] Opening a file asks which machine it's for, unless it's in the recent list (the machine used last time) or its extension has a default machine (set on the home page, or by "Always use this machine for .nc files" when asked)

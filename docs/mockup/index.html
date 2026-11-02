@@ -353,6 +353,8 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
 .mpfoot{display:flex;gap:8px;align-items:center;padding:10px 12px;border-top:1px solid #e5e5e5;background:#f3f3f3}
 .mpfoot span{flex:1}
 .mpfoot .btn{min-width:90px}
+.mfdlg{width:480px;height:auto}
+.mfdlg .mfpath{font:12px/1.4 Consolas,"Cascadia Mono",monospace;color:#555;word-break:break-all;background:#f6f6f6;border:1px solid #e5e5e5;border-radius:4px;padding:6px 8px}
 .mchip{margin-left:auto;display:flex;align-items:center;gap:7px;height:22px;padding:0 8px 0 10px;border:1px solid #d1d1d1;border-radius:4px;background:#fff;font-size:12px;cursor:pointer;white-space:nowrap}
 .mchip:hover,.mchip.open{background:#f6f6f6;border-color:#b9b9b9}
 .mchip .mlab{color:#777}
@@ -856,6 +858,17 @@ html.native .app>.tbar{display:none}
             <label class="chk" id="mp-defl"><input type="checkbox" id="mp-def"><span id="mp-deft"></span></label>
           </div>
           <div class="mpfoot"><span></span><button class="btn pri" id="mp-ok">Open</button><button class="btn" id="mp-cancel">Cancel</button></div>
+        </div>
+      </div>
+
+      <div class="dim" id="mfdlg" hidden>
+        <div class="dlg mfdlg" role="alertdialog" aria-labelledby="mf-title" aria-describedby="mf-text">
+          <div class="tbar"><span class="ttl" style="padding-left:2px" id="mf-title">Can't find the program</span><span class="cap"><span id="mf-x">&#x2715;</span></span></div>
+          <div class="mpbody">
+            <p id="mf-text"></p>
+            <div class="mfpath" id="mf-path"></div>
+          </div>
+          <div class="mpfoot"><span></span><button class="btn pri" id="mf-locate">Locate…</button><button class="btn" id="mf-remove">Remove from list</button><button class="btn" id="mf-cancel">Cancel</button></div>
         </div>
       </div>
 
@@ -4623,10 +4636,46 @@ async function nativeOpen(){
 async function openRecent(r){
   const open = TABS.findIndex(t => t.path===r.path);
   if (open >= 0){ activate(open); return; }
-  if (!NATIVE){ if (FILES[r.name]) openSample(r.name, r.machine); else setMsg(`${r.name} isn't one of the mockup's sample programs.`, true); return; }
+  if (!NATIVE){ if (FILES[r.name]) openSample(r.name, r.machine); else await missingRecent(r); return; }
+  let there = true;
+  try { there = await NATIVE.exists(r.path); } catch { /* older bridge: just try to open it */ }
+  if (!there) return missingRecent(r);
   let res;
   try { res = await NATIVE.openPath(r.path); }
-  catch (e){ setMsg(`Couldn't open ${r.path}. It may have been moved, renamed or deleted. ✕ removes it from the list.`, true); return; }
+  catch (e){ setMsg(String(e?.message || e) + " Check that you can open it, or ✕ removes it from the list.", true); return; }
+  await openNativeResult(res, r.machine);
+}
+/* A recent program that isn't where it was: find it with the Open dialog, or take it off the list. */
+let MF = null;
+function askMissing(r){
+  if (MF) MF.resolve(null);
+  return new Promise(resolve => {
+    MF = { resolve };
+    $("mf-title").textContent = `Can't find ${r.name}`;
+    $("mf-text").textContent = `It may have been moved, renamed or deleted, or it's on a drive that isn't connected. Locate it to open it and keep it in the list with ${MACHINES[r.machine]?.name || "its machine"}, or remove it from the list.`;
+    $("mf-path").textContent = r.path;
+    $("mfdlg").hidden = false; $("mf-locate").focus();
+  });
+}
+function closeMissing(choice){
+  if (!MF) return;
+  const m = MF; MF = null; $("mfdlg").hidden = true;
+  m.resolve(choice);
+}
+$("mf-locate").onclick = () => closeMissing("locate");
+$("mf-remove").onclick = () => closeMissing("remove");
+$("mf-cancel").onclick = $("mf-x").onclick = () => closeMissing(null);
+$("mfdlg").addEventListener("keydown", e => { if (e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); closeMissing(null); } });
+async function missingRecent(r){
+  const choice = await askMissing(r);
+  if (choice==="remove"){ forget(r.path); setMsg(`Removed ${r.name} from recent programs.`); return; }
+  if (choice!=="locate") return;
+  if (!NATIVE){ openDlg(); return; }
+  let res;
+  try { res = await NATIVE.open(r.path); } catch (e){ setMsg(String(e?.message || e), true); return; }
+  if (!res) return;
+  // The file it was is gone, so the one picked takes its place in the list, with the same machine.
+  if (res.path!==r.path){ SETTINGS.recent = SETTINGS.recent.filter(x => x.path!==r.path); saveSettings(); drawHome(); }
   await openNativeResult(res, r.machine);
 }
 // The mockup's sample programs (browser only). Without a machine, it's treated like a file never opened before.
