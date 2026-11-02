@@ -4,6 +4,9 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Fixed
+- On Windows the program opened on the mockup's intro page, with the editor in a small framed window inside it. It now opens straight into the editor, filling the window. Links in the program (such as **Get the examples**) open in your web browser again instead of replacing the editor.
+
 ## [0.1.3] - 2026-11-02
 
 ### Home page
