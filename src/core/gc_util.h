@@ -49,6 +49,10 @@ int gc_starts_with(const char *s, const char *prefix);
 int gc_ends_with(const char *s, const char *suffix);
 /* True when every character of s is a digit and s isn't empty. */
 int gc_all_digits(const char *s);
+/* /^[A-Z][-+]?[#[]/: a word whose value is a macro variable or expression ("X-#101", "F[#1*2]"). */
+int gc_is_var_val(const char *t);
+/* Macro text kept as one word: "#110=-0.035", "IF [...] GOTO 5", "WHILE [...] DO1", "END1". */
+int gc_is_macro_tok(const char *t);
 
 /* A string-to-int map (open addressing), used for N and O labels. */
 typedef struct gc_map {

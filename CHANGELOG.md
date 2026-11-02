@@ -4,6 +4,16 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Macro variables
+- Lines and words that use macro variables are read and shown instead of being dropped. A line like `#110= -0.035` (setting a variable) is one word, `X - #101` reads as `X-#101`, and `Z#113`, `F#111` and `F[#111*3]` keep their variable or expression. `IF`, `WHILE` and `END1` lines are kept whole as written.
+- Selecting a word that uses a variable shows what it works out to each time the simulation runs that line, for example the four values `X-#103` takes in a subprogram called for four rows.
+- These lines no longer get false "has no number after it" problems, and a move to a variable position doesn't give arc or rapid checks a wrong position.
+
+### Simulation
+- Macro variables are worked out as the program runs, including through local subprograms (`M97 P1000`), so subprograms that cut with variable positions (like concentric slots with `G03 X - #103 Y#104 I#101 J - #102`) draw correctly.
+- Drilling cycles: each hole now plunges from R to the bottom and goes back up to R (`G99`) or the starting height (`G98`). The Z-by-line timeline draws this as a vertical line down and back up for each hole. A cycle line with `L0` stores the cycle without drilling, and the holes come from the lines that follow (often a list of positions in a local subprogram). The cycle stays on until `G80` or `G00`–`G03`, even across subprogram calls.
+- New **G00** button beside the M01 and / buttons (also Simulate › Show rapid moves) hides rapid moves, so the toolpath shows feed moves only, like the control's own graphics screen.
+
 ## [0.1.4] - 2026-11-02
 
 ### Fixed

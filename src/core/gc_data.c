@@ -391,6 +391,13 @@ void gc_fmt_num(const gc_ctx *c, char L, const char *raw, int inch, gc_num *out)
 {
     memset(out, 0, sizeof *out);
     if (!raw || !*raw) return;
+    {   /* a macro variable or expression: worked out when the line runs */
+        const char *p = (raw[0] == '-' || raw[0] == '+') ? raw + 1 : raw;
+        if (*p == '#' || *p == '[') {
+            snprintf(out->v, sizeof out->v, "%s", raw);
+            return;
+        }
+    }
     const char *sign = raw[0] == '-' ? "-" : "";
     const char *body = (raw[0] == '-' || raw[0] == '+') ? raw + 1 : raw;
     if (strchr(body, '.')) {

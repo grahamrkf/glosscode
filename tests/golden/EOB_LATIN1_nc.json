@@ -28,6 +28,7 @@
   ],
   [
    "N40",
+   "#100=1",
    "G00",
    "Z1."
   ],
@@ -136,6 +137,11 @@
       "g": "N40",
       "e": "SEQ40",
       "d": "Sequence number 40"
+     },
+     {
+      "g": "#100=1",
+      "e": "#100=1",
+      "d": "Sets macro variable #100 to 1"
      },
      {
       "g": "G00",
@@ -276,6 +282,11 @@
       "d": "Sequence number 40"
      },
      {
+      "g": "#100=1",
+      "e": "#100=1",
+      "d": "Sets macro variable #100 to 1"
+     },
+     {
       "g": "G00",
       "e": "RPD",
       "d": "Rapid move"
@@ -412,6 +423,11 @@
       "g": "N40",
       "e": "SEQ40",
       "d": "Sequence number 40"
+     },
+     {
+      "g": "#100=1",
+      "e": "#100=1",
+      "d": "Sets macro variable #100 to 1"
      },
      {
       "g": "G00",
@@ -552,6 +568,11 @@
       "d": "Sequence number 40"
      },
      {
+      "g": "#100=1",
+      "e": "#100=1",
+      "d": "Sets macro variable #100 to 1"
+     },
+     {
       "g": "G00",
       "e": "RAPID",
       "d": "Rapid move"
@@ -688,6 +709,11 @@
       "g": "N40",
       "e": "SEQ40",
       "d": "Sequence number 40"
+     },
+     {
+      "g": "#100=1",
+      "e": "#100=1",
+      "d": "Sets macro variable #100 to 1"
      },
      {
       "g": "G00",

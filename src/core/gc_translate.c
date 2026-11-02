@@ -103,11 +103,16 @@ static void track_carry(const gc_ctx *c, const gc_line *l, tstate *st)
         const char *ta = NULL, *ti = NULL;
         char la[2] = { ABS[a], 0 }, li[2] = { INC[a], 0 };
         for (int i = 0; i < l->ntok && !ta; i++)
-            if (is_value_word(l->tok[i], la)) ta = l->tok[i];
+            if (is_value_word(l->tok[i], la) || (l->tok[i][0] == ABS[a] && gc_is_var_val(l->tok[i]))) ta = l->tok[i];
         for (int i = 0; i < l->ntok && !ti; i++)
-            if (is_value_word(l->tok[i], li)) ti = l->tok[i];
+            if (is_value_word(l->tok[i], li) || (l->tok[i][0] == INC[a] && gc_is_var_val(l->tok[i]))) ti = l->tok[i];
         if (!ta && !ti) continue;
         st->pos_w[a] = NULL;
+        if ((ta && gc_is_var_val(ta)) || (!ta && gc_is_var_val(ti))) { /* worked out when it runs */
+            if (ta && !st->inc) st->pos_w[a] = ta;
+            st->has_pos[a] = 0;
+            continue;
+        }
         if (unknown || (st->cycle && st->inc && a == 2)) {
             st->has_pos[a] = 0;
             continue;
@@ -152,7 +157,7 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
     const gc_json *tl_on = gc_json_get(gc_json_get(c->dialect, "toolLength"), "on");
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
-        if (is_value_word(t, "FSTH")) {
+        if (is_value_word(t, "FSTH") || (strchr("FSTH", t[0]) && gc_is_var_val(t))) {
             if (t[0] == 'H' && wcs_line) {
                 snprintf(st->wcs, sizeof st->wcs, "G15 %s", t);
                 CHG(CH_WCS);
@@ -329,6 +334,40 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         return;
     }
     const char *sk = style_key(c);
+    if (gc_is_macro_tok(t)) { /* macro text reads as written */
+        if (t[0] == '#') {
+            const char *eq = NULL;
+            if (t[1] == '[') {
+                const char *q = strchr(t, ']');
+                if (q && q[1] == '=') eq = q + 1;
+            } else {
+                const char *q = t + 1;
+                while (gc_is_digit((unsigned char)*q)) q++;
+                if (q > t + 1 && *q == '=') eq = q;
+            }
+            if (!eq || !eq[1]) {
+                snprintf(e, sizeof e, "?%s", t);
+                snprintf(d, sizeof d, "%s has no = and value, so it doesn't set the variable.", t);
+                cell_set(cell, e, NULL, d, GC_CELL_UNKNOWN);
+                return;
+            }
+            const char *val = eq + 1, *p = val;
+            if (*p == '-' || *p == '+') p++;
+            int plain = *p != '\0';
+            for (; *p; p++)
+                if (!gc_is_digit((unsigned char)*p) && *p != '.') plain = 0;
+            snprintf(d, sizeof d, "Sets macro variable %.*s to %s%s", (int)(eq - t), t, val, plain ? "" : ", worked out when the line runs");
+            cell_set(cell, t, NULL, d, 0);
+        } else if (gc_starts_with(t, "IF"))
+            cell_set(cell, t, NULL, "Macro IF statement: when the condition in [ ] is true, the rest of the line runs", 0);
+        else if (gc_starts_with(t, "WHILE"))
+            cell_set(cell, t, NULL, "Macro WHILE loop: runs the lines down to the matching END while the condition in [ ] is true", 0);
+        else {
+            snprintf(d, sizeof d, "End of WHILE loop %s", t + 3);
+            cell_set(cell, t, NULL, d, 0);
+        }
+        return;
+    }
     if (t[0] == '/') { /* block delete */
         const gc_json *en = gc_entry(c, "/");
         if (!en) {
@@ -571,7 +610,7 @@ static int has_axis_word(const gc_line *l)
         if (!t[0] || !strchr("XYZUW", t[0])) continue;
         const char *p = t + 1;
         if (*p == '-' || *p == '+') p++;
-        if (gc_is_digit((unsigned char)*p) || *p == '.') return 1;
+        if (gc_is_digit((unsigned char)*p) || *p == '.' || *p == '#' || *p == '[') return 1;
     }
     return 0;
 }

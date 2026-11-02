@@ -584,7 +584,7 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
             <div class="simbar">
               <button id="s-reset" title="Restart">⏮</button><button id="s-back" title="Step back one line (Ctrl+←)">|◀</button><button id="s-play" title="Play or pause (F5)">▶</button><button id="s-fwd" title="Step forward one line (Ctrl+→)">▶|</button>
               <select id="s-speed" aria-label="Simulation speed"><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option></select>
-              <button id="s-opt" class="tgl" aria-pressed="false" title="Optional stop: when on, the simulation also pauses at M01">M01</button><button id="s-bd" class="tgl" aria-pressed="false" title="Block delete: when on, lines that start with / are skipped">/</button>
+              <button id="s-opt" class="tgl" aria-pressed="false" title="Optional stop: when on, the simulation also pauses at M01">M01</button><button id="s-bd" class="tgl" aria-pressed="false" title="Block delete: when on, lines that start with / are skipped">/</button><button id="s-rap" class="tgl" aria-pressed="true" title="Rapid moves: when off, the toolpath shows feed moves only, like the control's graphics screen">G00</button>
               <button id="s-big" class="big" aria-pressed="false" title="Expanded view (Ctrl+Shift+E)">⤢</button>
             </div>
             <div class="simpos" id="s-pos"></div>
@@ -1057,7 +1057,7 @@ let findQ = "";
 let simIdx = null, simTimer = null;
 // Optional stop (M01) and block delete (/) switches, the expanded view, the stops already paused at in this run,
 // and the stop the simulation is paused at now.
-let simOpt = false, simBD = false, simX = false, simStops = new Set(), simStopAt = null;
+let simRapids = true, simOpt = false, simBD = false, simX = false, simStops = new Set(), simStopAt = null;
 const isBlockDel = toks => /^\/\d?$/.test(toks?.[0] || "");
 const nWordOf = li => (doc[li] || []).find(t => /^N\d+$/.test(t));
 let EXEC = { segs:[], steps:[] }, USED = [], WIDTHS = {};
@@ -1084,7 +1084,45 @@ function splitBlocks(line){
   return { blocks: out, eob: hit };
 }
 // A "/" at the start of a block is block delete (Fanuc-style controls also take /1 to /9). It stays the line's first word.
-function tokenize(line){ const out = []; const bd = /^\s*(\/\d?)/.exec(line); if (bd){ out.push(bd[1]); line = line.slice(bd[0].length); } const re = /\([^)]*\)?|\b(?:CALL|RTS|GOTO)\b|[A-Za-z][-+]?[\d.]*/gi; let m; while ((m = re.exec(line))) out.push(m[0].startsWith("(") ? m[0] : m[0].toUpperCase()); return out; }
+// Macro text stays whole: "#110= -0.035" (an assignment) and "IF [...] GOTO 10", "WHILE [...] DO1", "END1" (macro
+// statements) are one word each, up to a comment. A value can be a variable or an expression: "X - #101" is the word
+// "X-#101", "Z[#1+#2]" stays whole. Spaces inside these are dropped, except in IF and WHILE where they're single spaces.
+// gc_tokenize() in src/core/gc_doc.c mirrors this character for character.
+const isMacroTok = t => t[0]==="#" || /^(?:IF|WHILE)(?![A-Z0-9_])|^END\d/.test(t);
+const isVarVal = t => /^[A-Z][-+]?[#[]/.test(t);   // a word whose value is a macro variable or expression
+function tokenize(line){
+  const out = [], s = line, n = s.length, isWord = c => /[A-Za-z0-9_]/.test(c || ""), isSp = c => /[ \t\n\r\f\v]/.test(c || ""), SP = /[ \t\n\r\f\v]+/g;
+  let i = 0; const bd = /^\s*(\/\d?)/.exec(s); if (bd){ out.push(bd[1]); i = bd[0].length; }
+  const restOf = from => { let e = from; while (e < n && s[e]!=="(") e++; const raw = s.slice(from, e);
+    return [e, raw.replace(SP, " ").replace(/^ | $/g, "").toUpperCase()]; };
+  // Spaces go, except one between two letters or numbers ("#2 MOD 3")
+  const squeeze = t => t.replace(SP, " ").replace(/^ | $/g, "").replace(/ (?![A-Za-z0-9_])|(?<![A-Za-z0-9_]) /g, "").toUpperCase();
+  const group = from => { let d = 0, e = from; while (e < n){ if (s[e]==="[") d++; else if (s[e]==="]" && --d===0) return e+1; else if (s[e]==="(") return e; e++; } return e; };
+  while (i < n){
+    const c = s[i];
+    if (c==="("){ let e = i+1; while (e < n && s[e]!==")") e++; if (e < n) e++; out.push(s.slice(i, e)); i = e; continue; }
+    // An assignment ends at a comment, or at an address word outside brackets ("#100=1 G00 Z1." holds two more
+    // words). Letters followed by a letter (SIN, MOD, AND) are part of the expression.
+    if (c==="#"){ let e = i+1, d = 0;
+      while (e < n && s[e]!=="("){ if (s[e]==="[") d++; else if (s[e]==="]") d--; else if (!d && /[A-Za-z]/.test(s[e]) && !isWord(s[e-1]) || !d && /[A-Za-z]/.test(s[e]) && /[\d.]/.test(s[e-1])){ let k = e+1; while (isSp(s[k])) k++; if (/[-+\d.#]/.test(s[k] || "")) break; } e++; }
+      out.push(squeeze(s.slice(i, e))); i = e; continue; }
+    if (!/[A-Za-z]/.test(c)){ i++; continue; }
+    if (!isWord(s[i-1])){
+      const kw = /^(?:(IF|WHILE)(?![A-Za-z0-9_])|(END\d+)(?![A-Za-z0-9_])|(CALL|RTS|GOTO)(?![A-Za-z0-9_]))/i.exec(s.slice(i));
+      if (kw?.[1]){ const [e, t] = restOf(i); out.push(t); i = e; continue; }
+      if (kw){ out.push(kw[0].toUpperCase()); i += kw[0].length; continue; }
+    }
+    // A letter, then a variable or [expression] (spaces and a sign allowed between), or else a plain number
+    let j = i+1; while (isSp(s[j])) j++; let sign = ""; if (s[j]==="-" || s[j]==="+"){ sign = s[j++]; while (isSp(s[j])) j++; }
+    if (s[j]==="#" || s[j]==="["){
+      let e = j; if (s[e]==="#"){ e++; if (s[e]==="[") e = group(e); else while (e < n && /\d/.test(s[e])) e++; } else e = group(e);
+      out.push((c + sign).toUpperCase() + squeeze(s.slice(j, e))); i = e; continue;
+    }
+    let e = i+1; if (s[e]==="-" || s[e]==="+") e++; while (e < n && /[\d.]/.test(s[e])) e++;
+    out.push(s.slice(i, e).toUpperCase()); i = e;
+  }
+  return out;
+}
 // Reads a program's lines into the editor (the active tab). ";" marks are split off and remembered.
 function loadLines(src, expand){
   stopSim(true);
@@ -1139,7 +1177,7 @@ function applyModes(toks, st){
   const D = DIALECT, groups = D.modalGroups || {}, fc = feedCodes();
   const wcsLine = toks.some(t => isCode(t,"G15"));
   for (const t of toks){
-    if (/^[FSTH][-+]?[\d.]+$/.test(t)){ if (t[0]==="H" && wcsLine) set("wcs", "G15 " + t); else if (!(t[0]==="S" && toks.some(w => isCode(w, D.speedClamp?.code || "G50")) && mtype()==="lathe")) set(t[0], t); continue; }
+    if (/^[FSTH](?:[-+]?[\d.]+|[-+]?[#[].*)$/.test(t)){ if (t[0]==="H" && wcsLine) set("wcs", "G15 " + t); else if (!(t[0]==="S" && toks.some(w => isCode(w, D.speedClamp?.code || "G50")) && mtype()==="lathe")) set(t[0], t); continue; }
     if (t==="CALL") st.sub = true;
     if (!/^[GM]\d/.test(t)) continue;
     const k = pad2(t), cyc = D.cycles?.[k];
@@ -1178,9 +1216,11 @@ function trackCarry(toks, st){
   if (has("G04") || has("G65") || has("M97") || has("M98") || toks.includes("CALL")) return;   // X and P there are a dwell or arguments
   const unknown = ["G28","G30","G53","G52","G92"].some(has) || (lathe && has("G50")) || (lathe && st.cycle);
   for (const [A, [abs, inc]] of Object.entries(AXES)){
-    const ta = toks.find(t => t[0]===abs && /^.[-+]?[\d.]+$/.test(t)), ti = toks.find(t => t[0]===inc && /^.[-+]?[\d.]+$/.test(t));
+    const isVal = t => /^.[-+]?[\d.]+$/.test(t) || isVarVal(t);
+    const ta = toks.find(t => t[0]===abs && isVal(t)), ti = toks.find(t => t[0]===inc && isVal(t));
     if (!ta && !ti) continue;
     st.posW[A] = null;   // the word as written, shown when it still says where the axis is
+    if ((ta && isVarVal(ta)) || (!ta && isVarVal(ti))){ if (ta && st.dist!=="inc") st.posW[A] = ta; st.pos[A] = null; continue; }   // worked out when it runs
     if (unknown || (st.cycle && st.dist==="inc" && A==="Z")){ st.pos[A] = null; continue; }
     if (ta && st.dist!=="inc") st.posW[A] = ta;
     const val = t => parseFloat(fmtNum(t[0], t.slice(1), st).v);
@@ -1193,6 +1233,7 @@ function trackCarry(toks, st){
 // as the smallest increment, 0.0001 in or 0.001 mm on Fanuc-style controls.
 function fmtNum(L, raw, st){
   if (raw==="" || raw==null) return { v:"" };
+  if (/^[-+]?[#[]/.test(raw)) return { v:raw };   // a macro variable or expression: worked out when the line runs
   const sign = raw[0]==="-" ? "-" : "", body = raw.replace(/^[-+]/, "");
   if (body.includes(".")){
     let x = body; if (x.startsWith(".")) x = "0" + x; if (x.endsWith(".")) x += "0";
@@ -1214,6 +1255,7 @@ const UNIT_WORDS = { ipm:"inches per minute", ipr:"inches per rev", mmpm:"mm per
 function word(t, st, ctx){
   if (t.startsWith("(")) return { g:t, e:"", cm:true, d:"Comment, kept as written" };
   if (t[0]==="/"){ const e = entry("/"); if (!e) return { g:t, e:"?/", unk:true, d:"Block delete isn't in the dictionary." }; return { g:t, e:e[style] + t.slice(1), d:e.desc + (t.length > 1 ? ` (switch ${t.slice(1)})` : ""), code:"/", long:e.long }; }
+  if (isMacroTok(t)) return macroWord(t);
   if (isKw(t)){
     const e = entry(t);
     return e ? { g:t, e:e[style], d:e.desc, code:t, long:e.long } : { g:t, e:"?"+t, unk:true, d:`${t} isn't a keyword on this machine.` };
@@ -1246,6 +1288,17 @@ function word(t, st, ctx){
   const ax = a[mtype()]?.long ? a[mtype()] : a;   // a letter can read differently on one machine type (D is the kerf on a plasma table)
   return { g:t, e:ax[style]+v, ...imp, d: imp.d2 || `${ax.desc} ${v}` };
 }
+// Macro text: "#110=-0.035" sets a variable; IF, WHILE and END are macro statements. They read as written.
+function macroWord(t){
+  if (t[0]==="#"){
+    const m = /^(#(?:\d+|\[.*\]))=(.+)$/.exec(t);
+    if (!m) return { g:t, e:"?"+t, unk:true, d:`${t} has no = and value, so it doesn't set the variable.` };
+    return { g:t, e:t, d:/^[-+]?[\d.]+$/.test(m[2]) ? `Sets macro variable ${m[1]} to ${m[2]}` : `Sets macro variable ${m[1]} to ${m[2]}, worked out when the line runs` };
+  }
+  if (t.startsWith("IF")) return { g:t, e:t, d:"Macro IF statement: when the condition in [ ] is true, the rest of the line runs" };
+  if (t.startsWith("WHILE")) return { g:t, e:t, d:"Macro WHILE loop: runs the lines down to the matching END while the condition in [ ] is true" };
+  return { g:t, e:t, d:`End of WHILE loop ${t.slice(3)}` };
+}
 // Modes are tracked in the order the machine runs the lines, so a subprogram
 // is read with the modes active at its call. Lines never run fall back to file order.
 function translateAll(){
@@ -1266,7 +1319,7 @@ function translateAll(){
 }
 function lineKind(li){
   const st = lineState[li], toks = doc[li] || [];
-  if (!st || !toks.some(t => /^[XYZUW][-+]?[\d.]/.test(t)) || toks.some(t => isCode(t,"G65"))) return null;
+  if (!st || !toks.some(t => /^[XYZUW][-+]?[\d.#[]/.test(t)) || toks.some(t => isCode(t,"G65"))) return null;
   if (toks.some(t => isCode(t,"G28") || isCode(t,"G53"))) return "rapid";
   if (st.cycleCode) return "cyc";
   return st.motion==="G00" ? "rapid" : st.motion==="G01" ? "feed" : (st.motion==="G02"||st.motion==="G03") ? "arc" : null;
@@ -1483,8 +1536,10 @@ const needsText = h => h.sets.map(s => s.join(" and ")).join(", or ");
 
 function slotsFor(li){
   const toks = doc[li], cells = view[li], W = COLW();
+  // A long word (a macro assignment like #110=-0.0350) takes as many whole columns as it needs instead of being cut off.
+  const fit = i => W * Math.max(1, Math.ceil((Math.max(toks[i].length, (cells[i].e || "").length + (cells[i].u || "").length * 0.7) + 1) / W));
   if (layout==="order"){
-    const tok = i => ({ ref:String(i), idx:[i], g:toks[i], e:cells[i].e, u:cells[i].u || "", imp:!!cells[i].imp, cm:!!cells[i].cm, unk:!!cells[i].unk, n: i===0 && /^N\d/.test(toks[i]), w:W });
+    const tok = i => ({ ref:String(i), idx:[i], g:toks[i], e:cells[i].e, u:cells[i].u || "", imp:!!cells[i].imp, cm:!!cells[i].cm, unk:!!cells[i].unk, n: i===0 && /^N\d/.test(toks[i]), w:fit(i) });
     const pend = pendingIns && pendingIns.li===li && pendingIns.at!=null ? { ref:"i", idx:[], ins:pendingIns.at, g:"", e:"", add:true, pend:true, w:W } : null;
     const st = lineState[li] || newState();
     const hints = hintItems(li).map(h => ({ ref:"h:"+h.L, idx:[], hint:h, g:h.L+"##", e:englishPrefix(h.L, st)+"##", w:W }));
@@ -1504,7 +1559,7 @@ function slotsFor(li){
     const s = [];
     for (let i = 0; i < toks.length; i++){
       const ci = USED[i], c = cells[i], cm = !!c.cm;
-      s.push({ ref: ci!=null ? "c"+ci : "p"+i, fcol: ci, idx:[i], g:toks[i], e:c.e, u:c.u || "", imp:!!c.imp, cm, free:true, unk:!!c.unk, n: /^N\d/.test(toks[i]), w: ci!=null && !cm ? WIDTHS[ci] : W, auto: cm });
+      s.push({ ref: ci!=null ? "c"+ci : "p"+i, fcol: ci, idx:[i], g:toks[i], e:c.e, u:c.u || "", imp:!!c.imp, cm, free:true, unk:!!c.unk, n: /^N\d/.test(toks[i]), w: ci!=null && !cm ? WIDTHS[ci] : fit(i), auto: cm });
       if (cm) return s;
     }
     for (let k = toks.length; k < USED.length; k++) s.push({ ref:"c"+USED[k], fcol:USED[k], idx:[], g:"", e:"", free:true, w:WIDTHS[USED[k]] });
@@ -1644,7 +1699,7 @@ function checkProgram(){
 
   function checkLine(li){
     const all = doc[li].filter(t => !t.startsWith("(") && t[0]!=="/");
-    const words = all.filter(t => !isKw(t)).map(t => ({ t, L:t[0], v:t.slice(1), n:parseFloat(t.slice(1)) }));
+    const words = all.filter(t => !isKw(t) && !isMacroTok(t)).map(t => ({ t, L:t[0], v:t.slice(1), n:parseFloat(t.slice(1)) }));
     const codes = words.filter(w => w.L==="G" || w.L==="M").map(w => pad2(w.t));
     const has = c => codes.includes(c);
     const byL = {}; words.forEach(w => (byL[w.L] ||= []).push(w));
@@ -1719,7 +1774,7 @@ function checkProgram(){
     const tl = D.toolLength;
     if (tl) for (const c of codes) if ((groups["tool length"] || []).includes(c)){
       st.tloOn = tl.on.includes(c);
-      if (st.tloOn){ st.needTlo = false; const h = get(tl.word); if (h && st.T!=null && parseInt(h.v, 10)!==st.T) emit(li, "tlo-h-mismatch", { h:h.t, t:"T"+st.T }); }
+      if (st.tloOn){ st.needTlo = false; const h = get(tl.word); if (h && !isVarVal(h.t) && st.T!=null && parseInt(h.v, 10)!==st.T) emit(li, "tlo-h-mismatch", { h:h.t, t:"T"+st.T }); }
     }
 
     // Cutter comp
@@ -1748,12 +1803,12 @@ function checkProgram(){
         emit(li, "cycle-missing-choice", { cycle:cycCode, name, choices:def.choices.map(s => s.join(", ")).join(" or ") });
       const ok = new Set([...(def.requires || []), ...(def.optional || []), ...(def.choices || []).flat(), "N","G","M","S","T","H","D","O", ...(def.feed ? ["F"] : [])]);
       words.forEach(w => { if (!ok.has(w.L)) emit(li, "cycle-stray-word", { cycle:cycCode, name, word:w.t }); });
-      for (const l of def.labels || []){ const w = get(l); if (w && L["N"+parseInt(w.v, 10)]===undefined) emit(li, "missing-label", { word:w.t, label:"N"+parseInt(w.v, 10) }); }
+      for (const l of def.labels || []){ const w = get(l); if (w && !isVarVal(w.t) && L["N"+parseInt(w.v, 10)]===undefined) emit(li, "missing-label", { word:w.t, label:"N"+parseInt(w.v, 10) }); }
       if (def.speed && st.S==null) emit(li, "no-speed", { code:`${cycCode} (${name.toLowerCase()})` });
     }
     for (const [code, sc] of Object.entries(D.subCalls || {})){
       if (sc.target!=="label" || !has(code)) continue;
-      const w = get(sc.word); if (w && L["N"+parseInt(w.v, 10)]===undefined) emit(li, "missing-label", { word:`${code} ${w.t}`, label:"N"+parseInt(w.v, 10) });
+      const w = get(sc.word); if (w && !isVarVal(w.t) && L["N"+parseInt(w.v, 10)]===undefined) emit(li, "missing-label", { word:`${code} ${w.t}`, label:"N"+parseInt(w.v, 10) });
     }
     if (has("G04") && !(D.dwellWords || ["P"]).some(l => get(l))) emit(li, "dwell-no-time", { words:(D.dwellWords || ["P"]).join(" or ") });
     if (has("G04") && D.dwellNoDecimal==="ms"){ const p = get("P"); if (p && p.v!=="" && !p.v.includes(".")){ const ms = Math.abs(parseInt(p.v, 10)); emit(li, "dwell-milliseconds", { word:p.t, ms, sec:fmt4(ms/1000) }); } }
@@ -1791,6 +1846,7 @@ function checkProgram(){
     const p0 = {...st.pos}, p1 = {...st.pos};
     const val = (w) => w.n * ((lathe && (w.L==="X" || w.L==="U")) ? 0.5 : 1);
     for (const w of axisWords){
+      if (isVarVal(w.t)){ p1[w.L==="U" ? "X" : w.L==="W" ? "Z" : w.L] = null; continue; }   // known only when it runs
       if (isNaN(w.n)) continue;
       if (w.L==="U" || w.L==="W"){ const a = w.L==="U" ? "X" : "Z"; p1[a] = p1[a]==null ? null : p1[a] + val(w); }
       else if (st.dist==="inc") p1[w.L] = p1[w.L]==null ? null : p1[w.L] + val(w);
@@ -1911,8 +1967,17 @@ const cycBtn = code => code && DIALECT.cycles?.[code] ? `<button class="cyc" dat
 function showInfo(li, idx, warn){
   const c = idx!=null ? view[li]?.[idx] : null; const box = document.getElementById("info");
   if (!c){ const lp = PBYLINE[curLine]; box.innerHTML = (lp ? lp.map(p => `<span class="warn ${p.sev}"><b>${esc(p.title)}.</b> ${esc(p.msg)}</span>`).join("") : "<span>Hover a word to see what it means.</span>") + cycBtn(lineCycle(curLine)); return; }
-  box.innerHTML = `<span><span class="k">${esc(c.g)}</span> &nbsp;→&nbsp; <span class="k">${esc(c.e || "—")}${c.u ? `<small class="u">${esc(c.u)}</small>` : ""}</span></span><span>${esc(c.d)}</span>` + (warn ? `<span class="warn">${esc(warn)}</span>` : "") + (c.unk ? `<span class="warn">Unknown words are flagged instead of guessed.</span>` : "")
+  box.innerHTML = `<span><span class="k">${esc(c.g)}</span> &nbsp;→&nbsp; <span class="k">${esc(c.e || "—")}${c.u ? `<small class="u">${esc(c.u)}</small>` : ""}</span></span><span>${esc(c.d)}</span>` + (warn ? `<span class="warn">${esc(warn)}</span>` : "") + varValues(li, idx, c) + (c.unk ? `<span class="warn">Unknown words are flagged instead of guessed.</span>` : "")
     + cycBtn(c.code && DIALECT.cycles?.[c.code] ? c.code : lineCycle(li));
+}
+// For a word like X-#101, what it worked out to each time the simulation ran the line (a subprogram can run with
+// different values on each call).
+function varValues(li, idx, c){
+  if (!isVarVal(c.g)) return "";
+  const list = EXEC.vals?.[li + ":" + idx];
+  if (!list) return `<span style="color:#777">This line doesn't run in the simulation, so the value isn't known.</span>`;
+  const d = lineState[li]?.units==="mm" ? 3 : 4, shown = list.slice(0, 8).map(v => v==null ? "not set" : String(+v.toFixed(d)));
+  return `<span>${list.length===1 ? "Works out to" : `Works out to ${list.length} values as it runs:`} <span class="k">${esc(shown.join(", "))}${list.length > 8 ? "…" : ""}</span>${list.includes(null) ? " (a variable used here was never set)" : ""}</span>`;
 }
 function showHintInfo(h){
   document.getElementById("info").innerHTML = `<span class="hintmsg"><b>${esc(h.code)}</b> needs ${esc(needsText(h))}.</span><span><span class="k">${esc(h.L)}</span> &nbsp;${esc(hintMeaning(h))}</span><span style="color:#777">Click it, or select it and press Enter, to fill it in.</span>` + cycBtn(DIALECT.cycles?.[h.code] ? h.code : null);
@@ -2733,55 +2798,79 @@ function cycleSketch(kind, labels, def){
 function interpret(){
   const lathe = mtype()==="lathe";
   let p = {x: lathe ? 2 : 0, y:0, z:1}, mode = 0, dist = "abs", tool = null, pendingT = null;
-  // Canned cycles: Z and R carry over to the next holes; G98 returns to the Z the cycle started at, G99 to R.
-  let ret = "G98", cycZ = null, cycR = null, cycD = null;
+  // Canned cycles (mills): the cycle code stays on until G80 or G00-G03, Z and R carry over to the next holes,
+  // and G98 returns to the Z the cycle started at, G99 to R. L0 on the cycle line stores the cycle without drilling.
+  let ret = "G98", cyc = null, cycZ = null, cycR = null, cycD = null;
+  // Macro variables (#1, #110…), set by "#110=-0.035" lines and read by words like X-#101 and Z#110.
+  // Local subprograms (M97) share them with the main program. vals keeps what each word worked out to, per run.
+  const V = {}, vals = {}, near = (a, b) => Math.abs(a - b) < 1e-9;
+  let F = null;   // the feed rate as it runs (an F#111 is only known here)
   const segs = [], steps = [], L = labels(), stack = []; let i = 0, guard = 0;
-  while (i < doc.length && guard++ < 5000){
+  while (i < doc.length && guard++ < 20000){
     const li = i, toks = doc[i];
     if (simBD && isBlockDel(toks)){ i++; continue; }   // Block delete is on: the control skips "/" lines
-    const s0 = segs.length; step(toks, li);
+    const s0 = segs.length, dips = []; step(toks, li, false, dips);
     const stop = toks.some(t => isCode(t, "M00")) ? "M00" : toks.some(t => isCode(t, "M01")) ? "M01" : null;
-    steps.push({ li, v: lathe ? p.x/2 : p.z, s0, s1: segs.length, kind: segs.length > s0 ? (lineKind(li) || "feed") : null, stop, ...timelineValues(li, toks) });
+    const kind = segs.length > s0 ? (segs.slice(s0).some(sg => sg.kind==="cyc") ? "cyc" : segs[segs.length-1].kind) : null;
+    steps.push({ li, v: lathe ? p.x/2 : p.z, s0, s1: segs.length, kind, stop, dips, ...timelineValues(li, toks), ...(F!=null && lineState[li]?.F && !/^F[-+]?[\d.]+$/.test(lineState[li].F) ? { f:F } : {}) });
     if (isEnd(toks)) break;
     if (isReturn(toks) && stack.length){ i = stack.pop(); continue; }
     const tgt = callTarget(toks);
     if (tgt!=null && L[tgt]!==undefined && stack.length < 8){ stack.push(i+1); i = L[tgt]; continue; }
     i++;
   }
-  return { segs, steps };
-  function step(toks, li, inLib){
+  return { segs, steps, vals };
+  function calc(src){ try { const v = window.evalMacro?.(src, V); return typeof v==="number" && isFinite(v) ? v : null; } catch { return null; } }
+  function step(toks, li, inLib, dips){
     // A G65 call to a library subprogram runs its lines, worked out with the values on the call.
     const lib = !inLib && window.libExpandCall?.(toks, li);
-    if (lib){ lib.forEach(t => step(t, li, true)); return; }
+    if (lib){ lib.forEach(t => step(t, li, true, dips)); return; }
     const w = {};
-    if (!inLib && !lineState[li]?.cycleCode) cycZ = cycR = cycD = null;
     const tt = toks.find(t => /^T\d/.test(t));
     if (tt) pendingT = lathe ? "T" + parseInt(tt.slice(1, 3)) : "T" + parseInt(tt.slice(1));
     if (lathe && tt) tool = pendingT;
     if (toks.some(t => isCode(t,"M06"))) tool = pendingT;
-    for (const t of toks){
-      if (t.startsWith("(")) continue;
-      const k = t[0], v = parseFloat(t.slice(1));
-      if (k==="G"){ if ([0,1,2,3].includes(v)) mode = v; if (v===90) dist="abs"; if (v===91) dist="inc"; if (!lathe && (v===98 || v===99)) ret = "G"+v; if (v===28||v===53||v===50||v===4||v===65) return; }
-      else if (k==="M" && (v===97 || v===98)) return;
+    let skip = false, unknown = false;
+    toks.forEach((t, idx) => {
+      if (t.startsWith("(") || skip) return;
+      if (t[0]==="#"){ const m = /^#(\d+)=(.+)$/.exec(t); if (m) V[+m[1]] = calc(m[2]); return; }
+      if (isMacroTok(t)) return;
+      const k = t[0];
+      let v = parseFloat(t.slice(1));
+      if (isVarVal(t)){
+        v = calc(t.slice(1));
+        if (!inLib){ const key = li + ":" + idx, list = (vals[key] ||= []); if (!list.some(x => x===v || (x!=null && v!=null && near(x, v)))) list.push(v); }
+        if (v==null){ if ("XYZUWIJKR".includes(k)) unknown = true; return; }
+      }
+      if (k==="G"){ if ([0,1,2,3].includes(v)){ mode = v; if (!lathe) cyc = null; } if (v===90) dist="abs"; if (v===91) dist="inc"; if (!lathe && (v===98 || v===99)) ret = "G"+v;
+        if (!lathe && v===80) cyc = null;
+        if (!lathe && DIALECT.cycles?.[pad2(t)]){ if (cyc==null){ cycZ = p.z; cycR = cycD = null; } cyc = pad2(t); }
+        if (v===28||v===53||v===50||v===4||v===65){ skip = true; return; } }
+      else if (k==="M" && (v===97 || v===98)) skip = true;
       else if (!isNaN(v)) w[k] = v;
-    }
+    });
+    if ("F" in w && !lathe) F = w.F;
+    if (skip || unknown) return;
     if (!("X" in w || "Y" in w || "Z" in w || "U" in w || "W" in w)) return;
     const inc = dist==="inc";
     const n = { x: "U" in w ? p.x + w.U : ("X" in w ? (inc ? p.x + w.X : w.X) : p.x),
                 y: "Y" in w ? (inc ? p.y + w.Y : w.Y) : p.y,
                 z: "W" in w ? p.z + w.W : ("Z" in w ? (inc ? p.z + w.Z : w.Z) : p.z) };
-    const kind = (inLib ? null : lineKind(li)) || (mode===0 ? "rapid" : "feed");
     const T = tool || "T?";
-    if (kind==="cyc" && !lathe){
-      if (cycZ==null) cycZ = p.z;
+    if (cyc && !lathe){
+      // A hole: rapid over to X Y at the current height, rapid down to R, feed to the bottom, back up to R or the start.
       if ("R" in w) cycR = w.R;
       if ("Z" in w) cycD = n.z;
-      const r = cycR ?? 0.1, z = cycD ?? n.z;
+      if (w.L===0) return;   // stored for the holes that follow, nothing drilled here
+      const r = cycR ?? 0.1, z = cycD ?? n.z, back = ret==="G99" ? r : Math.max(cycZ ?? r, r);
       segs.push({a:{...p}, b:{x:n.x, y:n.y, z:p.z}, rapid:true, kind:"rapid", li, tool:T});
+      if (p.z > r) segs.push({a:{x:n.x, y:n.y, z:p.z}, b:{x:n.x, y:n.y, z:r}, rapid:true, kind:"rapid", li, tool:T});
       segs.push({a:{x:n.x, y:n.y, z:r}, b:{x:n.x, y:n.y, z}, rapid:false, kind:"cyc", li, tool:T});
-      p = {x:n.x, y:n.y, z: ret==="G99" ? r : Math.max(cycZ, r)}; return;
+      segs.push({a:{x:n.x, y:n.y, z}, b:{x:n.x, y:n.y, z:back}, rapid:true, kind:"rapid", li, tool:T});
+      dips.push({ top: Math.max(p.z, r), r, z, back });
+      p = {x:n.x, y:n.y, z:back}; return;
     }
+    const kind = (inLib ? null : lathe ? lineKind(li) : null) || (mode===0 ? "rapid" : (mode===2 || mode===3) ? "arc" : "feed");
     if (!lathe && (mode===2 || mode===3)){
       const cx = p.x + (w.I||0), cy = p.y + (w.J||0), rr = Math.hypot(p.x-cx, p.y-cy);
       const a0 = Math.atan2(p.y-cy, p.x-cx), a1 = Math.atan2(n.y-cy, n.x-cx);
@@ -2810,7 +2899,8 @@ function drawViews(){
   if (simIdx!=null){ doneTo = simIdx; const st = EXEC.steps.find(s => s.s0 <= simIdx-1 && simIdx-1 < s.s1); curFrom = st ? st.s0 : simIdx; }
   else { const st = EXEC.steps[stepIndexFor(curLine)]; curFrom = st ? st.s0 : 0; doneTo = st ? st.s1 : 0; }
   const [ , , W, H] = v1.getAttribute("viewBox").split(" ").map(Number), pad = 12;
-  const pts = segs.flatMap(s => [s.a, s.b]);
+  const shown = simRapids ? segs : segs.filter(s => !s.rapid);   // with rapids hidden, the view fits the feed moves
+  const pts = (shown.length ? shown : segs).flatMap(s => [s.a, s.b]);
   if (!pts.length){   // nothing moves yet (a new program): clear the toolpath, timeline and position
     v1.innerHTML = ""; document.getElementById("tleg").innerHTML = ""; document.getElementById("s-pos").textContent = "No moves yet";
     document.getElementById("tlsvg").innerHTML = ""; document.querySelector("#tlh span").textContent = ""; tlSteps = []; return; }
@@ -2828,6 +2918,7 @@ function drawViews(){
       else if (s.kind==="cyc" && future!=="hide") layers[0].push(`<circle cx="${X(fx(s.b))}" cy="${Y(fy(s.b))}" r="2.6" fill="none" stroke="${future==="grey" ? "#d3d8de" : KCOL.cyc}" stroke-width="1.2"/>`);
       return;
     }
+    if (s.rapid && !simRapids) return;
     const state = i >= doneTo ? "future" : i >= curFrom ? "cur" : "done";
     if (state==="future" && future==="hide") return;
     let col = colorBy==="tool" ? toolColor(s.tool) : KCOL[s.kind] || KCOL.feed;
@@ -2843,7 +2934,7 @@ function drawViews(){
   const tools = [...new Set(segs.map(s => s.tool))];
   document.getElementById("tleg").innerHTML = colorBy==="tool"
     ? tools.map(t => `<span><i style="background:${toolColor(t)}"></i>${t}</span>`).join("") + `<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`
-    : `<span><i style="background:${KCOL.rapid}"></i>Rapid</span><span><i style="background:${KCOL.feed}"></i>Feed</span><span><i style="background:${KCOL.arc}"></i>Arc</span><span><i style="background:${KCOL.cyc}"></i>Cycle</span><span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`;
+    : (simRapids ? `<span><i style="background:${KCOL.rapid}"></i>Rapid</span>` : "") + `<span><i style="background:${KCOL.feed}"></i>Feed</span><span><i style="background:${KCOL.arc}"></i>Arc</span><span><i style="background:${KCOL.cyc}"></i>Cycle</span><span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`;
   drawSimPos(doneTo > 0 ? at : null, lathe);
   document.getElementById("s-play").textContent = simTimer ? "⏸" : "▶";
   document.getElementById("s-play").classList.toggle("on", !!simTimer);
@@ -2889,7 +2980,8 @@ function drawTimeline(steps, lathe){
   svg.setAttribute("width", W); svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   const CLIP = 0.3, pos = mode==="z" || mode==="x";
   const vals = steps.map(s => mode==="feed" ? s.f : mode==="speed" ? s.s : lathe ? s.v : Math.min(s.v, CLIP));
-  const lo = pos ? Math.min(...vals, 0) : 0, hi = pos ? Math.max(...vals, lathe ? 0.1 : 0.05) : Math.max(...vals, 1) * 1.1;
+  const dipZ = mode==="z" && !lathe ? steps.flatMap(s => (s.dips || []).map(d => d.z)) : [];
+  const lo = pos ? Math.min(...vals, ...dipZ, 0) : 0, hi = pos ? Math.max(...vals, lathe ? 0.1 : 0.05) : Math.max(...vals, 1) * 1.1;
   const Y = v => top + (hi - v) / (hi - lo || 1) * (H - top - bot);
   const X = i => half + i*SLOT;
   const idx = stepIndexFor(curLine);
@@ -2908,6 +3000,9 @@ function drawTimeline(steps, lathe){
     const v = vals[i], col = s.kind ? KCOL[s.kind] : "#a9b1bc", dash = s.kind==="rapid" ? ' stroke-dasharray="3 2"' : "";
     if (prev!==null && Math.abs(prev - v) > 1e-9) g += `<line x1="${X(i)}" x2="${X(i)}" y1="${Y(prev)}" y2="${Y(v)}" stroke="${col}" stroke-width="1.6"${dash}/>`;
     g += `<line x1="${X(i)}" x2="${X(i)+SLOT}" y1="${Y(v)}" y2="${Y(v)}" stroke="${col}" stroke-width="${s.kind?2.2:1.2}"${dash}/>`;
+    // A drilling cycle's holes: a plunge from R (or the height it starts at) to the bottom and back up, one per hole
+    if (mode==="z" && !lathe) (s.dips || []).forEach((d, k, all) => { const x = (X(i) + SLOT*(k+1)/(all.length+1)).toFixed(1);
+      g += `<line x1="${x}" x2="${x}" y1="${Y(Math.min(d.top, CLIP))}" y2="${Y(d.z)}" stroke="${KCOL.cyc}" stroke-width="1.6" stroke-linecap="round"/>`; });
     if (mode==="z" && s.v > CLIP) g += `<text x="${X(i)+SLOT/2}" y="${Y(v)-3}" font-size="7" text-anchor="middle" fill="#9a9a9a">↑</text>`;
     const nw = doc[s.li]?.[0]; const lab = /^N\d+$/.test(nw||"") ? nw : "L" + (s.li+1);
     const cur = s.li===curLine;
@@ -2921,7 +3016,7 @@ function drawTimeline(steps, lathe){
   const st = steps[idx], ls = st ? lineState[st.li] || {} : {};
   const at = st ? ` at ${/^N\d+$/.test(doc[st.li]?.[0]||"") ? doc[st.li][0] : "line "+(st.li+1)}` : "";
   const unit = mode==="feed" ? FEED_UNIT[ls.feed]?.[ls.units] || "" : mode==="speed" ? "rpm" : "";
-  const now = !st ? "" : mode==="feed" ? `${word(numWord("F", st.f), ls).e} ${unit}` : mode==="speed" ? `${word(numWord("S", st.s), ls).e} ${unit}` : `${lathe ? "X" : "Z"} ${(lathe ? st.v*2 : st.v).toFixed(3)}`;
+  const now = !st ? "" : mode==="feed" ? `${word(numWord("F", st.f), ls).e} ${unit}` : mode==="speed" ? `${word(numWord("S", st.s), ls).e} ${unit}` : `${lathe ? "X" : "Z"} ${(lathe ? st.v*2 : st.v).toFixed(3)}` + (mode==="z" && st.dips?.length ? `, drills to Z ${st.dips[0].z.toFixed(3)}` : "");
   document.getElementById("tlh").innerHTML = `${TL_MODES[mode]} by line <span>${st ? esc(now.trim() + (P ? (st.on ? ", torch on" : ", torch off") : "") + at) : ""}</span>`;
 }
 document.getElementById("tl-mode").addEventListener("change", e => {
@@ -3006,6 +3101,11 @@ function setSimBD(on){
   render();
   setMsg(on ? "Block delete is on: lines that start with / are skipped." : "Block delete is off: lines that start with / run like any other.");
 }
+function setSimRapids(on){
+  simRapids = on; document.getElementById("s-rap").setAttribute("aria-pressed", on);
+  drawViews();
+  setMsg(on ? "Rapid moves are shown (dashed)." : "Rapid moves are hidden: the toolpath shows feed moves only.");
+}
 // Expanded view: the toolpath panel moves to the big area at the top left and back to the side panel.
 function setSimX(on){
   simX = on;
@@ -3022,6 +3122,7 @@ function setSimX(on){
 }
 document.getElementById("s-opt").onclick = () => setSimOpt(!simOpt);
 document.getElementById("s-bd").onclick = () => setSimBD(!simBD);
+document.getElementById("s-rap").onclick = () => setSimRapids(!simRapids);
 document.getElementById("s-big").onclick = () => setSimX(!simX);
 window.addEventListener("resize", () => { if (simX && activeTab >= 0) drawViews(); });
 
@@ -3118,6 +3219,7 @@ const MENUS = {
     "-",
     R("Optional stop (M01)", () => simOpt, () => setSimOpt(!simOpt)),
     R("Block delete (/)", () => simBD, () => setSimBD(!simBD)),
+    R("Show rapid moves (G00)", () => simRapids, () => setSimRapids(!simRapids)),
     R("Expanded view", () => simX, () => setSimX(!simX), "Ctrl+Shift+E"),
     "-",
     { label:"Stop simulating", sc:"Esc", fn:() => stopSim(), dis:() => simIdx==null }
@@ -3971,7 +4073,7 @@ function libButton(li){
   if (!e) return `<span class="xp bad" title="Not in any library folder. That's fine if O${n} is already on the control; GlossCode just can't show what it does.">O${n} isn't in the library</span>`;
   return `<button class="xp lib" data-x="${li}" title="${esc(e.name)} · ${SOURCES[e.source].label} library">${expanded.has(li) ? "▾ hide" : "▸ show"} O${n} ${esc(e.word?.[style] || "")}</button>`;
 }
-Object.assign(window, { libFor, libWord, libRows, libRowHTML, libButton, libExpandCall:(toks, li) => { const r = expandCall(toks, li); return r && !r.error ? r.lines : null; } });
+Object.assign(window, { evalMacro:evalExpr, libFor, libWord, libRows, libRowHTML, libButton, libExpandCall:(toks, li) => { const r = expandCall(toks, li); return r && !r.error ? r.lines : null; } });
 
 /* ---------- Insert › Subprogram library… ---------- */
 const ldlg = $("ldlg");

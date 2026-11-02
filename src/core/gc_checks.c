@@ -263,6 +263,7 @@ static void check_line(checker *ck, int li)
         if (t[0] == '(' || t[0] == '/') continue;
         if (!first_all) first_all = t;
         if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1])) continue; /* keyword */
+        if (gc_is_macro_tok(t)) continue;
         if (ln.nw >= 256) break;
         word_t *w = &ln.w[ln.nw++];
         w->t = t;
@@ -544,7 +545,7 @@ static void check_line(checker *ck, int li)
                 st->needTlo = 0;
                 const char *hw = gc_json_get_str(tl, "word");
                 const word_t *h = hw ? get(&ln, hw[0]) : NULL;
-                if (h && st->T.set) {
+                if (h && !gc_is_var_val(h->t) && st->T.set) {
                     double hv = gc_js_parse_int(h->v);
                     if (!(hv == st->T.v)) {
                         V0();
@@ -660,7 +661,7 @@ static void check_line(checker *ck, int li)
         for (size_t i = 0; i < gc_json_len(lblWords); i++) {
             const char *lw = gc_json_str(lblWords->items[i]);
             const word_t *w = lw ? get(&ln, lw[0]) : NULL;
-            if (!w) continue;
+            if (!w || gc_is_var_val(w->t)) continue;
             char n[64];
             gc_js_num(gc_js_parse_int(w->v), n, sizeof n);
             snprintf(tmp, sizeof tmp, "N%s", n);
@@ -689,7 +690,7 @@ static void check_line(checker *ck, int li)
         if (!target || strcmp(target, "label") != 0 || !has(&ln, subCalls->keys[i])) continue;
         const char *sw = gc_json_get_str(s, "word");
         const word_t *w = sw ? get(&ln, sw[0]) : NULL;
-        if (!w) continue;
+        if (!w || gc_is_var_val(w->t)) continue;
         char n[64];
         gc_js_num(gc_js_parse_int(w->v), n, sizeof n);
         snprintf(tmp, sizeof tmp, "N%s", n);
@@ -856,7 +857,12 @@ static void check_line(checker *ck, int li)
     for (int i = 0; i < 3; i++) p0[i] = p1[i] = st->pos[i];
     for (int i = 0; i < ln.nw; i++) {
         const word_t *w = &ln.w[i];
-        if (!strchr(axisL, w->L) || gc_isnan(w->n)) continue;
+        if (!strchr(axisL, w->L)) continue;
+        if (gc_is_var_val(w->t)) { /* known only when it runs */
+            p1[w->L == 'U' ? 0 : w->L == 'W' ? 2 : w->L - 'X'] = onull();
+            continue;
+        }
+        if (gc_isnan(w->n)) continue;
         double val = w->n * ((lathe && (w->L == 'X' || w->L == 'U')) ? 0.5 : 1);
         if (w->L == 'U' || w->L == 'W') {
             int ax = w->L == 'U' ? 0 : 2;

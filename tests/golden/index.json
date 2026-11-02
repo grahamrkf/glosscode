@@ -205,6 +205,10 @@
    "golden": "tests/golden/LATHE_EDGE_nc.json"
   },
   {
+   "example": "tests/cases/MACRO_VARS.nc",
+   "golden": "tests/golden/MACRO_VARS_nc.json"
+  },
+  {
    "example": "tests/cases/MILL_EDGE.nc",
    "golden": "tests/golden/MILL_EDGE_nc.json"
   },
