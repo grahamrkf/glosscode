@@ -262,7 +262,7 @@ static void check_line(checker *ck, int li)
         const char *t = l->tok[i];
         if (t[0] == '(' || t[0] == '/') continue;
         if (!first_all) first_all = t;
-        if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1])) continue; /* keyword */
+        if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1]) && t[0] != 'N') continue; /* keyword (not a name like NA1) */
         if (gc_is_macro_tok(t)) continue;
         if (ln.nw >= 256) break;
         word_t *w = &ln.w[ln.nw++];
@@ -295,12 +295,31 @@ static void check_line(checker *ck, int li)
             var(&vs, "letter", Ls);
             emit(ck, li, "empty-value", &vs, NULL);
         }
+    /* N words after the first name lines to jump to (GOTO N90, G85 NA1) */
+    for (int i = 0, k = 0, pk = -1; i < l->ntok; pk = (l->tok[i][0] == '(' || l->tok[i][0] == '/') ? pk : i, i++) {
+        const char *t = l->tok[i];
+        if (t[0] == '(' || t[0] == '/') continue;
+        if (k++ == 0 || t[0] != 'N') continue;
+        char key[64];
+        if (t[1] && gc_all_digits(t + 1)) {
+            char n[32];
+            gc_js_num(gc_js_parse_int(t + 1), n, sizeof n);
+            snprintf(key, sizeof key, "N%s", n);
+        } else
+            snprintf(key, sizeof key, "%s", t);
+        if (gc_map_get(&c->labels, key, NULL)) continue;
+        V0();
+        snprintf(tmp2, sizeof tmp2, "%s %s", l->tok[pk], t);
+        var(&vs, "word", tmp2);
+        var(&vs, "label", t);
+        emit(ck, li, "missing-label", &vs, NULL);
+    }
     for (int i = 0; i < ln.nw; i++) {
         char L = ln.w[i].L;
         int firstOcc = 1;
         for (int j = 0; j < i; j++)
             if (ln.w[j].L == L) firstOcc = 0;
-        if (!firstOcc || L == 'G' || L == 'M') continue;
+        if (!firstOcc || L == 'G' || L == 'M' || L == 'N') continue;
         int n = count(&ln, L);
         if (n <= 1) continue;
         V0();
@@ -880,10 +899,13 @@ static void check_line(checker *ck, int li)
             a1 = 1;
             a2 = 2;
         }
-        const word_t *R = get(&ln, 'R');
+        const char *rLs = gc_json_get_str(D, "arcRadius");
+        char rL[2] = { rLs && *rLs ? rLs[0] : 'R', 0 };
+        const word_t *R = get(&ln, rL[0]);
         if (!R && !nCenters) {
             V0();
             var(&vs, "code", st->motion);
+            var(&vs, "radius", rL);
             snprintf(tmp, sizeof tmp, "%c and %c", centerL[0], centerL[1]);
             var(&vs, "centers", tmp);
             emit(ck, li, "arc-no-center", &vs, NULL);
@@ -898,6 +920,7 @@ static void check_line(checker *ck, int li)
                     gc_buf_putc(&b, ln.w[i].L);
                 }
             V0();
+            var(&vs, "radius", rL);
             var(&vs, "centers", gc_buf_str(&b));
             gc_buf_free(&b);
             emit(ck, li, "arc-r-and-ijk", &vs, NULL);
@@ -909,6 +932,7 @@ static void check_line(checker *ck, int li)
             int same = hypot(p1[a1].v - p0[a1].v, p1[a2].v - p0[a2].v) < tol;
             if (R && same) {
                 V0();
+                var(&vs, "radius", rL);
                 snprintf(tmp, sizeof tmp, "%c and %c", centerL[0], centerL[1]);
                 var(&vs, "centers", tmp);
                 emit(ck, li, "arc-full-circle-r", &vs, NULL);

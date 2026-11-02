@@ -24,6 +24,7 @@
       "mill":  { "long": "SCALEOFF", "short": "SCLOFF", "desc": "Scaling off" },
       "lathe": { "long": "MAXRPM",   "short": "SMAX",   "desc": "Clamp spindle to a max RPM" }
     },
+    "G50.shift": { "lathe": { "long": "SETCOORD", "short": "SETC", "desc": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)" } },
     "G53": { "long": "MACHCRD",  "short": "MCS",   "desc": "Move in machine coordinates" },
     "G54": { "long": "WORK1",    "short": "W1",    "desc": "Work offset 1" },
     "G55": { "long": "WORK2",    "short": "W2",    "desc": "Work offset 2" },

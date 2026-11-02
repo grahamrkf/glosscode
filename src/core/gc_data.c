@@ -285,6 +285,7 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
             snprintf(key, sizeof key, "N%s", num);
             gc_map_add_first(&c->labels, key, i);
         }
+        if (l->tok[0][0] == 'N' && l->tok[0][1] >= 'A' && l->tok[0][1] <= 'Z') gc_map_add_first(&c->labels, l->tok[0], i);
         if (letter_digits(l->tok[0], 'O')) {
             gc_js_num(gc_js_parse_int(l->tok[0] + 1), num, sizeof num);
             snprintf(key, sizeof key, "O%s", num);
@@ -393,7 +394,7 @@ void gc_fmt_num(const gc_ctx *c, char L, const char *raw, int inch, gc_num *out)
     if (!raw || !*raw) return;
     {   /* a macro variable or expression: worked out when the line runs */
         const char *p = (raw[0] == '-' || raw[0] == '+') ? raw + 1 : raw;
-        if (*p == '#' || *p == '[') {
+        if (*p == '#' || *p == '[' || raw[0] == '=') {
             snprintf(out->v, sizeof out->v, "%s", raw);
             return;
         }

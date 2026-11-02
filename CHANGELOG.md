@@ -9,9 +9,17 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - Selecting a word that uses a variable shows what it works out to each time the simulation runs that line, for example the four values `X-#103` takes in a subprogram called for four rows.
 - These lines no longer get false "has no number after it" problems, and a move to a variable position doesn't give arc or rapid checks a wrong position.
 
+### Okuma lathes (OSP)
+- Okuma variables are read: `V1=3`, `VC2=VC2+1` and named variables like `DIA1=1.3` are one word each, and a word like `X=DIA1` keeps its expression.
+- Sequence names like `NA1` are read as one word (`G85 NA1` reads LAPRUF SEQA1, and the `NA1 G81` line is labeled). `GOTO N90`, `G85 NA1` and `IF [..] N440` that point to a name or number missing from the file are flagged, and these N words no longer give a false "address used twice" problem.
+- `G50 X Z` (or `G91 G50 Z…`) reads SETCOORD, setting the coordinates, instead of the spindle clamp. `G03 X Z L0.062` reads L as the arc radius, and the arc checks ask for L on these lathes. `G04 F0.2` reads as a dwell in seconds.
+
 ### Simulation
 - Macro variables are worked out as the program runs, including through local subprograms (`M97 P1000`), so subprograms that cut with variable positions (like concentric slots with `G03 X - #103 Y#104 I#101 J - #102`) draw correctly.
 - Drilling cycles: each hole now plunges from R to the bottom and goes back up to R (`G99`) or the starting height (`G98`). The Z-by-line timeline draws this as a vertical line down and back up for each hole. A cycle line with `L0` stores the cycle without drilling, and the holes come from the lines that follow (often a list of positions in a local subprogram). The cycle stays on until `G80` or `G00`–`G03`, even across subprogram calls.
+- The simulation follows jumps and loops: `GOTO N90` and `IF [V2 GE V1] N440` (Okuma), `GOTO 100` and `IF [..] GOTO 100` (Fanuc), and `WHILE [..] DO1` … `END1`.
+- Okuma lathes: `G85` LAP roughing cuts the contour named on the line (`NA1 G81` … `G80` along Z, `G82` along X) in steps of D, leaving U and W, then follows the contour at that allowance; `G87` finishing follows the contour. The contour lines are skipped in normal order, as on the control. `G74` face grooving plunges at the start X and every I until the X on the line. Arcs with an L radius are drawn as arcs.
+- `G50 X Z` and `G91 G50 Z…` on a lathe move the zero, so a program that makes several parts from one bar (a loop that shifts Z each time) draws each part in its place.
 - New **G00** button beside the M01 and / buttons (also Simulate › Show rapid moves) hides rapid moves, so the toolpath shows feed moves only, like the control's own graphics screen.
 
 ## [0.1.4] - 2026-11-02

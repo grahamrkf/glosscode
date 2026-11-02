@@ -81,6 +81,42 @@ static size_t match_word(const char *s, size_t len, size_t i, const char *word)
     return kl;
 }
 
+/* "NAME =" at s[k]: an Okuma variable (or extended address) being set. The length up to and including "=", or 0. */
+static size_t assign_at(const char *s, size_t len, size_t k)
+{
+    if (k >= len || !gc_is_alpha((unsigned char)s[k]) || (k && is_word_char((unsigned char)s[k - 1]))) return 0;
+    size_t e = k + 1;
+    while (e < len && is_word_char((unsigned char)s[e])) e++;
+    if (e - k < 2) return 0;
+    while (e < len && is_space((unsigned char)s[e])) e++;
+    return e < len && s[e] == '=' && !(e + 1 < len && s[e + 1] == '=') ? e + 1 - k : 0;
+}
+
+/* Where an expression starting at s[from] ends: a comment, or an address word (or assignment) outside [ ]
+   that follows a complete operand. */
+static size_t expr_end(const char *s, size_t len, size_t from)
+{
+    size_t e = from;
+    int d = 0;
+    char last = 0;
+    while (e < len && s[e] != '(') {
+        unsigned char ch = (unsigned char)s[e];
+        if (ch == '[') d++;
+        else if (ch == ']') d--;
+        else if (!d && gc_is_alpha(ch) && (!e || !is_word_char((unsigned char)s[e - 1]) || gc_is_digit((unsigned char)s[e - 1]) || s[e - 1] == '.') &&
+                 last && ((is_word_char((unsigned char)last) && last != '_') || last == '.' || last == ']')) {
+            size_t k = e + 1;
+            while (k < len && is_space((unsigned char)s[k])) k++;
+            if ((k < len && (s[k] == '-' || s[k] == '+' || s[k] == '.' || s[k] == '#' || s[k] == '=' || gc_is_digit((unsigned char)s[k]))) ||
+                assign_at(s, len, e))
+                break;
+        }
+        if (!is_space(ch)) last = (char)ch;
+        e++;
+    }
+    return e;
+}
+
 static void push_tok(char ***out, int *n, int *cap, char *t)
 {
     if (*n == *cap) {
@@ -115,19 +151,7 @@ char **gc_tokenize(const char *s, size_t len, int *ntok)
             continue;
         }
         if (ch == '#') { /* an assignment: up to a comment, or an address word outside [ ] */
-            size_t e = i + 1;
-            int d = 0;
-            while (e < len && s[e] != '(') {
-                if (s[e] == '[') d++;
-                else if (s[e] == ']') d--;
-                else if (!d && gc_is_alpha((unsigned char)s[e]) &&
-                         (!is_word_char((unsigned char)s[e - 1]) || gc_is_digit((unsigned char)s[e - 1]) || s[e - 1] == '.')) {
-                    size_t k = e + 1;
-                    while (k < len && is_space((unsigned char)s[k])) k++;
-                    if (k < len && (s[k] == '-' || s[k] == '+' || s[k] == '.' || s[k] == '#' || gc_is_digit((unsigned char)s[k]))) break;
-                }
-                e++;
-            }
+            size_t e = expr_end(s, len, i + 1);
             push_tok(&out, &n, &cap, squeeze(s + i, e - i));
             i = e;
             continue;
@@ -137,7 +161,13 @@ char **gc_tokenize(const char *s, size_t len, int *ntok)
             continue;
         }
         if (i == 0 || !is_word_char((unsigned char)s[i - 1])) {
-            if (match_word(s, len, i, "IF") || match_word(s, len, i, "WHILE")) {
+            int stmt = match_word(s, len, i, "IF") || match_word(s, len, i, "WHILE");
+            if (!stmt && match_word(s, len, i, "GOTO")) { /* "GOTO 100" (Fanuc) is a statement; "GOTO N90" is two words */
+                size_t k = i + 4;
+                while (k < len && (s[k] == ' ' || s[k] == '\t')) k++;
+                stmt = k < len && (gc_is_digit((unsigned char)s[k]) || s[k] == '#' || s[k] == '[');
+            }
+            if (stmt) {
                 size_t e = i;
                 while (e < len && s[e] != '(') e++;
                 push_tok(&out, &n, &cap, single_spaced(s + i, e - i));
@@ -159,10 +189,41 @@ char **gc_tokenize(const char *s, size_t len, int *ntok)
                 i += kl;
                 continue;
             }
+            size_t as = assign_at(s, len, i);
+            if (as) {
+                size_t e = expr_end(s, len, i + as);
+                push_tok(&out, &n, &cap, squeeze(s + i, e - i));
+                i = e;
+                continue;
+            }
+            /* An Okuma sequence name: N, a letter, up to 3 more letters or digits ("NA1") */
+            if ((ch == 'N' || ch == 'n') && i + 1 < len && gc_is_alpha((unsigned char)s[i + 1])) {
+                size_t e = i + 2;
+                while (e < len && e < i + 5 && (gc_is_alpha((unsigned char)s[e]) || gc_is_digit((unsigned char)s[e]))) e++;
+                if (e == len || !is_word_char((unsigned char)s[e])) {
+                    char *t = gc_strndup(s + i, e - i);
+                    for (char *p = t; *p; p++) *p = (char)gc_to_upper((unsigned char)*p);
+                    push_tok(&out, &n, &cap, t);
+                    i = e;
+                    continue;
+                }
+            }
         }
         /* A letter, then a variable or [expression] (spaces and a sign allowed between), or else a plain number */
         size_t j = i + 1;
         while (j < len && is_space((unsigned char)s[j])) j++;
+        if (j < len && s[j] == '=' && !(j + 1 < len && s[j + 1] == '=')) { /* Okuma: X=expression */
+            size_t e = expr_end(s, len, j + 1);
+            char *v = squeeze(s + j + 1, e - j - 1);
+            char *t = gc_xmalloc(strlen(v) + 3);
+            t[0] = (char)gc_to_upper(ch);
+            t[1] = '=';
+            strcpy(t + 2, v);
+            free(v);
+            push_tok(&out, &n, &cap, t);
+            i = e;
+            continue;
+        }
         char sign = 0;
         if (j < len && (s[j] == '-' || s[j] == '+')) {
             sign = s[j++];

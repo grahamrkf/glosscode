@@ -16,7 +16,7 @@ enum {
 
 typedef struct tstate {
     int inch, inc, per_rev, css;
-    int cycle, dwell, sub, local, one_shot;
+    int cycle, dwell, sub, local, one_shot, zero_shift;
     const gc_json *lib;
     char motion[16], cycle_code[16], plane[16], unit_code[16], dist_code[16], feed_code[16], spin_code[16];
     char comp[16], tlen[16], wcs[48], spin_dir[16], cool[16], torch[16];
@@ -51,7 +51,7 @@ static void new_state(const gc_ctx *c, tstate *st)
     SET(spin_code, "G97");
     SET(comp, "G40");
     SET(tlen, c->tlen_off);
-    SET(wcs, c->okuma ? "G15 H1" : "G54");
+    SET(wcs, c->okuma ? (c->lathe ? "" : "G15 H1") : "G54");
     SET(spin_dir, "M05");
     SET(cool, "M09");
 }
@@ -135,6 +135,16 @@ static void track_carry(const gc_ctx *c, const gc_line *l, tstate *st)
 static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
 {
     st->dwell = st->sub = st->local = 0;
+    /* a lathe G50 with X or Z sets the coordinates (zero shift) instead of the spindle limit */
+    st->zero_shift = 0;
+    if (c->lathe && gc_line_has_code(l, "G50"))
+        for (int i = 0; i < l->ntok; i++) {
+            const char *t = l->tok[i];
+            if (!t[0] || !strchr("XZUW", t[0])) continue;
+            const char *p = t + 1;
+            if (*p == '-' || *p == '+') p++;
+            if (gc_is_digit((unsigned char)*p) || *p == '.' || *p == '#' || *p == '[' || t[1] == '=') st->zero_shift = 1;
+        }
     st->lib = NULL;
     st->chg = 0;
     if (st->one_shot) {
@@ -325,7 +335,7 @@ static void cell_set(gc_cell *cell, const char *e, const char *u, const char *d,
     cell->flags = flags;
 }
 
-static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell)
+static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell, int ref)
 {
     char e[256], d[512];
     cell->g = gc_strdup(t);
@@ -358,6 +368,18 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
                 if (!gc_is_digit((unsigned char)*p) && *p != '.') plain = 0;
             snprintf(d, sizeof d, "Sets macro variable %.*s to %s%s", (int)(eq - t), t, val, plain ? "" : ", worked out when the line runs");
             cell_set(cell, t, NULL, d, 0);
+        } else if (gc_is_alpha((unsigned char)t[0]) && strchr(t, '=') && !gc_starts_with(t, "IF") && !gc_starts_with(t, "WHILE")) {
+            /* Okuma: V1=3 (a common variable) or DIA1=160 (a local variable) */
+            const char *eq = strchr(t, '='), *val = eq + 1, *p = val;
+            if (*p == '-' || *p == '+') p++;
+            int plain = *p != '\0';
+            for (; *p; p++)
+                if (!gc_is_digit((unsigned char)*p) && *p != '.') plain = 0;
+            snprintf(d, sizeof d, "Sets variable %.*s to %s%s", (int)(eq - t), t, val, plain ? "" : ", worked out when the line runs");
+            cell_set(cell, t, NULL, d, 0);
+        } else if (gc_starts_with(t, "GOTO ")) {
+            snprintf(d, sizeof d, "Jump to N%s", t[5] == 'N' ? t + 6 : t + 5);
+            cell_set(cell, t, NULL, d, 0);
         } else if (gc_starts_with(t, "IF"))
             cell_set(cell, t, NULL, "Macro IF statement: when the condition in [ ] is true, the rest of the line runs", 0);
         else if (gc_starts_with(t, "WHILE"))
@@ -380,7 +402,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         cell_set(cell, e, NULL, d, 0);
         return;
     }
-    if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1])) { /* CALL, RTS, GOTO */
+    if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1]) && t[0] != 'N') { /* CALL, RTS, GOTO */
         const gc_json *en = gc_entry(c, t);
         if (en) {
             cell_set(cell, js_str(gc_json_get(en, sk)), NULL, js_str(gc_json_get(en, "desc")), 0);
@@ -399,7 +421,8 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     if (L == 'G' || L == 'M') {
         char k[64];
         gc_pad2(t, k, sizeof k);
-        const gc_json *en = gc_entry(c, k);
+        const gc_json *en = (!strcmp(k, "G50") && st->zero_shift) ? gc_entry(c, "G50.shift") : NULL;
+        if (!en) en = gc_entry(c, k);
         if (!en) {
             snprintf(e, sizeof e, "?%s", k);
             snprintf(d, sizeof d, "%s isn't in the dictionary or this machine's file.", k);
@@ -461,9 +484,32 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     char Ls[2] = { L, '\0' };
     const gc_json *a = gc_json_get(gc_json_get(c->data->words, "address"), Ls);
     if (!a) {
+        /* Okuma lathes give an arc's radius with L (G03 X Z L), where other controls use R */
+        const char *ar = gc_json_get_str(c->dialect, "arcRadius");
+        if (ar && ar[0] == L && !ar[1] && (!strcmp(st->motion, "G02") || !strcmp(st->motion, "G03")) && !st->cycle_code[0]) {
+            const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "R"), "arc");
+            snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(x, sk)), v);
+            cell_set(cell, e, NULL, "Arc radius", f.implied ? GC_CELL_IMPLIED : 0);
+            return;
+        }
         snprintf(e, sizeof e, "?%c", L);
         snprintf(d, sizeof d, "Address letter %c isn't in the dictionary.", L);
         cell_set(cell, e, NULL, d, GC_CELL_UNKNOWN);
+        return;
+    }
+    /* A later N word names another line: the one a GOTO or IF jumps to, or where an Okuma LAP contour starts */
+    if (L == 'N' && ref) {
+        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(a, sk)), raw);
+        snprintf(d, sizeof d, "The line labeled N%s", raw);
+        cell_set(cell, e, NULL, d, 0);
+        return;
+    }
+    /* G04 F2. on controls that give the dwell time with F (Okuma) */
+    if (L == 'F' && st->dwell && gc_json_has_str(gc_json_get(c->dialect, "dwellWords"), "F")) {
+        const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "P"), "dwell");
+        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(x, sk)), v);
+        snprintf(d, sizeof d, "Dwell for %s seconds", v);
+        cell_set(cell, e, NULL, d, 0);
         return;
     }
     const char *in = st->inch ? "in" : "mm";
@@ -643,7 +689,8 @@ static void visit(walk *w, int li, tstate *st)
     w->saved[li].lib = NULL;
     w->a->ncells[li] = l->ntok;
     w->a->cells[li] = gc_xcalloc((size_t)(l->ntok ? l->ntok : 1), sizeof(gc_cell));
-    for (int i = 0; i < l->ntok; i++) word(w->c, l->tok[i], st, &w->a->cells[li][i]);
+    int first = (l->ntok && l->tok[0][0] == '/') ? 1 : 0; /* a later N word names a line to jump to */
+    for (int i = 0; i < l->ntok; i++) word(w->c, l->tok[i], st, &w->a->cells[li][i], l->tok[i][0] == 'N' && i > first);
     save_modes(st, &w->a->modes[li]);
     const char *k = line_kind(l, st);
     w->a->kind[li] = k ? gc_strdup(k) : NULL;
