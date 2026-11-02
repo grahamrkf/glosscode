@@ -10,7 +10,8 @@
 enum {
     CH_F = 1 << 0, CH_S = 1 << 1, CH_T = 1 << 2, CH_H = 1 << 3, CH_WCS = 1 << 4, CH_MOTION = 1 << 5,
     CH_PLANE = 1 << 6, CH_UNITS = 1 << 7, CH_DIST = 1 << 8, CH_FEED = 1 << 9, CH_SPIN = 1 << 10,
-    CH_COMP = 1 << 11, CH_TLEN = 1 << 12, CH_CYCLE = 1 << 13, CH_SPINDIR = 1 << 14, CH_COOL = 1 << 15
+    CH_COMP = 1 << 11, CH_TLEN = 1 << 12, CH_CYCLE = 1 << 13, CH_SPINDIR = 1 << 14, CH_COOL = 1 << 15,
+    CH_TORCH = 1 << 16
 };
 
 typedef struct tstate {
@@ -18,7 +19,7 @@ typedef struct tstate {
     int cycle, dwell, sub, local, one_shot;
     const gc_json *lib;
     char motion[16], cycle_code[16], plane[16], unit_code[16], dist_code[16], feed_code[16], spin_code[16];
-    char comp[16], tlen[16], wcs[48], spin_dir[16], cool[16];
+    char comp[16], tlen[16], wcs[48], spin_dir[16], cool[16], torch[16];
     int tlen_on;
     const char *F, *S, *T, *H;
     unsigned chg, ever;
@@ -206,12 +207,12 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
             SET(feed_code, k);
             CHG(CH_FEED);
         }
-        if (!strcmp(k, "G96")) {
+        if (!c->process && !strcmp(k, "G96")) {
             st->css = 1;
             SET(spin_code, k);
             CHG(CH_SPIN);
         }
-        if (!strcmp(k, "G97")) {
+        if (!c->process && !strcmp(k, "G97")) {
             st->css = 0;
             SET(spin_code, k);
             CHG(CH_SPIN);
@@ -246,11 +247,16 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
                 st->pos_w[2] = NULL;
             }
         }
-        if (!strcmp(k, "M03") || !strcmp(k, "M04") || !strcmp(k, "M05")) {
+        if (c->process) {
+            /* A plasma torch, not a spindle and coolant. */
+            if (gc_json_has_str(gc_json_get(c->process, "on"), k) || gc_json_has_str(gc_json_get(c->process, "off"), k)) {
+                SET(torch, k);
+                CHG(CH_TORCH);
+            }
+        } else if (!strcmp(k, "M03") || !strcmp(k, "M04") || !strcmp(k, "M05")) {
             SET(spin_dir, k);
             CHG(CH_SPINDIR);
-        }
-        if (!strcmp(k, "M08") || !strcmp(k, "M09") || !strcmp(k, "M88") || !strcmp(k, "M89")) {
+        } else if (!strcmp(k, "M08") || !strcmp(k, "M09") || !strcmp(k, "M88") || !strcmp(k, "M89")) {
             SET(cool, k);
             CHG(CH_COOL);
         }
@@ -516,9 +522,12 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         cell_set(cell, e, NULL, d, 0);
         return;
     }
-    snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(a, sk)), v);
+    /* A letter can read differently on one machine type (D is the kerf on a plasma table). */
+    const gc_json *ax = gc_json_get(a, c->type);
+    if (!gc_json_truthy(gc_json_get(ax, "long"))) ax = a;
+    snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(ax, sk)), v);
     if (*d2) snprintf(d, sizeof d, "%s", d2);
-    else snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(a, "desc")), v);
+    else snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(ax, "desc")), v);
     cell_set(cell, e, NULL, d, imp);
 }
 
@@ -541,6 +550,7 @@ static void save_modes(const tstate *st, gc_modes *m)
     snprintf(m->wcs, sizeof m->wcs, "%s", st->wcs);
     snprintf(m->spin_dir, sizeof m->spin_dir, "%s", st->spin_dir);
     snprintf(m->cool, sizeof m->cool, "%s", st->cool);
+    snprintf(m->torch, sizeof m->torch, "%s", st->torch);
     snprintf(m->cycle, sizeof m->cycle, "%s", st->cycle_code);
     m->F = st->F;
     m->S = st->S;

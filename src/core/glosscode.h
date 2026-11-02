@@ -89,6 +89,7 @@ typedef struct gc_cell {
 typedef struct gc_modes {
     char motion[16], plane[16], units[8], unit_code[16], dist_code[16], feed_mode[8], feed_code[16];
     char spin_mode[8], spin_code[16], comp[16], tlen[16], wcs[48], spin_dir[16], cool[16], cycle[16];
+    char torch[16];   /* the last cut on or cut off code on a plasma machine, "" before one */
     const char *F, *S, *T, *H; /* the words that set them, or NULL */
     int tlen_on;
     unsigned changed; /* GC_MODE_* bits set on this line */

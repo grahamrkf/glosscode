@@ -96,7 +96,7 @@
     "O": { "long": "PROG", "short": "O",   "desc": "Program number" },
     "T": { "long": "TOOL", "short": "T",   "desc": "Tool number" },
     "H": { "long": "LOFS", "short": "H",   "desc": "Tool length offset number" },
-    "D": { "long": "DOFS", "short": "D",   "desc": "Tool diameter offset number" },
+    "D": { "long": "DOFS", "short": "D",   "desc": "Tool diameter offset number", "plasma": { "long": "KERF", "short": "KRF", "desc": "Kerf compensation offset" } },
     "X": { "abs": { "long": "X", "short": "X" }, "inc": { "long": "INCX", "short": "iX" } },
     "Y": { "abs": { "long": "Y", "short": "Y" }, "inc": { "long": "INCY", "short": "iY" } },
     "Z": { "abs": { "long": "Z", "short": "Z" }, "inc": { "long": "INCZ", "short": "iZ" } },
@@ -281,6 +281,39 @@
       "G95": { "long": "FEEDREV", "short": "FPR", "desc": "Feed per revolution" },
       "G98": { "long": "RETINIT", "short": "RINI", "desc": "Cycle returns to the start level" },
       "G99": { "long": "RETRPLN", "short": "RRPL", "desc": "Cycle returns to R" }
+    },
+    "tormach.plasma": {
+      "G15": { "long": "PROBEHT", "short": "PRBH", "desc": "Probe for the material height (Tormach plasma)" },
+      "G16": { "long": "PIERCE", "short": "PRC", "desc": "Pierce (Tormach plasma)" }
+    },
+    "centroid.plasma": {
+      "M61": { "long": "PIERCE", "short": "PRC", "desc": "Touch off the material and pierce: the cut starts (Acorn plasma)" },
+      "M62": { "long": "TORCHUP", "short": "TUP", "desc": "Torch off and raise (Acorn plasma)" },
+      "M65": { "long": "MATERIAL", "short": "MATL", "desc": "Select a material profile (Acorn plasma)" }
+    },
+    "hypertherm.plasma": {
+      "G08": { "long": "REPEAT", "short": "RPT", "desc": "Repeat" },
+      "G43": { "long": "KERFSET", "short": "KSET", "desc": "Set the kerf value directly (with X)" },
+      "G59": { "long": "SETVAR", "short": "VAR", "desc": "Set variables (not a work offset on Hypertherm)" },
+      "G82": { "long": "OXYFUEL", "short": "OXY", "desc": "Oxyfuel mode (G82 and G83)" },
+      "G83": { "long": "OXYFUEL", "short": "OXY", "desc": "Oxyfuel mode (G82 and G83)" },
+      "G84": { "long": "PLASMA", "short": "PLS", "desc": "Plasma mode (G84 and G85)" },
+      "G85": { "long": "PLASMA", "short": "PLS", "desc": "Plasma mode (G84 and G85)" },
+      "G97": { "long": "LOOP", "short": "LOOP", "desc": "Start of a loop (G98 ends it)" },
+      "G98": { "long": "LOOPEND", "short": "LEND", "desc": "End of the loop started by G97" },
+      "M03": { "long": "CUTON", "short": "CON", "desc": "Cut on, when code mapping makes M03 cut on (M07 is the standard code)" },
+      "M04": { "long": "CUTON", "short": "CON", "desc": "Cut on, when code mapping makes M04 cut on (M07 is the standard code)" },
+      "M05": { "long": "CUTOFF", "short": "COFF", "desc": "Cut off, when code mapping makes M05 cut off (M08 is the standard code)" },
+      "M06": { "long": "CUTOFF", "short": "COFF", "desc": "Cut off, when code mapping makes M06 cut off (M08 is the standard code)" },
+      "M07": { "long": "CUTON", "short": "CON", "desc": "Cut on: the torch fires" },
+      "M08": { "long": "CUTOFF", "short": "COFF", "desc": "Cut off: the torch stops" },
+      "M09": { "long": "MARKON", "short": "MKON", "desc": "Marker on" },
+      "M10": { "long": "MARKOFF", "short": "MKOF", "desc": "Marker off" },
+      "M36": { "long": "PROCESS", "short": "PROC", "desc": "Select the process" },
+      "M40": { "long": "SUBCALL", "short": "SUB", "desc": "Call a subroutine" },
+      "M41": { "long": "SUBEND", "short": "SEND", "desc": "End of the subroutine" },
+      "M50": { "long": "THCOFF", "short": "THCF", "desc": "Torch height control off" },
+      "M51": { "long": "THCON", "short": "THCN", "desc": "Torch height control on" }
     },
     "tormach.lathe": {
       "M10": { "long": "COLLETUNC", "short": "CLTU", "desc": "Collet closer unclamp" },
