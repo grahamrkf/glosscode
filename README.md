@@ -6,6 +6,8 @@ GlossCode is a G-code editor that shows a plain-English line above every line of
 
 > **Status: early development.** The core (parser, mode tracking, English words and checks) is written in C and the program opens and saves files on Windows and Linux, using the UI from the clickable mockup in [`docs/mockup/`](docs/mockup/index.html). Downloads for Windows and Linux are on the [Releases page](https://github.com/one-moment-please/glosscode/releases), starting with 0.1.0, a preview. The screenshots below come from the mockup. To build it, see [`docs/building.md`](docs/building.md).
 
+> **Check every program on the machine before you cut.** GlossCode is new and hasn't been widely tested, so it can miss real problems and flag code that's fine. Its tables for each control are only as good as the manuals behind them. A control with a write-up in [`docs/manual-reviews/`](docs/manual-reviews/) has been compared with that control's programming manual; anything else hasn't, including controls we couldn't find manuals for, such as GRBL and wire EDM, waterjet and laser controls. Machine builders' options and settings can also change what a code does. Before running a part, prove the program out on the machine itself: run it through the control's own graphics or simulation, then a dry run or single block with the feed override turned down.
+
 ![GlossCode editor mockup](docs/images/editor-overview.png)
 
 ## What it looks like
