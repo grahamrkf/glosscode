@@ -616,6 +616,30 @@
       "inherits": "fanuc",
       "inheritWords": true,
       "verified": false,
+      "lathe": {
+        "source": { "manual": "SINUMERIK 840D sl/828D ISO Turning Programming Manual PGT", "revision": "02/2012, CNC software 4.5", "section": "G code system, dwell, M functions, subprograms, cycles G70 to G76, appendix B G code list. Tables are G code system B, the default (MD10881 = 0)" },
+        "mPerBlock": 5,
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G33", "G34", "G35", "G36", "G77", "G78", "G79"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G94", "G95"]
+        },
+        "speedClamp": { "code": "G92", "word": "S" },
+        "cycles": {
+          "G90": null, "G92": null, "G94": null,
+          "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+        "foreign": {
+          "G91": null,
+          "G32": { "severity": "error", "text": "In G code system B (the Siemens default) threading is G33, not G32." },
+          "G50": { "severity": "warning", "text": "In G code system B (the Siemens default) G92 sets coordinates and the spindle limit; G50 is system A." },
+          "G98": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level, not feed per minute or per rev (G94/G95)." },
+          "G99": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level, not feed per minute or per rev (G94/G95)." }
+        }
+      },
       "mill": {
         "source": { "manual": "SINUMERIK ONE / 840D sl / 828D ISO Milling Programming Manual", "revision": "07/2021, CNC 4.95/6.15", "section": "3 Programming principles, 5 Auxiliary functions, 6 Cycles and subprograms, appendix B G code groups" },
         "mPerBlock": 5,

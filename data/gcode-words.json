@@ -264,6 +264,24 @@
       "M130": { "long": "TURNMODE", "short": "TURN", "desc": "Turning mode (Hurco default)" },
       "M131": { "long": "MILLMODE", "short": "MILL", "desc": "Milling mode (Hurco default)" }
     },
+    "siemensiso.lathe": {
+      "G33": { "long": "THREAD", "short": "THD", "desc": "Thread cutting (system B)" },
+      "G34": { "long": "THDVAR", "short": "THDV", "desc": "Thread cutting with a variable lead" },
+      "G35": { "long": "THDARCCW", "short": "THCW", "desc": "Convex thread, clockwise arc" },
+      "G36": { "long": "THDARCCC", "short": "THCC", "desc": "Convex thread, counterclockwise arc" },
+      "G68": { "long": "DBLTURON", "short": "DTON", "desc": "Double turret mirror on" },
+      "G69": { "long": "DBLTUROF", "short": "DTOF", "desc": "Double turret mirror off" },
+      "G77": { "long": "TURNCYC", "short": "TCY", "desc": "OD/ID turning cycle" },
+      "G78": { "long": "THDCYC", "short": "TCYC", "desc": "Threading cycle" },
+      "G79": { "long": "FACECYC", "short": "FCY", "desc": "End facing cycle" },
+      "G90": { "long": "ABS", "short": "ABS", "desc": "Absolute positions" },
+      "G91": { "long": "INCR", "short": "INC", "desc": "Incremental positions" },
+      "G92": { "long": "COORDSET", "short": "CSET", "desc": "Set coordinates or the maximum spindle speed (system B)" },
+      "G94": { "long": "FEEDMIN", "short": "FPM", "desc": "Feed per minute" },
+      "G95": { "long": "FEEDREV", "short": "FPR", "desc": "Feed per revolution" },
+      "G98": { "long": "RETINIT", "short": "RINI", "desc": "Cycle returns to the start level" },
+      "G99": { "long": "RETRPLN", "short": "RRPL", "desc": "Cycle returns to R" }
+    },
     "tormach.lathe": {
       "M10": { "long": "COLLETUNC", "short": "CLTU", "desc": "Collet closer unclamp" },
       "M11": { "long": "COLLETCLP", "short": "CLTC", "desc": "Collet closer clamp" },
