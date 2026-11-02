@@ -497,6 +497,25 @@
       "inheritWords": true,
       "verified": true,
       "source": { "manual": "Hurco WinMax Mill NC Programming 704-0116-310 Rev B and WinMax Mill Programming 704-0116-501 Rev D", "revision": "2010 (v8) and 2015 (v9.1/10.1)", "section": "NC programming: G code groups, canned cycles, subprograms, M codes (ISNC)" },
+      "lathe": {
+        "source": { "manual": "Hurco WinMax Lathe NC Programming v546NC", "revision": "Jan. 2018", "section": "Chapters 1 to 3: numbers, G code table 2-4 to 2-5, cycles 2-46 to 2-82, subprograms, M codes (ISNC only)" },
+        "numbers": { "noDecimal": "asWritten" },
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G32", "G76", "G77", "G78", "G79"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G93", "G94", "G95"],
+          "radius mode": ["G07", "G08"]
+        },
+        "cycles": {
+          "G90": null, "G92": null, "G94": null,
+          "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "foreign": {
+          "G91": null
+        }
+      },
       "mill": {
         "numbers": { "noDecimal": "asWritten" },
         "modalGroups": {
