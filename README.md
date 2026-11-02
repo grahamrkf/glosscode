@@ -4,7 +4,7 @@
 
 GlossCode is a G-code editor that shows a plain-English line above every line of code, with each code lined up under its English word. It tracks active modes, colors rapid and feed moves, and expands subprogram calls inline.
 
-> **Status: early development.** The core (parser, mode tracking, English words and checks) is written in C and the program opens and saves files on Windows and Linux, using the UI from the clickable mockup in [`docs/mockup/`](docs/mockup/index.html). Downloads for Windows and Linux are on the [Releases page](https://github.com/one-moment-please/glosscode/releases), starting with 0.1.0, a preview. The screenshots below come from the mockup. To build it, see [`docs/building.md`](docs/building.md).
+> **Status: early development.** The core (parser, mode tracking, English words and checks) is written in C and the program opens and saves files on Windows and Linux, with its screen in [`src/ui/index.html`](src/ui/index.html). Downloads for Windows and Linux are on the [Releases page](https://github.com/one-moment-please/glosscode/releases), starting with 0.1.0, a preview. The screenshots below come from the mockup. To build it, see [`docs/building.md`](docs/building.md).
 
 > **Check every program on the machine before you cut.** GlossCode is new and hasn't been widely tested, so it can miss real problems and flag code that's fine. Its tables for each control are only as good as the manuals behind them, and machine builders' options and settings can change what a code does. Before running a part, prove the program out on the machine itself: run it through the control's own graphics or simulation, then a dry run or single block with the feed override turned down.
 >
@@ -132,14 +132,14 @@ docs/features.md        Feature list and open questions
 docs/releasing.md       Version number, release files, update check, and what a first release still needs
 docs/subprogram-library.md  Subprogram library: file format, variables, call or write in, folders
 docs/images/            Mockup screenshots
-docs/mockup/index.html  Clickable mockup; open it in a browser
+src/ui/index.html       The program's screen (HTML, CSS, JavaScript); also runs in a browser
 VERSION                 Current version number
 examples/               Sample programs used by the mockup (Haas, Fanuc and Okuma; BRACKET_0MC.nc ends lines with ;). Not built into the program; a separate download
 ```
 
-## Try the mockup
+## Try it in a browser
 
-Open [`docs/mockup/index.html`](docs/mockup/index.html) in any browser. Click a word to edit it (or use the arrow keys and Enter), open a sample program from the home page, try the View menu (edit in English or G-code, show one or both lines, columns), and use **▸ show N1000** to expand the subprogram. Press F1 on a canned cycle to see how it works. It loads its fonts from Google Fonts, so it looks best online.
+Open [`src/ui/index.html`](src/ui/index.html) in any browser. Click a word to edit it (or use the arrow keys and Enter), open a sample program from the home page, try the View menu (edit in English or G-code, show one or both lines, columns), and use **▸ show N1000** to expand the subprogram. Press F1 on a canned cycle to see how it works. In a browser the sample programs are built in and Open shows a pretend file list; the program uses real files instead.
 
 ## License
 

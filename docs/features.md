@@ -82,3 +82,17 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Macro programs (#vars, IF, WHILE) and 4th/5th axis checks. The subprogram library's reader already runs a subset (see subprogram-library.md)
 - [ ] Checks inside library calls, save called library programs with the program, re-insert written-in lines, Okuma CALL with variables
 - [ ] Machine limits (travel, max RPM and feed) and part/fixture models for rapid-into-part checks
+- [ ] Find and replace, with whole-word and regex options
+- [ ] Move selected lines up or down
+- [ ] Comment out or block-delete (/) a line with one key
+- [ ] Go to line or N number (Ctrl+G), and bookmarks
+- [ ] Tool list: every tool, its offsets, and the lines that use it
+- [ ] Program stats: travel extents, cut distance and a rough run time
+- [ ] Macro variables (#100, IF, WHILE) shown with their values
+- [ ] Preview: zoom, pan, click a move to jump to its line, and measure between two points
+- [ ] Compare two programs side by side
+- [ ] Autosave and a backup copy before each save
+- [ ] Print or export a listing with the English lines
+- [ ] An editor for the word dictionary
+- [ ] Font size zoom, dark theme and adjustable column width
+- [ ] Fast scrolling in very large files (100,000+ lines)

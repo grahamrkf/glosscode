@@ -1,4 +1,4 @@
-/* GlossCode: the program. Opens a webview window showing the UI (docs/mockup/index.html, compiled in),
+/* GlossCode: the program. Opens a webview window showing the UI (src/ui/index.html, compiled in),
    and connects it to the core and the platform file through a handful of bound functions. Portable:
    the only OS-specific code is in src/platform/. */
 #include <stdio.h>

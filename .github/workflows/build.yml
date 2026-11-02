@@ -38,7 +38,7 @@ jobs:
       - name: Mockup data is in sync
         run: |
           node scripts/sync-mockup-data.mjs
-          git diff --exit-code docs/mockup/index.html
+          git diff --exit-code src/ui/index.html
       - name: Configure
         run: >
           cmake -S . -B build -G Ninja -DGLOSSCODE_APP=OFF -DCMAKE_BUILD_TYPE=Debug

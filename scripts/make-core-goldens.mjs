@@ -1,4 +1,4 @@
-// Runs the mockup's own JavaScript (docs/mockup/index.html) on every sample program in examples/ and
+// Runs the mockup's own JavaScript (src/ui/index.html) on every sample program in examples/ and
 // every edge case in tests/cases/, and
 // writes what it shows to tests/golden/*.json: the English word, unit and description for every word,
 // and every problem the checks report. The C core's tests (tests/test_golden.c) compare against these,
@@ -9,7 +9,7 @@ import { readFileSync, writeFileSync, readdirSync, existsSync } from "node:fs";
 import vm from "node:vm";
 
 const check = process.argv.includes("--check");
-const html = readFileSync("docs/mockup/index.html", "utf8");
+const html = readFileSync("src/ui/index.html", "utf8");
 const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 
 // A stand-in for the browser: every DOM call returns another stand-in, so the page's start-up code

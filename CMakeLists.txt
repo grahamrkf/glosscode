@@ -100,9 +100,9 @@ FetchContent_MakeAvailable(webview nfd)
 # The UI without the sample programs (a separate download), built-in data and bridge script, compiled in.
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/ui/index.html"
-    COMMAND ${CMAKE_COMMAND} "-DIN=${CMAKE_CURRENT_SOURCE_DIR}/docs/mockup/index.html"
+    COMMAND ${CMAKE_COMMAND} "-DIN=${CMAKE_CURRENT_SOURCE_DIR}/src/ui/index.html"
             "-DOUT=${CMAKE_CURRENT_BINARY_DIR}/ui/index.html" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/strip-samples.cmake"
-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/docs/mockup/index.html" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/strip-samples.cmake"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/ui/index.html" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/strip-samples.cmake"
     COMMENT "Leaving the sample programs out of the UI"
     VERBATIM)
 set(GC_EMBED "ui/index.html=${CMAKE_CURRENT_BINARY_DIR}/ui/index.html")
