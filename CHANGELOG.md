@@ -4,6 +4,23 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Machines
+- Machines are picked as machine type → control → machine. Every type and control has a Generic machine, so "Mill › Generic" or "Lathe › Okuma OSP-U10L / OSP-U100L › Generic" works without a profile. Only controls made for the chosen type are listed.
+- Your machine profiles are kept in settings.json. New starts from a machine type and control, Copy from another profile, and Add from library from a known model (Haas VF-2 and ST-10, Okuma M560-V and LB3000 EX II), with the numbers we aren't sure of left empty to fill in. Profiles can be deleted: programs that used one open with the Generic machine for its type and control.
+- New controls: Okuma OSP-U10L / OSP-U100L and Okuma OSP700L / OSP7000L (lathe), and a Generic control with the common ISO codes. New machine type: router (Centroid, LinuxCNC, GRBL and Generic), which reads like a mill. Haas NGC stays one control: where the 2020 and 2025 manuals differ, the machine profile settles it.
+- The Home tab is just the ⌂ icon.
+
+### Simulation
+- The toolpath fits the cutting moves, so a home return far from the part (`G00 X20. Z20.`) no longer shrinks the part to a dot. Rapids that go farther run off the edge.
+- Zoom and pan the toolpath: scroll to zoom about the pointer, drag to pan, Shift+drag (or ⬚ then drag) to zoom to a box, and double-click or Fit to fit again. +/− zoom from the middle.
+
+### Okuma
+- The graphic display statements `DEF WORK`, `PS LC,[..],[..]`, `END`, `CLEAR` and `DRAW` read as one word each, and nothing moves.
+- A sign then a variable (`Z-V10`) reads as one word, so `G91 G50 Z-V10` is a zero shift in the reading and the simulation.
+- `L` on a `G75` or `G76` line is the chamfer or rounding size.
+- The Ctrl+Z end-of-file mark some older systems write is kept, shown as `^Z` and read as EOF.
+- New check `unbalanced-brackets`: an expression whose `[` and `]` don't pair up.
+
 ## [0.1.6] - 2026-11-04
 
 ### Nothing is hidden

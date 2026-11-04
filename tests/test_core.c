@@ -202,6 +202,27 @@ static void test_machine_overrides(const gc_data *data)
     gc_doc_free(doc);
 }
 
+/* The older Okuma lathe controls read Okuma's language (no G54 work offset, G80 ends a LAP contour), and a
+   router reads like its control's mill. */
+static void test_controls(const gc_data *data)
+{
+    const char *prog = "N10 G50 S2000\nN20 G00 X2. Z0.1\nN30 G91 G50 Z-V1\nN40 M30\n";
+    gc_doc *doc = gc_doc_parse(prog, strlen(prog));
+    char err[200];
+    const char *u10 = "{\"type\":\"lathe\",\"brand\":\"okumau10l\"}", *rt = "{\"type\":\"router\",\"brand\":\"generic\"}";
+    gc_json *m1 = gc_json_parse(u10, strlen(u10), err, sizeof err), *m2 = gc_json_parse(rt, strlen(rt), err, sizeof err);
+    gc_analysis *a = gc_analyze(data, m1, doc, GC_STYLE_LONG);
+    CHECK(!strcmp(a->modes[1].wcs, ""), "an OSP-U10L lathe has no G54 work offset");
+    CHECK_STR(a->cells[2][2].e, "SETCOORD", "G91 G50 Z-V1 is a zero shift on an OSP-U10L lathe");
+    gc_analysis_free(a);
+    a = gc_analyze(data, m2, doc, GC_STYLE_LONG);
+    CHECK_STR(a->cells[1][1].e, "RAPID", "a generic router reads G00");
+    gc_analysis_free(a);
+    gc_json_free(m1);
+    gc_json_free(m2);
+    gc_doc_free(doc);
+}
+
 static void test_api(const gc_data *data)
 {
     const char *p = "{\"text\":\"N10 G0 X1.;\\r\\nN20 M30;\\r\\n\"}";
@@ -274,6 +295,7 @@ int main(int argc, char **argv)
     CHECK(data != NULL, "load data from %s", root);
     if (data) {
         test_machine_overrides(data);
+        test_controls(data);
         test_api(data);
         test_garbage(data);
         char err[200];
