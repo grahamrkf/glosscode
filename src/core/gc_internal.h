@@ -14,7 +14,7 @@ typedef struct gc_ctx {
     const char *base_type; /* the type whose tables and words it starts from ("mill" for plasma), or NULL */
     int lathe;
     int okuma;
-    int style;         /* GC_STYLE_LONG or GC_STYLE_SHORT */
+    int style;         /* GC_STYLE_LONG, GC_STYLE_SHORT or GC_STYLE_WORDS */
     gc_json *dialect;  /* owned: the per-type tables merged along the inherits chain */
     gc_json *cycle_help_layers; /* owned array of borrowed pointers' clones: cycleHelp layers, base first */
     const gc_json *groups;      /* dialect.modalGroups */

@@ -744,6 +744,337 @@
    ]
   },
   {
+   "machine": "hyp_plasma",
+   "style": "words",
+   "words": [
+    [
+     {
+      "g": "(PLASMA PLATE, ACORN AND TORMACH CODES)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     }
+    ],
+    [
+     {
+      "g": "N10",
+      "e": "SEQ10",
+      "d": "Sequence number 10"
+     },
+     {
+      "g": "G20",
+      "e": "units.inch",
+      "d": "Inch units"
+     },
+     {
+      "g": "G90",
+      "e": "units.absolute",
+      "d": "Absolute positions"
+     },
+     {
+      "g": "G17",
+      "e": "plane.xy",
+      "d": "Arcs in the XY plane"
+     }
+    ],
+    [
+     {
+      "g": "N20",
+      "e": "SEQ20",
+      "d": "Sequence number 20"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X1.",
+      "e": "X1.0",
+      "d": "X position 1.0"
+     },
+     {
+      "g": "Y1.",
+      "e": "Y1.0",
+      "d": "Y position 1.0"
+     },
+     {
+      "g": "Z0.5",
+      "e": "Z0.5",
+      "d": "Z position 0.5"
+     }
+    ],
+    [
+     {
+      "g": "N30",
+      "e": "SEQ30",
+      "d": "Sequence number 30"
+     },
+     {
+      "g": "G15",
+      "e": "?G15",
+      "d": "G15 isn't in the dictionary or this machine's file.",
+      "unk": true
+     }
+    ],
+    [
+     {
+      "g": "N40",
+      "e": "SEQ40",
+      "d": "Sequence number 40"
+     },
+     {
+      "g": "G16",
+      "e": "?G16",
+      "d": "G16 isn't in the dictionary or this machine's file.",
+      "unk": true
+     }
+    ],
+    [
+     {
+      "g": "N50",
+      "e": "SEQ50",
+      "d": "Sequence number 50"
+     },
+     {
+      "g": "M61",
+      "e": "?M61",
+      "d": "M61 isn't in the dictionary or this machine's file.",
+      "unk": true
+     }
+    ],
+    [
+     {
+      "g": "N60",
+      "e": "SEQ60",
+      "d": "Sequence number 60"
+     },
+     {
+      "g": "G42",
+      "e": "comp.right",
+      "d": "Cutter compensation right"
+     },
+     {
+      "g": "D2",
+      "e": "KERF2",
+      "d": "Kerf compensation offset 2"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "X3.",
+      "e": "X3.0",
+      "d": "X position 3.0"
+     },
+     {
+      "g": "F90.",
+      "e": "F90.0",
+      "u": "ipm",
+      "d": "Feed rate 90.0 inches per minute"
+     }
+    ],
+    [
+     {
+      "g": "N70",
+      "e": "SEQ70",
+      "d": "Sequence number 70"
+     },
+     {
+      "g": "G03",
+      "e": "arc.ccw",
+      "d": "Counterclockwise arc"
+     },
+     {
+      "g": "X4.",
+      "e": "X4.0",
+      "d": "X position 4.0"
+     },
+     {
+      "g": "Y2.",
+      "e": "Y2.0",
+      "d": "Y position 2.0"
+     },
+     {
+      "g": "R1.",
+      "e": "RAD1.0",
+      "d": "Arc radius"
+     }
+    ],
+    [
+     {
+      "g": "N80",
+      "e": "SEQ80",
+      "d": "Sequence number 80"
+     },
+     {
+      "g": "M62",
+      "e": "?M62",
+      "d": "M62 isn't in the dictionary or this machine's file.",
+      "unk": true
+     }
+    ],
+    [
+     {
+      "g": "N90",
+      "e": "SEQ90",
+      "d": "Sequence number 90"
+     },
+     {
+      "g": "G40",
+      "e": "comp.off",
+      "d": "Cutter compensation off"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X0.",
+      "e": "X0.0",
+      "d": "X position 0.0"
+     },
+     {
+      "g": "Y0.",
+      "e": "Y0.0",
+      "d": "Y position 0.0"
+     }
+    ],
+    [
+     {
+      "g": "N100",
+      "e": "SEQ100",
+      "d": "Sequence number 100"
+     },
+     {
+      "g": "M65",
+      "e": "?M65",
+      "d": "M65 isn't in the dictionary or this machine's file.",
+      "unk": true
+     },
+     {
+      "g": "P2",
+      "e": "SEC2",
+      "d": "Dwell for 2 seconds"
+     }
+    ],
+    [
+     {
+      "g": "N110",
+      "e": "SEQ110",
+      "d": "Sequence number 110"
+     },
+     {
+      "g": "M61",
+      "e": "?M61",
+      "d": "M61 isn't in the dictionary or this machine's file.",
+      "unk": true
+     }
+    ],
+    [
+     {
+      "g": "N120",
+      "e": "SEQ120",
+      "d": "Sequence number 120"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "X1.",
+      "e": "X1.0",
+      "d": "X position 1.0"
+     },
+     {
+      "g": "F90.",
+      "e": "F90.0",
+      "u": "ipm",
+      "d": "Feed rate 90.0 inches per minute"
+     }
+    ],
+    [
+     {
+      "g": "N130",
+      "e": "SEQ130",
+      "d": "Sequence number 130"
+     },
+     {
+      "g": "M200",
+      "e": "?M200",
+      "d": "M200 isn't in the dictionary or this machine's file.",
+      "unk": true
+     }
+    ],
+    [
+     {
+      "g": "N140",
+      "e": "SEQ140",
+      "d": "Sequence number 140"
+     },
+     {
+      "g": "M02",
+      "e": "program.end",
+      "d": "End program"
+     }
+    ]
+   ],
+   "problems": [
+    {
+     "li": 3,
+     "id": "unknown-word",
+     "sev": "info",
+     "msg": "G15 isn't in the dictionary or this machine's file."
+    },
+    {
+     "li": 4,
+     "id": "unknown-word",
+     "sev": "info",
+     "msg": "G16 isn't in the dictionary or this machine's file."
+    },
+    {
+     "li": 5,
+     "id": "unknown-word",
+     "sev": "info",
+     "msg": "M61 isn't in the dictionary or this machine's file."
+    },
+    {
+     "li": 6,
+     "id": "torch-off-cut",
+     "sev": "warning",
+     "msg": "This G01 move runs at feed rate while the torch is off (it was never turned on)."
+    },
+    {
+     "li": 8,
+     "id": "unknown-word",
+     "sev": "info",
+     "msg": "M62 isn't in the dictionary or this machine's file."
+    },
+    {
+     "li": 10,
+     "id": "unknown-word",
+     "sev": "info",
+     "msg": "M65 isn't in the dictionary or this machine's file."
+    },
+    {
+     "li": 11,
+     "id": "unknown-word",
+     "sev": "info",
+     "msg": "M61 isn't in the dictionary or this machine's file."
+    },
+    {
+     "li": 13,
+     "id": "unknown-word",
+     "sev": "info",
+     "msg": "M200 isn't in the dictionary or this machine's file."
+    }
+   ]
+  },
+  {
    "machine": "acorn_plasma",
    "style": "long",
    "words": [

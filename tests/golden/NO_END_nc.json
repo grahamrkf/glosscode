@@ -640,6 +640,291 @@
    ]
   },
   {
+   "machine": "haas_vf2",
+   "style": "words",
+   "words": [
+    [
+     {
+      "g": "O0400",
+      "e": "PROG0400",
+      "d": "Program number 0400"
+     },
+     {
+      "g": "(NO END)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     }
+    ],
+    [
+     {
+      "g": "N10",
+      "e": "SEQ10",
+      "d": "Sequence number 10"
+     },
+     {
+      "g": "G20",
+      "e": "units.inch",
+      "d": "Inch units"
+     },
+     {
+      "g": "G90",
+      "e": "units.absolute",
+      "d": "Absolute positions"
+     },
+     {
+      "g": "G17",
+      "e": "plane.xy",
+      "d": "Arcs in the XY plane"
+     },
+     {
+      "g": "G94",
+      "e": "feed.perminute",
+      "d": "Feed per minute"
+     }
+    ],
+    [
+     {
+      "g": "N20",
+      "e": "SEQ20",
+      "d": "Sequence number 20"
+     },
+     {
+      "g": "T1",
+      "e": "TOOL1",
+      "d": "Tool number 1"
+     },
+     {
+      "g": "M06",
+      "e": "tool.change",
+      "d": "Tool change"
+     }
+    ],
+    [
+     {
+      "g": "N30",
+      "e": "SEQ30",
+      "d": "Sequence number 30"
+     },
+     {
+      "g": "M03",
+      "e": "spindle.fwd",
+      "d": "Spindle on, forward (CW)"
+     }
+    ],
+    [
+     {
+      "g": "N40",
+      "e": "SEQ40",
+      "d": "Sequence number 40"
+     },
+     {
+      "g": "G43",
+      "e": "toollength.on",
+      "d": "Tool length offset on"
+     },
+     {
+      "g": "H1",
+      "e": "LOFS1",
+      "d": "Tool length offset number 1"
+     },
+     {
+      "g": "Z1.",
+      "e": "Z1.0",
+      "d": "Z position 1.0"
+     }
+    ],
+    [
+     {
+      "g": "N50",
+      "e": "SEQ50",
+      "d": "Sequence number 50"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X0.",
+      "e": "X0.0",
+      "d": "X position 0.0"
+     },
+     {
+      "g": "Y0.",
+      "e": "Y0.0",
+      "d": "Y position 0.0"
+     }
+    ],
+    [
+     {
+      "g": "N60",
+      "e": "SEQ60",
+      "d": "Sequence number 60"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "Z-.1",
+      "e": "Z-0.1",
+      "d": "Z position -0.1"
+     },
+     {
+      "g": "F20.",
+      "e": "F20.0",
+      "u": "ipm",
+      "d": "Feed rate 20.0 inches per minute"
+     }
+    ],
+    [
+     {
+      "g": "N70",
+      "e": "SEQ70",
+      "d": "Sequence number 70"
+     },
+     {
+      "g": "G95",
+      "e": "feed.perrev",
+      "d": "Feed per revolution"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "X1.",
+      "e": "X1.0",
+      "d": "X position 1.0"
+     }
+    ],
+    [
+     {
+      "g": "N80",
+      "e": "SEQ80",
+      "d": "Sequence number 80"
+     },
+     {
+      "g": "G02",
+      "e": "arc.cw",
+      "d": "Clockwise arc"
+     },
+     {
+      "g": "X2.",
+      "e": "X2.0",
+      "d": "X position 2.0"
+     },
+     {
+      "g": "Y1.",
+      "e": "Y1.0",
+      "d": "Y position 1.0"
+     }
+    ],
+    [
+     {
+      "g": "N90",
+      "e": "SEQ90",
+      "d": "Sequence number 90"
+     },
+     {
+      "g": "G81",
+      "e": "cycle.drill",
+      "d": "Drilling cycle"
+     },
+     {
+      "g": "X1.",
+      "e": "X1.0",
+      "d": "X position 1.0"
+     },
+     {
+      "g": "Y1.",
+      "e": "Y1.0",
+      "d": "Y position 1.0"
+     },
+     {
+      "g": "Z-0.2",
+      "e": "Z-0.2",
+      "d": "Z position -0.2"
+     },
+     {
+      "g": "R0.1",
+      "e": "RPLN0.1",
+      "d": "Retract plane for the drilling cycle"
+     },
+     {
+      "g": "F5.",
+      "e": "F5.0",
+      "u": "ipr",
+      "d": "Feed rate 5.0 inches per rev"
+     },
+     {
+      "g": "S",
+      "e": "S",
+      "u": "rpm",
+      "d": "Spindle speed  RPM"
+     }
+    ],
+    [
+     {
+      "g": "N100",
+      "e": "SEQ100",
+      "d": "Sequence number 100"
+     },
+     {
+      "g": "G80",
+      "e": "cycle.off",
+      "d": "Cancel canned cycle"
+     },
+     {
+      "g": "M05",
+      "e": "spindle.off",
+      "d": "Spindle off"
+     }
+    ]
+   ],
+   "problems": [
+    {
+     "li": 0,
+     "id": "no-program-end",
+     "sev": "warning",
+     "msg": "The file has no M02 or M30."
+    },
+    {
+     "li": 3,
+     "id": "no-speed",
+     "sev": "warning",
+     "msg": "M03 starts the spindle but no S has been set."
+    },
+    {
+     "li": 7,
+     "id": "feed-mode-changed",
+     "sev": "warning",
+     "msg": "F20.0 was set under G94 but G95 is active now, so it reads as ipr."
+    },
+    {
+     "li": 8,
+     "id": "arc-no-center",
+     "sev": "error",
+     "msg": "G02 needs R or I and J to define the arc."
+    },
+    {
+     "li": 9,
+     "id": "empty-value",
+     "sev": "error",
+     "msg": "S has no number after it."
+    },
+    {
+     "li": 9,
+     "id": "feed-plausibility",
+     "sev": "info",
+     "msg": "F5.0 ipr is unusually large for a per-rev feed. Check that G95 (feed per rev) is the mode you meant."
+    }
+   ]
+  },
+  {
    "machine": "fanuc_0imf",
    "style": "long",
    "words": [

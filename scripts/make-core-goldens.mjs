@@ -45,7 +45,7 @@ for (const { dir, name } of sources){
   const doc = []; for (const line of lines) A.splitBlocks(line).blocks.forEach(b => doc.push(A.tokenize(b)));
   const machines = LATHE_FILES.includes(name) ? LATHES : OKUMA_LATHE_FILES.includes(name) ? ["okuma_lb3000", "haas_st10"] : PLASMA_FILES.includes(name) ? PLASMAS : OKUMA_FILES.includes(name) ? ["okuma_m560", ...MILLS.filter(m => m!=="okuma_m560")] : MILLS;
   const runs = [];
-  for (const id of machines) for (const s of id===machines[0] ? ["long", "short"] : ["long"]){
+  for (const id of machines) for (const s of id===machines[0] ? ["long", "short", "words"] : ["long"]){
     A.use(id, s); A.doc = doc.map(t => [...t]); A.translateAll();
     const words = A.view.map(cells => cells.map(c => {
       const o = { g:c.g, e:c.e }; if (c.u) o.u = c.u; o.d = c.d2 || c.d || ""; if (c.unk) o.unk = true; if (c.imp) o.imp = true; if (c.cm) o.cm = true; return o; }));

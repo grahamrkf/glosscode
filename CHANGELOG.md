@@ -4,6 +4,21 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Nothing is hidden
+- Every character of a program shows in the G-code row, as in a text editor, with the spacing of the columns added. `%` lines and `;` at the end of a block are shown and saved as written (a `;` only some lines have stays only on those lines). Text GlossCode can't read, like a stray symbol or number, is kept as written and flagged.
+- A machine that needs `;` on every block still gets it added on save, but never a second one.
+
+### Editor
+- The row you're editing is dark and heavy, and the other row of each line is light and faint, so it's clear which one is active.
+- New English style, View › Full words, writes codes as words like `spindle.fwd`, `units.inch`, `units.absolute` and `coolant.on`. Typing a full word in English mode works too. Address words (X, SEQ, TOOL, PECK…) read as in the long style.
+- Each line shows a grey run order number on the left: the block count as the program runs, counting a subprogram's lines on every call. It matches the line count some controls show. View › Run order numbers turns it off.
+
+### Simulation
+- The simulation follows the line actually running, not the first time that line runs. A subprogram called again with new variables (a deeper `#110`, for example) shows its own depth in the timeline, and the timeline scrolls straight through calls instead of jumping back.
+- Inside a call, the editor follows along in the call's shown lines (▸ show). While the call is hidden, a progress bar beside its button shows how far through it the tool is.
+- New 16×, 32× and 64× speeds.
+- Lathes: a program that uses the tailstock shows a tailstock symbol in the toolpath view, with ← (in), → (out) or ? (not set yet).
+
 ## [0.1.5] - 2026-11-02
 
 ### Macro variables
