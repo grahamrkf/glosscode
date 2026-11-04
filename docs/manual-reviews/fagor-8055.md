@@ -119,7 +119,7 @@ Programming Manual Ref. 2008 (498 pp) is the main source. Ref. 1402 (750 pp) is 
 - Help texts: K on G83, G88/G89 and G160/G161 is in hundredths of a second; G83 D is the approach distance; R0 is clutch tapping (the default) and R1 rigid; G86/G87 A defaults to 30° and W with K is the spindle angle at the measure point; the signs of the thread depth and pass give the direction; M defaults to L on G66/G68/G69 and to 0 on G81 to G85.
 
 **Still to check:**
-- G87 K: this manual gives the measure point along Z, the quick reference along X.
+- G87 K: this manual (p. 44) gives the measure point as a Z coordinate, worded as for G86 K, while the quick reference (Ref. 1402, p. 36) gives X. GlossCode reads it as X, since Z stays the same along a face thread and the p. 44 text looks copied from G86. A test on a control would settle it.
 - G192, G92, G33 and G34 aren't in this manual; they come from the programming manual.
 - `#MILLCY` and `#LATHECY` (switching cycle sets) and `#DINDIST` read as unknown words, and a subroutine name in quotes (`P"NAME"`) isn't read.
 - Whether the 8060 has every cycle the 8065 manual describes.
