@@ -81,12 +81,19 @@ static int in_group(const gc_ctx *c, const char *group, const char *code)
     return gc_json_has_str(gc_json_get(c->groups, group), code);
 }
 
-/* The lathe code that clamps the spindle speed and, with X or Z, sets the coordinates:
-   G50 in G code system A, G92 in systems B and C (the dialect's speedClamp code). */
-static const char *coord_set_code(const gc_ctx *c)
+/* The lathe code that clamps the spindle speed: G50 in G code system A, G92 in systems B and C
+   (the dialect's speedClamp code), G192 on a Fagor 8060/8065. */
+static const char *clamp_code_of(const gc_ctx *c)
 {
     const char *k = gc_json_get_str(gc_json_get(c->dialect, "speedClamp"), "code");
     return k ? k : "G50";
+}
+
+/* The lathe code that, with X or Z, sets the coordinates: the clamp code unless the dialect's coordSet names another. */
+static const char *coord_set_code(const gc_ctx *c)
+{
+    const char *k = gc_json_get_str(c->dialect, "coordSet");
+    return k ? k : clamp_code_of(c);
 }
 
 static double num_value(const gc_ctx *c, const char *t, int inch)
@@ -184,7 +191,7 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
     }
 #define CHG(bit) (st->chg |= (bit), st->ever |= (bit))
     int wcs_line = gc_line_has_code(l, "G15");
-    const char *clamp_code = coord_set_code(c);
+    const char *clamp_code = clamp_code_of(c);
     const gc_json *unit_codes = gc_json_get(c->dialect, "unitCodes");
     const char *uc_inch = "G20", *uc_mm = "G21";
     if (unit_codes) {
@@ -717,7 +724,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         return;
     }
     /* Inside a canned cycle, a word can mean something special (Haas G76 A is the tool angle). */
-    if (st->cycle_code[0] && (!strchr("FSXYZ", L) || (L == 'Z' && gc_json_truthy(gc_json_get(c->dialect, "cycleRefZ"))) || own)) {
+    if (st->cycle_code[0] && (L != 'N' || ref) && (!strchr("FSXYZ", L) || (L == 'Z' && gc_json_truthy(gc_json_get(c->dialect, "cycleRefZ"))) || own)) {
         const gc_json *cw = gc_cycle_word(c, st->cycle_code, L);
         const char *en = gc_json_str(gc_json_at(cw, 2));
         if (en && *en) {

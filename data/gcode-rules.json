@@ -1159,6 +1159,73 @@
           "M98": { "severity": "error", "text": "Fagor has no M98. Call a subroutine with #CALL name (or LL name for a local %L subroutine)." },
           "M99": { "severity": "error", "text": "Fagor ends a subroutine with M17, M29 or #RET, not M99." }
         }
+      },
+      "lathe": {
+        "source": { "manual": "Fagor CNC 8060/8065 Programming manual Ref. 2008 and the 8060/8065 T quick reference Ref. 1402", "section": "G list and block format from the programming manual; the lathe cycle words from the quick reference only, since the lathe canned cycles manual isn't public. See docs/manual-reviews/fagor-8055.md" },
+        "verified": false,
+        "blockSyntax": "fagor8060",
+        "numbers": { "noDecimal": "asWritten" },
+        "unitCodes": { "inch": "G70", "mm": "G71" },
+        "dwellWords": ["K"],
+        "dwellNoDecimal": null,
+        "speedClamp": { "code": "G192", "word": "S" },
+        "coordSet": "G92",
+        "modalGroups": {
+          "motion": ["G00", "G01", "G02", "G03", "G33", "G34", "G63"],
+          "units": ["G70", "G71"],
+          "feed mode": ["G93", "G94", "G95"],
+          "distance": ["G90", "G91"],
+          "x mode": ["G151", "G152"],
+          "work offset": ["G53", "G54", "G55", "G56", "G57", "G58", "G59", "G159"],
+          "exact stop": ["G05", "G07", "G50"]
+        },
+        "programOrderCodes": ["M00", "M01", "M02", "M30", "M06", "G04", "G53", "G74", "G92", "G192"],
+        "subCalls": { "M98": null, "G65": null },
+        "subReturn": ["M17", "M29"],
+        "wordMeaning": { "P": "the subroutine with the profile", "U": null, "W": null, "Q": "the end point in X", "R": "the end point in Z", "C": "the depth of each pass", "S": "a profile label or the live tool speed", "E": "the last line of the profile", "X": "the start point in X", "Z": "the start point in Z", "I": "the depth or stock", "B": "the peck or pass depth", "J": "the number of points", "L": "the X finish stock or slot length", "K": "a dwell or the plunge feed", "F": "the feed rate" },
+        "wordHints": { "G32": null },
+        "codeWords": {
+          "G33": {"name": "Threading", "words": {"K": ["PITCH", "Thread pitch along Z"], "I": ["PITCHX", "Thread pitch along X"], "J": ["PITCHY", "Thread pitch along Y"]}}
+        },
+        "cycles": {
+          "G66": {"name": "Pattern repeat", "requires": ["X", "Z", "I", "C", "S", "E"], "optional": ["A", "L", "M", "H", "P", "Q"], "modal": false, "labels": ["S", "E"], "ownWords": ["S", "M"], "feed": true},
+          "G68": {"name": "Roughing along X", "requires": ["X", "Z", "C", "S", "E"], "optional": ["D", "L", "M", "K", "F", "H", "P", "Q"], "modal": false, "labels": ["S", "E"], "ownWords": ["S", "F", "M"], "leadF": true, "feed": true},
+          "G69": {"name": "Roughing along Z", "requires": ["X", "Z", "C", "S", "E"], "optional": ["D", "L", "M", "K", "F", "H", "P", "Q"], "modal": false, "labels": ["S", "E"], "ownWords": ["S", "F", "M"], "leadF": true, "feed": true},
+          "G81": {"name": "Straight turning", "requires": ["X", "Z", "Q", "R", "C"], "optional": ["D", "L", "M", "F", "H"], "modal": false, "ownWords": ["F", "M"], "leadF": true, "feed": true},
+          "G82": {"name": "Straight facing", "requires": ["X", "Z", "Q", "R", "C"], "optional": ["D", "L", "M", "F", "H"], "modal": false, "ownWords": ["F", "M"], "leadF": true, "feed": true},
+          "G83": {"name": "Drilling or tapping along Z", "requires": ["X", "Z", "I", "B"], "optional": ["D", "K", "H", "C", "R"], "modal": false, "feed": true},
+          "G84": {"name": "Turning with an arc", "requires": ["X", "Z", "Q", "R", "C", "I", "K"], "optional": ["D", "L", "M", "F", "H"], "modal": false, "ownWords": ["F", "M"], "leadF": true, "feed": true},
+          "G85": {"name": "Facing with an arc", "requires": ["X", "Z", "Q", "R", "C", "I", "K"], "optional": ["D", "L", "M", "F", "H"], "modal": false, "ownWords": ["F", "M"], "leadF": true, "feed": true},
+          "G86": {"name": "Threading along Z", "requires": ["X", "Z", "Q", "R", "I", "B", "C"], "optional": ["K", "E", "D", "L", "J", "A", "W"], "modal": false},
+          "G87": {"name": "Threading on the face", "requires": ["X", "Z", "Q", "R", "I", "B", "C"], "optional": ["K", "E", "D", "L", "J", "A", "W"], "modal": false},
+          "G88": {"name": "Grooving along X", "requires": ["X", "Z", "Q", "R"], "optional": ["C", "D", "K"], "modal": false, "feed": true},
+          "G89": {"name": "Grooving along Z", "requires": ["X", "Z", "Q", "R"], "optional": ["C", "D", "K"], "modal": false, "feed": true},
+          "G160": {"name": "Face drilling or tapping", "requires": ["X", "Z", "I", "B", "Q", "J", "S"], "optional": ["A", "D", "K", "H", "C", "R", "N"], "modal": false, "ownWords": ["S", "N"], "needs": ["liveTooling"], "feed": true},
+          "G161": {"name": "Side drilling or tapping", "requires": ["X", "Z", "I", "B", "Q", "J", "S"], "optional": ["A", "D", "K", "H", "C", "R", "N"], "modal": false, "ownWords": ["S", "N"], "needs": ["liveTooling"], "feed": true},
+          "G162": {"name": "Side slot milling", "requires": ["X", "Z", "L", "I", "Q", "J", "S", "F"], "optional": ["A", "D", "N"], "modal": false, "ownWords": ["S", "N"], "needs": ["liveTooling"], "feed": true},
+          "G163": {"name": "Face slot milling", "requires": ["X", "Z", "L", "I", "Q", "J", "S", "F"], "optional": ["A", "D", "N"], "modal": false, "ownWords": ["S", "N"], "needs": ["liveTooling"], "feed": true},
+          "G70": null,
+          "G71": null,
+          "G72": null,
+          "G73": null,
+          "G74": null,
+          "G75": null,
+          "G76": null,
+          "G90": null,
+          "G92": null,
+          "G94": null
+        },
+        "foreign": {
+          "G91": null,
+          "M97": null,
+          "M98": { "severity": "error", "text": "The Fagor 8060/8065 has no M98. Call a subroutine with #CALL, or a local one with LL." },
+          "M99": { "severity": "error", "text": "The Fagor 8060/8065 ends a subroutine with M17, M29 or #RET, not M99." },
+          "G80": { "severity": "error", "text": "The Fagor 8060/8065 lathe has no G80: its cycles aren't modal, so there's nothing to cancel." },
+          "G98": { "severity": "error", "text": "On the Fagor 8060/8065 lathe, G94 is feed per minute; G98 is a mill cycle code." },
+          "G99": { "severity": "error", "text": "On the Fagor 8060/8065 lathe, G95 is feed per rev; G99 is a mill cycle code." },
+          "G43": { "severity": "error", "text": "The Fagor 8060/8065 has no G43: the tool's D offset applies its length." },
+          "G50": { "severity": "warning", "text": "On the Fagor 8060/8065, G50 is a semi-rounded corner, not a speed limit. Limit the spindle speed with G192 S." }
+        }
       }
     },
 
@@ -1251,6 +1318,8 @@
         "dwellHundredths": true,
         "dwellWords": ["K"],
         "dwellNoDecimal": null,
+        "coordSet": null,
+        "verified": null,
         "speedClamp": { "code": "G92", "word": "S" },
         "modalGroups": {
           "motion": ["G00", "G01", "G02", "G03", "G33", "G34"],
@@ -1287,6 +1356,10 @@
           "G87": {"name": "Threading on the face", "requires": ["X", "Z", "Q", "R", "I", "B", "C"], "optional": ["K", "E", "D", "L", "J", "A", "W", "V", "M", "H", "U"], "modal": false, "ownWords": ["M"]},
           "G88": {"name": "Grooving along X", "requires": ["X", "Z", "Q", "R"], "optional": ["C", "D", "K"], "modal": false, "feed": true},
           "G89": {"name": "Grooving along Z", "requires": ["X", "Z", "Q", "R"], "optional": ["C", "D", "K"], "modal": false, "feed": true},
+          "G160": null,
+          "G161": null,
+          "G162": null,
+          "G163": null,
           "G70": null,
           "G71": null,
           "G72": null,
@@ -1299,6 +1372,8 @@
           "G94": null
         },
         "foreign": {
+          "G50": null,
+          "M98": { "severity": "error", "text": "The Fagor 8055 has no M98. Call a subroutine with (CALL n), or (PCALL n, …) to give it its own parameters." },
           "G41": null,
           "G91": null,
           "M97": null,
@@ -1482,6 +1557,25 @@
       "G86": {"about": "Boring to depth I, dwell K. With Q the spindle stops at angle Q and the tool moves off by D and E before coming out; without, it comes out at rapid with the spindle stopped.", "words": {"Q": ["90", "Spindle angle for the way out.", "ORIENT"]}},
       "G87": {"about": "Rectangular pocket: half length J, half width K, passes of B down to I, finishing stock L. I is measured from the starting plane."},
       "G89": {"about": "Boring with a dwell: feed to the depth I, dwell K, feed back out."}
+    },
+    "fagor8060.lathe": {
+      "common": {"words": {"X": ["40", "Start point in X."], "Z": ["2", "Start point in Z."]}},
+      "G66": {"about": "Roughs by repeating the profile from label S to label E until the stock I is gone, then finishes at feed H. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"I": ["5", "Stock to remove.", "STOCK"], "C": ["1", "Depth of each pass.", "PASS"], "A": ["0", "Main direction: A0 along Z, A1 along X.", "MAINAX"], "L": ["0.2", "Finish stock in X (radius).", "FINX"], "M": ["0.1", "Finish stock in Z.", "FINZ"], "H": ["0.1", "Finish pass feed. None or 0: no finish pass.", "FINFEED"], "S": ["100", "Label of the first line of the profile.", "PROFFROM"], "E": ["200", "Label of the last line of the profile.", "PROFTO"], "P": ["", "Subroutine that holds the profile.", "PROFSUB"], "Q": ["", "Program that holds the profile.", "PROG"]}},
+      "G68": {"about": "Roughs along X following the profile from label S to label E. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"C": ["1", "Depth of each pass.", "PASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "L": ["0.2", "Finish stock in X (radius).", "FINX"], "M": ["0.1", "Finish stock in Z.", "FINZ"], "H": ["0.1", "Finish pass feed. None or 0: no finish pass.", "FINFEED"], "F": ["0.2", "Feed for the last roughing pass.", "LASTFEED"], "K": ["0.1", "Feed for plunging into valleys.", "PLUNGEF"], "S": ["100", "Label of the first line of the profile.", "PROFFROM"], "E": ["200", "Label of the last line of the profile.", "PROFTO"], "P": ["", "Subroutine that holds the profile.", "PROFSUB"], "Q": ["", "Program that holds the profile.", "PROG"]}},
+      "G69": {"about": "Roughs along Z following the profile from label S to label E. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"C": ["1", "Depth of each pass.", "PASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "L": ["0.2", "Finish stock in X (radius).", "FINX"], "M": ["0.1", "Finish stock in Z.", "FINZ"], "H": ["0.1", "Finish pass feed. None or 0: no finish pass.", "FINFEED"], "F": ["0.2", "Feed for the last roughing pass.", "LASTFEED"], "K": ["0.1", "Feed for plunging into valleys.", "PLUNGEF"], "S": ["100", "Label of the first line of the profile.", "PROFFROM"], "E": ["200", "Label of the last line of the profile.", "PROFTO"], "P": ["", "Subroutine that holds the profile.", "PROFSUB"], "Q": ["", "Program that holds the profile.", "PROG"]}},
+      "G81": {"about": "Straight turning from X Z to Q R in passes of C. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"Q": ["20", "End point in X.", "ENDX"], "R": ["-30", "End point in Z.", "ENDZ"], "C": ["1", "Depth of each pass.", "PASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "L": ["0.2", "Finish stock in X (radius).", "FINX"], "M": ["0.1", "Finish stock in Z.", "FINZ"], "H": ["0.1", "Finish pass feed. None or 0: no finish pass.", "FINFEED"], "F": ["0.2", "Feed for the last roughing pass.", "LASTFEED"]}},
+      "G82": {"about": "Straight facing from X Z to Q R in passes of C. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"Q": ["20", "End point in X.", "ENDX"], "R": ["-30", "End point in Z.", "ENDZ"], "C": ["1", "Depth of each pass.", "PASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "L": ["0.2", "Finish stock in X (radius).", "FINX"], "M": ["0.1", "Finish stock in Z.", "FINZ"], "H": ["0.1", "Finish pass feed. None or 0: no finish pass.", "FINFEED"], "F": ["0.2", "Feed for the last roughing pass.", "LASTFEED"]}},
+      "G83": {"about": "Drilling (B is the peck) or tapping (B0) along Z at X Z, to depth I. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"I": ["20", "Depth.", "DEPTH"], "B": ["5", "Peck depth. B0 taps.", "PECK"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "K": ["0", "Dwell at the bottom.", "DWELL"], "H": ["2", "How far the tool backs off after each peck.", "BACKOFF"], "C": ["1", "How close the rapid comes to the last peck.", "CLEAR"], "R": ["1", "Peck factor when drilling; the tapping type when tapping.", "PECKFAC"]}},
+      "G84": {"about": "Turning from X Z to Q R with an arc whose center is I K from the start point. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"Q": ["20", "End point in X.", "ENDX"], "R": ["-30", "End point in Z.", "ENDZ"], "C": ["1", "Depth of each pass.", "PASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "L": ["0.2", "Finish stock in X (radius).", "FINX"], "M": ["0.1", "Finish stock in Z.", "FINZ"], "H": ["0.1", "Finish pass feed. None or 0: no finish pass.", "FINFEED"], "F": ["0.2", "Feed for the last roughing pass.", "LASTFEED"], "I": ["10", "Arc center in X, from the start point.", "CENTERX"], "K": ["-5", "Arc center in Z, from the start point.", "CENTERZ"]}},
+      "G85": {"about": "Facing from X Z to Q R with an arc whose center is I K from the start point. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"Q": ["20", "End point in X.", "ENDX"], "R": ["-30", "End point in Z.", "ENDZ"], "C": ["1", "Depth of each pass.", "PASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "L": ["0.2", "Finish stock in X (radius).", "FINX"], "M": ["0.1", "Finish stock in Z.", "FINZ"], "H": ["0.1", "Finish pass feed. None or 0: no finish pass.", "FINFEED"], "F": ["0.2", "Feed for the last roughing pass.", "LASTFEED"], "I": ["10", "Arc center in X, from the start point.", "CENTERX"], "K": ["-5", "Arc center in Z, from the start point.", "CENTERZ"]}},
+      "G86": {"about": "Threading along Z from X Z to Q R, depth I in passes of B, pitch C. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"Q": ["20", "End point in X.", "ENDX"], "R": ["-30", "End point in Z.", "ENDZ"], "K": ["", "Z where the thread is measured, for thread repair.", "MEASZ"], "I": ["1", "Thread depth.", "DEPTH"], "B": ["0.2", "Pass depth.", "PASS"], "E": ["0.05", "Smallest pass.", "MINPASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "L": ["0.05", "Finish pass.", "FINISH"], "C": ["1.5", "Thread pitch.", "PITCH"], "J": ["", "Thread exit distance.", "EXIT"], "A": ["30", "Infeed angle.", "INFANG"], "W": ["", "Spindle angle where the thread starts.", "SPNANG"]}},
+      "G87": {"about": "Threading on the face from X Z to Q R, depth I in passes of B, pitch C. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"Q": ["20", "End point in X.", "ENDX"], "R": ["-30", "End point in Z.", "ENDZ"], "K": ["", "Z where the thread is measured, for thread repair.", "MEASZ"], "I": ["1", "Thread depth.", "DEPTH"], "B": ["0.2", "Pass depth.", "PASS"], "E": ["0.05", "Smallest pass.", "MINPASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "L": ["0.05", "Finish pass.", "FINISH"], "C": ["1.5", "Thread pitch.", "PITCH"], "J": ["", "Thread exit distance.", "EXIT"], "A": ["30", "Infeed angle.", "INFANG"], "W": ["", "Spindle angle where the thread starts.", "SPNANG"]}},
+      "G88": {"about": "Grooving along X. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"Q": ["20", "End point in X.", "ENDX"], "R": ["-30", "End point in Z.", "ENDZ"], "C": ["3", "Step between plunges.", "PASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "K": ["0", "Dwell at the bottom.", "DWELL"]}},
+      "G89": {"about": "Grooving along Z. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"Q": ["20", "End point in X.", "ENDX"], "R": ["-30", "End point in Z.", "ENDZ"], "C": ["3", "Step between plunges.", "PASS"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "K": ["0", "Dwell at the bottom.", "DWELL"]}},
+      "G160": {"about": "Live tool drilling or tapping on the face. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"I": ["20", "Depth.", "DEPTH"], "B": ["5", "Peck depth. B0 taps.", "PECK"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "K": ["0", "Dwell at the bottom.", "DWELL"], "H": ["2", "How far the tool backs off after each peck.", "BACKOFF"], "C": ["1", "How close the rapid comes to the last peck.", "CLEAR"], "R": ["1", "Peck factor when drilling; the tapping type when tapping.", "PECKFAC"], "Q": ["0", "Spindle angle of the first point.", "STARTANG"], "A": ["90", "Angle between points.", "ANGSTEP"], "J": ["4", "Number of points, counting the first.", "COUNT"], "S": ["1000", "Live tool speed in rpm.", "LIVERPM"], "N": ["2", "Number of the live tool spindle.", "SPINDLE"]}},
+      "G161": {"about": "Live tool drilling or tapping on the side. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"I": ["20", "Depth.", "DEPTH"], "B": ["5", "Peck depth. B0 taps.", "PECK"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "K": ["0", "Dwell at the bottom.", "DWELL"], "H": ["2", "How far the tool backs off after each peck.", "BACKOFF"], "C": ["1", "How close the rapid comes to the last peck.", "CLEAR"], "R": ["1", "Peck factor when drilling; the tapping type when tapping.", "PECKFAC"], "Q": ["0", "Spindle angle of the first point.", "STARTANG"], "A": ["90", "Angle between points.", "ANGSTEP"], "J": ["4", "Number of points, counting the first.", "COUNT"], "S": ["1000", "Live tool speed in rpm.", "LIVERPM"], "N": ["2", "Number of the live tool spindle.", "SPINDLE"]}},
+      "G162": {"about": "Live tool slot along Z on the side. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"L": ["20", "Slot length.", "LENGTH"], "I": ["3", "Slot depth.", "DEPTH"], "Q": ["0", "Spindle angle of the first point.", "STARTANG"], "A": ["90", "Angle between points.", "ANGSTEP"], "J": ["4", "Number of points, counting the first.", "COUNT"], "S": ["1000", "Live tool speed in rpm.", "LIVERPM"], "N": ["2", "Number of the live tool spindle.", "SPINDLE"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "F": ["100", "Feed along the slot.", "SLOTFEED"]}},
+      "G163": {"about": "Live tool slot along X on the face. Words from the quick reference; not checked against the lathe canned cycles manual.", "words": {"L": ["20", "Slot length.", "LENGTH"], "I": ["3", "Slot depth.", "DEPTH"], "Q": ["0", "Spindle angle of the first point.", "STARTANG"], "A": ["90", "Angle between points.", "ANGSTEP"], "J": ["4", "Number of points, counting the first.", "COUNT"], "S": ["1000", "Live tool speed in rpm.", "LIVERPM"], "N": ["2", "Number of the live tool spindle.", "SPINDLE"], "D": ["1", "Safety distance the tool pulls back.", "SAFETY"], "F": ["100", "Feed along the slot.", "SLOTFEED"]}}
     },
     "fagor8060.mill": {
       "common": {"words": {"X": ["15", "Hole position in X. After this line, every move drills another hole, until G80."], "Z": ["2", "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was.", "REFZ"], "I": ["-20", "Depth of the hole (absolute in G90; from the reference plane in G91).", "DEPTH"], "K": ["1", "Dwell at the bottom, in seconds.", "DWELL"], "A": ["0", "Spindle on the way out: A0 keeps it turning, A1 stops it.", "SPNOUT"]}},

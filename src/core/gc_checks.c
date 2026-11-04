@@ -265,7 +265,7 @@ static void check_line(checker *ck, int li)
     memset(&ln, 0, sizeof ln.nw + sizeof ln.nc);
     ln.nw = ln.nc = 0;
     const char *first_all = NULL;
-    int ownM = gc_own_word(c, l, 'M'), ownS = gc_own_word(c, l, 'S');
+    int ownM = gc_own_word(c, l, 'M'), ownS = gc_own_word(c, l, 'S'), ownN = gc_own_word(c, l, 'N');
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
         if (gc_is_comment(t, c->syntax) || t[0] == '/') continue;
@@ -327,6 +327,7 @@ static void check_line(checker *ck, int li)
         if (k++ == 0 || t[0] != 'N') continue;
         if (c->syntax == GC_SYN_FAGOR8060 && t[1] == 'R' && t[2] && gc_all_digits(t + 2)) continue; /* NR3: run the line 3 times */
         if (c->syntax == GC_SYN_FAGOR8055) continue; /* a repeat count (N3), not a label */
+        if (ownN) continue;                          /* a cycle's own N word (Fagor 8060 lathe G160: the spindle) */
         char key[64];
         gc_label_key(t, key, sizeof key);
         if (gc_map_get(&c->labels, key, NULL)) continue;
@@ -1084,7 +1085,7 @@ static void check_line(checker *ck, int li)
         var(&vs, "z", f.v);
         emit(ck, li, "rapid-below-zero", &vs, NULL);
     }
-    if (has(&ln, "G65") || cwk) {
+    if (has(&ln, "G65") || (cwk && gc_json_has_str(gc_json_get(D, "noMoveCodes"), cwk))) {
         for (int i = 0; i < 3; i++) st->pos[i] = onull();
     } else if (nonMove) {
         if (has(&ln, "G28") || has(&ln, "G30") || has(&ln, "G53") || has(&ln, "G92") || has(&ln, "G50"))
