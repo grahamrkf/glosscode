@@ -21,6 +21,6 @@ Windows 10 and 11.
 
 Sample programs are a separate download, GlossCode-<version>-examples.zip,
 on the release page:
-  https://github.com/one-moment-please/glosscode/releases
+  https://github.com/grahamrkf/glosscode/releases
 
 License: MIT (LICENSE.txt). Third-party code: THIRD_PARTY_NOTICES.txt.

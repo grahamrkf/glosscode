@@ -9,9 +9,9 @@ arch: amd64
 platform: linux
 section: editors
 priority: optional
-maintainer: GlossCode <319282511+one-moment-please@users.noreply.github.com>
+maintainer: GlossCode <319282511+grahamrkf@users.noreply.github.com>
 vendor: GlossCode
-homepage: https://github.com/one-moment-please/glosscode
+homepage: https://github.com/grahamrkf/glosscode
 license: MIT
 description: |-
   G-code editor with a plain-English line above every line of code
@@ -57,7 +57,7 @@ overrides:
 
 deb:
   fields:
-    Bugs: https://github.com/one-moment-please/glosscode/issues
+    Bugs: https://github.com/grahamrkf/glosscode/issues
 rpm:
   group: Applications/Editors
   summary: G-code editor with a plain-English line above every line of code
