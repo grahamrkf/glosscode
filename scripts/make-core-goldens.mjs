@@ -33,7 +33,8 @@ const LATHE_FILES = ["LATHE_CHECKS.nc", "SHAFT_OD.nc", "LATHE_EDGE.nc"], PLASMA_
 const OKUMA_FILES = ["OKUMA_PLATE.MIN", "OKUMA_CALLS.MIN"], OKUMA_LATHE_FILES = ["OKUMA_LATHE.MIN", "OKUMA_GRAPHIC.MIN"];
 // Lathes set to G code system B or C (generic machines on those controls), with a system A lathe for contrast.
 const SYSTEM_FILES = { "LATHE_SYSTEM_B.nc": ["gen.lathe.fanuclb", "gen.lathe.mazaklb", "gen.lathe.mitsubishilb", "gen.lathe.fanuc"],
-                       "LATHE_SYSTEM_C.nc": ["gen.lathe.fanuclc", "gen.lathe.mazaklc", "gen.lathe.fanuc"] };
+                       "LATHE_SYSTEM_C.nc": ["gen.lathe.fanuclc", "gen.lathe.mazaklc", "gen.lathe.fanuc"],
+                       "MITSU_M2.nc": ["gen.mill.mitsubishim2", "gen.mill.mitsubishi"] };
 let changed = 0;
 const write = (file, out) => {
   if (existsSync(file) && readFileSync(file, "utf8")===out) return;

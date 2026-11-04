@@ -10,6 +10,7 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - New controls: Okuma OSP-U10L / OSP-U100L and Okuma OSP700L / OSP7000L (lathe), and a Generic control with the common ISO codes. New machine type: router (Centroid, LinuxCNC, GRBL and Generic), which reads like a mill. Haas NGC stays one control: where the 2020 and 2025 manuals differ, the machine profile settles it.
 - Lathe G code systems B and C are their own controls: Fanuc lathe system B and C, Mazak EIA/ISO lathe system B (the Mazak default) and C, and Mitsubishi M800 lathe G code list 3, 5 or 7. On these G90/G91 are absolute and incremental, G92 clamps the spindle and with X or Z sets the coordinates, G94/G95 pick the feed, and the turning cycles are G77/G78/G79 (system B) or G20/G21/G24 (system C, where inch and metric are G70/G71 and the repetitive cycles G72 to G78). The Fanuc and Mazak controls stay system A on a lathe.
 - New controls: Fanuc Series 0 / 00 / 0-Mate (mill: no G93, G150 to G152 normal direction control, G05), and a Mitsubishi M800 lathe with G code list 2, 4 or 6 (G190/G191 absolute and incremental).
+- New control: Mitsubishi M700/M70 in the M2/M0 format (mill). G22 L calls a subprogram (L the program, P the repeat count) and G23 returns, G44 cancels the tool length (G49 is flagged), G62 is mirror image, and G22.1/G23.1 are the stroke check.
 - The Home tab is just the ⌂ icon.
 
 ### Simulation

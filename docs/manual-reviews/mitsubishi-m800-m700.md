@@ -38,6 +38,6 @@ A parameter (cmdtyp) picks one of six G code lists (pp. 23–26):
 
 Added 2026-11-04: `mitsubishi.lathe` is lists 2, 4 and 6 (the Fanuc lathe tables with G190/G191), and `mitsubishilb` is lists 3, 5 and 7 (the Fanuc system B renumbering). G14/G15 have English words. Check the six-column table on pp. 24–26 against the image; the cycles' group 09 and G46 aren't modeled.
 
-## M2/M0 format (M700/M70), not added
+## M2/M0 format (M700/M70)
 
-This is Mitsubishi's own format, not Fanuc-like: G22 calls a subprogram and G23 returns, G22.1/G23.1 are stroke check, G44 cancels the tool length (there's no G49), G62 is mirror image, and G68 is a subprogram return. The subprogram section labels both words "L", but its examples (G22 L2200 P5) use L as the program and P as the repeat count. Check section 13.3.1 against the image. This format would need its own dialect.
+This is Mitsubishi's own format, not Fanuc-like: G22 calls a subprogram and G23 returns, G22.1/G23.1 are stroke check, G44 cancels the tool length (there's no G49), G62 is mirror image, and G68 is a subprogram return. The subprogram section labels both words "L", but its examples (G22 L2200 P5) use L as the program and P as the repeat count. Check section 13.3.1 against the image. Added 2026-11-04 as the `mitsubishim2` dialect (mill), going by the examples: G22 L is the program and P the repeat count. M98/M99 are flagged, G49 is an error.
