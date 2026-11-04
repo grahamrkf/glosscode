@@ -4,7 +4,8 @@
  "lines": [
   [
    "O0042",
-   "(BRACKET OP1)"
+   "(BRACKET OP1)",
+   ";"
   ],
   [
    "N10",
@@ -13,90 +14,105 @@
    "G17",
    "G40",
    "G49",
-   "G80"
+   "G80",
+   ";"
   ],
   [
    "N20",
    "T3",
    "M06",
-   "(1/2 END MILL)"
+   "(1/2 END MILL)",
+   ";"
   ],
   [
    "N30",
    "G54",
    "G00",
    "X-0.3",
-   "Y0."
+   "Y0.",
+   ";"
   ],
   [
    "N40",
    "S2400",
-   "M03"
+   "M03",
+   ";"
   ],
   [
    "N50",
    "G43",
    "H03",
    "Z1.",
-   "M08"
+   "M08",
+   ";"
   ],
   [
    "N60",
    "G01",
    "Z-0.25",
-   "F8."
+   "F8.",
+   ";"
   ],
   [
    "N70",
    "X1.5",
-   "F15."
+   "F15.",
+   ";"
   ],
   [
    "N80",
    "G03",
    "X2.",
    "Y0.5",
-   "R0.5"
+   "R0.5",
+   ";"
   ],
   [
    "N90",
    "G01",
-   "Y1.5"
+   "Y1.5",
+   ";"
   ],
   [
    "N100",
    "G00",
    "Z1.",
-   "M09"
+   "M09",
+   ";"
   ],
   [
    "N110",
-   "M05"
+   "M05",
+   ";"
   ],
   [
    "N120",
    "T5",
    "M06",
-   "(#7 DRILL)"
+   "(#7 DRILL)",
+   ";"
   ],
   [
    "N130",
    "G54",
    "G00",
    "X0.5",
-   "Y1."
+   "Y1.",
+   ";"
   ],
   [
    "N140",
    "S2000",
-   "M03"
+   "M03",
+   ";"
   ],
   [
    "N150",
    "G43",
    "H05",
    "Z1.",
-   "M08"
+   "M08",
+   ";"
   ],
   [
    "N160",
@@ -107,28 +123,33 @@
    "Z-0.6",
    "R0.1",
    "Q0.15",
-   "F6."
+   "F6.",
+   ";"
   ],
   [
    "N170",
-   "X1.5"
+   "X1.5",
+   ";"
   ],
   [
    "N180",
    "G80",
    "G00",
    "Z1.",
-   "M09"
+   "M09",
+   ";"
   ],
   [
    "N190",
    "G91",
    "G28",
-   "Z0."
+   "Z0.",
+   ";"
   ],
   [
    "N200",
-   "M30"
+   "M30",
+   ";"
   ]
  ],
  "runs": [
@@ -147,6 +168,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -184,6 +210,11 @@
       "g": "G80",
       "e": "CYCOFF",
       "d": "Cancel canned cycle"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -207,6 +238,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -234,6 +270,11 @@
       "g": "Y0.",
       "e": "Y0.0",
       "d": "Y position 0.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -252,6 +293,11 @@
       "g": "M03",
       "e": "SPINFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -279,6 +325,11 @@
       "g": "M08",
       "e": "COOLON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -302,6 +353,11 @@
       "e": "F8.0",
       "u": "ipm",
       "d": "Feed rate 8.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -320,6 +376,11 @@
       "e": "F15.0",
       "u": "ipm",
       "d": "Feed rate 15.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -347,6 +408,11 @@
       "g": "R0.5",
       "e": "RAD0.5",
       "d": "Arc radius"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -364,6 +430,11 @@
       "g": "Y1.5",
       "e": "Y1.5",
       "d": "Y position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -386,6 +457,11 @@
       "g": "M09",
       "e": "COOLOFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -398,6 +474,11 @@
       "g": "M05",
       "e": "SPINOFF",
       "d": "Spindle off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -421,6 +502,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -448,6 +534,11 @@
       "g": "Y1.",
       "e": "Y1.0",
       "d": "Y position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -466,6 +557,11 @@
       "g": "M03",
       "e": "SPINFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -493,6 +589,11 @@
       "g": "M08",
       "e": "COOLON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -541,6 +642,11 @@
       "e": "F6.0",
       "u": "ipm",
       "d": "Feed rate 6.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -553,6 +659,11 @@
       "g": "X1.5",
       "e": "X1.5",
       "d": "X position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -580,6 +691,11 @@
       "g": "M09",
       "e": "COOLOFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -602,6 +718,11 @@
       "g": "Z0.",
       "e": "INCZ0.0",
       "d": "Move 0.0 in Z from where the tool is"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -614,6 +735,11 @@
       "g": "M30",
       "e": "ENDRESET",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],
@@ -634,6 +760,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -671,6 +802,11 @@
       "g": "G80",
       "e": "CYOFF",
       "d": "Cancel canned cycle"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -694,6 +830,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -721,6 +862,11 @@
       "g": "Y0.",
       "e": "Y0.0",
       "d": "Y position 0.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -739,6 +885,11 @@
       "g": "M03",
       "e": "SFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -766,6 +917,11 @@
       "g": "M08",
       "e": "CON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -789,6 +945,11 @@
       "e": "F8.0",
       "u": "ipm",
       "d": "Feed rate 8.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -807,6 +968,11 @@
       "e": "F15.0",
       "u": "ipm",
       "d": "Feed rate 15.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -834,6 +1000,11 @@
       "g": "R0.5",
       "e": "R0.5",
       "d": "Arc radius"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -851,6 +1022,11 @@
       "g": "Y1.5",
       "e": "Y1.5",
       "d": "Y position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -873,6 +1049,11 @@
       "g": "M09",
       "e": "COFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -885,6 +1066,11 @@
       "g": "M05",
       "e": "SOFF",
       "d": "Spindle off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -908,6 +1094,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -935,6 +1126,11 @@
       "g": "Y1.",
       "e": "Y1.0",
       "d": "Y position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -953,6 +1149,11 @@
       "g": "M03",
       "e": "SFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -980,6 +1181,11 @@
       "g": "M08",
       "e": "CON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1028,6 +1234,11 @@
       "e": "F6.0",
       "u": "ipm",
       "d": "Feed rate 6.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1040,6 +1251,11 @@
       "g": "X1.5",
       "e": "X1.5",
       "d": "X position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1067,6 +1283,11 @@
       "g": "M09",
       "e": "COFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1089,6 +1310,11 @@
       "g": "Z0.",
       "e": "iZ0.0",
       "d": "Move 0.0 in Z from where the tool is"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1101,6 +1327,603 @@
       "g": "M30",
       "e": "END",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "machine": "haas_vf2",
+   "style": "words",
+   "words": [
+    [
+     {
+      "g": "O0042",
+      "e": "PROG0042",
+      "d": "Program number 0042"
+     },
+     {
+      "g": "(BRACKET OP1)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N10",
+      "e": "SEQ10",
+      "d": "Sequence number 10"
+     },
+     {
+      "g": "G20",
+      "e": "units.inch",
+      "d": "Inch units"
+     },
+     {
+      "g": "G90",
+      "e": "units.absolute",
+      "d": "Absolute positions"
+     },
+     {
+      "g": "G17",
+      "e": "plane.xy",
+      "d": "Arcs in the XY plane"
+     },
+     {
+      "g": "G40",
+      "e": "comp.off",
+      "d": "Cutter compensation off"
+     },
+     {
+      "g": "G49",
+      "e": "toollength.off",
+      "d": "Tool length offset off"
+     },
+     {
+      "g": "G80",
+      "e": "cycle.off",
+      "d": "Cancel canned cycle"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N20",
+      "e": "SEQ20",
+      "d": "Sequence number 20"
+     },
+     {
+      "g": "T3",
+      "e": "TOOL3",
+      "d": "Tool number 3"
+     },
+     {
+      "g": "M06",
+      "e": "tool.change",
+      "d": "Tool change"
+     },
+     {
+      "g": "(1/2 END MILL)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N30",
+      "e": "SEQ30",
+      "d": "Sequence number 30"
+     },
+     {
+      "g": "G54",
+      "e": "work.1",
+      "d": "Work offset 1"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X-0.3",
+      "e": "X-0.3",
+      "d": "X position -0.3"
+     },
+     {
+      "g": "Y0.",
+      "e": "Y0.0",
+      "d": "Y position 0.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N40",
+      "e": "SEQ40",
+      "d": "Sequence number 40"
+     },
+     {
+      "g": "S2400",
+      "e": "S2400",
+      "u": "rpm",
+      "d": "Spindle speed 2400 RPM"
+     },
+     {
+      "g": "M03",
+      "e": "spindle.fwd",
+      "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N50",
+      "e": "SEQ50",
+      "d": "Sequence number 50"
+     },
+     {
+      "g": "G43",
+      "e": "toollength.on",
+      "d": "Tool length offset on"
+     },
+     {
+      "g": "H03",
+      "e": "LOFS03",
+      "d": "Tool length offset number 03"
+     },
+     {
+      "g": "Z1.",
+      "e": "Z1.0",
+      "d": "Z position 1.0"
+     },
+     {
+      "g": "M08",
+      "e": "coolant.on",
+      "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N60",
+      "e": "SEQ60",
+      "d": "Sequence number 60"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "Z-0.25",
+      "e": "Z-0.25",
+      "d": "Z position -0.25"
+     },
+     {
+      "g": "F8.",
+      "e": "F8.0",
+      "u": "ipm",
+      "d": "Feed rate 8.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N70",
+      "e": "SEQ70",
+      "d": "Sequence number 70"
+     },
+     {
+      "g": "X1.5",
+      "e": "X1.5",
+      "d": "X position 1.5"
+     },
+     {
+      "g": "F15.",
+      "e": "F15.0",
+      "u": "ipm",
+      "d": "Feed rate 15.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N80",
+      "e": "SEQ80",
+      "d": "Sequence number 80"
+     },
+     {
+      "g": "G03",
+      "e": "arc.ccw",
+      "d": "Counterclockwise arc"
+     },
+     {
+      "g": "X2.",
+      "e": "X2.0",
+      "d": "X position 2.0"
+     },
+     {
+      "g": "Y0.5",
+      "e": "Y0.5",
+      "d": "Y position 0.5"
+     },
+     {
+      "g": "R0.5",
+      "e": "RAD0.5",
+      "d": "Arc radius"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N90",
+      "e": "SEQ90",
+      "d": "Sequence number 90"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "Y1.5",
+      "e": "Y1.5",
+      "d": "Y position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N100",
+      "e": "SEQ100",
+      "d": "Sequence number 100"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "Z1.",
+      "e": "Z1.0",
+      "d": "Z position 1.0"
+     },
+     {
+      "g": "M09",
+      "e": "coolant.off",
+      "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N110",
+      "e": "SEQ110",
+      "d": "Sequence number 110"
+     },
+     {
+      "g": "M05",
+      "e": "spindle.off",
+      "d": "Spindle off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N120",
+      "e": "SEQ120",
+      "d": "Sequence number 120"
+     },
+     {
+      "g": "T5",
+      "e": "TOOL5",
+      "d": "Tool number 5"
+     },
+     {
+      "g": "M06",
+      "e": "tool.change",
+      "d": "Tool change"
+     },
+     {
+      "g": "(#7 DRILL)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N130",
+      "e": "SEQ130",
+      "d": "Sequence number 130"
+     },
+     {
+      "g": "G54",
+      "e": "work.1",
+      "d": "Work offset 1"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X0.5",
+      "e": "X0.5",
+      "d": "X position 0.5"
+     },
+     {
+      "g": "Y1.",
+      "e": "Y1.0",
+      "d": "Y position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N140",
+      "e": "SEQ140",
+      "d": "Sequence number 140"
+     },
+     {
+      "g": "S2000",
+      "e": "S2000",
+      "u": "rpm",
+      "d": "Spindle speed 2000 RPM"
+     },
+     {
+      "g": "M03",
+      "e": "spindle.fwd",
+      "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N150",
+      "e": "SEQ150",
+      "d": "Sequence number 150"
+     },
+     {
+      "g": "G43",
+      "e": "toollength.on",
+      "d": "Tool length offset on"
+     },
+     {
+      "g": "H05",
+      "e": "LOFS05",
+      "d": "Tool length offset number 05"
+     },
+     {
+      "g": "Z1.",
+      "e": "Z1.0",
+      "d": "Z position 1.0"
+     },
+     {
+      "g": "M08",
+      "e": "coolant.on",
+      "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N160",
+      "e": "SEQ160",
+      "d": "Sequence number 160"
+     },
+     {
+      "g": "G99",
+      "e": "return.rplane",
+      "d": "Cycle returns to R plane"
+     },
+     {
+      "g": "G83",
+      "e": "cycle.peck",
+      "d": "Peck drilling cycle"
+     },
+     {
+      "g": "X0.5",
+      "e": "X0.5",
+      "d": "X position 0.5"
+     },
+     {
+      "g": "Y1.",
+      "e": "Y1.0",
+      "d": "Y position 1.0"
+     },
+     {
+      "g": "Z-0.6",
+      "e": "Z-0.6",
+      "d": "Z position -0.6"
+     },
+     {
+      "g": "R0.1",
+      "e": "RPLN0.1",
+      "d": "Retract plane for the drilling cycle"
+     },
+     {
+      "g": "Q0.15",
+      "e": "PECK0.15",
+      "d": "Peck depth 0.15"
+     },
+     {
+      "g": "F6.",
+      "e": "F6.0",
+      "u": "ipm",
+      "d": "Feed rate 6.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N170",
+      "e": "SEQ170",
+      "d": "Sequence number 170"
+     },
+     {
+      "g": "X1.5",
+      "e": "X1.5",
+      "d": "X position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N180",
+      "e": "SEQ180",
+      "d": "Sequence number 180"
+     },
+     {
+      "g": "G80",
+      "e": "cycle.off",
+      "d": "Cancel canned cycle"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "Z1.",
+      "e": "Z1.0",
+      "d": "Z position 1.0"
+     },
+     {
+      "g": "M09",
+      "e": "coolant.off",
+      "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N190",
+      "e": "SEQ190",
+      "d": "Sequence number 190"
+     },
+     {
+      "g": "G91",
+      "e": "units.incremental",
+      "d": "Incremental positions"
+     },
+     {
+      "g": "G28",
+      "e": "home.return",
+      "d": "Return to machine home"
+     },
+     {
+      "g": "Z0.",
+      "e": "INCZ0.0",
+      "d": "Move 0.0 in Z from where the tool is"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N200",
+      "e": "SEQ200",
+      "d": "Sequence number 200"
+     },
+     {
+      "g": "M30",
+      "e": "program.endrewind",
+      "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],
@@ -1121,6 +1944,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1158,6 +1986,11 @@
       "g": "G80",
       "e": "CYCOFF",
       "d": "Cancel canned cycle"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1181,6 +2014,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1208,6 +2046,11 @@
       "g": "Y0.",
       "e": "Y0.0",
       "d": "Y position 0.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1226,6 +2069,11 @@
       "g": "M03",
       "e": "SPINFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1253,6 +2101,11 @@
       "g": "M08",
       "e": "COOLON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1276,6 +2129,11 @@
       "e": "F8.0",
       "u": "ipm",
       "d": "Feed rate 8.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1294,6 +2152,11 @@
       "e": "F15.0",
       "u": "ipm",
       "d": "Feed rate 15.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1321,6 +2184,11 @@
       "g": "R0.5",
       "e": "RAD0.5",
       "d": "Arc radius"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1338,6 +2206,11 @@
       "g": "Y1.5",
       "e": "Y1.5",
       "d": "Y position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1360,6 +2233,11 @@
       "g": "M09",
       "e": "COOLOFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1372,6 +2250,11 @@
       "g": "M05",
       "e": "SPINOFF",
       "d": "Spindle off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1395,6 +2278,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1422,6 +2310,11 @@
       "g": "Y1.",
       "e": "Y1.0",
       "d": "Y position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1440,6 +2333,11 @@
       "g": "M03",
       "e": "SPINFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1467,6 +2365,11 @@
       "g": "M08",
       "e": "COOLON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1515,6 +2418,11 @@
       "e": "F6.0",
       "u": "ipm",
       "d": "Feed rate 6.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1527,6 +2435,11 @@
       "g": "X1.5",
       "e": "X1.5",
       "d": "X position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1554,6 +2467,11 @@
       "g": "M09",
       "e": "COOLOFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1576,6 +2494,11 @@
       "g": "Z0.",
       "e": "INCZ0.0",
       "d": "Move 0.0 in Z from where the tool is"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1588,6 +2511,11 @@
       "g": "M30",
       "e": "ENDRESET",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],
@@ -1608,6 +2536,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1645,6 +2578,11 @@
       "g": "G80",
       "e": "CYCOFF",
       "d": "Cancel canned cycle"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1668,6 +2606,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1695,6 +2638,11 @@
       "g": "Y0.",
       "e": "Y0.0",
       "d": "Y position 0.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1713,6 +2661,11 @@
       "g": "M03",
       "e": "SPINFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1740,6 +2693,11 @@
       "g": "M08",
       "e": "COOLON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1763,6 +2721,11 @@
       "e": "F8.0",
       "u": "ipm",
       "d": "Feed rate 8.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1781,6 +2744,11 @@
       "e": "F15.0",
       "u": "ipm",
       "d": "Feed rate 15.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1808,6 +2776,11 @@
       "g": "R0.5",
       "e": "RAD0.5",
       "d": "Arc radius"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1825,6 +2798,11 @@
       "g": "Y1.5",
       "e": "Y1.5",
       "d": "Y position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1847,6 +2825,11 @@
       "g": "M09",
       "e": "COOLOFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1859,6 +2842,11 @@
       "g": "M05",
       "e": "SPINOFF",
       "d": "Spindle off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1882,6 +2870,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1909,6 +2902,11 @@
       "g": "Y1.",
       "e": "Y1.0",
       "d": "Y position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1927,6 +2925,11 @@
       "g": "M03",
       "e": "SPINFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -1954,6 +2957,11 @@
       "g": "M08",
       "e": "COOLON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2002,6 +3010,11 @@
       "e": "F6.0",
       "u": "ipm",
       "d": "Feed rate 6.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2014,6 +3027,11 @@
       "g": "X1.5",
       "e": "X1.5",
       "d": "X position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2041,6 +3059,11 @@
       "g": "M09",
       "e": "COOLOFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2063,6 +3086,11 @@
       "g": "Z0.",
       "e": "INCZ0.0",
       "d": "Move 0.0 in Z from where the tool is"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2075,6 +3103,11 @@
       "g": "M30",
       "e": "ENDRESET",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],
@@ -2095,6 +3128,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2132,6 +3170,11 @@
       "g": "G80",
       "e": "CYCOFF",
       "d": "Cancel canned cycle"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2155,6 +3198,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2182,6 +3230,11 @@
       "g": "Y0.",
       "e": "Y0.0",
       "d": "Y position 0.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2200,6 +3253,11 @@
       "g": "M03",
       "e": "SPINFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2227,6 +3285,11 @@
       "g": "M08",
       "e": "COOLON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2250,6 +3313,11 @@
       "e": "F8.0",
       "u": "ipm",
       "d": "Feed rate 8.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2268,6 +3336,11 @@
       "e": "F15.0",
       "u": "ipm",
       "d": "Feed rate 15.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2295,6 +3368,11 @@
       "g": "R0.5",
       "e": "RAD0.5",
       "d": "Arc radius"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2312,6 +3390,11 @@
       "g": "Y1.5",
       "e": "Y1.5",
       "d": "Y position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2334,6 +3417,11 @@
       "g": "M09",
       "e": "COOLOFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2346,6 +3434,11 @@
       "g": "M05",
       "e": "SPINOFF",
       "d": "Spindle off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2369,6 +3462,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2396,6 +3494,11 @@
       "g": "Y1.",
       "e": "Y1.0",
       "d": "Y position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2414,6 +3517,11 @@
       "g": "M03",
       "e": "SPINFWD",
       "d": "Spindle on, forward (CW)"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2441,6 +3549,11 @@
       "g": "M08",
       "e": "COOLON",
       "d": "Flood coolant on"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2489,6 +3602,11 @@
       "e": "F6.0",
       "u": "ipm",
       "d": "Feed rate 6.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2501,6 +3619,11 @@
       "g": "X1.5",
       "e": "X1.5",
       "d": "X position 1.5"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2528,6 +3651,11 @@
       "g": "M09",
       "e": "COOLOFF",
       "d": "Coolant off"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2550,6 +3678,11 @@
       "g": "Z0.",
       "e": "INCZ0.0",
       "d": "Move 0.0 in Z from where the tool is"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -2562,6 +3695,11 @@
       "g": "M30",
       "e": "ENDRESET",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],

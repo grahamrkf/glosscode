@@ -4,19 +4,22 @@
  "lines": [
   [
    "O0300",
-   "(EOB AND TWO BLOCKS)"
+   "(EOB AND TWO BLOCKS)",
+   ";"
   ],
   [
    "N10",
    "G20",
-   "G90"
+   "G90",
+   ";"
   ],
   [
    "N20",
    "G00",
    "X1.",
    "(A;B)",
-   "Y2."
+   "Y2.",
+   ";"
   ],
   [],
   [
@@ -24,20 +27,24 @@
    "N30",
    "G01",
    "Z-.1",
-   "F5."
+   "F5.",
+   ";"
   ],
   [
    "N40",
    "#100=1",
    "G00",
-   "Z1."
+   "Z1.",
+   ";"
   ],
   [
-   "(été café)"
+   "(été café)",
+   ";"
   ],
   [
    "N50",
-   "M30"
+   "M30",
+   ";"
   ]
  ],
  "runs": [
@@ -56,6 +63,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -73,6 +85,11 @@
       "g": "G90",
       "e": "ABS",
       "d": "Absolute positions"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -101,6 +118,11 @@
       "g": "Y2.",
       "e": "Y2.0",
       "d": "Y position 2.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [],
@@ -130,6 +152,11 @@
       "e": "F5.0",
       "u": "ipm",
       "d": "Feed rate 5.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -152,6 +179,11 @@
       "g": "Z1.",
       "e": "Z1.0",
       "d": "Z position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -160,6 +192,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -172,6 +209,11 @@
       "g": "M30",
       "e": "ENDRESET",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],
@@ -199,6 +241,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -216,6 +263,11 @@
       "g": "G90",
       "e": "ABS",
       "d": "Absolute positions"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -244,6 +296,11 @@
       "g": "Y2.",
       "e": "Y2.0",
       "d": "Y position 2.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [],
@@ -273,6 +330,11 @@
       "e": "F5.0",
       "u": "ipm",
       "d": "Feed rate 5.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -295,6 +357,11 @@
       "g": "Z1.",
       "e": "Z1.0",
       "d": "Z position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -303,6 +370,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -315,6 +387,189 @@
       "g": "M30",
       "e": "END",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ]
+   ],
+   "problems": [
+    {
+     "li": 4,
+     "id": "spindle-off-feed",
+     "sev": "warning",
+     "msg": "This G01 move cuts while the spindle is stopped (it was never started)."
+    }
+   ]
+  },
+  {
+   "machine": "haas_vf2",
+   "style": "words",
+   "words": [
+    [
+     {
+      "g": "O0300",
+      "e": "PROG0300",
+      "d": "Program number 0300"
+     },
+     {
+      "g": "(EOB AND TWO BLOCKS)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N10",
+      "e": "SEQ10",
+      "d": "Sequence number 10"
+     },
+     {
+      "g": "G20",
+      "e": "units.inch",
+      "d": "Inch units"
+     },
+     {
+      "g": "G90",
+      "e": "units.absolute",
+      "d": "Absolute positions"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N20",
+      "e": "SEQ20",
+      "d": "Sequence number 20"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X1.",
+      "e": "X1.0",
+      "d": "X position 1.0"
+     },
+     {
+      "g": "(A;B)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     },
+     {
+      "g": "Y2.",
+      "e": "Y2.0",
+      "d": "Y position 2.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [],
+    [
+     {
+      "g": "/",
+      "e": "block.delete",
+      "d": "Block delete: the control skips this line while Block Delete is on"
+     },
+     {
+      "g": "N30",
+      "e": "SEQ30",
+      "d": "Sequence number 30"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "Z-.1",
+      "e": "Z-0.1",
+      "d": "Z position -0.1"
+     },
+     {
+      "g": "F5.",
+      "e": "F5.0",
+      "u": "ipm",
+      "d": "Feed rate 5.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N40",
+      "e": "SEQ40",
+      "d": "Sequence number 40"
+     },
+     {
+      "g": "#100=1",
+      "e": "#100=1",
+      "d": "Sets macro variable #100 to 1"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "Z1.",
+      "e": "Z1.0",
+      "d": "Z position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "(été café)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
+     }
+    ],
+    [
+     {
+      "g": "N50",
+      "e": "SEQ50",
+      "d": "Sequence number 50"
+     },
+     {
+      "g": "M30",
+      "e": "program.endrewind",
+      "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],
@@ -342,6 +597,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -359,6 +619,11 @@
       "g": "G90",
       "e": "ABS",
       "d": "Absolute positions"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -387,6 +652,11 @@
       "g": "Y2.",
       "e": "Y2.0",
       "d": "Y position 2.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [],
@@ -416,6 +686,11 @@
       "e": "F5.0",
       "u": "ipm",
       "d": "Feed rate 5.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -438,6 +713,11 @@
       "g": "Z1.",
       "e": "Z1.0",
       "d": "Z position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -446,6 +726,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -458,6 +743,11 @@
       "g": "M30",
       "e": "ENDRESET",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],
@@ -485,6 +775,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -502,6 +797,11 @@
       "g": "G90",
       "e": "ABS",
       "d": "Absolute positions"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -530,6 +830,11 @@
       "g": "Y2.",
       "e": "Y2.0",
       "d": "Y position 2.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [],
@@ -559,6 +864,11 @@
       "e": "F5.0",
       "u": "ipm",
       "d": "Feed rate 5.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -581,6 +891,11 @@
       "g": "Z1.",
       "e": "Z1.0",
       "d": "Z position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -589,6 +904,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -601,6 +921,11 @@
       "g": "M30",
       "e": "ENDRESET",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],
@@ -628,6 +953,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -645,6 +975,11 @@
       "g": "G90",
       "e": "ABS",
       "d": "Absolute positions"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -673,6 +1008,11 @@
       "g": "Y2.",
       "e": "Y2.0",
       "d": "Y position 2.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [],
@@ -702,6 +1042,11 @@
       "e": "F5.0",
       "u": "ipm",
       "d": "Feed rate 5.0 inches per minute"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -724,6 +1069,11 @@
       "g": "Z1.",
       "e": "Z1.0",
       "d": "Z position 1.0"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -732,6 +1082,11 @@
       "e": "",
       "d": "Comment, kept as written",
       "cm": true
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ],
     [
@@ -744,6 +1099,11 @@
       "g": "M30",
       "e": "ENDRESET",
       "d": "End program and rewind"
+     },
+     {
+      "g": ";",
+      "e": ";",
+      "d": "End of block (;)"
      }
     ]
    ],

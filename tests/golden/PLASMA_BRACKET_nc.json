@@ -1012,6 +1012,446 @@
    "problems": []
   },
   {
+   "machine": "hyp_plasma",
+   "style": "words",
+   "words": [
+    [
+     {
+      "g": "(PLASMA BRACKET, 1/4 MILD STEEL)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     }
+    ],
+    [
+     {
+      "g": "(HYPERTHERM CUT CODES: M07 CUT ON, M08 CUT OFF)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     }
+    ],
+    [
+     {
+      "g": "N10",
+      "e": "SEQ10",
+      "d": "Sequence number 10"
+     },
+     {
+      "g": "G20",
+      "e": "units.inch",
+      "d": "Inch units"
+     },
+     {
+      "g": "G90",
+      "e": "units.absolute",
+      "d": "Absolute positions"
+     }
+    ],
+    [
+     {
+      "g": "N20",
+      "e": "SEQ20",
+      "d": "Sequence number 20"
+     },
+     {
+      "g": "M36",
+      "e": "process.select",
+      "d": "Select the process"
+     }
+    ],
+    [
+     {
+      "g": "(HOLE, CUT SLOWER)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     }
+    ],
+    [
+     {
+      "g": "N30",
+      "e": "SEQ30",
+      "d": "Sequence number 30"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X1.75",
+      "e": "X1.75",
+      "d": "X position 1.75"
+     },
+     {
+      "g": "Y1.5",
+      "e": "Y1.5",
+      "d": "Y position 1.5"
+     }
+    ],
+    [
+     {
+      "g": "N40",
+      "e": "SEQ40",
+      "d": "Sequence number 40"
+     },
+     {
+      "g": "M07",
+      "e": "cut.on",
+      "d": "Cut on: the torch fires"
+     }
+    ],
+    [
+     {
+      "g": "N50",
+      "e": "SEQ50",
+      "d": "Sequence number 50"
+     },
+     {
+      "g": "G41",
+      "e": "comp.left",
+      "d": "Cutter compensation left"
+     },
+     {
+      "g": "D1",
+      "e": "KERF1",
+      "d": "Kerf compensation offset 1"
+     }
+    ],
+    [
+     {
+      "g": "N60",
+      "e": "SEQ60",
+      "d": "Sequence number 60"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "X2.",
+      "e": "X2.0",
+      "d": "X position 2.0"
+     },
+     {
+      "g": "Y1.5",
+      "e": "Y1.5",
+      "d": "Y position 1.5"
+     },
+     {
+      "g": "F45.",
+      "e": "F45.0",
+      "u": "ipm",
+      "d": "Feed rate 45.0 inches per minute"
+     }
+    ],
+    [
+     {
+      "g": "N70",
+      "e": "SEQ70",
+      "d": "Sequence number 70"
+     },
+     {
+      "g": "G03",
+      "e": "arc.ccw",
+      "d": "Counterclockwise arc"
+     },
+     {
+      "g": "X2.",
+      "e": "X2.0",
+      "d": "X position 2.0"
+     },
+     {
+      "g": "Y1.5",
+      "e": "Y1.5",
+      "d": "Y position 1.5"
+     },
+     {
+      "g": "I-.5",
+      "e": "ARCI-0.5",
+      "d": "Arc center offset in X -0.5"
+     },
+     {
+      "g": "J0.",
+      "e": "ARCJ0.0",
+      "d": "Arc center offset in Y 0.0"
+     }
+    ],
+    [
+     {
+      "g": "N80",
+      "e": "SEQ80",
+      "d": "Sequence number 80"
+     },
+     {
+      "g": "G40",
+      "e": "comp.off",
+      "d": "Cutter compensation off"
+     }
+    ],
+    [
+     {
+      "g": "N90",
+      "e": "SEQ90",
+      "d": "Sequence number 90"
+     },
+     {
+      "g": "M08",
+      "e": "cut.off",
+      "d": "Cut off: the torch stops"
+     }
+    ],
+    [
+     {
+      "g": "(OUTSIDE PROFILE)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     }
+    ],
+    [
+     {
+      "g": "N100",
+      "e": "SEQ100",
+      "d": "Sequence number 100"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X-.25",
+      "e": "X-0.25",
+      "d": "X position -0.25"
+     },
+     {
+      "g": "Y-.25",
+      "e": "Y-0.25",
+      "d": "Y position -0.25"
+     }
+    ],
+    [
+     {
+      "g": "N110",
+      "e": "SEQ110",
+      "d": "Sequence number 110"
+     },
+     {
+      "g": "M07",
+      "e": "cut.on",
+      "d": "Cut on: the torch fires"
+     }
+    ],
+    [
+     {
+      "g": "N120",
+      "e": "SEQ120",
+      "d": "Sequence number 120"
+     },
+     {
+      "g": "G41",
+      "e": "comp.left",
+      "d": "Cutter compensation left"
+     },
+     {
+      "g": "D1",
+      "e": "KERF1",
+      "d": "Kerf compensation offset 1"
+     }
+    ],
+    [
+     {
+      "g": "N130",
+      "e": "SEQ130",
+      "d": "Sequence number 130"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "X0.",
+      "e": "X0.0",
+      "d": "X position 0.0"
+     },
+     {
+      "g": "Y0.",
+      "e": "Y0.0",
+      "d": "Y position 0.0"
+     },
+     {
+      "g": "F110.",
+      "e": "F110.0",
+      "u": "ipm",
+      "d": "Feed rate 110.0 inches per minute"
+     }
+    ],
+    [
+     {
+      "g": "N140",
+      "e": "SEQ140",
+      "d": "Sequence number 140"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "X4.",
+      "e": "X4.0",
+      "d": "X position 4.0"
+     }
+    ],
+    [
+     {
+      "g": "N150",
+      "e": "SEQ150",
+      "d": "Sequence number 150"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "Y2.",
+      "e": "Y2.0",
+      "d": "Y position 2.0"
+     }
+    ],
+    [
+     {
+      "g": "N160",
+      "e": "SEQ160",
+      "d": "Sequence number 160"
+     },
+     {
+      "g": "G02",
+      "e": "arc.cw",
+      "d": "Clockwise arc"
+     },
+     {
+      "g": "X3.",
+      "e": "X3.0",
+      "d": "X position 3.0"
+     },
+     {
+      "g": "Y3.",
+      "e": "Y3.0",
+      "d": "Y position 3.0"
+     },
+     {
+      "g": "I-1.",
+      "e": "ARCI-1.0",
+      "d": "Arc center offset in X -1.0"
+     },
+     {
+      "g": "J0.",
+      "e": "ARCJ0.0",
+      "d": "Arc center offset in Y 0.0"
+     }
+    ],
+    [
+     {
+      "g": "N170",
+      "e": "SEQ170",
+      "d": "Sequence number 170"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "X0.",
+      "e": "X0.0",
+      "d": "X position 0.0"
+     }
+    ],
+    [
+     {
+      "g": "N180",
+      "e": "SEQ180",
+      "d": "Sequence number 180"
+     },
+     {
+      "g": "G01",
+      "e": "move.linear",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "Y0.",
+      "e": "Y0.0",
+      "d": "Y position 0.0"
+     }
+    ],
+    [
+     {
+      "g": "N190",
+      "e": "SEQ190",
+      "d": "Sequence number 190"
+     },
+     {
+      "g": "G40",
+      "e": "comp.off",
+      "d": "Cutter compensation off"
+     }
+    ],
+    [
+     {
+      "g": "N200",
+      "e": "SEQ200",
+      "d": "Sequence number 200"
+     },
+     {
+      "g": "M08",
+      "e": "cut.off",
+      "d": "Cut off: the torch stops"
+     }
+    ],
+    [
+     {
+      "g": "N210",
+      "e": "SEQ210",
+      "d": "Sequence number 210"
+     },
+     {
+      "g": "G00",
+      "e": "move.rapid",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X0.",
+      "e": "X0.0",
+      "d": "X position 0.0"
+     },
+     {
+      "g": "Y0.",
+      "e": "Y0.0",
+      "d": "Y position 0.0"
+     }
+    ],
+    [
+     {
+      "g": "N220",
+      "e": "SEQ220",
+      "d": "Sequence number 220"
+     },
+     {
+      "g": "M02",
+      "e": "program.end",
+      "d": "End program"
+     }
+    ]
+   ],
+   "problems": []
+  },
+  {
    "machine": "acorn_plasma",
    "style": "long",
    "words": [

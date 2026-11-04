@@ -156,8 +156,15 @@ char **gc_tokenize(const char *s, size_t len, int *ntok)
             i = e;
             continue;
         }
-        if (!gc_is_alpha(ch)) {
+        if (is_space(ch)) {
             i++;
+            continue;
+        }
+        if (!gc_is_alpha(ch)) { /* "%", ";", stray symbols or numbers: kept as written, one word per run */
+            size_t e = i;
+            while (e < len && !is_space((unsigned char)s[e]) && !gc_is_alpha((unsigned char)s[e]) && s[e] != '(' && s[e] != '#') e++;
+            push_tok(&out, &n, &cap, gc_strndup(s + i, e - i));
+            i = e;
             continue;
         }
         if (i == 0 || !is_word_char((unsigned char)s[i - 1])) {
@@ -318,10 +325,10 @@ static int add_source_line(gc_doc *doc, const char *s, size_t len)
         char c = s[i];
         if (c == '(') depth++;
         else if (c == ')') depth = depth > 0 ? depth - 1 : 0;
-        if (c == ';' && !depth) {
+        if (c == ';' && !depth) { /* the ';' stays on its block, as written */
             int nt;
-            char **t = gc_tokenize(s + start, i - start, &nt);
-            add_line_owned(doc, t, nt, gc_strndup(s + start, i - start));
+            char **t = gc_tokenize(s + start, i + 1 - start, &nt);
+            add_line_owned(doc, t, nt, gc_strndup(s + start, i + 1 - start));
             blocks++;
             start = i + 1;
             hit = 1;
@@ -397,17 +404,18 @@ char *gc_doc_serialize(const gc_doc *doc, int eob, size_t *len)
             /* Unchanged: keep the text as written (spacing, '%' and macro text the word list
                doesn't hold), less trailing spaces before a ';'. */
             size_t n = strlen(l->raw);
-            if (eob)
+            if (eob && !(l->ntok && !strcmp(l->tok[l->ntok - 1], ";")))
                 while (n && (l->raw[n - 1] == ' ' || l->raw[n - 1] == '\t')) n--;
             gc_buf_putn(&b, l->raw, n);
         } else {
             for (int j = 0; j < l->ntok; j++) {
-                if (j && l->tok[j - 1][0] != '/') gc_buf_putc(&b, ' '); /* "/N30", not "/ N30" */
+                /* "/N30", not "/ N30"; "G00;", not "G00 ;" */
+                if (j && l->tok[j - 1][0] != '/' && strcmp(l->tok[j], ";")) gc_buf_putc(&b, ' ');
                 gc_buf_puts(&b, l->tok[j]);
             }
         }
-        /* ';' ends every block that holds a word; blank lines and '%' stay as they are. */
-        if (eob && l->ntok) gc_buf_putc(&b, ';');
+        /* ';' ends every block that holds a word and doesn't end with one already; blank lines and '%' stay as they are. */
+        if (eob && l->ntok && strcmp(l->tok[l->ntok - 1], ";") && !(l->ntok == 1 && !strcmp(l->tok[0], "%"))) gc_buf_putc(&b, ';');
         if (i < doc->nlines - 1 || doc->final_eol) gc_buf_puts(&b, doc->eol);
     }
     if (len) *len = b.len;

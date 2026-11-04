@@ -225,7 +225,7 @@ char *gc_api_call(const gc_data *data, const char *method, const char *params_js
         gc_json *empty = NULL;
         if (!gc_json_is_obj(machine)) machine = empty = gc_json_new(GC_JOBJ);
         const char *style = gc_json_get_str(p, "style");
-        gc_analysis *a = gc_analyze(data, machine, doc, style && !strcmp(style, "short") ? GC_STYLE_SHORT : GC_STYLE_LONG);
+        gc_analysis *a = gc_analyze(data, machine, doc, style && !strcmp(style, "short") ? GC_STYLE_SHORT : style && !strcmp(style, "words") ? GC_STYLE_WORDS : GC_STYLE_LONG);
         write_analysis(&b, a);
         gc_analysis_free(a);
         gc_doc_free(doc);

@@ -262,6 +262,7 @@ static void check_line(checker *ck, int li)
         const char *t = l->tok[i];
         if (t[0] == '(' || t[0] == '/') continue;
         if (!first_all) first_all = t;
+        if (!(t[0] >= 'A' && t[0] <= 'Z') && t[0] != '#') continue; /* "%", ";" and other text that isn't a word */
         if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1]) && t[0] != 'N') continue; /* keyword (not a name like NA1) */
         if (gc_is_macro_tok(t)) continue;
         if (ln.nw >= 256) break;

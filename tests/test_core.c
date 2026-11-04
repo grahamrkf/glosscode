@@ -95,7 +95,7 @@ static void test_tokenize(void)
     tok_is("END1", "END1");
     tok_is("ENDX1", "E|N|D|X1");
     tok_is("  /2 N40 M01", "/2|N40|M01");
-    tok_is("N50 X1. / 2", "N50|X1.");                   /* a "/" later in the block isn't block delete */
+    tok_is("N50 X1. / 2", "N50|X1.|/|2");             /* a "/" later in the block isn't block delete; kept as written */
     tok_is("X-", "X-");
     /* Okuma: NAME= assignments, X=expression, sequence names, GOTO N.. */
     tok_is("V1=3 (PARTS)", "V1=3|(PARTS)");
@@ -109,8 +109,10 @@ static void test_tokenize(void)
     tok_is("IF [V2 GE V1] N440", "IF [V2 GE V1] N440");
     tok_is("#1=#2 X1.", "#1=#2|X1.");
     tok_is("#1=2 MOD 3 Y1.", "#1=2 MOD 3|Y1.");
-    tok_is("X1.==", "X1.");
-    tok_is("%", "");
+    tok_is("X1.==", "X1.|==");
+    tok_is("%", "%");
+    tok_is("N10 G00;", "N10|G00|;");
+    tok_is("X1. *& 12", "X1.|*&|12");
 }
 
 static void test_doc(void)
@@ -121,7 +123,7 @@ static void test_doc(void)
     CHECK(d->eob, "';' found");
     CHECK_STR(d->eol, "\r\n", "line ending");
     CHECK(!d->final_eol, "no final line ending");
-    CHECK(d->nlines == 5 && d->lines[0].ntok == 2, "a ';' inside a comment doesn't split");
+    CHECK(d->nlines == 5 && d->lines[0].ntok == 3, "a ';' inside a comment doesn't split, and the ';' after it is a word");
     size_t n;
     char *out = gc_doc_serialize(d, 1, &n);
     CHECK_STR(out, "O1 (A;B);\r\nN10 G00;\r\nN20 X1.;\r\n\r\n%", "written with ';' after blocks that have words");
@@ -130,7 +132,7 @@ static void test_doc(void)
     free(d->lines[1].tok[1]);
     d->lines[1].tok[1] = gc_strdup("G01");
     out = gc_doc_serialize(d, 0, &n);
-    CHECK_STR(out, "O1 (A;B)\r\nN10 G01\r\nN20 X1.\r\n\r\n%", "edited block, no ';'");
+    CHECK_STR(out, "O1 (A;B);\r\nN10 G01;\r\nN20 X1.;\r\n\r\n%", "edited block keeps the ';' it was written with");
     free(out);
     gc_doc_free(d);
 
@@ -204,7 +206,7 @@ static void test_api(const gc_data *data)
 {
     const char *p = "{\"text\":\"N10 G0 X1.;\\r\\nN20 M30;\\r\\n\"}";
     char *r = gc_api_call(data, "parse", p, strlen(p));
-    CHECK_STR(r, "{\"lines\":[{\"tok\":[\"N10\",\"G0\",\"X1.\"],\"raw\":\"N10 G0 X1.\"},{\"tok\":[\"N20\",\"M30\"],\"raw\":\"N20 M30\"}],"
+    CHECK_STR(r, "{\"lines\":[{\"tok\":[\"N10\",\"G0\",\"X1.\",\";\"],\"raw\":\"N10 G0 X1.;\"},{\"tok\":[\"N20\",\"M30\",\";\"],\"raw\":\"N20 M30;\"}],"
                  "\"eob\":true,\"eol\":\"\\r\\n\",\"finalEol\":true}", "parse");
     free(r);
     p = "{\"lines\":[[\"N10\",\"G01\",\"X2.\"],{\"tok\":[\"N20\",\"M30\"],\"raw\":\"N20  M30\"}],\"eob\":true,\"eol\":\"\\n\",\"finalEol\":true}";

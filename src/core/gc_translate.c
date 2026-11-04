@@ -288,7 +288,14 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
 
 static const char *style_key(const gc_ctx *c)
 {
-    return c->style == GC_STYLE_SHORT ? "short" : "long";
+    return c->style == GC_STYLE_SHORT ? "short" : c->style == GC_STYLE_WORDS ? "words" : "long";
+}
+
+/* An entry's English word in the chosen style; full words fall back to the long word where an entry has none. */
+static const gc_json *style_get(const gc_json *o, const char *sk)
+{
+    const gc_json *v = gc_json_get(o, sk);
+    return v ? v : gc_json_get(o, "long");
 }
 
 static const char *feed_unit(int per_rev, int inch)
@@ -341,6 +348,16 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     cell->g = gc_strdup(t);
     if (t[0] == '(') {
         cell_set(cell, "", NULL, "Comment, kept as written", GC_CELL_COMMENT);
+        return;
+    }
+    if (!gc_is_alpha((unsigned char)t[0]) && t[0] != '#' && t[0] != '/') { /* text that isn't a word, kept as written */
+        if (!strcmp(t, ";")) cell_set(cell, ";", NULL, "End of block (;)", 0);
+        else if (!strcmp(t, "%")) cell_set(cell, "%", NULL, "Program start or end mark (%), kept as written", 0);
+        else {
+            snprintf(e, sizeof e, "?%s", t);
+            snprintf(d, sizeof d, "%s isn't G-code GlossCode can read. It's kept as written.", t);
+            cell_set(cell, e, NULL, d, GC_CELL_UNKNOWN);
+        }
         return;
     }
     const char *sk = style_key(c);
@@ -396,7 +413,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
             cell_set(cell, "?/", NULL, "Block delete isn't in the dictionary.", GC_CELL_UNKNOWN);
             return;
         }
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(en, sk)), t + 1);
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(en, sk)), t + 1);
         if (t[1]) snprintf(d, sizeof d, "%s (switch %s)", js_str(gc_json_get(en, "desc")), t + 1);
         else snprintf(d, sizeof d, "%s", js_str(gc_json_get(en, "desc")));
         cell_set(cell, e, NULL, d, 0);
@@ -405,7 +422,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1]) && t[0] != 'N') { /* CALL, RTS, GOTO */
         const gc_json *en = gc_entry(c, t);
         if (en) {
-            cell_set(cell, js_str(gc_json_get(en, sk)), NULL, js_str(gc_json_get(en, "desc")), 0);
+            cell_set(cell, js_str(style_get(en, sk)), NULL, js_str(gc_json_get(en, "desc")), 0);
         } else {
             snprintf(e, sizeof e, "?%s", t);
             snprintf(d, sizeof d, "%s isn't a keyword on this machine.", t);
@@ -428,7 +445,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
             snprintf(d, sizeof d, "%s isn't in the dictionary or this machine's file.", k);
             cell_set(cell, e, NULL, d, GC_CELL_UNKNOWN);
         } else {
-            cell_set(cell, js_str(gc_json_get(en, sk)), NULL, js_str(gc_json_get(en, "desc")), 0);
+            cell_set(cell, js_str(style_get(en, sk)), NULL, js_str(gc_json_get(en, "desc")), 0);
         }
         return;
     }
@@ -438,7 +455,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         char prog[32];
         gc_js_num(gc_json_get(lib, "program") ? gc_json_get(lib, "program")->num : gc_nan(), prog, sizeof prog);
         if (L == 'P') {
-            const char *w = gc_json_get_str(gc_json_get(lib, "word"), sk);
+            const char *w = js_str(style_get(gc_json_get(lib, "word"), sk));
             snprintf(e, sizeof e, "%s", (w && *w) ? w : "");
             if (!(w && *w)) snprintf(e, sizeof e, "O%s", prog);
             snprintf(d, sizeof d, "Library subprogram O%s: %s", prog, js_str(gc_json_get(lib, "name")));
@@ -488,7 +505,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         const char *ar = gc_json_get_str(c->dialect, "arcRadius");
         if (ar && ar[0] == L && !ar[1] && (!strcmp(st->motion, "G02") || !strcmp(st->motion, "G03")) && !st->cycle_code[0]) {
             const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "R"), "arc");
-            snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(x, sk)), v);
+            snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
             cell_set(cell, e, NULL, "Arc radius", f.implied ? GC_CELL_IMPLIED : 0);
             return;
         }
@@ -499,7 +516,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     /* A later N word names another line: the one a GOTO or IF jumps to, or where an Okuma LAP contour starts */
     if (L == 'N' && ref) {
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(a, sk)), raw);
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(a, sk)), raw);
         snprintf(d, sizeof d, "The line labeled N%s", raw);
         cell_set(cell, e, NULL, d, 0);
         return;
@@ -507,7 +524,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     /* G04 F2. on controls that give the dwell time with F (Okuma) */
     if (L == 'F' && st->dwell && gc_json_has_str(gc_json_get(c->dialect, "dwellWords"), "F")) {
         const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "P"), "dwell");
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(x, sk)), v);
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
         snprintf(d, sizeof d, "Dwell for %s seconds", v);
         cell_set(cell, e, NULL, d, 0);
         return;
@@ -540,7 +557,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     if (L == 'X' || L == 'Y' || L == 'Z') {
         const gc_json *x = gc_json_get(a, st->inc ? "inc" : "abs");
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(x, sk)), v);
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
         if (*d2) snprintf(d, sizeof d, "%s", d2);
         else if (st->inc) snprintf(d, sizeof d, "Move %s in %c from where the tool is", v, L);
         else snprintf(d, sizeof d, "%c position %s", L, v);
@@ -555,7 +572,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
             return;
         }
         const gc_json *x = gc_json_get(a, "lathe");
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(x, sk)), v);
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
         if (*d2) snprintf(d, sizeof d, "%s", d2);
         else snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(x, "desc")), v);
         cell_set(cell, e, NULL, d, imp);
@@ -563,7 +580,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     if (L == 'R') {
         const gc_json *x = gc_json_get(a, st->cycle ? "cycle" : "arc");
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(x, sk)), v);
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
         snprintf(d, sizeof d, "%s", *d2 ? d2 : st->cycle ? "Retract plane for the drilling cycle" : "Arc radius");
         cell_set(cell, e, NULL, d, imp);
         return;
@@ -601,7 +618,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     if (L == 'P') {
         const gc_json *x = gc_json_get(a, st->sub ? "sub" : "dwell");
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(x, sk)), v);
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
         if (st->sub) snprintf(d, sizeof d, "Program number %s", v);
         else snprintf(d, sizeof d, "Dwell for %s seconds", v);
         cell_set(cell, e, NULL, d, 0);
@@ -610,7 +627,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     /* A letter can read differently on one machine type (D is the kerf on a plasma table). */
     const gc_json *ax = gc_json_get(a, c->type);
     if (!gc_json_truthy(gc_json_get(ax, "long"))) ax = a;
-    snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(ax, sk)), v);
+    snprintf(e, sizeof e, "%s%s", js_str(style_get(ax, sk)), v);
     if (*d2) snprintf(d, sizeof d, "%s", d2);
     else snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(ax, "desc")), v);
     cell_set(cell, e, NULL, d, imp);
