@@ -94,7 +94,7 @@ int main(int argc, char **argv)
             int latin1 = !gc_is_utf8(etext, el);
             size_t ul = el;
             char *utext = latin1 ? gc_latin1_to_utf8(etext, el, &ul) : NULL;
-            gc_doc *doc = gc_doc_parse(utext ? utext : etext, ul);
+            gc_doc *doc = gc_doc_parse_syntax(utext ? utext : etext, ul, gc_json_get_str(golden, "syntax"));
             /* The parser splits blocks and words like the mockup. */
             const gc_json *lines = gc_json_get(golden, "lines");
             CHECK(doc->nlines == (int)gc_json_len(lines), "%s: %d blocks, want %d", ex, doc->nlines, (int)gc_json_len(lines));

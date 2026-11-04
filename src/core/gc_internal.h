@@ -14,6 +14,7 @@ typedef struct gc_ctx {
     const char *base_type; /* the type whose tables and words it starts from ("mill" for plasma), or NULL */
     int lathe;
     int okuma;
+    int fagor;         /* the dialect's blockSyntax is "fagor8060" (SYNTAX in the mockup) */
     int style;         /* GC_STYLE_LONG, GC_STYLE_SHORT or GC_STYLE_WORDS */
     gc_json *dialect;  /* owned: the per-type tables merged along the inherits chain */
     gc_json *cycle_help_layers; /* owned array of borrowed pointers' clones: cycleHelp layers, base first */
@@ -43,9 +44,11 @@ int gc_is_code(const char *t, const char *c);
 int gc_line_has_code(const gc_line *l, const char *c);
 int gc_line_has_tok(const gc_line *l, const char *t);
 int gc_is_end(const gc_line *l);
-int gc_is_return(const gc_line *l);
+int gc_is_return(const gc_line *l, int fagor);
 /* Writes the label a line jumps to ("N1000", "O1200") into out; returns 0 when it calls nothing. */
 int gc_call_target(const gc_line *l, char *out, size_t outsz);
+/* "N90" or "N90:" -> "N90", anything else ("NA1") as it is: labelKey() in the mockup. */
+int gc_label_key(const char *t, char *key, size_t keysz);
 
 /* fmtNum(): the number as the English line shows it. */
 typedef struct gc_num {

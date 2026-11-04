@@ -126,11 +126,45 @@ static void push_tok(char ***out, int *n, int *cap, char *t)
     (*out)[(*n)++] = t;
 }
 
+/* Fagor 8060/8065: a statement to the end of the line or a ';' comment. Spaces outside quotes become one,
+   letters outside quotes upper case. Sets *end to where it stopped. */
+static char *fagor_stmt(const char *s, size_t len, size_t from, size_t *end)
+{
+    char *o = gc_xmalloc(len - from + 1);
+    size_t n = 0, e = from;
+    int q = 0;
+    for (; e < len; e++) {
+        unsigned char ch = (unsigned char)s[e];
+        if (ch == '"') q = !q;
+        if (!q && ch == ';') break;
+        if (!q && is_space(ch)) {
+            if (n && o[n - 1] != ' ') o[n++] = ' ';
+            continue;
+        }
+        o[n++] = q ? (char)ch : (char)gc_to_upper(ch);
+    }
+    if (n && o[n - 1] == ' ') n--;
+    o[n] = '\0';
+    *end = e;
+    return o;
+}
+
+static int is_fagor(const char *syntax)
+{
+    return syntax && !strcmp(syntax, "fagor8060");
+}
+
 char **gc_tokenize(const char *s, size_t len, int *ntok)
+{
+    return gc_tokenize_syntax(s, len, NULL, ntok);
+}
+
+char **gc_tokenize_syntax(const char *s, size_t len, const char *syntax, int *ntok)
 {
     char **out = NULL;
     int n = 0, cap = 0;
     size_t i = 0;
+    int fagor = is_fagor(syntax);
     /* A "/" at the start of a block is block delete (/1 to /9 on Fanuc-style controls): its own first word. */
     while (i < len && is_space((unsigned char)s[i])) i++;
     if (i < len && s[i] == '/') {
@@ -140,8 +174,55 @@ char **gc_tokenize(const char *s, size_t len, int *ntok)
         i = end;
     } else
         i = 0;
+    if (fagor) {
+        /* A label (N10: or [NAME]) and then a $ or # statement, a %NAME or %L NAME header, or an LL or L call */
+        while (i < len && is_space((unsigned char)s[i])) i++;
+        if (i < len && (s[i] == 'N' || s[i] == 'n') && i + 1 < len && gc_is_digit((unsigned char)s[i + 1])) {
+            size_t e = i + 1;
+            while (e < len && gc_is_digit((unsigned char)s[e])) e++;
+            if (e < len && s[e] == ':') {
+                char *t = gc_strndup(s + i, e + 1 - i);
+                t[0] = 'N';
+                push_tok(&out, &n, &cap, t);
+                i = e + 1;
+                while (i < len && is_space((unsigned char)s[i])) i++;
+            }
+        }
+        if (i < len && s[i] == '[') {
+            size_t e = i + 1;
+            while (e < len && is_word_char((unsigned char)s[e])) e++;
+            if (e > i + 1 && e < len && s[e] == ']') {
+                char *t = gc_strndup(s + i, e + 1 - i);
+                for (char *p = t; *p; p++) *p = (char)gc_to_upper((unsigned char)*p);
+                push_tok(&out, &n, &cap, t);
+                i = e + 1;
+                while (i < len && is_space((unsigned char)s[i])) i++;
+            }
+        }
+        int st = i < len && (s[i] == '#' || s[i] == '$' || s[i] == '%');
+        if (!st && i < len && (s[i] == 'L' || s[i] == 'l')) {
+            size_t k = i + 1;
+            if (k < len && (s[k] == 'L' || s[k] == 'l')) k++;
+            size_t sp = k;
+            while (k < len && (s[k] == ' ' || s[k] == '\t')) k++;
+            st = k > sp && k < len && (gc_is_alpha((unsigned char)s[k]) || s[k] == '_');
+        }
+        if (st) {
+            size_t e;
+            char *t = fagor_stmt(s, len, i, &e);
+            if (*t) push_tok(&out, &n, &cap, t);
+            else free(t);
+            i = e;
+        }
+    }
     while (i < len) {
         unsigned char ch = (unsigned char)s[i];
+        if (ch == ';' && fagor) { /* a comment to the end of the line */
+            size_t e = len;
+            while (e > i && is_space((unsigned char)s[e - 1])) e--;
+            push_tok(&out, &n, &cap, gc_strndup(s + i, e - i));
+            break;
+        }
         if (ch == '(') {
             size_t end = i + 1;
             while (end < len && s[end] != ')') end++;
@@ -228,6 +309,16 @@ char **gc_tokenize(const char *s, size_t len, int *ntok)
                     continue;
                 }
             }
+        }
+        /* Fagor: a letter and a parameter (XP1, GP0, FP100) is one word */
+        if (fagor && i + 2 < len && (s[i + 1] == 'P' || s[i + 1] == 'p') && gc_is_digit((unsigned char)s[i + 2])) {
+            size_t e = i + 2;
+            while (e < len && gc_is_digit((unsigned char)s[e])) e++;
+            char *t = gc_strndup(s + i, e - i);
+            for (char *p = t; *p; p++) *p = (char)gc_to_upper((unsigned char)*p);
+            push_tok(&out, &n, &cap, t);
+            i = e;
+            continue;
         }
         /* A letter, then a variable or [expression] (spaces and a sign allowed between), or else a plain number */
         size_t j = i + 1;
@@ -344,6 +435,12 @@ static int blank(const char *s, size_t n)
 /* One source line: split on ';' outside comments. Returns 1 if the line had a ';'. */
 static int add_source_line(gc_doc *doc, const char *s, size_t len)
 {
+    if (is_fagor(doc->syntax)) { /* Fagor: ';' starts a comment, so it never splits a line */
+        int nt;
+        char **t = gc_tokenize_syntax(s, len, doc->syntax, &nt);
+        add_line_owned(doc, t, nt, gc_strndup(s, len));
+        return 0;
+    }
     size_t start = 0;
     int depth = 0, hit = 0, blocks = 0;
     for (size_t i = 0; i < len; i++) {
@@ -352,7 +449,7 @@ static int add_source_line(gc_doc *doc, const char *s, size_t len)
         else if (c == ')') depth = depth > 0 ? depth - 1 : 0;
         if (c == ';' && !depth) { /* the ';' stays on its block, as written */
             int nt;
-            char **t = gc_tokenize(s + start, i + 1 - start, &nt);
+            char **t = gc_tokenize_syntax(s + start, i + 1 - start, doc->syntax, &nt);
             add_line_owned(doc, t, nt, gc_strndup(s + start, i + 1 - start));
             blocks++;
             start = i + 1;
@@ -361,7 +458,7 @@ static int add_source_line(gc_doc *doc, const char *s, size_t len)
     }
     if (!blank(s + start, len - start) || !blocks) {
         int nt;
-        char **t = gc_tokenize(s + start, len - start, &nt);
+        char **t = gc_tokenize_syntax(s + start, len - start, doc->syntax, &nt);
         add_line_owned(doc, t, nt, gc_strndup(s + start, len - start));
     }
     return hit;
@@ -369,7 +466,13 @@ static int add_source_line(gc_doc *doc, const char *s, size_t len)
 
 gc_doc *gc_doc_parse(const char *text, size_t len)
 {
+    return gc_doc_parse_syntax(text, len, NULL);
+}
+
+gc_doc *gc_doc_parse_syntax(const char *text, size_t len, const char *syntax)
+{
     gc_doc *doc = gc_doc_new();
+    gc_doc_set_syntax(doc, syntax);
     int found_eol = 0;
     size_t start = 0, i = 0;
     doc->final_eol = 0;
@@ -408,11 +511,19 @@ void gc_doc_free(gc_doc *doc)
     free(doc);
 }
 
-static int raw_matches(const gc_line *l)
+void gc_doc_set_syntax(gc_doc *doc, const char *syntax)
+{
+    size_t n = syntax ? strlen(syntax) : 0;
+    if (n >= sizeof doc->syntax) n = 0;
+    memcpy(doc->syntax, syntax ? syntax : "", n);
+    doc->syntax[n] = '\0';
+}
+
+static int raw_matches(const gc_doc *doc, const gc_line *l)
 {
     if (!l->raw) return 0;
     int n;
-    char **t = gc_tokenize(l->raw, strlen(l->raw), &n);
+    char **t = gc_tokenize_syntax(l->raw, strlen(l->raw), doc->syntax, &n);
     int same = n == l->ntok;
     for (int i = 0; same && i < n; i++) same = strcmp(t[i], l->tok[i]) == 0;
     gc_tokens_free(t, n);
@@ -425,7 +536,7 @@ char *gc_doc_serialize(const gc_doc *doc, int eob, size_t *len)
     gc_buf_init(&b);
     for (int i = 0; i < doc->nlines; i++) {
         const gc_line *l = &doc->lines[i];
-        if (raw_matches(l)) {
+        if (raw_matches(doc, l)) {
             /* Unchanged: keep the text as written (spacing, '%' and macro text the word list
                doesn't hold), less trailing spaces before a ';'. */
             size_t n = strlen(l->raw);

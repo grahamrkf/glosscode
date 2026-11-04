@@ -90,9 +90,10 @@ int gc_is_end(const gc_line *l)
     return gc_line_has_code(l, "M30") || gc_line_has_code(l, "M02");
 }
 
-int gc_is_return(const gc_line *l)
+int gc_is_return(const gc_line *l, int fagor)
 {
-    return gc_line_has_code(l, "M99") || gc_line_has_tok(l, "RTS");
+    if (gc_line_has_code(l, "M99") || gc_line_has_tok(l, "RTS")) return 1;
+    return fagor && (gc_line_has_code(l, "M17") || gc_line_has_code(l, "M29") || gc_line_has_tok(l, "#RET"));
 }
 
 /* /^X\d+$/ on a token with letter X. */
@@ -101,8 +102,38 @@ static int letter_digits(const char *t, char L)
     return t[0] == L && gc_all_digits(t + 1);
 }
 
+/* N10 or N10: (a Fagor label): the key "N10" */
+static int n_label(const char *t, char *key, size_t keysz)
+{
+    if (t[0] != 'N' || !gc_is_digit((unsigned char)t[1])) return 0;
+    size_t k = 1;
+    while (gc_is_digit((unsigned char)t[k])) k++;
+    if (t[k] && !(t[k] == ':' && !t[k + 1])) return 0;
+    char num[32];
+    gc_js_num(gc_js_parse_int(t + 1), num, sizeof num);
+    snprintf(key, keysz, "N%s", num);
+    return 1;
+}
+
+int gc_label_key(const char *t, char *key, size_t keysz)
+{
+    if (!n_label(t, key, keysz)) snprintf(key, keysz, "%s", t);
+    return 1;
+}
+
 int gc_call_target(const gc_line *l, char *out, size_t outsz)
 {
+    /* Fagor: LL NAME, #CALL NAME or #PCALL NAME … calls the local subroutine "%L NAME" */
+    for (int i = 0; i < l->ntok; i++) {
+        const char *t = l->tok[i], *p = NULL;
+        if (gc_starts_with(t, "LL ")) p = t + 3;
+        else if (gc_starts_with(t, "#CALL ")) p = t + 6;
+        else if (gc_starts_with(t, "#PCALL ")) p = t + 7;
+        if (!p || !*p || *p == ' ' || *p == ',') continue;
+        size_t n = strcspn(p, " ,");
+        snprintf(out, outsz, "%%L %.*s", (int)n, p);
+        return 1;
+    }
     for (int i = 0; i < l->ntok; i++) {
         if (strcmp(l->tok[i], "CALL") != 0) continue;
         for (int j = i + 1; j < l->ntok; j++)
@@ -287,22 +318,36 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
         if (ly) gc_json_push(c->cycle_help_layers, gc_json_clone(ly));
     }
 
+    {
+        const char *bs = gc_json_get_str(c->dialect, "blockSyntax");
+        c->fagor = bs && !strcmp(bs, "fagor8060");
+    }
     gc_map_init(&c->labels);
     for (int i = 0; doc && i < doc->nlines; i++) {
         const gc_line *l = &doc->lines[i];
         if (!l->ntok) continue;
         char key[48], num[32];
-        if (letter_digits(l->tok[0], 'N')) {
-            gc_js_num(gc_js_parse_int(l->tok[0] + 1), num, sizeof num);
-            snprintf(key, sizeof key, "N%s", num);
-            gc_map_add_first(&c->labels, key, i);
-        }
+        if (n_label(l->tok[0], key, sizeof key)) gc_map_add_first(&c->labels, key, i);
         if (l->tok[0][0] == 'N' && l->tok[0][1] >= 'A' && l->tok[0][1] <= 'Z') gc_map_add_first(&c->labels, l->tok[0], i);
         if (letter_digits(l->tok[0], 'O')) {
             gc_js_num(gc_js_parse_int(l->tok[0] + 1), num, sizeof num);
             snprintf(key, sizeof key, "O%s", num);
             gc_map_add_first(&c->labels, key, i);
         }
+        /* Fagor: an [NAME] label anywhere on the line, and a "%L NAME" local subroutine header */
+        for (int k = 0; k < l->ntok; k++) {
+            const char *t = l->tok[k];
+            size_t len_t = strlen(t);
+            if (t[0] != '[' || len_t < 3 || t[len_t - 1] != ']') continue;
+            int ok = 1;
+            for (size_t q = 1; q + 1 < len_t; q++)
+                if (!gc_is_alpha((unsigned char)t[q]) && !gc_is_digit((unsigned char)t[q]) && t[q] != '_') ok = 0;
+            if (ok) {
+                gc_map_add_first(&c->labels, t, i);
+                break;
+            }
+        }
+        if (gc_starts_with(l->tok[0], "%L ")) gc_map_add_first(&c->labels, l->tok[0], i);
     }
 }
 
@@ -408,7 +453,8 @@ void gc_fmt_num(const gc_ctx *c, char L, const char *raw, int inch, gc_num *out)
     if (!raw || !*raw) return;
     {   /* a macro variable or expression: worked out when the line runs */
         const char *p = (raw[0] == '-' || raw[0] == '+') ? raw + 1 : raw;
-        if (*p == '#' || *p == '[' || raw[0] == '=' || (p != raw && gc_is_alpha((unsigned char)*p))) {
+        if (*p == '#' || *p == '[' || raw[0] == '=' || (p != raw && gc_is_alpha((unsigned char)*p)) ||
+            (raw[0] == 'P' && gc_is_digit((unsigned char)raw[1]))) { /* Fagor: XP1, a parameter */
             snprintf(out->v, sizeof out->v, "%s", raw);
             return;
         }

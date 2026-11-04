@@ -4,7 +4,7 @@
 |---|---|
 | Manuals | 8055/8055i M Programming Manual Ref. 1501, Soft V01.6x (main mill source) · 8055 Programming Manual Ref. 1402 and 8055 M Ref. 1110 (earlier mill editions) · 8055 ·T· Programming Manual Ref. 1110, Soft V01.3x (lathe) · a Portuguese 8055/8055i M Ref. 0706 was not used |
 | Copy reviewed | PDFs with text. Page numbers are the manuals' printed "·n·" footers |
-| Reviewed | 2026-11-01. No dialect yet |
+| Reviewed | 2026-11-01. 8060/8065 mill dialect `fagor8060` added 2026-11-04; no 8055 dialect yet |
 | Result | Fagor looks like Fanuc but renumbers many G codes, uses different cycle words and has its own block format. It needs its own dialect, and the parser needs work first |
 
 Fagor was last in the suggested order. This review records what a `fagor` dialect would need, so it can be built when a Fagor machine is a target.
@@ -88,3 +88,7 @@ Programming Manual Ref. 2008 (498 pp) is the main source. Ref. 1402 (750 pp) is 
 6. **G codes that changed** (pp. 48–50): work zones moved to G120–G123, and G20 sets the plane from two directions; G30/G31 set the polar origin; G93 is machining time (the 8055 uses G32 for inverse time); G58/G59 are absolute offsets 5 and 6 (additive on the 8055); G60/G61 are one-block corner modes (patterns on the 8055); G63 is rigid tapping; G100–G104 are probing; G151 is diameter mode. G43/G44 aren't listed. G05/G07, G06/G08/G09, G10–G14, G36, G38, G50, G70/G71, G72, G73 and G74 mean the same as on the 8055, and the cycle numbers match too.
 
 **For a Fagor dialect:** build it for the 8060/8065, since that's the current control. Its G codes are close to the 8055's, but the syntax (comments, $ and # statements, NR, dwell in seconds, %L and #CALL subroutines) is different. Checking cycle words needs the 8060/8065 canned cycles manual.
+
+**Built (2026-11-04):** the `fagor8060` mill dialect, with the cycle words from the 8060/8065 M canned cycles manual (Ref. 1807): G81 to G88 and G210 to G212 take Z as the reference plane and I as the depth, with no R; G87/G88 are the rectangular and circular pockets. G160 to G165 (multiple machining) and the lathe aren't done. Its block syntax is described in [machine-definitions.md](../machine-definitions.md).
+
+**What an 8055 entry still needs:** the 8055 reads `( )` as statements, not comments, so it needs its own block syntax: `(SUB n)`, `(RET)`, `(CALL n)`, `(PCALL n, …)`, `(MCALL n)`, `(IF …)` and `(P100 = …)` as one word each, `;` comments, an N at the end of a line as a repeat count, P parameters, and its own G table (G43/G44 tool length, G58/G59 additive offsets, G60 to G65 patterns, G32 inverse time, G04 K in hundredths). Calls and returns would use the same mechanism as the 8060's.

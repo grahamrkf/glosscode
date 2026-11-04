@@ -331,6 +331,46 @@
    "generic": true,
    "notes": "",
    "control": "Mitsubishi M800/M80 (and M700/M70)"
+  },
+  "gen.mill.fagor8060": {
+   "name": "Generic Fagor 8060 / 8065 mill",
+   "type": "mill",
+   "brand": "fagor8060",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Fagor 8060 / 8065"
+  },
+  "gen.mill.fanuc": {
+   "name": "Generic Fanuc-style (0i, 30i and compatibles) mill",
+   "type": "mill",
+   "brand": "fanuc",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Fanuc-style (0i, 30i and compatibles)"
   }
  },
  "library": [
@@ -387,6 +427,10 @@
   {
    "example": "tests/cases/EOB_LATIN1.nc",
    "golden": "tests/golden/EOB_LATIN1_nc.json"
+  },
+  {
+   "example": "tests/cases/FAGOR_8060.nc",
+   "golden": "tests/golden/FAGOR_8060_nc.json"
   },
   {
    "example": "tests/cases/LATHE_EDGE.nc",

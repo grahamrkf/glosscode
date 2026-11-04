@@ -330,11 +330,23 @@ int gc_ends_with(const char *s, const char *suffix)
     return a >= b && strcmp(s + a - b, suffix) == 0;
 }
 
+int gc_is_comment(const char *t)
+{
+    return t[0] == '(' || (t[0] == ';' && t[1]);
+}
+
+int gc_is_kw(const char *t)
+{
+    if (!gc_is_alpha((unsigned char)t[0]) || !gc_is_alpha((unsigned char)t[1]) || t[0] == 'N') return 0;
+    return !(t[1] == 'P' && t[2] && gc_all_digits(t + 2)); /* XP1 is a word whose value is a Fagor parameter */
+}
+
 int gc_is_var_val(const char *t)
 {
     if (!t || !gc_is_alpha((unsigned char)t[0])) return 0;
     const char *p = t + 1;
     if (*p == '=') return 1;
+    if (*p == 'P' && gc_is_digit((unsigned char)p[1])) return 1; /* Fagor: XP1, a parameter */
     if (*p == '-' || *p == '+') {
         p++;
         if (gc_is_alpha((unsigned char)*p)) return 1; /* Okuma: Z-V10 */

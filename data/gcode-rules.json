@@ -1101,6 +1101,65 @@
       }
     },
 
+    "fagor8060": {
+      "label": "Fagor 8060 / 8065",
+      "about": "Fagor's current control. Its own language: ; comments to the end of the line, $ and # statements, %L local subroutines, P parameters (XP1), G70/G71 units, tool length from D, and drilling cycles where Z is the reference plane and I the depth.",
+      "inherits": "fanuc",
+      "verified": false,
+      "mill": {
+        "source": { "manual": "Fagor CNC 8060/8065 Programming manual Ref. 2008 and Canned cycles (M model) Ref. 1807", "section": "G and M lists (pp. 48-51), block format and comments (pp. 41-56), parameters (p. 58), subroutines (ch. 15), dwell (p. 245), cycles (pp. 31-72); see docs/manual-reviews/fagor-8055.md" },
+        "blockSyntax": "fagor8060",
+        "cycleRefZ": true,
+        "numbers": { "noDecimal": "asWritten" },
+        "unitCodes": { "inch": "G70", "mm": "G71" },
+        "modalGroups": {
+          "units":        ["G70", "G71"],
+          "canned cycle": ["G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G210", "G211", "G212"],
+          "feed mode":    ["G93", "G94", "G95"],
+          "tool length":  null,
+          "work offset":  ["G53", "G54", "G55", "G56", "G57", "G58", "G59", "G159"],
+          "exact stop":   ["G05", "G07", "G50"],
+          "stroke check": null,
+          "scaling":      null,
+          "macro modal":  null,
+          "rotation":     null,
+          "polar":        null
+        },
+        "toolLength": null,
+        "dwellWords": ["K"],
+        "dwellNoDecimal": null,
+        "subCalls": { "M98": null, "G65": null },
+        "subReturn": ["M17", "M29"],
+        "wordHints": { "G43": null, "G44": null },
+        "cycles": {
+          "G73": null, "G74": null, "G76": null, "G89": null,
+          "G81": { "name": "Drill", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "A", "F"], "feed": true },
+          "G82": { "name": "Drill, variable peck", "requires": ["I", "B"], "optional": ["X", "Y", "Z", "D", "H", "C", "J", "K", "R", "L", "A", "F"], "feed": true },
+          "G83": { "name": "Deep hole, constant peck", "requires": ["I", "J"], "optional": ["X", "Y", "Z", "B", "K", "F"], "feed": true },
+          "G84": { "name": "Tap", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "R", "J", "B", "H", "F"], "feed": true },
+          "G85": { "name": "Ream", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "F"], "feed": true },
+          "G86": { "name": "Bore", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "R", "A", "Q", "D", "E", "F"], "feed": true },
+          "G87": { "name": "Rectangular pocket", "requires": ["I", "J", "K", "B"], "optional": ["X", "Y", "Z", "D", "A", "M", "Q", "C", "L", "H", "V", "F"], "feed": true },
+          "G88": { "name": "Circular pocket", "requires": ["I", "J", "B"], "optional": ["X", "Y", "Z", "D", "C", "L", "H", "V", "F"], "feed": true },
+          "G210": { "name": "Bore milling", "requires": ["I", "J", "B"], "optional": ["X", "Y", "Z", "D", "K", "F"], "feed": true },
+          "G211": { "name": "Inside thread milling", "requires": ["I", "J", "K", "B"], "optional": ["X", "Y", "Z", "D", "C", "L", "A", "E", "Q", "F"], "feed": true },
+          "G212": { "name": "Outside thread milling", "requires": ["I", "J", "K", "B"], "optional": ["X", "Y", "Z", "D", "C", "L", "A", "E", "Q", "F"], "feed": true }
+        },
+        "foreign": {
+          "G43": { "severity": "error", "text": "Fagor 8060/8065 has no G43. The tool length offset comes from D (D1 on, D0 off) and applies on the next move along the tool axis." },
+          "G44": { "severity": "error", "text": "Fagor 8060/8065 has no G44. The tool length offset comes from D (D0 cancels it)." },
+          "G49": { "severity": "error", "text": "Fagor 8060/8065 has no G49. D0 cancels the tool length offset." },
+          "G21": { "severity": "error", "text": "Fagor has no G21. Millimeters are G71 (inch is G70); G20 sets the plane." },
+          "G28": { "severity": "error", "text": "Fagor 8060/8065 has no G28 home return; G74 is the home search." },
+          "G65": { "severity": "error", "text": "Fagor has no G65 macro call. Call a subroutine with #CALL or #PCALL, or LL for a local one." },
+          "G76": { "severity": "error", "text": "Fagor 8060/8065 has no G76. Boring is G86." },
+          "G89": { "severity": "error", "text": "On a Fagor mill G89 isn't a cycle. Bore with a dwell is G86 with K." },
+          "M98": { "severity": "error", "text": "Fagor has no M98. Call a subroutine with #CALL name (or LL name for a local %L subroutine)." },
+          "M99": { "severity": "error", "text": "Fagor ends a subroutine with M17, M29 or #RET, not M99." }
+        }
+      }
+    },
+
     "generic": {
       "label": "Generic",
       "about": "For a program that isn't tied to one control: the common ISO (Fanuc-style) codes that most controls share.",
@@ -1226,6 +1285,20 @@
       "G70": { "sketch": "finish", "about": "Finishes the profile in an O-subroutine named by Q, after roughing with G71 or G72.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0", "Starting offset from the profile.", "OFFSET"], "E": ["0", "Finishing pass offset.", "FINOFS"], "P": ["1", "Number of finishing passes.", "PASSES"] } },
       "G71": { "sketch": "rough", "about": "Roughs along Z to the profile in an O-subroutine named by Q, leaving D for finishing.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0.01", "Finishing allowance left on the profile.", "ALLOW"], "I": ["0.05", "Depth of each roughing pass.", "CUTDEPTH"], "R": ["0.01", "Retract distance after each pass.", "RETRACT"] } },
       "G72": { "sketch": "face-rough", "about": "Like G71, but roughs on the face, along X.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0.01", "Finishing allowance left on the profile.", "ALLOW"], "I": ["0.05", "Depth of each roughing pass.", "CUTDEPTH"], "R": ["0.01", "Retract distance after each pass.", "RETRACT"] } }
+    },
+    "fagor8060.mill": {
+      "common": {"words": {"X": ["15", "Hole position in X. After this line, every move drills another hole, until G80."], "Z": ["2", "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was.", "REFZ"], "I": ["-20", "Depth of the hole (absolute in G90; from the reference plane in G91).", "DEPTH"], "K": ["1", "Dwell at the bottom, in seconds.", "DWELL"], "A": ["0", "Spindle on the way out: A0 keeps it turning, A1 stops it.", "SPNOUT"]}},
+      "G81": {"about": "Fagor drilling: rapid to the reference plane Z, feed to the depth I, dwell K, rapid back out."},
+      "G82": {"about": "Drilling with a peck that changes: the first peck is B, each later one R times the last, never less than L.", "words": {"B": ["4", "First peck depth.", "PECK"], "D": ["1", "Distance from the reference plane to the surface.", "SURF"], "H": ["3", "How far the tool backs off after each peck.", "BACKOFF"], "C": ["1", "How close the rapid comes to the last peck.", "CLEAR"], "J": ["3", "Go back to the reference plane every J pecks.", "RETEVERY"], "R": ["0.8", "Peck factor: each peck is R times the last.", "PECKFAC"], "L": ["3", "Smallest peck.", "MINPECK"]}},
+      "G83": {"about": "Deep-hole drilling with a constant peck: J pecks of I each.", "words": {"I": ["-5", "Depth of each peck (not the total depth).", "PECK"], "J": ["4", "Number of pecks.", "PECKS"], "B": ["3", "Rapid back-off after each peck.", "BACKOFF"]}},
+      "G84": {"about": "Tapping to depth I. R0 is normal tapping, R1 rigid tapping, where J, B and H also apply.", "words": {"R": ["0", "R0 normal tapping, R1 rigid tapping.", "RIGID"], "J": ["1", "Rigid tapping: the way out runs J times the tapping feed.", "OUTFEED"], "B": ["2", "Rigid tapping: depth of each step, for chip breaking.", "STEP"], "H": ["1", "Rigid tapping: how far the tool backs off after each step.", "BACKOFF"]}},
+      "G85": {"about": "Reaming: feed in to the depth I, dwell K, feed back out."},
+      "G86": {"about": "Boring to depth I. R picks the way out: R0 rapid with the spindle stopped, R1 at the feed rate.", "words": {"R": ["0", "Way out: R0 rapid with the spindle stopped, R1 at the feed rate.", "OUTMODE"], "A": ["0", "Spindle: A0 in turning and out stopped, A1 in stopped and out turning.", "SPNMODE"], "Q": ["90", "Spindle orientation angle (with A).", "ORIENT"], "D": ["0.5", "Clearance along the first axis of the plane.", "CLRX"], "E": ["0.5", "Clearance along the second axis of the plane.", "CLRY"]}},
+      "G87": {"about": "Rectangular pocket: half length J, half width K, passes of B down to I, finishing stock L.", "words": {"J": ["40", "Half the pocket's length; the sign gives the direction.", "HALFLEN"], "K": ["20", "Half the pocket's width.", "HALFWID"], "B": ["5", "Depth of each pass.", "PASS"], "D": ["2", "Distance from the reference plane to the surface.", "SURF"], "A": ["15", "Angle of the pocket to the first axis.", "ANGLE"], "M": ["1", "Corners: M0 square, M1 rounded, M2 chamfered.", "CORNER"], "Q": ["10", "Corner radius or chamfer size.", "CORNSZ"], "C": ["5", "Width of each cut.", "STEPOVR"], "L": ["1", "Finishing stock.", "FINSTK"], "H": ["300", "Finishing feed.", "FINFEED"], "V": ["50", "Plunge feed.", "PLUNGE"]}},
+      "G88": {"about": "Circular pocket of radius J, passes of B down to I, finishing stock L.", "words": {"J": ["20", "Pocket radius; the sign gives the direction.", "RADIUS"], "B": ["5", "Depth of each pass.", "PASS"], "D": ["2", "Distance from the reference plane to the surface.", "SURF"], "C": ["5", "Width of each cut.", "STEPOVR"], "L": ["1", "Finishing stock.", "FINSTK"], "H": ["300", "Finishing feed.", "FINFEED"], "V": ["50", "Plunge feed.", "PLUNGE"]}},
+      "G210": {"about": "Bore milling: mills a hole of diameter J down to depth I in a helix of step B.", "words": {"J": ["30", "Hole diameter; the sign gives the direction.", "HOLEDIA"], "K": ["10", "Diameter of the hole already there.", "PREHOLE"], "B": ["2", "Helix step; positive also mills the bottom.", "STEP"], "D": ["1", "Safety distance.", "SAFE"]}},
+      "G211": {"about": "Inside thread milling: thread diameter J, thread depth K, pitch B.", "words": {"J": ["20", "Thread diameter; the sign gives the direction.", "THDDIA"], "K": ["1", "Thread depth, crest to root.", "THDDEP"], "B": ["1.5", "Thread pitch; positive mills from the surface down.", "PITCH"], "C": ["1", "C0 one pass, C1 single-edge cutter, or the number of cutter edges.", "EDGES"], "L": ["0", "Finishing stock.", "FINSTK"], "A": ["0.5", "Largest pass.", "MAXPASS"], "E": ["1", "Approach distance.", "APPR"], "Q": ["0", "Entry angle.", "ENTRY"], "D": ["1", "Safety distance.", "SAFE"]}},
+      "G212": {"about": "Outside thread milling: thread diameter J, thread depth K, pitch B.", "words": {"J": ["20", "Thread diameter; the sign gives the direction.", "THDDIA"], "K": ["1", "Thread depth, crest to root.", "THDDEP"], "B": ["1.5", "Thread pitch; positive mills from the surface down.", "PITCH"], "C": ["1", "C0 one pass, C1 single-edge cutter, or the number of cutter edges.", "EDGES"], "L": ["0", "Finishing stock.", "FINSTK"], "A": ["0.5", "Largest pass.", "MAXPASS"], "E": ["1", "Approach distance.", "APPR"], "Q": ["0", "Entry angle.", "ENTRY"], "D": ["1", "Safety distance.", "SAFE"]}}
     },
     "okuma.lathe": {
       "G71": { "sketch": "thread", "about": "Cuts a whole thread along Z in one block: passes get shallower until the thread height H is reached, then an optional finishing pass removes U.", "words": { "X": ["28.", "Final thread diameter."], "Z": ["5.", "Z where the thread ends."], "D": ["0.5", "Depth of the first pass, as a diameter.", "CUT1"], "H": ["1.8", "Thread height, as a diameter.", "THDHT"], "F": ["1.5", "Thread lead.", "LEAD"], "B": ["60", "Infeed angle, usually the insert's point angle (0 if left out).", "INFEED"], "A": ["30", "Taper angle (use A or the taper word, not both).", "TAPER"], "U": ["0.1", "Finishing allowance, as a diameter. No finishing pass without it.", "ALLOW"], "L": ["1.5", "Chamfer length on the last pass (with M23 on).", "CHAMF"], "E": ["0.2", "Lead change per lead, for a variable-lead thread.", "LEADCHG"], "J": ["1", "Number of threads within the F distance (1 if left out).", "THDS"], "M": ["32", "Picks the infeed mode and pattern (M32 to M34, M73 to M75)."], "Q": ["2", "Number of starts for a multi-start thread.", "STARTS"], "I": ["7.", "Taper as a difference in radius from start to end.", "TAPERR"] } },
