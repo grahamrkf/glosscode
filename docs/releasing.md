@@ -34,7 +34,7 @@ Help › About GlossCode has a **Check for updates** button, and a setting (on b
 
 ![About window with an update available](images/about-update.png)
 
-1. GlossCode requests `https://api.github.com/repos/one-moment-please/glosscode/releases/latest`. This returns the newest published release that isn't a draft or pre-release. No account or token is needed, and nothing is sent except the request itself.
+1. GlossCode requests `https://api.github.com/repos/grahamrkf/glosscode/releases/latest`. This returns the newest published release that isn't a draft or pre-release. No account or token is needed, and nothing is sent except the request itself.
 2. It compares the release's tag with its own version. If the release is newer, it shows the version, the release notes and a download button.
 3. An installed copy offers the installer; a portable copy offers the portable archive. **Other downloads** opens the release page.
 4. The download goes to the user's Downloads folder. GlossCode checks it against `SHA256SUMS.txt` from the same release and refuses a file that doesn't match. On Windows it then offers to close and run the installer. On Linux it opens the folder, since installing a package needs the system's package tool.

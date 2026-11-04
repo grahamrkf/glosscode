@@ -21,7 +21,7 @@ GlossCode $version examples
 programs/  Sample programs for Haas, Fanuc and Okuma mills and lathes.
            Open them with File > Open.
 library/   An example subprogram library file, showing the file format
-           (https://github.com/one-moment-please/glosscode/blob/main/docs/subprogram-library.md).
+           (https://github.com/grahamrkf/glosscode/blob/main/docs/subprogram-library.md).
 
 These are examples only. Check every program against your machine's manual
 and prove it out before running it on a machine.
