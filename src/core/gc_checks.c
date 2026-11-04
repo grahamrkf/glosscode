@@ -260,7 +260,7 @@ static void check_line(checker *ck, int li)
     const char *first_all = NULL;
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
-        if (gc_is_comment(t) || t[0] == '/') continue;
+        if (gc_is_comment(t, c->syntax) || t[0] == '/') continue;
         if (!first_all) first_all = t;
         if (!(t[0] >= 'A' && t[0] <= 'Z') && t[0] != '#') continue; /* "%", ";" and other text that isn't a word */
         if (gc_is_kw(t)) continue; /* keyword (not a name like NA1) */
@@ -299,7 +299,7 @@ static void check_line(checker *ck, int li)
     /* Brackets that don't pair up in an expression */
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
-        if (gc_is_comment(t) || t[0] == '/') continue;
+        if (gc_is_comment(t, c->syntax) || t[0] == '/') continue;
         int o = 0, cl = 0;
         for (const char *q = t; *q; q++) o += *q == '[', cl += *q == ']';
         if (o == cl) continue;
@@ -313,11 +313,12 @@ static void check_line(checker *ck, int li)
         emit(ck, li, "unbalanced-brackets", &vs, NULL);
     }
     /* N words after the first name lines to jump to (GOTO N90, G85 NA1) */
-    for (int i = 0, k = 0, pk = -1; i < l->ntok; pk = (gc_is_comment(l->tok[i]) || l->tok[i][0] == '/') ? pk : i, i++) {
+    for (int i = 0, k = 0, pk = -1; i < l->ntok; pk = (gc_is_comment(l->tok[i], c->syntax) || l->tok[i][0] == '/') ? pk : i, i++) {
         const char *t = l->tok[i];
-        if (gc_is_comment(t) || t[0] == '/') continue;
+        if (gc_is_comment(t, c->syntax) || t[0] == '/') continue;
         if (k++ == 0 || t[0] != 'N') continue;
-        if (c->fagor && t[1] == 'R' && t[2] && gc_all_digits(t + 2)) continue; /* NR3: run the line 3 times */
+        if (c->syntax == GC_SYN_FAGOR8060 && t[1] == 'R' && t[2] && gc_all_digits(t + 2)) continue; /* NR3: run the line 3 times */
+        if (c->syntax == GC_SYN_FAGOR8055) continue; /* a repeat count (N3), not a label */
         char key[64];
         gc_label_key(t, key, sizeof key);
         if (gc_map_get(&c->labels, key, NULL)) continue;
@@ -514,8 +515,12 @@ static void check_line(checker *ck, int li)
             emit(ck, li, "comp-left-on", &vs, NULL);
         }
         st->T = st->pendingT;
-        st->needTlo = gc_json_is_obj(gc_json_get(D, "toolLength")); /* none on Fagor: D sets the length */
-        st->tloOn = 0;
+        /* None on the Fagor 8060 (D sets the length). G43 that stays on through a tool change (Fagor 8055) needs no new call. */
+        const gc_json *tlx = gc_json_get(D, "toolLength");
+        if (!(gc_json_truthy(gc_json_get(tlx, "staysOn")) && st->tloOn)) {
+            st->needTlo = gc_json_is_obj(tlx);
+            st->tloOn = 0;
+        }
         snprintf(st->tcLine, sizeof st->tcLine, "%s", nLabel);
     }
     if (gc_is_end(l)) {
@@ -1030,13 +1035,13 @@ void gc_check(gc_ctx *c, gc_analysis *a)
         seen[i] = 1;
         check_line(&ck, i);
         if (gc_is_end(l)) break;
-        if (gc_is_return(l, c->fagor) && depth) {
+        if (gc_is_return(l, c->syntax) && depth) {
             i = stack[--depth];
             continue;
         }
         char tgt[48];
         int to;
-        if (gc_call_target(l, tgt, sizeof tgt) && gc_map_get(&c->labels, tgt, &to) && depth < 8) {
+        if (gc_call_target(l, c->syntax, tgt, sizeof tgt) && gc_map_get(&c->labels, tgt, &to) && depth < 8) {
             stack[depth++] = i + 1;
             i = to;
             continue;

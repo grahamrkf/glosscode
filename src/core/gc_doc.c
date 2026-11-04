@@ -149,9 +149,50 @@ static char *fagor_stmt(const char *s, size_t len, size_t from, size_t *end)
     return o;
 }
 
-static int is_fagor(const char *syntax)
+int gc_syntax_code(const char *syntax)
 {
-    return syntax && !strcmp(syntax, "fagor8060");
+    if (!syntax) return GC_SYN_NONE;
+    if (!strcmp(syntax, "fagor8060")) return GC_SYN_FAGOR8060;
+    if (!strcmp(syntax, "fagor8055")) return GC_SYN_FAGOR8055;
+    return GC_SYN_NONE;
+}
+
+/* Fagor 8055: a statement from '(' to its matching ')': spaces outside quotes made single, letters outside
+   quotes upper case. Sets *end to the character after it. */
+static char *fagor55_stmt(const char *s, size_t len, size_t from, size_t *end)
+{
+    char *o = gc_xmalloc(len - from + 1);
+    size_t n = 0, e = from;
+    int d = 0, q = 0;
+    for (; e < len; e++) {
+        unsigned char ch = (unsigned char)s[e];
+        if (ch == '"') q = !q;
+        if (!q) {
+            if (ch == '(') d++;
+            else if (ch == ')' && --d == 0) {
+                o[n++] = ')';
+                e++;
+                break;
+            }
+            if (is_space(ch)) {
+                if (n && o[n - 1] != ' ') o[n++] = ' ';
+                continue;
+            }
+        }
+        o[n++] = q ? (char)ch : (char)gc_to_upper(ch);
+    }
+    o[n] = '\0';
+    if (n >= 2 && o[0] == '(' && o[1] == ' ') {
+        memmove(o + 1, o + 2, n - 1);
+        n--;
+    }
+    if (n >= 2 && o[n - 1] == ')' && o[n - 2] == ' ') {
+        o[n - 2] = ')';
+        o[--n] = '\0';
+    }
+    if (n && o[n - 1] == ' ') o[--n] = '\0';
+    *end = e;
+    return o;
 }
 
 char **gc_tokenize(const char *s, size_t len, int *ntok)
@@ -164,7 +205,8 @@ char **gc_tokenize_syntax(const char *s, size_t len, const char *syntax, int *nt
     char **out = NULL;
     int n = 0, cap = 0;
     size_t i = 0;
-    int fagor = is_fagor(syntax);
+    int syn = gc_syntax_code(syntax);
+    int fagor = syn == GC_SYN_FAGOR8060, semi = syn == GC_SYN_FAGOR8060 || syn == GC_SYN_FAGOR8055;
     /* A "/" at the start of a block is block delete (/1 to /9 on Fanuc-style controls): its own first word. */
     while (i < len && is_space((unsigned char)s[i])) i++;
     if (i < len && s[i] == '/') {
@@ -215,9 +257,24 @@ char **gc_tokenize_syntax(const char *s, size_t len, const char *syntax, int *nt
             i = e;
         }
     }
+    if (syn == GC_SYN_FAGOR8055) { /* the "%comment ,MX," header line, as written */
+        while (i < len && is_space((unsigned char)s[i])) i++;
+        if (i < len && s[i] == '%') {
+            size_t e = len;
+            while (e > i && is_space((unsigned char)s[e - 1])) e--;
+            push_tok(&out, &n, &cap, gc_strndup(s + i, e - i));
+            i = len;
+        }
+    }
     while (i < len) {
         unsigned char ch = (unsigned char)s[i];
-        if (ch == ';' && fagor) { /* a comment to the end of the line */
+        if (ch == '(' && syn == GC_SYN_FAGOR8055) {
+            size_t e;
+            push_tok(&out, &n, &cap, fagor55_stmt(s, len, i, &e));
+            i = e;
+            continue;
+        }
+        if (ch == ';' && semi) { /* a comment to the end of the line */
             size_t e = len;
             while (e > i && is_space((unsigned char)s[e - 1])) e--;
             push_tok(&out, &n, &cap, gc_strndup(s + i, e - i));
@@ -311,7 +368,7 @@ char **gc_tokenize_syntax(const char *s, size_t len, const char *syntax, int *nt
             }
         }
         /* Fagor: a letter and a parameter (XP1, GP0, FP100) is one word */
-        if (fagor && i + 2 < len && (s[i + 1] == 'P' || s[i + 1] == 'p') && gc_is_digit((unsigned char)s[i + 2])) {
+        if (semi && i + 2 < len && (s[i + 1] == 'P' || s[i + 1] == 'p') && gc_is_digit((unsigned char)s[i + 2])) {
             size_t e = i + 2;
             while (e < len && gc_is_digit((unsigned char)s[e])) e++;
             char *t = gc_strndup(s + i, e - i);
@@ -435,7 +492,7 @@ static int blank(const char *s, size_t n)
 /* One source line: split on ';' outside comments. Returns 1 if the line had a ';'. */
 static int add_source_line(gc_doc *doc, const char *s, size_t len)
 {
-    if (is_fagor(doc->syntax)) { /* Fagor: ';' starts a comment, so it never splits a line */
+    if (gc_syntax_code(doc->syntax) != GC_SYN_NONE) { /* Fagor: ';' starts a comment, so it never splits a line */
         int nt;
         char **t = gc_tokenize_syntax(s, len, doc->syntax, &nt);
         add_line_owned(doc, t, nt, gc_strndup(s, len));

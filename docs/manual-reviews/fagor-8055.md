@@ -4,7 +4,7 @@
 |---|---|
 | Manuals | 8055/8055i M Programming Manual Ref. 1501, Soft V01.6x (main mill source) · 8055 Programming Manual Ref. 1402 and 8055 M Ref. 1110 (earlier mill editions) · 8055 ·T· Programming Manual Ref. 1110, Soft V01.3x (lathe) · a Portuguese 8055/8055i M Ref. 0706 was not used |
 | Copy reviewed | PDFs with text. Page numbers are the manuals' printed "·n·" footers |
-| Reviewed | 2026-11-01. 8060/8065 mill dialect `fagor8060` added 2026-11-04; no 8055 dialect yet |
+| Reviewed | 2026-11-01. Mill dialects `fagor8060` (8060/8065) and `fagor8055` (8055/8055i) added 2026-11-04 |
 | Result | Fagor looks like Fanuc but renumbers many G codes, uses different cycle words and has its own block format. It needs its own dialect, and the parser needs work first |
 
 Fagor was last in the suggested order. This review records what a `fagor` dialect would need, so it can be built when a Fagor machine is a target.
@@ -91,4 +91,6 @@ Programming Manual Ref. 2008 (498 pp) is the main source. Ref. 1402 (750 pp) is 
 
 **Built (2026-11-04):** the `fagor8060` mill dialect, with the cycle words from the 8060/8065 M canned cycles manual (Ref. 1807): G81 to G88 and G210 to G212 take Z as the reference plane and I as the depth, with no R; G87/G88 are the rectangular and circular pockets. G160 to G165 (multiple machining) and the lathe aren't done. Its block syntax is described in [machine-definitions.md](../machine-definitions.md).
 
-**What an 8055 entry still needs:** the 8055 reads `( )` as statements, not comments, so it needs its own block syntax: `(SUB n)`, `(RET)`, `(CALL n)`, `(PCALL n, …)`, `(MCALL n)`, `(IF …)` and `(P100 = …)` as one word each, `;` comments, an N at the end of a line as a repeat count, P parameters, and its own G table (G43/G44 tool length, G58/G59 additive offsets, G60 to G65 patterns, G32 inverse time, G04 K in hundredths). Calls and returns would use the same mechanism as the 8060's.
+**Built (2026-11-04), 8055:** the `fagor8055` mill dialect from Ref. 1501, with its own block syntax (statements in parentheses, `;` comments, the N repeat count at the end of a line; see machine-definitions.md). Corrections to the notes above from a closer read: the header line is `%comment ,attributes,` with no name (the program number is the file name); G43 stays on through a tool change and the length comes from the tool's D; and the cycles are G69 (variable peck), G81 drill, G82 drill with dwell, G83 deep hole (J pecks of I), G84 tap (R0 normal, R1/R2 rigid), G85 ream, G86 bore, G87/G88 pockets, G89 bore with dwell and G210 to G212. Not done: the lathe, G60 to G65 pattern words, G66 to G68 irregular pockets, and simulating the N repeat count.
+
+**What the 8055 entry needed (planning notes):** the 8055 reads `( )` as statements, not comments, so it needs its own block syntax: `(SUB n)`, `(RET)`, `(CALL n)`, `(PCALL n, …)`, `(MCALL n)`, `(IF …)` and `(P100 = …)` as one word each, `;` comments, an N at the end of a line as a repeat count, P parameters, and its own G table (G43/G44 tool length, G58/G59 additive offsets, G60 to G65 patterns, G32 inverse time, G04 K in hundredths). Calls and returns would use the same mechanism as the 8060's.

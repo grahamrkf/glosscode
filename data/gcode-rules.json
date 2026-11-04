@@ -1160,6 +1160,78 @@
       }
     },
 
+    "fagor8055": {
+      "label": "Fagor 8055 / 8055i",
+      "about": "Fagor's earlier control. Its own language: ( ) holds statements such as (CALL 3) and (P100 = P101 + 2), ; starts a comment, an N at the end of a line repeats it, P parameters (XP1), G70/G71 units, G43/G44 tool length, and drilling cycles where Z is the reference plane and I the depth. G04 K is in hundredths of a second.",
+      "inherits": "fagor8060",
+      "verified": false,
+      "mill": {
+        "source": { "manual": "Fagor CNC 8055 / 8055i M Programming manual Ref. 1501, Soft V01.6x", "section": "Block format (pp. 33-36), G list (pp. 62-64 and 437-438), dwell (p. 108), cycles (pp. 144-199), high-level language (pp. 333-400); see docs/manual-reviews/fagor-8055.md" },
+        "blockSyntax": "fagor8055",
+        "dwellHundredths": true,
+        "noCss": true,
+        "modalGroups": {
+          "canned cycle": ["G80", "G69", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89", "G210", "G211", "G212"],
+          "feed mode":    ["G32", "G94", "G95"],
+          "tool length":  ["G43", "G44"]
+        },
+        "toolLength": { "on": ["G43"], "word": "H", "label": "G43", "staysOn": true },
+        "subReturn": ["(RET)"],
+        "cycles": {
+          "G69": {"name": "Drill, variable peck", "requires": ["I", "B"], "optional": ["X", "Y", "Z", "C", "D", "H", "J", "K", "L", "R", "F"], "feed": true},
+          "G81": {"name": "Drill", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "F"], "feed": true},
+          "G82": {"name": "Drill with dwell", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "F"], "feed": true},
+          "G83": {"name": "Deep hole, constant peck", "requires": ["I", "J"], "optional": ["X", "Y", "Z", "F"], "feed": true},
+          "G84": {"name": "Tap", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "R", "J", "B", "H", "F"], "feed": true},
+          "G85": {"name": "Ream", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "F"], "feed": true},
+          "G86": {"name": "Bore", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "Q", "D", "E", "F"], "feed": true},
+          "G87": {"name": "Rectangular pocket", "requires": ["I", "J", "K", "B"], "optional": ["X", "Y", "Z", "C", "D", "H", "L", "V", "F"], "feed": true},
+          "G88": {"name": "Circular pocket", "requires": ["I", "J", "B"], "optional": ["X", "Y", "Z", "C", "D", "H", "L", "V", "F"], "feed": true},
+          "G89": {"name": "Bore with dwell", "requires": ["I"], "optional": ["X", "Y", "Z", "K", "F"], "feed": true},
+          "G210": {"name": "Bore milling", "requires": ["I", "J", "B"], "optional": ["X", "Y", "Z", "D", "K", "F"], "feed": true},
+          "G211": {"name": "Inside thread milling", "requires": ["I", "J", "K", "B"], "optional": ["X", "Y", "Z", "D", "C", "L", "A", "E", "Q", "F"], "feed": true},
+          "G212": {"name": "Outside thread milling", "requires": ["I", "J", "K", "B", "E"], "optional": ["X", "Y", "Z", "D", "C", "L", "A", "Q", "F"], "feed": true}
+        },
+        "foreign": {
+          "G43": null,
+          "G44": null,
+          "G49": null,
+          "G21": null,
+          "G28": null,
+          "G65": null,
+          "G89": null,
+          "G76": { "severity": "error", "text": "The Fagor 8055 has no G76. Boring is G86, or G89 with a dwell." },
+          "M98": { "severity": "error", "text": "The Fagor 8055 has no M98. Call a subroutine with (CALL n), or (PCALL n, …) to give it its own parameters." },
+          "M99": { "severity": "error", "text": "The Fagor 8055 ends a subroutine with (RET), not M99." },
+          "M17": { "severity": "error", "text": "M17 ends a subroutine on the Fagor 8060/8065. The 8055 uses (RET)." },
+          "M29": { "severity": "error", "text": "M29 ends a subroutine on the Fagor 8060/8065. The 8055 uses (RET)." },
+          "G31": { "severity": "error", "text": "G31 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G63": { "severity": "error", "text": "G63 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G100": { "severity": "error", "text": "G100 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G103": { "severity": "error", "text": "G103 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G104": { "severity": "error", "text": "G104 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G108": { "severity": "error", "text": "G108 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G109": { "severity": "error", "text": "G109 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G151": { "severity": "error", "text": "G151 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G152": { "severity": "error", "text": "G152 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G157": { "severity": "error", "text": "G157 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G158": { "severity": "error", "text": "G158 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G160": { "severity": "error", "text": "G160 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G161": { "severity": "error", "text": "G161 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G162": { "severity": "error", "text": "G162 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G163": { "severity": "error", "text": "G163 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G164": { "severity": "error", "text": "G164 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G165": { "severity": "error", "text": "G165 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G192": { "severity": "error", "text": "G192 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G196": { "severity": "error", "text": "G196 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G197": { "severity": "error", "text": "G197 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G261": { "severity": "error", "text": "G261 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G262": { "severity": "error", "text": "G262 is a Fagor 8060/8065 code. The 8055 doesn't have it." },
+          "G263": { "severity": "error", "text": "G263 is a Fagor 8060/8065 code. The 8055 doesn't have it." }
+        }
+      }
+    },
+
     "generic": {
       "label": "Generic",
       "about": "For a program that isn't tied to one control: the common ISO (Fanuc-style) codes that most controls share.",
@@ -1285,6 +1357,17 @@
       "G70": { "sketch": "finish", "about": "Finishes the profile in an O-subroutine named by Q, after roughing with G71 or G72.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0", "Starting offset from the profile.", "OFFSET"], "E": ["0", "Finishing pass offset.", "FINOFS"], "P": ["1", "Number of finishing passes.", "PASSES"] } },
       "G71": { "sketch": "rough", "about": "Roughs along Z to the profile in an O-subroutine named by Q, leaving D for finishing.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0.01", "Finishing allowance left on the profile.", "ALLOW"], "I": ["0.05", "Depth of each roughing pass.", "CUTDEPTH"], "R": ["0.01", "Retract distance after each pass.", "RETRACT"] } },
       "G72": { "sketch": "face-rough", "about": "Like G71, but roughs on the face, along X.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0.01", "Finishing allowance left on the profile.", "ALLOW"], "I": ["0.05", "Depth of each roughing pass.", "CUTDEPTH"], "R": ["0.01", "Retract distance after each pass.", "RETRACT"] } }
+    },
+    "fagor8055.mill": {
+      "common": {"words": {"K": ["50", "Dwell at the bottom, in hundredths of a second (K50 is half a second).", "DWELL"]}},
+      "G69": {"about": "Drilling with a peck that changes: the first peck is B, each later one R times the last, never less than L. Every J pecks the tool goes back to the reference plane.", "words": {"B": ["4", "First peck depth.", "PECK"], "C": ["1", "How close the rapid comes to the last peck.", "CLEAR"], "D": ["1", "Distance from the reference plane to the surface.", "SURF"], "H": ["3", "How far the tool backs off after each peck.", "BACKOFF"], "J": ["3", "Go back to the reference plane every J pecks.", "RETEVERY"], "R": ["0.8", "Peck factor: each peck is R times the last.", "PECKFAC"], "L": ["1", "Smallest peck.", "MINPECK"]}},
+      "G81": {"about": "Fagor drilling: rapid to the reference plane Z, feed to the depth I, dwell K, rapid back out."},
+      "G82": {"about": "Drilling with a dwell: rapid to the reference plane Z, feed to the depth I, dwell K at the bottom, rapid back out."},
+      "G83": {"about": "Deep-hole drilling: J pecks of I each, back to the reference plane after each one."},
+      "G84": {"about": "Tapping to depth I. R0 is normal tapping, R1 rigid tapping with a spindle orientation, R2 rigid tapping without one; J, B and H apply to rigid tapping.", "words": {"R": ["0", "R0 normal tapping, R1 rigid with orientation, R2 rigid without.", "RIGID"]}},
+      "G86": {"about": "Boring to depth I, dwell K. With Q the spindle stops at angle Q and the tool moves off by D and E before coming out; without, it comes out at rapid with the spindle stopped.", "words": {"Q": ["90", "Spindle angle for the way out.", "ORIENT"]}},
+      "G87": {"about": "Rectangular pocket: half length J, half width K, passes of B down to I, finishing stock L. I is measured from the starting plane."},
+      "G89": {"about": "Boring with a dwell: feed to the depth I, dwell K, feed back out."}
     },
     "fagor8060.mill": {
       "common": {"words": {"X": ["15", "Hole position in X. After this line, every move drills another hole, until G80."], "Z": ["2", "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was.", "REFZ"], "I": ["-20", "Depth of the hole (absolute in G90; from the reference plane in G91).", "DEPTH"], "K": ["1", "Dwell at the bottom, in seconds.", "DWELL"], "A": ["0", "Spindle on the way out: A0 keeps it turning, A1 stops it.", "SPNOUT"]}},

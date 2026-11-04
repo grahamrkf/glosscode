@@ -1,4 +1,5 @@
 #include "gc_util.h"
+#include "glosscode.h"
 
 #include <float.h>
 #include <math.h>
@@ -330,9 +331,9 @@ int gc_ends_with(const char *s, const char *suffix)
     return a >= b && strcmp(s + a - b, suffix) == 0;
 }
 
-int gc_is_comment(const char *t)
+int gc_is_comment(const char *t, int syntax)
 {
-    return t[0] == '(' || (t[0] == ';' && t[1]);
+    return (t[0] == '(' && syntax != GC_SYN_FAGOR8055) || (t[0] == ';' && t[1]);
 }
 
 int gc_is_kw(const char *t)
