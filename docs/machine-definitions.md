@@ -236,7 +236,7 @@ Programming manuals are written for a control, not a machine. The Haas NGC mill 
 So the work is split in two:
 
 - **GlossCode ships the controls**, checked against their manuals: the codes, cycles, checks and the options each control knows about.
-- **Users make machine profiles** for the machines they have. A profile is a name, a control, and the numbers and options from the user's own spec sheet and shop practice. GlossCode doesn't ship machine models.
+- **Users make machine profiles** for the machines they have. A profile is a name, a control, and the numbers and options from the user's own spec sheet and shop practice. GlossCode ships only a small library of known models, with just the numbers we're confident of; adding one makes it a profile to fill in.
 
 ### The control tree
 
@@ -378,6 +378,15 @@ A profile in the shop folder settles a contradiction once for everyone who uses 
 | `machine` | A user's machine profile: name, control, numbers, options, in-house codes and checks | `acme.vf3ss-cell1` |
 
 Built-in files stop at `type`. Everything from `machine` down is the user's.
+
+### Picking a machine (built, 2026-11)
+
+What's built today, ahead of the file layout above:
+
+- The picker has three columns: **machine type** (mill, lathe, router, plasma), **control** and **machine**. A control shows only under the machine types it has tables for. A router reads like its control's mill.
+- Each type and control has a **Generic** machine (`gen.<type>.<control>`): no numbers, every option allowed. The **Generic** control is the common ISO (Fanuc-style) language, so "Mill › Generic" is a program that isn't tied to one control.
+- Controls follow the programming manuals: one entry per manual, unless two manuals are close enough that the differences can be options in the machine profile. Haas NGC is one control for the 2020 and 2025 editions (see [Contradictions in the manuals](#contradictions-in-the-manuals)). The Okuma OSP-U10L / OSP-U100L and OSP700L / OSP7000L lathe controls have their own entries; they read like the Okuma lathe until the differences from the P200L/P300L are recorded.
+- The user's machine profiles live in `settings.json` (`machines`), with the recent machines. **New** starts from a type and control, **Copy** from a profile, and **Add from library** from a known model. The library only fills in numbers we're confident of; the rest stays empty. A deleted profile's programs, recent files and file type defaults move to the Generic machine for the same type and control.
 
 ### Setting up a machine in GlossCode
 

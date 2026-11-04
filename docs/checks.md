@@ -25,6 +25,7 @@ A machine definition file will be able to change any rule's severity or turn it 
 |---|---|---|
 | `dup-address` | error | The same letter twice in one line, like `Y2. Y3.` (G and M are exempt) |
 | `empty-value` | error | A letter with no number, like `X` on its own |
+| `unbalanced-brackets` | error | An expression whose `[` and `]` don't pair up, like `V58=[[V50+V51]/2+V52` |
 | `modal-group-clash` | error | Two codes from one group on one line, like `G90 G91` or `G00 G01` |
 | `m-conflict` | error | M-codes that contradict each other, like `M03 M05` or `M08 M09` |
 | `foreign-code` | warning or error | A code that means something else on this control, like `G54` on an Okuma (X-axis length offset) or `M97` on a Fanuc |

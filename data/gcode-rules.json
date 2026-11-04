@@ -4,6 +4,7 @@
   "rules": {
     "dup-address":          { "severity": "error",   "title": "Word repeated in a line",            "message": "{letter} appears {count} on this line ({words}). The control uses one of them or alarms.", "why": "Each address letter except G and M can appear once per block." },
     "empty-value":          { "severity": "error",   "title": "Address with no value",              "message": "{letter} has no number after it." },
+    "unbalanced-brackets":  { "severity": "error",   "title": "Brackets that don't match",          "message": "{word} has {open} [ and {close} ]. The control alarms when it reads this line.", "why": "Every [ in an expression needs a ] to close it." },
     "modal-group-clash":    { "severity": "error",   "title": "Two codes from one group",           "message": "{codes} are both {group} codes. Only one can be active, so the control alarms or uses the last one.", "why": "Codes in the same modal group cancel each other." },
     "m-conflict":           { "severity": "error",   "title": "M-codes that contradict each other", "message": "{codes} on the same line contradict each other." },
     "foreign-code":         { "severity": "warning", "title": "Code means something else here",     "message": "{text}" },
@@ -42,6 +43,7 @@
   "machineTypes": {
     "mill":   { "label": "Mill",   "timeline": ["z", "feed", "speed"] },
     "lathe":  { "label": "Lathe",  "timeline": ["x", "feed", "speed"] },
+    "router": { "label": "Router", "base": "mill", "timeline": ["z", "feed", "speed"], "about": "A router reads G code the way its control's mill does; a control lists router (even empty) when it's made for routers." },
     "plasma": { "label": "Plasma", "base": "mill", "timeline": ["feed", "z"], "about": "A plasma machine starts from its control's mill tables and words, then the control's plasma table on top (fanuc.plasma for the Fanuc-style chain). A control with no mill tables (Hypertherm) has only its plasma table. timeline lists the values the Z-by-line timeline can plot, the first being the default: z (or x, the lathe radius), feed (the feed rate) and speed (the spindle speed while it turns). A machine with a process (process.on) also shows a band where the torch is on and marks the lines with a process.changes code (a material or process change, since plasma power is set on the power supply, not in the program)." }
   },
 
@@ -311,6 +313,7 @@
       "inherits": "fanuc",
       "verified": true,
       "source": { "manual": "LinuxCNC Documentation V2.9.7", "revision": "22 Oct. 2025", "section": "Chapter 11 G-code Programming (11.4 to 11.8)" },
+      "router": {},
       "mill": {
         "numbers": { "noDecimal": "asWritten" },
         "modalGroups": {
@@ -442,6 +445,7 @@
       "inherits": "fanuc",
       "verified": true,
       "source": { "manual": "Centroid CNC12 Mill, Lathe and Router Operator's Manuals", "revision": "v5.42 and later (lathe also checked against v3.16, v4.14 and v4.20)", "section": "Program codes, G codes and M codes chapters" },
+      "router": {},
       "mill": {
         "modalGroups": {
           "feed mode":   ["G93", "G94"],
@@ -624,6 +628,7 @@
       "inheritWords": true,
       "verified": true,
       "source": { "manual": "GRBL v1.1 README (supported G codes) and grbl/gcode.c", "revision": "gnea/grbl master", "section": "List of Supported G-Codes in Grbl v1.1; the gc_execute_line parser" },
+      "router": {},
       "mill": {
         "mPerBlock": null,
         "toolChange": null,
@@ -849,6 +854,30 @@
           "M98": { "severity": "warning", "text": "Okuma calls subprograms with CALL O_ and returns with RTS." }
         }
       }
+    },
+    "okumau10l": {
+      "label": "Okuma OSP-U10L / OSP-U100L",
+      "inherits": "okuma",
+      "inheritWords": true,
+      "source": "Okuma OSP-U100L/U10L Programming Manual EEL3-101-R1 (1998); see docs/manual-reviews/okuma-osp7000l-u10l.md. Same tables as the Okuma lathe until the differences from the P200L/P300L are recorded.",
+      "lathe": {}
+    },
+    "okuma7000l": {
+      "label": "Okuma OSP700L / OSP7000L",
+      "inherits": "okuma",
+      "inheritWords": true,
+      "source": "Okuma OSP7000L/OSP700L Programming 3812-E (1994); see docs/manual-reviews/okuma-osp7000l-u10l.md. Same tables as the Okuma lathe until the differences from the P200L/P300L are recorded.",
+      "lathe": {}
+    },
+    "generic": {
+      "label": "Generic",
+      "about": "For a program that isn't tied to one control: the common ISO (Fanuc-style) codes that most controls share.",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "mill": {},
+      "lathe": {},
+      "plasma": {},
+      "router": {}
     }
   },
   "cycleHelp": {

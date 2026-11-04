@@ -17,6 +17,7 @@ enum {
 typedef struct tstate {
     int inch, inc, per_rev, css;
     int cycle, dwell, sub, local, one_shot, zero_shift;
+    char corner[16]; /* Okuma G75/G76 on this line: L is the chamfer or rounding size */
     const gc_json *lib;
     char motion[16], cycle_code[16], plane[16], unit_code[16], dist_code[16], feed_code[16], spin_code[16];
     char comp[16], tlen[16], wcs[48], spin_dir[16], cool[16], torch[16];
@@ -143,8 +144,20 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
             if (!t[0] || !strchr("XZUW", t[0])) continue;
             const char *p = t + 1;
             if (*p == '-' || *p == '+') p++;
-            if (gc_is_digit((unsigned char)*p) || *p == '.' || *p == '#' || *p == '[' || t[1] == '=') st->zero_shift = 1;
+            if (gc_is_digit((unsigned char)*p) || *p == '.' || *p == '#' || *p == '[' || t[1] == '=' ||
+                (p != t + 1 && gc_is_alpha((unsigned char)*p)))
+                st->zero_shift = 1;
         }
+    /* Okuma automatic chamfer or rounding (G75, G76): L on that line is the corner's size */
+    st->corner[0] = '\0';
+    for (int i = 0; i < l->ntok && !st->corner[0]; i++) {
+        const char *t = l->tok[i];
+        if (t[0] != 'G' || !gc_is_digit((unsigned char)t[1])) continue;
+        char k[16], kl[24];
+        gc_pad2(t, k, sizeof k);
+        snprintf(kl, sizeof kl, "%s.L", k);
+        if (gc_entry(c, kl)) snprintf(st->corner, sizeof st->corner, "%s", k);
+    }
     st->lib = NULL;
     st->chg = 0;
     if (st->one_shot) {
@@ -353,6 +366,8 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     if (!gc_is_alpha((unsigned char)t[0]) && t[0] != '#' && t[0] != '/') { /* text that isn't a word, kept as written */
         if (!strcmp(t, ";")) cell_set(cell, ";", NULL, "End of block (;)", 0);
         else if (!strcmp(t, "%")) cell_set(cell, "%", NULL, "Program start or end mark (%), kept as written", 0);
+        else if (!strcmp(t, "\x1a"))
+            cell_set(cell, "EOF", NULL, "End-of-file mark (Ctrl+Z) that older systems write after the last line, kept as written", 0);
         else {
             snprintf(e, sizeof e, "?%s", t);
             snprintf(d, sizeof d, "%s isn't G-code GlossCode can read. It's kept as written.", t);
@@ -421,7 +436,21 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1]) && t[0] != 'N') { /* CALL, RTS, GOTO */
         const gc_json *en = gc_entry(c, t);
-        if (en) {
+        /* A statement with arguments (Okuma PS LC,[0,0],[-2,55]) reads by its first word, and the rest as written */
+        size_t w1 = 0;
+        while (t[w1] >= 'A' && t[w1] <= 'Z') w1++;
+        char first[32];
+        const gc_json *e1 = NULL;
+        if (!en && t[w1] && w1 < sizeof first) {
+            memcpy(first, t, w1);
+            first[w1] = '\0';
+            e1 = gc_entry(c, first);
+        }
+        if (e1) {
+            char ee[600];
+            snprintf(ee, sizeof ee, "%s%s", js_str(style_get(e1, sk)), t + w1);
+            cell_set(cell, ee, NULL, js_str(gc_json_get(e1, "desc")), 0);
+        } else if (en) {
             cell_set(cell, js_str(style_get(en, sk)), NULL, js_str(gc_json_get(en, "desc")), 0);
         } else {
             snprintf(e, sizeof e, "?%s", t);
@@ -501,6 +530,15 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     char Ls[2] = { L, '\0' };
     const gc_json *a = gc_json_get(gc_json_get(c->data->words, "address"), Ls);
     if (!a) {
+        if (L == 'L' && st->corner[0]) { /* Okuma G75/G76: the chamfer or rounding size */
+            char kl[24];
+            snprintf(kl, sizeof kl, "%s.L", st->corner);
+            const gc_json *x = gc_entry(c, kl);
+            snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+            snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(x, "desc")), v);
+            cell_set(cell, e, NULL, d, f.implied ? GC_CELL_IMPLIED : 0);
+            return;
+        }
         /* Okuma lathes give an arc's radius with L (G03 X Z L), where other controls use R */
         const char *ar = gc_json_get_str(c->dialect, "arcRadius");
         if (ar && ar[0] == L && !ar[1] && (!strcmp(st->motion, "G02") || !strcmp(st->motion, "G03")) && !st->cycle_code[0]) {

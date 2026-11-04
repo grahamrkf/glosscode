@@ -189,6 +189,19 @@ char **gc_tokenize(const char *s, size_t len, int *ntok)
                 if (e == len || !is_word_char((unsigned char)s[e])) kl = e - i;
             }
             for (size_t k = 0; k < sizeof KEYWORDS / sizeof *KEYWORDS && !kl; k++) kl = match_word(s, len, i, KEYWORDS[k]);
+            /* Okuma graphic display statements at the start of a block (DEF WORK, PS LC,[..],[..], END, CLEAR, DRAW): one word each */
+            if (!kl && (n == 0 || (n == 1 && out[0][0] == '/'))) {
+                static const char *const GRAPHIC[] = { "DEF", "PS", "END", "CLEAR", "DRAW" };
+                int g = 0;
+                for (size_t k = 0; k < sizeof GRAPHIC / sizeof *GRAPHIC && !g; k++) g = match_word(s, len, i, GRAPHIC[k]) > 0;
+                if (g) {
+                    size_t e = i;
+                    while (e < len && s[e] != '(') e++;
+                    push_tok(&out, &n, &cap, single_spaced(s + i, e - i));
+                    i = e;
+                    continue;
+                }
+            }
             if (kl) {
                 char *t = gc_strndup(s + i, kl);
                 for (char *p = t; *p; p++) *p = (char)gc_to_upper((unsigned char)*p);
@@ -235,6 +248,18 @@ char **gc_tokenize(const char *s, size_t len, int *ntok)
         if (j < len && (s[j] == '-' || s[j] == '+')) {
             sign = s[j++];
             while (j < len && is_space((unsigned char)s[j])) j++;
+        }
+        if (sign && j < len && gc_is_alpha((unsigned char)s[j])) { /* Okuma: Z-V10 */
+            size_t e = expr_end(s, len, j);
+            char *v = squeeze(s + j, e - j);
+            char *t = gc_xmalloc(strlen(v) + 3);
+            t[0] = (char)gc_to_upper(ch);
+            t[1] = sign;
+            strcpy(t + 2, v);
+            free(v);
+            push_tok(&out, &n, &cap, t);
+            i = e;
+            continue;
         }
         if (j < len && (s[j] == '#' || s[j] == '[')) {
             size_t e = j;

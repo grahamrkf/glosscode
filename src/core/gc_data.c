@@ -179,7 +179,19 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
     if (!c->type || (strcmp(c->type, "lathe") != 0 && !gc_json_is_obj(gc_json_get(types, c->type)))) c->type = "mill";
     c->base_type = gc_json_get_str(gc_json_get(types, c->type), "base");
     c->lathe = strcmp(c->type, "lathe") == 0;
-    c->okuma = strcmp(c->brand, "okuma") == 0;
+    /* Okuma's own language on any Okuma control (okuma, okumau10l, okuma7000l): the word chain reaches "okuma"
+       (isOkuma() in the mockup) */
+    c->okuma = 0;
+    {
+        const gc_json *ds = gc_json_get(data->rules, "dialects");
+        const char *b = c->brand;
+        for (int depth = 0; b && depth < 16; depth++) {
+            if (strcmp(b, "okuma") == 0) c->okuma = 1;
+            const gc_json *d = gc_json_get(ds, b);
+            if (!d || gc_json_get(d, "inheritWords") == NULL || gc_json_get(d, "inheritWords")->type != GC_JTRUE) break;
+            b = gc_json_get_str(d, "inherits");
+        }
+    }
 
     const gc_json *dialects = gc_json_get(data->rules, "dialects");
     const char *chain[16];
@@ -359,10 +371,12 @@ static int lib_fits(const gc_ctx *c, const gc_json *e)
     char a[64], b[64];
     snprintf(a, sizeof a, "%s.%s", c->brand, c->type);
     snprintf(b, sizeof b, "fanuc.%s", c->type);
-    int haas = strcmp(c->brand, "haas") == 0;
+    /* EXTENDS: Haas and Generic run Fanuc-style programs; the older Okuma lathe controls run Okuma ones */
+    if (!strcmp(c->brand, "okumau10l") || !strcmp(c->brand, "okuma7000l")) snprintf(b, sizeof b, "okuma.%s", c->type);
+    int ext = !strcmp(c->brand, "haas") || !strcmp(c->brand, "generic") || !strcmp(c->brand, "okumau10l") || !strcmp(c->brand, "okuma7000l");
     for (size_t i = 0; i < gc_json_len(ms); i++) {
         const char *id = gc_json_str(ms->items[i]);
-        if (id && (strcmp(id, a) == 0 || (haas && strcmp(id, b) == 0))) return 1;
+        if (id && (strcmp(id, a) == 0 || (ext && strcmp(id, b) == 0))) return 1;
     }
     return 0;
 }
@@ -394,7 +408,7 @@ void gc_fmt_num(const gc_ctx *c, char L, const char *raw, int inch, gc_num *out)
     if (!raw || !*raw) return;
     {   /* a macro variable or expression: worked out when the line runs */
         const char *p = (raw[0] == '-' || raw[0] == '+') ? raw + 1 : raw;
-        if (*p == '#' || *p == '[' || raw[0] == '=') {
+        if (*p == '#' || *p == '[' || raw[0] == '=' || (p != raw && gc_is_alpha((unsigned char)*p))) {
             snprintf(out->v, sizeof out->v, "%s", raw);
             return;
         }
