@@ -50,6 +50,7 @@
   "dialects": {
     "fanuc": {
       "label": "Fanuc-style (0i, 30i and compatibles)",
+      "about": "On a lathe these are G code system A, the Fanuc default. A lathe set to system B or C has its own control.",
       "verified": true,
       "mill": {
         "source": { "manual": "FANUC Series 0i-MODEL F Operator's Manual, Machining Center System B-64604EN-2/01", "revision": "1st edition", "section": "Part II Programming: G code list, canned cycles, compensation, Series 10/11 format" },
@@ -499,6 +500,7 @@
 
     "mazak": {
       "label": "Mazak EIA/ISO (Mazatrol M Plus, 640M, T-Plus, 640T, Matrix)",
+      "about": "On a lathe these are G code system A. Mazak lathes default to system B (parameter P9), which has its own control.",
       "inherits": "fanuc",
       "inheritWords": true,
       "verified": false,
@@ -599,6 +601,15 @@
       "inherits": "fanuc",
       "inheritWords": true,
       "verified": false,
+      "lathe": {
+        "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Lathe System IB-1501275-U", "section": "G code lists 2, 4 and 6 (pp. 23-26), close to Fanuc system A; see docs/manual-reviews/mitsubishi-m800-m700.md" },
+        "modalGroups": {
+          "distance":  ["G190", "G191"]
+        },
+        "foreign": {
+          "G91": { "severity": "warning", "text": "On a Mitsubishi lathe with G code list 2, 4 or 6, incremental positions are G191 (or U and W); for G90/G91 pick the list 3, 5 or 7 control." }
+        }
+      },
       "mill": {
         "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Machining Center System IB-1501277", "revision": "P", "section": "G code list, dwell, fixed cycles, subprograms" },
         "modalGroups": {
@@ -737,7 +748,7 @@
     },
 
     "okuma": {
-      "label": "Okuma OSP (P300 and later)",
+      "label": "Okuma OSP-P200/P300 and later",
       "inherits": "fanuc",
       "verified": true,
       "keywords": ["CALL", "RTS", "GOTO", "IF", "NAT", "MODIN", "MODOUT"],
@@ -869,6 +880,201 @@
       "source": "Okuma OSP7000L/OSP700L Programming 3812-E (1994); see docs/manual-reviews/okuma-osp7000l-u10l.md. Same tables as the Okuma lathe until the differences from the P200L/P300L are recorded.",
       "lathe": {}
     },
+    "fanuclb": {
+      "label": "Fanuc lathe, G code system B",
+      "about": "A Fanuc lathe with parameter 3401 set to G code system B: G90/G91 absolute and incremental, G92 sets coordinates and the spindle limit, G94/G95 feeds, G77/G78/G79 turning cycles.",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "verified": false,
+      "lathe": {
+        "source": { "manual": "FANUC Series 0i-MODEL F Operator's Manual, Lathe System B-64604EN-1/01 (and 0i-D B-64304EN-1/02)", "section": "G code list for systems A, B and C (pp. 12-15); see docs/manual-reviews/fanuc-lathe-and-series-0.md" },
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G33", "G77", "G78", "G79"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G94", "G95"]
+        },
+        "speedClamp": { "code": "G92", "word": "S" },
+        "programOrderCodes": ["M00", "M01", "M02", "M30", "M06", "M97", "M98", "M99", "G65", "G04", "G10", "G28", "G30", "G53", "G92"],
+        "cycles": {
+          "G90": null, "G92": null, "G94": null,
+          "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+        "foreign": {
+          "G91": null,
+          "G32": { "severity": "error", "text": "In G code system B threading is G33, not G32 (system A)." },
+          "G50": { "severity": "warning", "text": "In G code system B G92 sets coordinates and the spindle limit; G50 is system A." },
+          "G98": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." },
+          "G99": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." }
+        }
+      }
+    },
+
+    "fanuclc": {
+      "label": "Fanuc lathe, G code system C",
+      "about": "A Fanuc lathe with parameter 3401 set to G code system C: as system B, but inch and metric are G70/G71, the repetitive cycles are G72 to G78 and the turning cycles G20/G21/G24.",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "verified": false,
+      "lathe": {
+        "source": { "manual": "FANUC Series 0i-MODEL F Operator's Manual, Lathe System B-64604EN-1/01 (and 0i-D B-64304EN-1/02)", "section": "G code list for systems A, B and C (pp. 12-15); see docs/manual-reviews/fanuc-lathe-and-series-0.md" },
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G33", "G20", "G21", "G24"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G94", "G95"],
+          "units":     ["G70", "G71"]
+        },
+        "unitCodes": { "inch": "G70", "mm": "G71" },
+        "cycleCatsByName": true,
+        "speedClamp": { "code": "G92", "word": "S" },
+        "programOrderCodes": ["M00", "M01", "M02", "M30", "M06", "M97", "M98", "M99", "G65", "G04", "G10", "G28", "G30", "G53", "G92"],
+        "cycles": {
+          "G70": null, "G71": null, "G90": null, "G92": null, "G94": null,
+          "G72": { "name": "Finish contour", "requires": ["P", "Q"], "optional": ["F", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G73": { "name": "OD/ID roughing", "requires": ["P", "Q"], "optional": ["U", "W", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Two-block format on most Fanuc controls; this table checks the second block." },
+          "G74": { "name": "Face roughing", "requires": ["P", "Q"], "optional": ["U", "W", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G75": { "name": "Pattern repeat", "requires": ["P", "Q"], "optional": ["U", "W", "R", "F", "S", "T"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G76": { "name": "Face peck or groove", "requires": ["Z"], "optional": ["X", "U", "W", "P", "Q", "R", "F"], "meaning": {"Z": "the bottom of the peck"}, "modal": false, "feed": true, "spindle": true },
+          "G77": { "name": "OD/ID peck groove", "requires": ["X"], "optional": ["Z", "U", "W", "P", "Q", "R", "F"], "meaning": {"X": "the groove bottom diameter"}, "modal": false, "feed": true, "spindle": true },
+          "G78": { "name": "Threading", "requires": ["X", "Z", "P", "Q", "F"], "optional": ["R", "U", "W"], "modal": false, "spindle": true, "leadF": true },
+          "G20": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G21": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G24": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+        "foreign": {
+          "G91": null,
+          "G32": { "severity": "error", "text": "In G code system C threading is G33, not G32 (system A)." },
+          "G50": { "severity": "warning", "text": "In G code system C G92 sets coordinates and the spindle limit; G50 is system A." },
+          "G98": { "severity": "info", "text": "In G code system C G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." },
+          "G99": { "severity": "info", "text": "In G code system C G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." }
+        }
+      }
+    },
+
+    "mazaklb": {
+      "label": "Mazak EIA/ISO lathe, G code system B",
+      "about": "A Mazak lathe with parameter P9 set to G code system B, the default when both bits are 0.",
+      "inherits": "mazak",
+      "inheritWords": true,
+      "verified": false,
+      "lathe": {
+        "source": { "manual": "Mazak EIA/ISO Programming Manual C734PBT018E (Mazatrol turning)", "section": "G code systems A, B and C (3-10 to 3-12); see docs/manual-reviews/mazak-eia.md" },
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G33", "G77", "G78", "G79"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G94", "G95"]
+        },
+        "speedClamp": { "code": "G92", "word": "S" },
+        "programOrderCodes": ["M00", "M01", "M02", "M30", "M06", "M97", "M98", "M99", "G65", "G04", "G10", "G28", "G30", "G53", "G92"],
+        "cycles": {
+          "G90": null, "G92": null, "G94": null,
+          "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+        "foreign": {
+          "G91": null,
+          "G32": { "severity": "error", "text": "In G code system B threading is G33, not G32 (system A)." },
+          "G50": { "severity": "warning", "text": "In G code system B G92 sets coordinates and the spindle limit; G50 is system A." },
+          "G98": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." },
+          "G99": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." }
+        }
+      }
+    },
+
+    "mazaklc": {
+      "label": "Mazak EIA/ISO lathe, G code system C",
+      "about": "A Mazak lathe with parameter P9 set to G code system C.",
+      "inherits": "mazak",
+      "inheritWords": true,
+      "verified": false,
+      "lathe": {
+        "source": { "manual": "Mazak EIA/ISO Programming Manual C734PBT018E (Mazatrol turning)", "section": "G code systems A, B and C (3-10 to 3-12); see docs/manual-reviews/mazak-eia.md" },
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G33", "G20", "G21", "G24"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G94", "G95"],
+          "units":     ["G70", "G71"]
+        },
+        "unitCodes": { "inch": "G70", "mm": "G71" },
+        "cycleCatsByName": true,
+        "speedClamp": { "code": "G92", "word": "S" },
+        "programOrderCodes": ["M00", "M01", "M02", "M30", "M06", "M97", "M98", "M99", "G65", "G04", "G10", "G28", "G30", "G53", "G92"],
+        "cycles": {
+          "G70": null, "G71": null, "G90": null, "G92": null, "G94": null,
+          "G72": { "name": "Finish contour", "requires": ["P", "Q"], "optional": ["A", "F", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G73": { "name": "OD/ID roughing", "requires": ["P", "Q"], "optional": ["A", "U", "W", "D", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Standard mode uses two blocks (G71 U R, then G71 A P Q U W F); T32 mode uses one block with D as the depth. A names the program that holds the finish shape." },
+          "G74": { "name": "Face roughing", "requires": ["P", "Q"], "optional": ["A", "U", "W", "D", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G75": { "name": "Pattern repeat", "requires": ["P", "Q"], "optional": ["A", "U", "W", "I", "K", "D", "R", "F", "S", "T"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+          "G76": { "name": "Face peck or groove", "requires": ["Z"], "optional": ["X", "U", "W", "I", "K", "D", "P", "Q", "R", "F", "S", "T"], "meaning": {"Z": "the bottom of the peck"}, "modal": false, "feed": true, "spindle": true },
+          "G77": { "name": "OD/ID peck groove", "requires": ["X"], "optional": ["Z", "U", "W", "I", "K", "D", "P", "Q", "R", "F", "S", "T"], "meaning": {"X": "the groove bottom diameter"}, "modal": false, "feed": true, "spindle": true },
+          "G78": { "name": "Threading", "requires": ["X", "Z", "F"], "optional": ["U", "W", "P", "Q", "R", "I", "K", "D", "A", "E", "S", "T"], "modal": false, "spindle": true, "leadF": true, "note": "Standard mode uses two blocks (G76 P Q R, then G76 X Z R P Q F); T32 mode uses one block, G76 X Z I K D A F." },
+          "G20": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G21": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G24": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+        "foreign": {
+          "G91": null,
+          "G32": { "severity": "error", "text": "In G code system C threading is G33, not G32 (system A)." },
+          "G50": { "severity": "warning", "text": "In G code system C G92 sets coordinates and the spindle limit; G50 is system A." },
+          "G98": { "severity": "info", "text": "In G code system C G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." },
+          "G99": { "severity": "info", "text": "In G code system C G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." }
+        }
+      }
+    },
+    "mitsubishilb": {
+      "label": "Mitsubishi M800/M80 lathe, G code list 3, 5 or 7",
+      "about": "A Mitsubishi lathe whose cmdtyp parameter picks G code list 3, 5 or 7, close to Fanuc system B: G33 threads, G77/G78/G79 cycles, G92 spindle clamp, G94/G95 feeds.",
+      "inherits": "mitsubishi",
+      "inheritWords": true,
+      "verified": false,
+      "lathe": {
+        "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Lathe System IB-1501275-U", "section": "G code lists 3, 5 and 7 (pp. 23-26); see docs/manual-reviews/mitsubishi-m800-m700.md" },
+        "modalGroups": {
+          "motion":    ["G00", "G01", "G02", "G03", "G33", "G77", "G78", "G79"],
+          "distance":  ["G90", "G91"],
+          "feed mode": ["G94", "G95"]
+        },
+        "speedClamp": { "code": "G92", "word": "S" },
+        "programOrderCodes": ["M00", "M01", "M02", "M30", "M06", "M97", "M98", "M99", "G65", "G04", "G10", "G28", "G30", "G53", "G92"],
+        "cycles": {
+          "G90": null, "G92": null, "G94": null,
+          "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+          "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+          "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+        },
+        "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+        "foreign": {
+          "G91": null,
+          "G32": { "severity": "error", "text": "In G code system B threading is G33, not G32 (system A)." },
+          "G50": { "severity": "warning", "text": "In G code system B G92 sets coordinates and the spindle limit; G50 is system A." },
+          "G98": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." },
+          "G99": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." }
+        }
+      }
+    },
+    "fanuc0": {
+      "label": "Fanuc Series 0 / 00 / 0-Mate",
+      "about": "The 1990s Fanuc Series 0 machining center control. It reads like the 0i-F mill but has no inverse time feed (G93), uses G150-G152 for normal direction control and G05 for high-speed cycle machining.",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "verified": false,
+      "mill": {
+        "source": { "manual": "FANUC Series 0/00/0-Mate Operator's Manual, Machining Center B-61404E/08", "section": "G code list (pp. 28-31), dwell (p. 63), subprograms (p. 129); see docs/manual-reviews/fanuc-lathe-and-series-0.md" },
+        "modalGroups": {
+          "feed mode": ["G94", "G95"]
+        },
+        "foreign": {
+          "G93": { "severity": "error", "text": "The Fanuc Series 0 has no inverse time feed (G93)." }
+        }
+      }
+    },
+
     "generic": {
       "label": "Generic",
       "about": "For a program that isn't tied to one control: the common ISO (Fanuc-style) codes that most controls share.",
