@@ -18,7 +18,7 @@ static gc_data *DATA;
 static char *STARTUP_FILE;
 
 static const nfdu8filteritem_t FILTERS[] = {
-    { "G-code programs", "nc,ngc,tap,gcode,cnc,min,ssb,eia,mpf,spf,txt" },
+    { "CNC programs", "nc,ngc,tap,gcode,cnc,min,ssb,eia,mpf,spf,h,txt" },
 };
 
 /* ---------- Data ---------- */

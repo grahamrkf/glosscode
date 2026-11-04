@@ -30,6 +30,8 @@ typedef struct tstate {
     double pos[3];
     const char *pos_w[3];
     const char *cyc_r, *cyc_q;
+    char kl_def[16]; /* Klartext: the cycle number while a CYCL DEF's Q parameter lines go on */
+    int kl_cont;     /* Klartext: this line ends in "~", so the block goes on in the next line */
 } tstate;
 
 /* Copies a code into a fixed field, cutting it short if it's ever longer than any real code. */
@@ -105,6 +107,43 @@ static double num_value(const gc_ctx *c, const char *t, int inch)
 
 static void track_carry(const gc_ctx *c, const gc_line *l, tstate *st)
 {
+    if (c->syntax == GC_SYN_KLARTEXT) { /* only a path function moves the tool; IX IY IZ move it from where it is, polar moves aren't followed */
+        char h[64];
+        if (!gc_kl_head(c, l, h, sizeof h) || !gc_kl_move(h)) return;
+        if (!strcmp(h, "LP") || !strcmp(h, "CP") || !strcmp(h, "CTP") || gc_starts_with(h, "APPR P") || gc_starts_with(h, "DEP P"))
+            for (int a = 0; a < 2; a++) {
+                st->has_pos[a] = 0;
+                st->pos_w[a] = NULL;
+            }
+        static const char AX[3] = { 'X', 'Y', 'Z' };
+        for (int a = 0; a < 3; a++) {
+            const char *ta = NULL, *ti = NULL;
+            int q = 0;
+            char la[2] = { AX[a], 0 };
+            for (int i = 0; i < l->ntok; i++) {
+                const char *t = l->tok[i], *v = t[0] == 'I' && t[1] == AX[a] ? t + 2 : t[0] == AX[a] ? t + 1 : NULL;
+                if (!v) continue;
+                if ((*v == '-' || *v == '+') && v[1] == 'Q') q = 1;
+                if (*v == 'Q') q = 1;
+                if (!ta && is_value_word(t, la)) ta = t;
+                if (!ti && t[0] == 'I' && is_value_word(t + 1, la)) ti = t;
+            }
+            if (q) {
+                st->has_pos[a] = 0;
+                st->pos_w[a] = NULL;
+                continue;
+            }
+            if (ta) {
+                st->pos[a] = gc_js_parse_float(ta + 1);
+                st->has_pos[a] = 1;
+                st->pos_w[a] = ta;
+            } else if (ti) {
+                if (st->has_pos[a]) st->pos[a] += gc_js_parse_float(ti + 2);
+                st->pos_w[a] = NULL;
+            }
+        }
+        return;
+    }
     if (st->cycle)
         for (int i = 0; i < l->ntok; i++) {
             if (is_value_word(l->tok[i], "R")) st->cyc_r = l->tok[i];
@@ -327,6 +366,48 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
         if (!strcmp(k, "M97")) st->local = 1;
         if (!strcmp(k, "G65")) st->lib = gc_lib_for(c, l);
     }
+    if (c->syntax == GC_SYN_KLARTEXT) { /* klModes() in the mockup */
+        if (!st->kl_cont) st->kl_def[0] = '\0';
+        const char *last = l->ntok ? l->tok[l->ntok - 1] : "";
+        size_t ll = strlen(last);
+        while (ll && (last[ll - 1] == ' ' || last[ll - 1] == '\t' || last[ll - 1] == '\r' || last[ll - 1] == '\n' || last[ll - 1] == '\f' || last[ll - 1] == '\v')) ll--;
+        st->kl_cont = !strcmp(last, "~") || (last[0] == ';' && ll && last[ll - 1] == '~');
+        for (int i = 0; i < l->ntok; i++) {
+            const char *t = l->tok[i];
+            char k[64];
+            if (!gc_kl_key(c, t, k, sizeof k)) continue;
+            if (!strcmp(k, "CYCL DEF")) {
+                size_t n = 0;
+                while (gc_is_digit((unsigned char)t[9 + n]) && n < sizeof st->kl_def - 1) n++;
+                memcpy(st->kl_def, t + 9, n);
+                st->kl_def[n] = '\0';
+            }
+            if (!strcmp(k, "BEGIN PGM")) {
+                size_t tl = strlen(t);
+                if (tl >= 3 && !strcmp(t + tl - 3, " MM")) {
+                    st->inch = 0;
+                    SET(unit_code, "G21");
+                    CHG(CH_UNITS);
+                }
+                if (tl >= 5 && !strcmp(t + tl - 5, " INCH")) {
+                    st->inch = 1;
+                    SET(unit_code, "G20");
+                    CHG(CH_UNITS);
+                }
+            }
+            if (gc_kl_move(k)) {
+                int arc = gc_kl_arc(k);
+                SET(motion, arc ? (gc_line_has_tok(l, "DR+") ? "G03" : "G02") : gc_line_has_tok(l, "FMAX") ? "G00" : "G01");
+                CHG(CH_MOTION);
+            }
+        }
+        static const char *const CP[][2] = { { "RL", "G41" }, { "RR", "G42" }, { "R0", "G40" } };
+        for (size_t i = 0; i < 3; i++)
+            if (gc_line_has_tok(l, CP[i][0])) {
+                SET(comp, CP[i][1]);
+                CHG(CH_COMP);
+            }
+    }
 #undef CHG
     track_carry(c, l, st);
 }
@@ -524,6 +605,216 @@ static int fagor55_word(const gc_ctx *c, const char *t, gc_cell *cell)
     return 1;
 }
 
+/* /^[-+]?\d*\.?\d+$/ */
+static int kl_is_num(const char *s)
+{
+    if (*s == '-' || *s == '+') s++;
+    size_t d = 0;
+    while (gc_is_digit((unsigned char)s[d])) d++;
+    if (!s[d]) return d > 0;
+    if (s[d] != '.' || !gc_is_digit((unsigned char)s[d + 1])) return 0;
+    return gc_all_digits(s + d + 1);
+}
+
+/* Heidenhain Klartext: block numbers, "~", names in quotes, functions and statements by their dictionary key,
+   Q parameters (inside a CYCL DEF, by the cycle's name for them), pattern points and named words (IX, RL, DR+, FMAX).
+   Returns 0 for a word read the way G code is (X Y Z F S M T G with a number): klWord() in the mockup. */
+static int kl_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell)
+{
+    char e[1024], d[1024], key[64];
+    const char *sk = style_key(c);
+    const gc_json *addr = gc_json_get(c->data->words, "address");
+    if (gc_all_digits(t)) {
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(gc_json_get(addr, "N"), sk)), t);
+        snprintf(d, sizeof d, "Block %s", t);
+        cell_set(cell, e, NULL, d, 0);
+        return 1;
+    }
+    if (!strcmp(t, "~")) {
+        cell_set(cell, "~", NULL, "The block goes on in the next line", 0);
+        return 1;
+    }
+    if (t[0] == '"') {
+        cell_set(cell, t, NULL, "A name, as written", 0);
+        return 1;
+    }
+    if (gc_kl_key(c, t, key, sizeof key)) {
+        const gc_json *en = gc_entry(c, key);
+        const char *rest = gc_starts_with(key, "FN ") ? strchr(t, ':') + 1 : t + strlen(key);
+        snprintf(d, sizeof d, "%s", js_str(gc_json_get(en, "desc")));
+        if (!strcmp(key, "CYCL DEF") && rest[0] == ' ' && gc_is_digit((unsigned char)rest[1])) {
+            size_t k = 1;
+            char n[32];
+            while (gc_is_digit((unsigned char)rest[k])) k++;
+            snprintf(n, sizeof n, "%.*s", (int)(k - 1 < 31 ? k - 1 : 31), rest + 1);
+            const char *nm = gc_json_get_str(gc_json_get(c->dialect, "klCycles"), n);
+            if (nm) {
+                size_t dl = strlen(d);
+                snprintf(d + dl, sizeof d - dl, ". Cycle %s: %s", n, nm);
+            }
+        }
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(en, sk)), rest);
+        cell_set(cell, e, NULL, d, 0);
+        return 1;
+    }
+    { /* Q1 = 5, Q200=+2 */
+        size_t k = 0;
+        if (t[0] == 'Q') {
+            k = 1;
+            if (t[k] == 'L' || t[k] == 'R' || t[k] == 'S') k++;
+            size_t dg = k;
+            while (gc_is_digit((unsigned char)t[k])) k++;
+            if (k == dg) {
+                k = 1; /* QL without digits: Q alone then needs digits */
+                while (gc_is_digit((unsigned char)t[k])) k++;
+                if (k == 1) k = 0;
+            }
+        }
+        if (k) {
+            size_t q = k;
+            if (t[q] == ' ') q++;
+            if (t[q] == '=') {
+                q++;
+                if (t[q] == ' ') q++;
+                char name[32];
+                const char *val = t + q;
+                snprintf(name, sizeof name, "%.*s", (int)(k < 31 ? k : 31), t);
+                int num = kl_is_num(val);
+                gc_num f;
+                if (num) gc_fmt_num(c, 'Q', val, st ? st->inch : 1, &f);
+                const char *v = num ? f.v : val;
+                const gc_json *qp = st && st->kl_def[0] ? gc_json_get(gc_json_get(c->dialect, "qParams"), name) : NULL;
+                if (qp) {
+                    snprintf(e, sizeof e, "%s%s", js_str(gc_json_at(qp, 0)), v);
+                    snprintf(d, sizeof d, "%s (%s, cycle %s)", js_str(gc_json_at(qp, 1)), name, st->kl_def);
+                } else {
+                    snprintf(e, sizeof e, "%s", t);
+                    if (num) snprintf(d, sizeof d, "Sets Q parameter %s to %s", name, v);
+                    else snprintf(d, sizeof d, "Sets Q parameter %s to %s, worked out when the line runs", name, val);
+                }
+                cell_set(cell, e, NULL, d, 0);
+                return 1;
+            }
+        }
+    }
+    { /* a pattern point: POS1(X+25 Y+33 Z+0) */
+        static const char *const PT[][2] = { { "POS", "POINT" }, { "ROW", "ROW" }, { "PAT", "PATTERN" }, { "FRAME", "FRAME" }, { "CIRC", "CIRCLE" }, { "PITCHCIRC", "PITCHCIRCLE" } };
+        size_t a = 0, tl = strlen(t);
+        while (t[a] >= 'A' && t[a] <= 'Z') a++;
+        size_t b = a;
+        while (gc_is_digit((unsigned char)t[b])) b++;
+        if (a && t[b] == '(' && tl && t[tl - 1] == ')')
+            for (size_t p = 0; p < sizeof PT / sizeof *PT; p++)
+                if (strlen(PT[p][0]) == a && !strncmp(t, PT[p][0], a)) {
+                    char low[16];
+                    size_t m = 0;
+                    for (; PT[p][1][m] && m < sizeof low - 1; m++) low[m] = (char)(PT[p][1][m] - 'A' + 'a');
+                    low[m] = '\0';
+                    snprintf(e, sizeof e, "%s%.*s %.*s", PT[p][1], (int)(b - a), t + a, (int)(tl - b - 2), t + b + 1);
+                    snprintf(d, sizeof d, "Pattern %s %.*s: %.*s", low, (int)(b - a), t + a, (int)(tl - b - 2), t + b + 1);
+                    cell_set(cell, e, NULL, d, 0);
+                    return 1;
+                }
+    }
+    if (t[0] && strchr("XYZABCFS", t[0])) { /* an axis, feed or speed from a Q parameter: X+Q10, FQ5 */
+        const char *p = t + 1;
+        if (*p == '-' || *p == '+') p++;
+        if (*p == 'Q') {
+            size_t k = 1;
+            if (p[k] == 'L' || p[k] == 'R' || p[k] == 'S') k++;
+            size_t dg = k;
+            while (gc_is_digit((unsigned char)p[k])) k++;
+            int ok = k > dg && !p[k];
+            if (!ok) { /* Q[LRS]? backtracks: QL5 needs the digits right after Q then */
+                k = 1;
+                while (gc_is_digit((unsigned char)p[k])) k++;
+                ok = k > 1 && !p[k];
+            }
+            if (ok) {
+                char L[2] = { t[0], 0 };
+                const gc_json *a = gc_json_get(addr, L);
+                const char *head = L;
+                if (!strchr("FS", t[0]) && a) {
+                    const gc_json *ab = gc_json_get(a, "abs");
+                    head = js_str(style_get(gc_json_truthy(ab) ? ab : a, sk));
+                }
+                const char *q = t + 1;
+                if (*q == '-' || *q == '+') q++;
+                snprintf(e, sizeof e, "%s%s", head, t + 1);
+                snprintf(d, sizeof d, "%c from Q parameter %s, worked out when the line runs", t[0], q);
+                cell_set(cell, e, NULL, d, 0);
+                return 1;
+            }
+        }
+    }
+    if (!(t[0] >= 'A' && t[0] <= 'Z')) return 0;
+    char name[64];
+    size_t nl = 0;
+    while (t[nl] >= 'A' && t[nl] <= 'Z' && nl < sizeof name - 8) nl++;
+    memcpy(name, t, nl);
+    name[nl] = '\0';
+    const char *val = t + nl;
+    const gc_json *KW = gc_json_get(c->dialect, "klWords");
+    if (gc_is_digit((unsigned char)val[0])) { /* DR2+0.05: a name ending in digits */
+        size_t k = 0;
+        while (gc_is_digit((unsigned char)val[k])) k++;
+        if ((val[k] == '-' || val[k] == '+') && k < 8) {
+            char nd[72];
+            snprintf(nd, sizeof nd, "%s%.*s", name, (int)k, val);
+            if (gc_json_truthy(gc_json_get(KW, nd))) {
+                snprintf(name, sizeof name, "%s", nd);
+                val += k;
+            }
+        }
+    }
+    if (!name[1] && strchr("XYZFSMGT", name[0])) return 0;
+    gc_num f;
+    const char *v = "";
+    if (val[0] && strcmp(val, "+") != 0 && strcmp(val, "-") != 0) {
+        gc_fmt_num(c, 'X', val, st ? st->inch : 1, &f);
+        v = f.v;
+    }
+    if (!name[1] && strchr("ABC", name[0])) {
+        snprintf(e, sizeof e, "%s%s", name, v);
+        snprintf(d, sizeof d, "%s axis position %s", name, v);
+        cell_set(cell, e, NULL, d, 0);
+        return 1;
+    }
+    if (!strcmp(name, "R") && val[0]) { /* /^[-+]?0*\.?0*$/ */
+        const char *p = val;
+        if (*p == '-' || *p == '+') p++;
+        while (*p == '0') p++;
+        if (*p == '.') p++;
+        while (*p == '0') p++;
+        if (!*p) {
+            cell_set(cell, js_str(style_get(gc_entry(c, "G40"), sk)), NULL, "No tool radius compensation", 0);
+            return 1;
+        }
+    }
+    if (!strcmp(name, "DR") && (!strcmp(val, "+") || !strcmp(val, "-"))) {
+        int ccw = val[0] == '+';
+        cell_set(cell, js_str(style_get(gc_entry(c, ccw ? "G03" : "G02"), sk)), NULL, ccw ? "The arc turns counterclockwise" : "The arc turns clockwise", 0);
+        return 1;
+    }
+    if (!strcmp(name, "DR")) {
+        snprintf(e, sizeof e, "DELTAR%s", v);
+        snprintf(d, sizeof d, "Tool radius oversize %s", v);
+        cell_set(cell, e, NULL, d, 0);
+        return 1;
+    }
+    const gc_json *k = gc_json_get(KW, name);
+    if (k) {
+        snprintf(e, sizeof e, "%s%s", js_str(gc_json_at(k, 0)), v);
+        snprintf(d, sizeof d, "%s%s%s", js_str(gc_json_at(k, 1)), v[0] ? " " : "", v);
+        cell_set(cell, e, NULL, d, 0);
+        return 1;
+    }
+    snprintf(e, sizeof e, "?%s", t);
+    snprintf(d, sizeof d, "%s isn't a Klartext word GlossCode knows.", name);
+    cell_set(cell, e, NULL, d, GC_CELL_UNKNOWN);
+    return 1;
+}
+
 static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell, int ref)
 {
     char e[256], d[512];
@@ -534,6 +825,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     if (c->syntax == GC_SYN_FAGOR8060 && fagor_word(c, t, st, cell)) return;
     if (c->syntax == GC_SYN_FAGOR8055 && fagor55_word(c, t, cell)) return;
+    if (c->syntax == GC_SYN_KLARTEXT && kl_word(c, t, st, cell)) return;
     if (!gc_is_alpha((unsigned char)t[0]) && t[0] != '#' && t[0] != '/') { /* text that isn't a word, kept as written */
         if (!strcmp(t, ";")) cell_set(cell, ";", NULL, "End of block (;)", 0);
         else if (!strcmp(t, "%")) cell_set(cell, "%", NULL, "Program start or end mark (%), kept as written", 0);
@@ -998,7 +1290,7 @@ void gc_translate(gc_ctx *c, gc_analysis *a)
     while (i < n && guard++ < limit) {
         const gc_line *l = &doc->lines[i];
         visit(&w, i, &st);
-        if (gc_is_end(l)) break;
+        if (gc_is_end(l, c->syntax)) break;
         if (gc_is_return(l, c->syntax) && depth) {
             i = stack[--depth];
             continue;

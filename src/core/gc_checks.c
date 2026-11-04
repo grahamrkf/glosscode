@@ -537,7 +537,7 @@ static void check_line(checker *ck, int li)
         }
         snprintf(st->tcLine, sizeof st->tcLine, "%s", nLabel);
     }
-    if (gc_is_end(l)) {
+    if (gc_is_end(l, c->syntax)) {
         if (st->cycle[0] && !has(&ln, "G80")) {
             V0();
             var(&vs, "cycle", st->cycle);
@@ -563,7 +563,7 @@ static void check_line(checker *ck, int li)
                 snprintf(st->torch, sizeof st->torch, "%s", ln.codes[i]);
                 st->torchWarned = 0;
             }
-        if (torchKnown && gc_is_end(l) && gc_json_has_str(Pon, st->torch)) {
+        if (torchKnown && gc_is_end(l, c->syntax) && gc_json_has_str(Pon, st->torch)) {
             V0();
             var(&vs, "code", st->torch);
             var(&vs, "off", js_or(gc_json_str(gc_json_at(Poff, 0))));
@@ -1111,6 +1111,170 @@ static int sev_rank(const char *s)
     return !strcmp(s, "error") ? 3 : !strcmp(s, "warning") ? 2 : !strcmp(s, "info") ? 1 : 0;
 }
 
+/* Klartext: the label a CALL LBL or an FN 9-12 jump names ("5" or "\"NAME\""), its length in *n, or NULL */
+static const char *kl_lbl_ref(const char *t, size_t *n)
+{
+    const char *p = NULL;
+    if (gc_starts_with(t, "CALL LBL ")) p = t + 9;
+    else if (gc_starts_with(t, "FN ")) {
+        const char *q = t + 3;
+        size_t d = 0;
+        while (gc_is_digit((unsigned char)q[d])) d++;
+        if (q[d] == ':' && ((d == 1 && q[0] == '9') || (d == 2 && q[0] == '1' && q[1] >= '0' && q[1] <= '2'))) p = strstr(t, " GOTO LBL ");
+        if (p) p += 10;
+    }
+    if (!p) return NULL;
+    size_t k = 0;
+    if (*p == '"') {
+        k = 1;
+        while (p[k] && p[k] != '"') k++;
+        if (p[k] != '"') return NULL;
+        k++;
+    } else
+        while (gc_is_digit((unsigned char)p[k])) k++;
+    if (!k) return NULL;
+    *n = k;
+    return p;
+}
+
+/* Klartext checks, in file order: block numbers, the program name, cycle calls with no CYCL DEF, calls and jumps to
+   labels that aren't there, the first feed move with no F or with the spindle stopped, and M codes that contradict.
+   checkKlartext() in the mockup. */
+static void check_klartext(checker *ck)
+{
+    const gc_ctx *c = ck->c;
+    const gc_doc *doc = c->doc;
+    int have_prev = 0, def = 0, F = 0, noF = 0, spinWarned = 0;
+    double prev = 0;
+    char begin[256] = "", spin[16] = "";
+    int have_begin = 0;
+    for (int li = 0; li < doc->nlines; li++) {
+        const gc_line *l = &doc->lines[li];
+        vars vs;
+        if (l->ntok && gc_all_digits(l->tok[0])) {
+            double n = gc_js_parse_int(l->tok[0]);
+            if (have_prev && n <= prev) {
+                vs.n = 0;
+                varnum(&vs, "n", n);
+                varnum(&vs, "prev", prev);
+                emit(ck, li, "block-number-order", &vs, NULL);
+            }
+            prev = n;
+            have_prev = 1;
+        }
+        char codes[16][16];
+        int nc = 0;
+        for (int i = 0; i < l->ntok; i++) {
+            const char *t = l->tok[i];
+            if (gc_is_comment(t, c->syntax)) continue;
+            if (t[0] == 'M' && gc_all_digits(t + 1) && nc < 16) {
+                char k[16];
+                gc_pad2(t, k, sizeof k);
+                int dup = 0;
+                for (int j = 0; j < nc; j++)
+                    if (!strcmp(codes[j], k)) dup = 1;
+                if (!dup) snprintf(codes[nc++], sizeof codes[0], "%s", k);
+            }
+            char key[64];
+            int hk = gc_kl_key(c, t, key, sizeof key);
+            if (hk && !strcmp(key, "BEGIN PGM")) {
+                const char *p = t + 10;
+                size_t n = strcspn(p, " \t\n\r\f\v");
+                have_begin = t[9] == ' ' && n > 0;
+                if (have_begin) snprintf(begin, sizeof begin, "%.*s", (int)n, p);
+            }
+            if (hk && !strcmp(key, "END PGM") && t[7] == ' ') {
+                const char *p = t + 8;
+                size_t n = strcspn(p, " \t\n\r\f\v");
+                char e[256];
+                snprintf(e, sizeof e, "%.*s", (int)n, p);
+                if (have_begin && n && strcmp(e, begin) != 0) {
+                    vs.n = 0;
+                    var(&vs, "end", e);
+                    var(&vs, "begin", begin);
+                    emit(ck, li, "pgm-name-mismatch", &vs, NULL);
+                }
+            }
+            if (hk && !strcmp(key, "CYCL DEF")) def = 1;
+            if ((gc_starts_with(t, "CYCL CALL") || gc_is_code(t, "M99") || gc_is_code(t, "M89")) && !def) {
+                vs.n = 0;
+                var(&vs, "word", t);
+                emit(ck, li, "cycle-call-no-def", &vs, NULL);
+            }
+            size_t ln;
+            const char *lb = kl_lbl_ref(t, &ln);
+            if (lb) {
+                int zeros = 1;
+                for (size_t q = 0; q < ln; q++)
+                    if (lb[q] != '0') zeros = 0;
+                char lk[96];
+                gc_kl_label(lb, ln, lk, sizeof lk);
+                if (!zeros && !gc_map_get(&c->labels, lk, NULL)) {
+                    vs.n = 0;
+                    var(&vs, "word", t);
+                    var(&vs, "label", lk);
+                    emit(ck, li, "missing-label", &vs, NULL);
+                }
+            }
+        }
+        const gc_json *mc = gc_json_get(c->dialect, "mConflicts");
+        for (size_t g = 0; g < gc_json_len(mc); g++) {
+            gc_buf b;
+            gc_buf_init(&b);
+            int hits = 0;
+            for (int j = 0; j < nc; j++)
+                if (gc_json_has_str(mc->items[g], codes[j])) {
+                    if (hits++) gc_buf_puts(&b, " and ");
+                    gc_buf_puts(&b, codes[j]);
+                }
+            if (hits > 1) {
+                vs.n = 0;
+                var(&vs, "codes", gc_buf_str(&b));
+                emit(ck, li, "m-conflict", &vs, NULL);
+            }
+            gc_buf_free(&b);
+        }
+        int fmax = 0;
+        for (int i = 0; i < l->ntok; i++) {
+            const char *t = l->tok[i];
+            if (gc_is_comment(t, c->syntax)) continue;
+            if (!strcmp(t, "FMAX")) fmax = 1;
+            if (t[0] == 'F') {
+                const char *p = t + 1;
+                if (!strcmp(p, "AUTO") || *p == 'Q') F = 1;
+                if (*p == '-' || *p == '+') p++;
+                if (gc_is_digit((unsigned char)*p) || *p == '.') F = 1;
+            }
+        }
+        for (int j = 0; j < nc; j++) {
+            if (!strcmp(codes[j], "M03") || !strcmp(codes[j], "M04") || !strcmp(codes[j], "M13") || !strcmp(codes[j], "M14")) snprintf(spin, sizeof spin, "%s", codes[j]);
+            if (!strcmp(codes[j], "M05")) snprintf(spin, sizeof spin, "M05");
+        }
+        char h[64];
+        if (gc_kl_head(c, l, h, sizeof h) && gc_kl_move(h) && !fmax) {
+            char move[80];
+            snprintf(move, sizeof move, "%s move", h);
+            if (!F && !noF) {
+                noF = 1;
+                vs.n = 0;
+                var(&vs, "move", move);
+                emit(ck, li, "no-feed-rate", &vs, NULL);
+            }
+            int on = !strcmp(spin, "M03") || !strcmp(spin, "M04") || !strcmp(spin, "M13") || !strcmp(spin, "M14");
+            if (!on && !spinWarned) {
+                char sp[48];
+                spinWarned = 1;
+                if (spin[0]) snprintf(sp, sizeof sp, "%s is active", spin);
+                else snprintf(sp, sizeof sp, "it was never started");
+                vs.n = 0;
+                var(&vs, "move", move);
+                var(&vs, "spin", sp);
+                emit(ck, li, "spindle-off-feed", &vs, NULL);
+            }
+        }
+    }
+}
+
 void gc_check(gc_ctx *c, gc_analysis *a)
 {
     const gc_doc *doc = c->doc;
@@ -1128,12 +1292,18 @@ void gc_check(gc_ctx *c, gc_analysis *a)
     /* Walk in execution order, following local subprogram calls, then check lines never reached. */
     int stack[8], depth = 0, i = 0;
     long guard = 0, limit = 5000 + 20L * n;
+    if (c->syntax == GC_SYN_KLARTEXT) { /* its own checks, in file order */
+        ck.emitting = 1;
+        check_klartext(&ck);
+        for (int li = 0; li < n; li++) seen[li] = 1;
+        i = n;
+    }
     while (i < n && guard++ < limit) {
         const gc_line *l = &doc->lines[i];
         ck.emitting = !seen[i];
         seen[i] = 1;
         check_line(&ck, i);
-        if (gc_is_end(l)) break;
+        if (gc_is_end(l, c->syntax)) break;
         if (gc_is_return(l, c->syntax) && depth) {
             i = stack[--depth];
             continue;
@@ -1157,14 +1327,16 @@ void gc_check(gc_ctx *c, gc_analysis *a)
     ck.emitting = 1;
     int anyEnd = 0;
     for (int li = 0; li < n; li++)
-        if (gc_is_end(&doc->lines[li])) anyEnd = 1;
+        if (gc_is_end(&doc->lines[li], c->syntax)) anyEnd = 1;
     if (!anyEnd) {
         vars vs;
         vs.n = 0;
         const gc_json *ends = gc_json_get(c->dialect, "programEnds");
         gc_buf b;
         gc_buf_init(&b);
-        if (ends)
+        if (c->syntax == GC_SYN_KLARTEXT)
+            gc_buf_puts(&b, "END PGM");
+        else if (ends)
             for (size_t k = 0; k < gc_json_len(ends); k++) {
                 if (k) gc_buf_puts(&b, " or ");
                 gc_buf_puts(&b, js_or(gc_json_str(ends->items[k])));
@@ -1180,7 +1352,7 @@ void gc_check(gc_ctx *c, gc_analysis *a)
         for (int k = 0; k < a->ncells[li]; k++) {
             const gc_cell *cell = &a->cells[li][k];
             if (!(cell->flags & GC_CELL_UNKNOWN)) continue;
-            if ((cell->g[0] == 'G' || cell->g[0] == 'M') && gc_is_digit((unsigned char)cell->g[1])) {
+            if (c->syntax != GC_SYN_KLARTEXT && (cell->g[0] == 'G' || cell->g[0] == 'M') && gc_is_digit((unsigned char)cell->g[1])) {
                 char key[64];
                 gc_pad2(cell->g, key, sizeof key);
                 if (gc_json_truthy(gc_json_get(foreign, key))) continue;

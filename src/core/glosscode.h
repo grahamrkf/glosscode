@@ -58,7 +58,7 @@ gc_doc *gc_doc_parse(const char *text, size_t len);
 gc_doc *gc_doc_parse_syntax(const char *text, size_t len, const char *syntax);
 void gc_doc_set_syntax(gc_doc *doc, const char *syntax);
 /* A block syntax name as a number: GC_SYN_NONE for the usual one or an unknown name. */
-enum { GC_SYN_NONE = 0, GC_SYN_FAGOR8060 = 1, GC_SYN_FAGOR8055 = 2 };
+enum { GC_SYN_NONE = 0, GC_SYN_FAGOR8060 = 1, GC_SYN_FAGOR8055 = 2, GC_SYN_KLARTEXT = 3 };
 int gc_syntax_code(const char *syntax);
 /* Adds one block made of the given words (for building documents from the UI or in tests). */
 void gc_doc_add_line(gc_doc *doc, const char *const *tok, int ntok, const char *raw);

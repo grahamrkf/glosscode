@@ -45,7 +45,17 @@ int gc_line_has_code(const gc_line *l, const char *c);
 /* Whether a cycle on this line reads letter L as its own word, not as F, S or M (Fagor 8055 lathe: G68 S is a label). */
 int gc_own_word(const gc_ctx *c, const gc_line *l, char L);
 int gc_line_has_tok(const gc_line *l, const char *t);
-int gc_is_end(const gc_line *l);
+int gc_is_end(const gc_line *l, int syntax);
+/* Heidenhain Klartext: the dictionary key a word starts with ("TOOL CALL 5 Z" -> "TOOL CALL", "FN 9: IF ..." -> "FN 9"): klKey()
+   in the mockup. 0 for a word with a value. */
+int gc_kl_key(const gc_ctx *c, const char *t, char *key, size_t keysz);
+/* The key of a line's first such word (klHeadOf()) */
+int gc_kl_head(const gc_ctx *c, const gc_line *l, char *key, size_t keysz);
+/* A path function that moves the tool (KL_MOVE), and one that is an arc (KL_ARC) */
+int gc_kl_move(const char *key);
+int gc_kl_arc(const char *key);
+/* "LBL 5" (leading zeros dropped) or 'LBL "NAME"' from the n characters at x: klLabel() */
+void gc_kl_label(const char *x, size_t n, char *out, size_t outsz);
 int gc_is_return(const gc_line *l, int syntax);
 /* Writes the label a line jumps to ("N1000", "O1200") into out; returns 0 when it calls nothing. */
 int gc_call_target(const gc_line *l, int syntax, char *out, size_t outsz);
