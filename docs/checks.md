@@ -31,8 +31,10 @@ A machine definition file will be able to change any rule's severity or turn it 
 | `foreign-code` | warning or error | A code that means something else on this control, like `G54` on an Okuma (X-axis length offset) or `M97` on a Fanuc |
 | `cycle-missing-word` | error | A canned cycle without a word it needs, like G81 with no R |
 | `cycle-missing-choice` | error | A cycle that needs one of several words, like Haas G83 with no Q and no I/J/K |
+| `code-missing-word` | error | A code with words of its own missing one it needs, like a Fagor 8055 G60 pattern with only K, or a G66 pocket with no S and E profile labels |
+| `pattern-no-cycle` | warning | A Fagor 8055 multiple machining pattern (G60 to G65) with no canned cycle or (MCALL) active to repeat at its points |
 | `cycle-stray-word` | info | A word the cycle doesn't use, like Q on a G81 |
-| `missing-label` | error | M97 P, or a lathe cycle's P/Q, pointing to an N number that isn't in the file |
+| `missing-label` | error | M97 P, a lathe cycle's P/Q, or a Fagor 8055 G66 label (S, E, D, H, R, I, F, K), pointing to an N number that isn't in the file |
 | `no-feed-rate` | error | A G01/G02/G03 move or feed cycle before any F |
 | `feed-mode-changed` | warning | F set under G94 and then used under G95 (or the reverse), which turns 10 ipm into 10 ipr |
 | `feed-plausibility` | info | A per-rev feed that's large (over 0.05 in or 1.5 mm) or a per-minute feed that's tiny |
