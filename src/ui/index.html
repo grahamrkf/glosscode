@@ -3056,7 +3056,7 @@ function interpret(){
   // so p is where the tool really is and off is the program zero's shift from where it started.
   const okL = lathe && isOkuma(), NV = {}, off = { x:0, z:0 };
   let F = null;   // the feed rate as it runs (an F#111 is only known here)
-  const segs = [], steps = [], L = labels(), stack = []; let i = 0, guard = 0, entering = false;
+  const segs = [], steps = [], L = labels(), stack = []; let i = 0, guard = 0, entering = false, noCyc = false;
   // tail is the tailstock (in, out, or null until a tailstock code runs).
   let tail = null;
   // An Okuma lathe's LAP contour (G81/G82/G83 … G80) only runs from a G85/G87 line: in order, it's passed over.
@@ -3068,7 +3068,10 @@ function interpret(){
     if ((/^%L /.test(toks[0] || "") || (SYNTAX==="fagor8055" && toks.some(t => /^\(SUB ?\d+\)$/.test(t)))) && !entering){ let k = i+1; while (k < doc.length && !isReturn(doc[k])) k++; i = k+1; continue; }
     entering = false;
     if (isLapDef(toks)){ let k = i+1; while (k < doc.length && !doc[k].some(t => isCode(t,"G80"))) k++; i = k+1; continue; }
-    const s0 = segs.length, dips = []; step(toks, li, false, dips);
+    // Fagor 8055: an N after the first word runs the line that many times (N0: the move without the active cycle)
+    const rep = SYNTAX==="fagor8055" ? toks.find((t, k) => refN(toks, k) && /^N\d+$/.test(t)) : null, reps = rep ? parseInt(rep.slice(1), 10) : 1;
+    const s0 = segs.length, dips = [];
+    noCyc = reps===0; for (let r = 0; r < Math.max(1, Math.min(reps, 999)); r++) step(toks, li, false, dips); noCyc = false;
     const stop = toks.some(t => isCode(t, "M00")) ? "M00" : toks.some(t => isCode(t, "M01")) ? "M01" : null;
     const kind = segs.length > s0 ? (segs.slice(s0).some(sg => sg.kind==="cyc") ? "cyc" : segs[segs.length-1].kind) : null;
     const tc = lathe ? tailCode(toks) : null; if (tc) tail = tc;
@@ -3180,7 +3183,7 @@ function interpret(){
                 y: "Y" in w ? (inc ? p.y + w.Y : w.Y) : p.y,
                 z: "W" in w ? p.z + w.W : ("Z" in w ? (inc ? p.z + w.Z : w.Z + off.z) : p.z) };
     if (okL && has("G74")){ groove(n, w, li, T); return; }
-    if (cyc && !lathe){
+    if (cyc && !lathe && !noCyc){
       // A hole: rapid over to X Y at the current height, rapid down to R, feed to the bottom, back up to R or the start.
       if (DIALECT.cycleRefZ){   // Fagor: Z is the reference plane and I the depth (G83: I is each peck, J of them)
         if ("Z" in w) cycR = w.Z;
