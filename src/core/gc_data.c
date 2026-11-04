@@ -71,6 +71,21 @@ int gc_is_code(const char *t, const char *c)
     return strcmp(k, c) == 0;
 }
 
+int gc_own_word(const gc_ctx *c, const gc_line *l, char L)
+{
+    for (int i = 0; i < l->ntok; i++) {
+        const char *t = l->tok[i];
+        if (t[0] != 'G' || !gc_is_digit((unsigned char)t[1])) continue;
+        char k[64];
+        gc_pad2(t, k, sizeof k);
+        const gc_json *o = gc_json_get(gc_json_get(c->cycles, k), "ownWords");
+        if (!o) continue;
+        char Ls[2] = { L, '\0' };
+        return gc_json_has_str(o, Ls);
+    }
+    return 0;
+}
+
 int gc_line_has_code(const gc_line *l, const char *c)
 {
     for (int i = 0; i < l->ntok; i++)
