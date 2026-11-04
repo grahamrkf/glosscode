@@ -90,10 +90,37 @@ int gc_is_end(const gc_line *l)
     return gc_line_has_code(l, "M30") || gc_line_has_code(l, "M02");
 }
 
-int gc_is_return(const gc_line *l, int fagor)
+int gc_is_return(const gc_line *l, int syntax)
 {
     if (gc_line_has_code(l, "M99") || gc_line_has_tok(l, "RTS")) return 1;
-    return fagor && (gc_line_has_code(l, "M17") || gc_line_has_code(l, "M29") || gc_line_has_tok(l, "#RET"));
+    if (syntax == GC_SYN_FAGOR8060) return gc_line_has_code(l, "M17") || gc_line_has_code(l, "M29") || gc_line_has_tok(l, "#RET");
+    return syntax == GC_SYN_FAGOR8055 && gc_line_has_tok(l, "(RET)");
+}
+
+/* Fagor 8055: "(SUB 12)" (with label 1) or "(CALL 12" / "(PCALL 12" (label 0): the number's digits, or NULL.
+   *nd gets how many. */
+static const char *f55_num(const char *t, int label, size_t *nd)
+{
+    const char *p = NULL;
+    if (label && gc_starts_with(t, "(SUB")) p = t + 4;
+    else if (!label && gc_starts_with(t, "(CALL")) p = t + 5;
+    else if (!label && gc_starts_with(t, "(PCALL")) p = t + 6;
+    if (!p) return NULL;
+    if (*p == ' ') p++;
+    size_t k = 0;
+    while (gc_is_digit((unsigned char)p[k])) k++;
+    if (!k) return NULL;
+    if (label ? strcmp(p + k, ")") != 0 : p[k] == '.') return NULL;
+    *nd = k;
+    return p;
+}
+
+static void sub_key(const char *digits, size_t nd, char *out, size_t outsz)
+{
+    char d[32], num[32];
+    snprintf(d, sizeof d, "%.*s", (int)(nd < 31 ? nd : 31), digits);
+    gc_js_num(gc_js_parse_int(d), num, sizeof num);
+    snprintf(out, outsz, "SUB %s", num);
 }
 
 /* /^X\d+$/ on a token with letter X. */
@@ -121,7 +148,7 @@ int gc_label_key(const char *t, char *key, size_t keysz)
     return 1;
 }
 
-int gc_call_target(const gc_line *l, char *out, size_t outsz)
+int gc_call_target(const gc_line *l, int syntax, char *out, size_t outsz)
 {
     /* Fagor: LL NAME, #CALL NAME or #PCALL NAME … calls the local subroutine "%L NAME" */
     for (int i = 0; i < l->ntok; i++) {
@@ -133,6 +160,15 @@ int gc_call_target(const gc_line *l, char *out, size_t outsz)
         size_t n = strcspn(p, " ,");
         snprintf(out, outsz, "%%L %.*s", (int)n, p);
         return 1;
+    }
+    /* Fagor 8055: (CALL 12) or (PCALL 12, …) calls the "(SUB 12)" in the same file */
+    for (int i = 0; syntax == GC_SYN_FAGOR8055 && i < l->ntok; i++) {
+        size_t nd;
+        const char *d = f55_num(l->tok[i], 0, &nd);
+        if (d) {
+            sub_key(d, nd, out, outsz);
+            return 1;
+        }
     }
     for (int i = 0; i < l->ntok; i++) {
         if (strcmp(l->tok[i], "CALL") != 0) continue;
@@ -320,7 +356,7 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
 
     {
         const char *bs = gc_json_get_str(c->dialect, "blockSyntax");
-        c->fagor = bs && !strcmp(bs, "fagor8060");
+        c->syntax = gc_syntax_code(bs);
     }
     gc_map_init(&c->labels);
     for (int i = 0; doc && i < doc->nlines; i++) {
@@ -348,6 +384,15 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
             }
         }
         if (gc_starts_with(l->tok[0], "%L ")) gc_map_add_first(&c->labels, l->tok[0], i);
+        for (int k = 0; c->syntax == GC_SYN_FAGOR8055 && k < l->ntok; k++) { /* Fagor 8055: (SUB 12) */
+            size_t nd;
+            const char *d = f55_num(l->tok[k], 1, &nd);
+            if (d) {
+                sub_key(d, nd, key, sizeof key);
+                gc_map_add_first(&c->labels, key, i);
+                break;
+            }
+        }
     }
 }
 

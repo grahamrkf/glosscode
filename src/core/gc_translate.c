@@ -244,12 +244,13 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
             SET(feed_code, k);
             CHG(CH_FEED);
         }
-        if (!c->process && !strcmp(k, "G96")) {
+        int css_codes = !c->process && !gc_json_truthy(gc_json_get(c->dialect, "noCss")); /* Fagor 8055: G96/G97 are feed modes */
+        if (css_codes && !strcmp(k, "G96")) {
             st->css = 1;
             SET(spin_code, k);
             CHG(CH_SPIN);
         }
-        if (!c->process && !strcmp(k, "G97")) {
+        if (css_codes && !strcmp(k, "G97")) {
             st->css = 0;
             SET(spin_code, k);
             CHG(CH_SPIN);
@@ -449,15 +450,73 @@ static int fagor_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell 
     return 0;
 }
 
+/* Fagor 8055: the "%" header line, and statements in ( ): an assignment reads as written, others by their
+   first word. Returns 0 for other words. */
+static int fagor55_word(const gc_ctx *c, const char *t, gc_cell *cell)
+{
+    char e[1024], d[512];
+    const char *sk = style_key(c);
+    if (t[0] == '%') {
+        const gc_json *en = gc_entry(c, "%");
+        if (!en) return 0;
+        const char *rest = t + 1;
+        snprintf(e, sizeof e, "%s%s%s", js_str(style_get(en, sk)), (*rest && *rest != ' ') ? " " : "", rest);
+        cell_set(cell, e, NULL, js_str(gc_json_get(en, "desc")), 0);
+        return 1;
+    }
+    if (t[0] != '(') return 0;
+    size_t tl = strlen(t), il = tl - 1;
+    if (tl > 1 && t[tl - 1] == ')') il = tl - 2;
+    char inner[1024];
+    snprintf(inner, sizeof inner, "%.*s", (int)il, t + 1);
+    /* An assignment: NAME =, or NAME(index) = */
+    {
+        const char *q = inner;
+        if (*q >= 'A' && *q <= 'Z') {
+            q++;
+            while ((*q >= 'A' && *q <= 'Z') || gc_is_digit((unsigned char)*q)) q++;
+            if (*q == '(') {
+                const char *r = strchr(q, ')');
+                if (r && !memchr(q + 1, '(', (size_t)(r - q - 1))) q = r + 1;
+            }
+            if (*q == ' ') q++;
+            if (*q == '=') {
+                cell_set(cell, inner, NULL, "Sets parameters or variables, worked out when the line runs", 0);
+                return 1;
+            }
+        }
+    }
+    size_t w1 = 0;
+    while (inner[w1] >= 'A' && inner[w1] <= 'Z') w1++;
+    char key[40];
+    const gc_json *en = NULL;
+    if (w1 && w1 < sizeof key - 1) {
+        snprintf(key, sizeof key, "(%.*s", (int)w1, inner);
+        en = gc_entry(c, key);
+    }
+    if (en) {
+        const char *rest = inner + w1;
+        snprintf(e, sizeof e, "%s%s%s", js_str(style_get(en, sk)), (*rest && *rest != ' ') ? " " : "", rest);
+        cell_set(cell, e, NULL, js_str(gc_json_get(en, "desc")), 0);
+    } else {
+        snprintf(e, sizeof e, "?%s", t);
+        if (w1) snprintf(d, sizeof d, "%.*s isn't a statement GlossCode knows on this control.", (int)w1, inner);
+        else snprintf(d, sizeof d, "%s isn't a statement GlossCode knows on this control.", t);
+        cell_set(cell, e, NULL, d, GC_CELL_UNKNOWN);
+    }
+    return 1;
+}
+
 static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell, int ref)
 {
     char e[256], d[512];
     cell->g = gc_strdup(t);
-    if (gc_is_comment(t)) {
+    if (gc_is_comment(t, c->syntax)) {
         cell_set(cell, "", NULL, "Comment, kept as written", GC_CELL_COMMENT);
         return;
     }
-    if (c->fagor && fagor_word(c, t, st, cell)) return;
+    if (c->syntax == GC_SYN_FAGOR8060 && fagor_word(c, t, st, cell)) return;
+    if (c->syntax == GC_SYN_FAGOR8055 && fagor55_word(c, t, cell)) return;
     if (!gc_is_alpha((unsigned char)t[0]) && t[0] != '#' && t[0] != '/') { /* text that isn't a word, kept as written */
         if (!strcmp(t, ";")) cell_set(cell, ";", NULL, "End of block (;)", 0);
         else if (!strcmp(t, "%")) cell_set(cell, "%", NULL, "Program start or end mark (%), kept as written", 0);
@@ -669,6 +728,17 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         return;
     }
     /* A later N word names another line: the one a GOTO or IF jumps to, or where an Okuma LAP contour starts */
+    /* Fagor 8055: an N after the first word repeats the line (N0 makes the move without the active cycle) */
+    if (L == 'N' && ref && c->syntax == GC_SYN_FAGOR8055) {
+        int zeros = *raw != '\0';
+        for (const char *q = raw; *q; q++)
+            if (*q != '0') zeros = 0;
+        snprintf(e, sizeof e, "%s%s", strcmp(sk, "short") ? "REPEAT" : "x", raw);
+        if (zeros) snprintf(d, sizeof d, "Make the move without running the active cycle");
+        else snprintf(d, sizeof d, "Run this line %s times", raw);
+        cell_set(cell, e, NULL, d, 0);
+        return;
+    }
     if (L == 'N' && ref) {
         snprintf(e, sizeof e, "%s%s", js_str(style_get(a, sk)), raw);
         snprintf(d, sizeof d, "The line labeled N%s", raw);
@@ -676,6 +746,13 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         return;
     }
     /* G04 K0.5 (Fagor 8060), in seconds */
+    if (L == 'K' && st->dwell && gc_json_has_str(gc_json_get(c->dialect, "dwellWords"), "K") &&
+        gc_json_truthy(gc_json_get(c->dialect, "dwellHundredths"))) { /* Fagor 8055: K50 is half a second */
+        snprintf(e, sizeof e, "%s%s", strcmp(sk, "short") ? "DWELL" : "DWL", v);
+        snprintf(d, sizeof d, "Dwell for %s hundredths of a second", v);
+        cell_set(cell, e, NULL, d, 0);
+        return;
+    }
     if (L == 'K' && st->dwell && gc_json_has_str(gc_json_get(c->dialect, "dwellWords"), "K")) {
         const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "P"), "dwell");
         snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
@@ -890,13 +967,13 @@ void gc_translate(gc_ctx *c, gc_analysis *a)
         const gc_line *l = &doc->lines[i];
         visit(&w, i, &st);
         if (gc_is_end(l)) break;
-        if (gc_is_return(l, c->fagor) && depth) {
+        if (gc_is_return(l, c->syntax) && depth) {
             i = stack[--depth];
             continue;
         }
         char tgt[48];
         int to;
-        if (gc_call_target(l, tgt, sizeof tgt) && gc_map_get(&c->labels, tgt, &to) && depth < 8) {
+        if (gc_call_target(l, c->syntax, tgt, sizeof tgt) && gc_map_get(&c->labels, tgt, &to) && depth < 8) {
             stack[depth++] = i + 1;
             i = to;
             continue;

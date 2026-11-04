@@ -371,6 +371,26 @@
    "generic": true,
    "notes": "",
    "control": "Fanuc-style (0i, 30i and compatibles)"
+  },
+  "gen.mill.fagor8055": {
+   "name": "Generic Fagor 8055 / 8055i mill",
+   "type": "mill",
+   "brand": "fagor8055",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Fagor 8055 / 8055i"
   }
  },
  "library": [
@@ -427,6 +447,10 @@
   {
    "example": "tests/cases/EOB_LATIN1.nc",
    "golden": "tests/golden/EOB_LATIN1_nc.json"
+  },
+  {
+   "example": "tests/cases/FAGOR_8055.nc",
+   "golden": "tests/golden/FAGOR_8055_nc.json"
   },
   {
    "example": "tests/cases/FAGOR_8060.nc",
