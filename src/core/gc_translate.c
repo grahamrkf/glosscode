@@ -20,6 +20,7 @@ typedef struct tstate {
     char sub_word; /* the subprogram call's program letter when it isn't P (M2/M0 G22 L) */
     char corner[16]; /* Okuma G75/G76 on this line: L is the chamfer or rounding size */
     const gc_json *lib;
+    char code_w[16]; /* a code on this line whose words mean something of their own (Fagor 8055 G60-G68) */
     char motion[16], cycle_code[16], plane[16], unit_code[16], dist_code[16], feed_code[16], spin_code[16];
     char comp[16], tlen[16], wcs[48], spin_dir[16], cool[16], torch[16];
     int tlen_on;
@@ -105,6 +106,9 @@ static void track_carry(const gc_ctx *c, const gc_line *l, tstate *st)
     if (gc_line_has_code(l, "G04") || gc_line_has_code(l, "G65") || gc_line_has_code(l, "M97") ||
         gc_line_has_code(l, "M98") || gc_line_has_tok(l, "CALL"))
         return; /* X and P there are a dwell or arguments */
+    const gc_json *nm = gc_json_get(c->dialect, "noMoveCodes");
+    for (size_t i = 0; i < gc_json_len(nm); i++)
+        if (gc_json_str(nm->items[i]) && gc_line_has_code(l, gc_json_str(nm->items[i]))) return; /* X and Y there are a pattern's sizes */
     int unknown = gc_line_has_code(l, "G28") || gc_line_has_code(l, "G30") || gc_line_has_code(l, "G53") ||
                   gc_line_has_code(l, "G52") || gc_line_has_code(l, "G92") || (c->lathe && gc_line_has_code(l, coord_set_code(c))) ||
                   (c->lathe && st->cycle);
@@ -170,6 +174,7 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
         if (gc_entry(c, kl)) snprintf(st->corner, sizeof st->corner, "%s", k);
     }
     st->lib = NULL;
+    st->code_w[0] = '\0';
     st->chg = 0;
     if (st->one_shot) {
         st->cycle = 0;
@@ -299,6 +304,10 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
             CHG(CH_COOL);
         }
         if (!strcmp(k, "G04")) st->dwell = 1;
+        if (gc_json_get(gc_json_get(c->dialect, "codeWords"), k)) { /* Fagor 8055 G60-G68 patterns and pockets */
+            set_str(st->code_w, sizeof st->code_w, k);
+            continue;
+        }
         if (!strcmp(k, "M98") || !strcmp(k, "M97") || !strcmp(k, "G65")) st->sub = 1;
         {
             const char *sw = gc_json_get_str(gc_json_get(gc_json_get(c->dialect, "subCalls"), k), "word");
@@ -653,6 +662,18 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         cell_set(cell, e, NULL, d, 0);
         return;
     }
+    /* On a code with words of its own (Fagor 8055 G60 linear pattern: X is its length, K the number of points) */
+    if (st->code_w[0] && L != 'N') {
+        const gc_json *cd = gc_json_get(gc_json_get(c->dialect, "codeWords"), st->code_w);
+        char Ls1[2] = { L, '\0' };
+        const gc_json *cw = gc_json_get(gc_json_get(cd, "words"), Ls1);
+        if (cw) {
+            snprintf(e, sizeof e, "%s%s", js_str(gc_json_at(cw, 0)), gc_json_has_str(gc_json_get(cd, "labels"), Ls1) ? raw : v);
+            snprintf(d, sizeof d, "%s (%s)", js_str(gc_json_at(cw, 1)), st->code_w);
+            cell_set(cell, e, NULL, d, f.implied ? GC_CELL_IMPLIED : 0);
+            return;
+        }
+    }
     /* On a G65 line that calls a library subprogram, each argument reads as the name the library gives it. */
     if (st->lib && L != 'N' && L != 'O') {
         const gc_json *lib = st->lib;
@@ -917,9 +938,9 @@ static int has_axis_word(const gc_line *l)
     return 0;
 }
 
-static const char *line_kind(const gc_line *l, const tstate *st)
+static const char *line_kind(const gc_ctx *c, const gc_line *l, const tstate *st)
 {
-    if (!has_axis_word(l) || gc_line_has_code(l, "G65")) return NULL;
+    if (!has_axis_word(l) || (gc_line_has_code(l, "G65") && !gc_json_get(gc_json_get(c->dialect, "codeWords"), "G65"))) return NULL;
     if (gc_line_has_code(l, "G28") || gc_line_has_code(l, "G53")) return "rapid";
     if (st->cycle_code[0]) return "cyc";
     if (!strcmp(st->motion, "G00")) return "rapid";
@@ -948,7 +969,7 @@ static void visit(walk *w, int li, tstate *st)
     int first = (l->ntok && l->tok[0][0] == '/') ? 1 : 0; /* a later N word names a line to jump to */
     for (int i = 0; i < l->ntok; i++) word(w->c, l->tok[i], st, &w->a->cells[li][i], l->tok[i][0] == 'N' && i > first);
     save_modes(st, &w->a->modes[li]);
-    const char *k = line_kind(l, st);
+    const char *k = line_kind(w->c, l, st);
     w->a->kind[li] = k ? gc_strdup(k) : NULL;
 }
 

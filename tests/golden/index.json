@@ -453,6 +453,10 @@
    "golden": "tests/golden/FAGOR_8055_nc.json"
   },
   {
+   "example": "tests/cases/FAGOR_8055_PATTERNS.nc",
+   "golden": "tests/golden/FAGOR_8055_PATTERNS_nc.json"
+  },
+  {
    "example": "tests/cases/FAGOR_8060.nc",
    "golden": "tests/golden/FAGOR_8060_nc.json"
   },

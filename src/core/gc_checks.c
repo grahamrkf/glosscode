@@ -52,6 +52,7 @@ typedef struct cstate {
     char tcLine[64];
     int tloOn;
     int clamp;
+    int mcall; /* Fagor 8055: a (MCALL) modal subroutine is on until (MDOFF) */
     onum pos[3];
 } cstate;
 
@@ -153,6 +154,12 @@ static const char *feed_unit_for(int f, int inch)
 }
 
 /* `${x}` in JavaScript for an array item that may be missing. */
+/* The end of a word, as a regex \b sees it after a letter */
+static int word_end(char ch)
+{
+    return !(ch == '_' || (ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
+}
+
 static const char *js_or(const char *s)
 {
     return s ? s : "undefined";
@@ -633,7 +640,11 @@ static void check_line(checker *ck, int li)
         snprintf(st->cycle, sizeof st->cycle, "%s", cycCode);
         st->oneShot = notModal;
     }
-    if (st->cycle[0])
+    const gc_json *codeWords = gc_json_get(D, "codeWords");
+    const char *cwk = NULL;
+    for (int i = 0; i < ln.nc && !cwk; i++)
+        if (gc_json_get(codeWords, ln.codes[i])) cwk = ln.codes[i];
+    if (st->cycle[0] && !cwk)
         for (int i = 0; i < ln.nw; i++)
             if (!strchr("GMN", ln.w[i].L)) st->cycleWords[(unsigned char)ln.w[i].L & 127] = 1;
     if (cycCode) {
@@ -719,6 +730,82 @@ static void check_line(checker *ck, int li)
             var(&vs, "code", tmp);
             emit(ck, li, "no-speed", &vs, NULL);
         }
+    }
+    /* Codes with words of their own (Fagor 8055 patterns and irregular pockets): the words they need, the labels they name,
+       and, for a pattern, a canned cycle or modal subroutine (MCALL) to repeat at each point */
+    for (int i = 0; i < l->ntok; i++) {
+        const char *t = l->tok[i];
+        if (gc_is_comment(t, c->syntax) || t[0] == '/') continue;
+        if (!strncmp(t, "(MCALL", 6) && word_end(t[6])) st->mcall = 1;
+        if (!strncmp(t, "(MDOFF", 6) && word_end(t[6])) st->mcall = 0;
+    }
+    if (cwk) {
+        const gc_json *cd = gc_json_get(codeWords, cwk), *need = gc_json_get(cd, "need"), *cwords = gc_json_get(cd, "words");
+        const char *name = js_or(gc_json_get_str(cd, "name"));
+        for (size_t i = 0; i < gc_json_len(need); i++) {
+            const gc_json *of = gc_json_get(need->items[i], "of");
+            const gc_json *cn = gc_json_get(need->items[i], "count");
+            int want = cn ? (int)cn->num : 1, got = 0;
+            size_t nof = gc_json_len(of);
+            for (size_t j = 0; j < nof; j++) {
+                const char *x = gc_json_str(of->items[j]);
+                if (x && get(&ln, x[0])) got++;
+            }
+            if (got >= want) continue;
+            gc_buf b;
+            gc_buf_init(&b);
+            if (nof == 1) {
+                const char *x = js_or(gc_json_str(of->items[0]));
+                const char *what = gc_json_str(gc_json_at(gc_json_get(cwords, x), 1));
+                gc_buf_puts(&b, x);
+                if (what && *what) {
+                    char lw[2] = { (char)((what[0] >= 'A' && what[0] <= 'Z') ? what[0] + 32 : what[0]), '\0' };
+                    gc_buf_puts(&b, " (");
+                    gc_buf_puts(&b, lw);
+                    gc_buf_puts(&b, what + 1);
+                    gc_buf_puts(&b, ")");
+                }
+            } else {
+                static const char *const NUM[] = { "", "one", "two", "three", "four" };
+                if (want != 1) {
+                    char nb[32];
+                    if (want > 0 && want < 5) snprintf(nb, sizeof nb, "%s of ", NUM[want]);
+                    else snprintf(nb, sizeof nb, "%d of ", want);
+                    gc_buf_puts(&b, nb);
+                }
+                for (size_t j = 0; j < nof; j++) {
+                    if (j) gc_buf_puts(&b, j + 1 < nof ? ", " : want == 1 ? " or " : " and ");
+                    gc_buf_puts(&b, js_or(gc_json_str(of->items[j])));
+                }
+            }
+            V0();
+            var(&vs, "code", cwk);
+            var(&vs, "name", name);
+            var(&vs, "need", gc_buf_str(&b));
+            emit(ck, li, "code-missing-word", &vs, NULL);
+            gc_buf_free(&b);
+        }
+        if (gc_json_truthy(gc_json_get(cd, "needsCycle")) && !st->cycle[0] && !st->mcall) {
+            V0();
+            var(&vs, "code", cwk);
+            var(&vs, "name", name);
+            emit(ck, li, "pattern-no-cycle", &vs, NULL);
+        }
+        const gc_json *lbls = gc_json_get(cd, "labels");
+        if (!get(&ln, 'Q'))
+            for (size_t i = 0; i < gc_json_len(lbls); i++) {
+                const char *lw = gc_json_str(lbls->items[i]);
+                const word_t *w = lw ? get(&ln, lw[0]) : NULL;
+                if (!w || gc_is_var_val(w->t)) continue;
+                char n[64];
+                gc_js_num(gc_js_parse_int(w->v), n, sizeof n);
+                snprintf(tmp, sizeof tmp, "N%s", n);
+                if (gc_map_get(&c->labels, tmp, NULL)) continue;
+                V0();
+                var(&vs, "word", w->t);
+                var(&vs, "label", tmp);
+                emit(ck, li, "missing-label", &vs, NULL);
+            }
     }
     const gc_json *subCalls = gc_json_get(D, "subCalls");
     for (size_t i = 0; i < gc_json_len(subCalls); i++) {
@@ -807,6 +894,11 @@ static void check_line(checker *ck, int li)
         const char *k = NONMOVE_ALL[i];
         if (gc_json_get(cycles, k) || gc_json_has_str(gc_json_get(groups, "tool length"), k)) continue;
         if (has(&ln, k)) nonMove = 1;
+    }
+    {
+        const gc_json *nm = gc_json_get(D, "noMoveCodes");
+        for (size_t i = 0; i < gc_json_len(nm); i++)
+            if (gc_json_str(nm->items[i]) && has(&ln, gc_json_str(nm->items[i]))) nonMove = 1;
     }
     const char *axisL = lathe ? "XZUW" : "XYZ";
     int nAxis = 0;
@@ -986,7 +1078,7 @@ static void check_line(checker *ck, int li)
         var(&vs, "z", f.v);
         emit(ck, li, "rapid-below-zero", &vs, NULL);
     }
-    if (has(&ln, "G65")) {
+    if (has(&ln, "G65") || cwk) {
         for (int i = 0; i < 3; i++) st->pos[i] = onull();
     } else if (nonMove) {
         if (has(&ln, "G28") || has(&ln, "G30") || has(&ln, "G53") || has(&ln, "G92") || has(&ln, "G50"))
