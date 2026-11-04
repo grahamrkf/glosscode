@@ -4,6 +4,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-11-04
+
 ### Nothing is hidden
 - Every character of a program shows in the G-code row, as in a text editor, with the spacing of the columns added. `%` lines and `;` at the end of a block are shown and saved as written (a `;` only some lines have stays only on those lines). Text GlossCode can't read, like a stray symbol or number, is kept as written and flagged.
 - A machine that needs `;` on every block still gets it added on save, but never a second one.
