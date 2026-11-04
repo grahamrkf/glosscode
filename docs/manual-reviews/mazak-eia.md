@@ -62,7 +62,7 @@ G65/G66/G67 macros are in chapter 14, and G65 can call a Mazatrol program (14-10
 
 ### In the dialect (`mazak.lathe`)
 
-- Tables are G code system A in standard mode, the same as `fanuc.lathe`, because GlossCode can't yet switch systems by machine setting. **A machine left at the default system B reads wrongly** for G90/G91, G92 and G94/G95, as with the Siemens ISO lathe.
+- Tables are G code system A in standard mode, the same as `fanuc.lathe`. A machine left at the default system B, or set to C, uses the `mazaklb` or `mazaklc` control (2026-11-04), which renumber these tables.
 - Up to 4 M codes per line.
 - G70–G73 take A. G71/G72/G73 take D, and G73–G75 take I and K, so T32 one-block cycles don't raise missing-word errors.
 - G76 needs only X, Z and F, so both the two-block and the T32 one-block forms pass.

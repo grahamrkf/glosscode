@@ -79,6 +79,14 @@ static int in_group(const gc_ctx *c, const char *group, const char *code)
     return gc_json_has_str(gc_json_get(c->groups, group), code);
 }
 
+/* The lathe code that clamps the spindle speed and, with X or Z, sets the coordinates:
+   G50 in G code system A, G92 in systems B and C (the dialect's speedClamp code). */
+static const char *coord_set_code(const gc_ctx *c)
+{
+    const char *k = gc_json_get_str(gc_json_get(c->dialect, "speedClamp"), "code");
+    return k ? k : "G50";
+}
+
 static double num_value(const gc_ctx *c, const char *t, int inch)
 {
     gc_num f;
@@ -97,7 +105,7 @@ static void track_carry(const gc_ctx *c, const gc_line *l, tstate *st)
         gc_line_has_code(l, "M98") || gc_line_has_tok(l, "CALL"))
         return; /* X and P there are a dwell or arguments */
     int unknown = gc_line_has_code(l, "G28") || gc_line_has_code(l, "G30") || gc_line_has_code(l, "G53") ||
-                  gc_line_has_code(l, "G52") || gc_line_has_code(l, "G92") || (c->lathe && gc_line_has_code(l, "G50")) ||
+                  gc_line_has_code(l, "G52") || gc_line_has_code(l, "G92") || (c->lathe && gc_line_has_code(l, coord_set_code(c))) ||
                   (c->lathe && st->cycle);
     static const char ABS[3] = { 'X', 'Y', 'Z' }, INC[3] = { 'U', 'V', 'W' };
     for (int a = 0; a < 3; a++) {
@@ -136,9 +144,10 @@ static void track_carry(const gc_ctx *c, const gc_line *l, tstate *st)
 static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
 {
     st->dwell = st->sub = st->local = 0;
-    /* a lathe G50 with X or Z sets the coordinates (zero shift) instead of the spindle limit */
+    /* a lathe G50 (G92 in G code systems B and C: the speedClamp code) with X or Z sets the
+       coordinates (zero shift) instead of the spindle limit */
     st->zero_shift = 0;
-    if (c->lathe && gc_line_has_code(l, "G50"))
+    if (c->lathe && gc_line_has_code(l, coord_set_code(c)))
         for (int i = 0; i < l->ntok; i++) {
             const char *t = l->tok[i];
             if (!t[0] || !strchr("XZUW", t[0])) continue;
@@ -168,9 +177,7 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
     }
 #define CHG(bit) (st->chg |= (bit), st->ever |= (bit))
     int wcs_line = gc_line_has_code(l, "G15");
-    const gc_json *clamp = gc_json_get(c->dialect, "speedClamp");
-    const char *clamp_code = gc_json_get_str(clamp, "code");
-    if (!clamp_code) clamp_code = "G50";
+    const char *clamp_code = coord_set_code(c);
     const gc_json *unit_codes = gc_json_get(c->dialect, "unitCodes");
     const char *uc_inch = "G20", *uc_mm = "G21";
     if (unit_codes) {
@@ -221,7 +228,7 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
             CHG(CH_UNITS);
         }
         if (in_group(c, "distance", k)) {
-            st->inc = !strcmp(k, "G91");
+            st->inc = (!strcmp(k, "G91") || !strcmp(k, "G191"));
             SET(dist_code, k);
             CHG(CH_DIST);
         }
@@ -467,7 +474,9 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     if (L == 'G' || L == 'M') {
         char k[64];
         gc_pad2(t, k, sizeof k);
-        const gc_json *en = (!strcmp(k, "G50") && st->zero_shift) ? gc_entry(c, "G50.shift") : NULL;
+        char ks[72];
+        snprintf(ks, sizeof ks, "%s.shift", k);
+        const gc_json *en = (!strcmp(k, coord_set_code(c)) && st->zero_shift) ? gc_entry(c, ks) : NULL;
         if (!en) en = gc_entry(c, k);
         if (!en) {
             snprintf(e, sizeof e, "?%s", k);

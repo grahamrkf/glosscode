@@ -21,7 +21,7 @@
 | Feed per min / per rev | G98/G99 | G94/G95 | G94/G95 |
 | Absolute / incremental | X/Z vs U/W | G90/G91 | G90/G91 |
 
-A machine on system B or C needs its own dialect. The existing G91 warning on Fanuc lathes already says so.
+A machine on system B or C needs its own dialect: `fanuclb` and `fanuclc` (2026-11-04) hold the renumbered tables, and the G91 warning on system A lathes says to pick one.
 
 **What changed:**
 
@@ -40,6 +40,6 @@ A machine on system B or C needs its own dialect. The existing G91 warning on Fa
 
 - **Dwell (p. 63): G04 X takes seconds with a decimal point; G04 P takes no decimal point, in 0.001 s units, so P1000 is 1 second.** The `fanuc` dialect (mill and lathe) now has `dwellNoDecimal: "ms"`, as Haas already did. LinuxCNC, Centroid and Okuma read P differently, so they switch it off.
 - The one-shot rule is printed correctly here ("group 00 except G10/G11", p. 28), which confirms the 0i-F sentence on p. 12 is a misprint.
-- Differences from 0i-F: no G93; normal direction control is G150–G152 (0i-F uses G40.1–G42.1); G05 is high-speed cycle machining (pp. 29–31).
+- Differences from 0i-F: no G93; normal direction control is G150–G152 (0i-F uses G40.1–G42.1); G05 is high-speed cycle machining (pp. 29–31). These are in the `fanuc0` dialect (2026-11-04).
 - **Subprograms (p. 129):** M98 P with a 3-digit count and a 4-digit program number, two levels of nesting. The subprogram starts with O (or ":") and ends with M99.
 - **Custom Macro A (pp. 279–296)** uses G65 H(op) P#i Q#j R#k for arithmetic and jumps. GlossCode reads G65 P as a program call, so a Macro A line would be misread. Not handled yet; Macro B is pp. 297–345.

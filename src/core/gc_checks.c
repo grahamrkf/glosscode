@@ -433,7 +433,7 @@ static void check_line(checker *ck, int li)
     }
     for (int i = 0; i < ln.nc; i++) {
         const char *k = ln.codes[i];
-        if (gc_json_has_str(gc_json_get(groups, "distance"), k)) st->inc = !strcmp(k, "G91");
+        if (gc_json_has_str(gc_json_get(groups, "distance"), k)) st->inc = (!strcmp(k, "G91") || !strcmp(k, "G191"));
         if (!gc_json_get(cycles, k)) {
             if (!strcmp(k, c->feed_per_min)) st->feed = FEED_MIN;
             if (!strcmp(k, c->feed_per_rev)) st->feed = FEED_REV;

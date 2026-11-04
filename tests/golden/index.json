@@ -75,7 +75,7 @@
    "name": "Okuma M560-V",
    "type": "mill",
    "brand": "okuma",
-   "control": "Okuma OSP (P300 and later)"
+   "control": "Okuma OSP-P200/P300 and later"
   },
   "haas_st10": {
    "travel": [
@@ -113,7 +113,7 @@
    "name": "Okuma LB3000 EX II",
    "type": "lathe",
    "brand": "okuma",
-   "control": "Okuma OSP (P300 and later)"
+   "control": "Okuma OSP-P200/P300 and later"
   },
   "hyp_plasma": {
    "travel": [
@@ -171,6 +171,126 @@
    "type": "plasma",
    "brand": "tormach",
    "control": "Tormach PathPilot"
+  },
+  "gen.lathe.fanuclb": {
+   "name": "Generic Fanuc lathe, G code system B lathe",
+   "type": "lathe",
+   "brand": "fanuclb",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Fanuc lathe, G code system B"
+  },
+  "gen.lathe.mazaklb": {
+   "name": "Generic Mazak EIA/ISO lathe, G code system B lathe",
+   "type": "lathe",
+   "brand": "mazaklb",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Mazak EIA/ISO lathe, G code system B"
+  },
+  "gen.lathe.mitsubishilb": {
+   "name": "Generic Mitsubishi M800/M80 lathe, G code list 3, 5 or 7 lathe",
+   "type": "lathe",
+   "brand": "mitsubishilb",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Mitsubishi M800/M80 lathe, G code list 3, 5 or 7"
+  },
+  "gen.lathe.fanuc": {
+   "name": "Generic Fanuc-style (0i, 30i and compatibles) lathe",
+   "type": "lathe",
+   "brand": "fanuc",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Fanuc-style (0i, 30i and compatibles)"
+  },
+  "gen.lathe.fanuclc": {
+   "name": "Generic Fanuc lathe, G code system C lathe",
+   "type": "lathe",
+   "brand": "fanuclc",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Fanuc lathe, G code system C"
+  },
+  "gen.lathe.mazaklc": {
+   "name": "Generic Mazak EIA/ISO lathe, G code system C lathe",
+   "type": "lathe",
+   "brand": "mazaklc",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Mazak EIA/ISO lathe, G code system C"
   }
  },
  "library": [
@@ -231,6 +351,14 @@
   {
    "example": "tests/cases/LATHE_EDGE.nc",
    "golden": "tests/golden/LATHE_EDGE_nc.json"
+  },
+  {
+   "example": "tests/cases/LATHE_SYSTEM_B.nc",
+   "golden": "tests/golden/LATHE_SYSTEM_B_nc.json"
+  },
+  {
+   "example": "tests/cases/LATHE_SYSTEM_C.nc",
+   "golden": "tests/golden/LATHE_SYSTEM_C_nc.json"
   },
   {
    "example": "tests/cases/MACRO_VARS.nc",

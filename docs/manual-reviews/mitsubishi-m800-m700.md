@@ -28,7 +28,7 @@ Neither programming manual defines the builder's M codes; only M98, M99 and M198
 - **Subprograms** (pp. 440–441): M98 P(up to 8 digits) H(N number inside it) L(1–9999) ,D(device), or M98 <file name>. Without P it calls within the current program. M99 P returns to an N number. Only M98 P is checked.
 - G70–G72 and G77–G79 are user fixed cycles, G100–G225 user macro G codes, G37.1 a pattern cycle. Decimal codes (G02.1–G03.4, G06.2, G10.9, G30.1–G30.6) aren't added.
 
-## Lathe (M800), not added
+## Lathe (M800)
 
 A parameter (cmdtyp) picks one of six G code lists (pp. 23–26):
 
@@ -36,7 +36,7 @@ A parameter (cmdtyp) picks one of six G code lists (pp. 23–26):
 - Lists 3, 5 and 7 are close to system B (G33 threads, G77/G78/G79 cycles, G92 spindle clamp, G94/G95 feeds, G83.2 deep hole).
 - Every turning and drilling cycle is in group 09 (G70–G76, G90/G92/G94 or G77–G79, G80–G89). G14/G15 are balance cut off/on, G46 is automatic-direction nose comp, and G68/G69 are the facing tool post mirror.
 
-A Mitsubishi lathe profile gets the Fanuc lathe (system A) tables for now. Check the six-column table on pp. 24–26 against the image.
+Added 2026-11-04: `mitsubishi.lathe` is lists 2, 4 and 6 (the Fanuc lathe tables with G190/G191), and `mitsubishilb` is lists 3, 5 and 7 (the Fanuc system B renumbering). G14/G15 have English words. Check the six-column table on pp. 24–26 against the image; the cycles' group 09 and G46 aren't modeled.
 
 ## M2/M0 format (M700/M70), not added
 
