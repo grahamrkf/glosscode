@@ -99,5 +99,27 @@ Programming Manual Ref. 2008 (498 pp) is the main source. Ref. 1402 (750 pp) is 
 
 **Built (2026-11-04), lathe:** the `fagor8055` lathe table from the 8055 T programming manual (Ref. 1110), with the same block syntax as the mill. Its G list differs from the mill's: G15 turns the C axis on, G16 picks the plane by two axes, G60 to G63 are live tool drilling and slot cycles, G66 is pattern repeat, G68/G69 rough along a profile, G81 to G89 are turning, facing, drilling, threading and grooving cycles, G96 is constant surface speed (on the mill it's the feed at the cutting point), G151/G152 pick diameter or radius, and G233 sets the thread withdraw. There is no G43, G80, G98 or G99. Cycles aren't modal. S on G66/G68/G69 is a profile label and S on G60 to G63 the live tool speed; M on the roughing and threading cycles is a stock or a pitch change, not an M code. Not checked: X in radius (G152) is drawn as a diameter, and G84/G85 arcs are drawn straight. The manual has a few small slips (G34 has no modal mark in the table but the text says modal; a G33 example on p. 94 reads `Z160 Z60`).
 
-**Built (2026-11-04), 8060/8065 lathe, unverified:** a `fagor8060` lathe table. The G list and block format come from the programming manual (Ref. 2008); the lathe cycle words come only from the T quick reference (Ref. 1402), because the lathe canned cycles manual needs a Fagor customer login. The cycles follow the 8055 lathe's numbers and words, with G66/G68/G69 also taking P (the profile's subroutine) and Q (its program), and the live tool cycles at G160 to G163 with N as the live tool spindle. G192 S limits the spindle speed, G92 presets the coordinates (`coordSet`), and G33 takes the pitch as K (or I, J). To check when the cycles manual is available: which words each cycle requires, their defaults, the units of K (dwell) on G83 and G88/G89, and whether the threading cycles take V, M, H and U as on the 8055.
+**Built (2026-11-04), 8060/8065 lathe, unverified:** a `fagor8060` lathe table. The G list and block format come from the programming manual (Ref. 2008); the lathe cycle words come only from the T quick reference (Ref. 1402), because the lathe canned cycles manual needs a Fagor customer login. The cycles follow the 8055 lathe's numbers and words, with G66/G68/G69 also taking P (the profile's subroutine) and Q (its program), and the live tool cycles at G160 to G163 with N as the live tool spindle. G192 S limits the spindle speed, G92 presets the coordinates (`coordSet`), and G33 takes the pitch as K (or I, J). Checked against the 8065 T canned cycles manual on 2026-11-04 (below).
 
+## Fagor 8065 T canned cycles (Ref. 1209)
+
+| | |
+|---|---|
+| Manual | CNC 8065 ·T· Canned cycles, Ref. 1209, software V04.24. The printed page numbers equal the PDF pages |
+| Reviewed | 2026-11-04, against the `fagor8060` lathe table built from the quick reference. The manual names only the 8065; GlossCode applies it to the 8060 too |
+| Result | The cycle numbers and most words were right. The fixes are below; the dialect stays marked unverified until it's checked against a machine |
+
+**Fixed:**
+- G66, G68 and G69 don't always need S and E. The profile can be between labels S and E in this program, in a local subroutine P (S and E are then ignored), in a global subroutine Q, or between labels S and E in Q (pp. 51, 57, 63). The cycles now need one of S/E, P or Q, and labels with Q aren't looked for in this file (`labelProgram`).
+- G66, G68 and G69 leave G00, G40 and G90 active (pp. 52, 57, 63); G83, G86 to G89 and G160 to G163 leave G40. The cycle's `after` list sets these modes, so the next line reads as a rapid.
+- G160 to G163: S, the live tool speed, is optional; without it the live tool doesn't start (pp. 69, 72, 74, 76). The main spindle is stopped on purpose, so no spindle-off warning (`startsSpindle`).
+- G160 to G163 in G95 alarm (1039) when no G94 feed was programmed before (pp. 70, 73, 75, 77). The new `cycle-needs-feed-per-min` check flags it (`needsFeedPerMin`), and the G94 feed isn't flagged as changed under G95.
+- G162/G163 F is the slot feed; the feed from before the cycle stays active, so F is now one of the cycle's own words.
+- G84/G85 I and K are the arc center along X (incremental, radius) and along Z (incremental) (pp. 35, 38). G86/G87 C is the thread pitch (pp. 41, 45).
+- Help texts: K on G83, G88/G89 and G160/G161 is in hundredths of a second; G83 D is the approach distance; R0 is clutch tapping (the default) and R1 rigid; G86/G87 A defaults to 30° and W with K is the spindle angle at the measure point; the signs of the thread depth and pass give the direction; M defaults to L on G66/G68/G69 and to 0 on G81 to G85.
+
+**Still to check:**
+- G87 K: this manual gives the measure point along Z, the quick reference along X.
+- G192, G92, G33 and G34 aren't in this manual; they come from the programming manual.
+- `#MILLCY` and `#LATHECY` (switching cycle sets) and `#DINDIST` read as unknown words, and a subroutine name in quotes (`P"NAME"`) isn't read.
+- Whether the 8060 has every cycle the 8065 manual describes.

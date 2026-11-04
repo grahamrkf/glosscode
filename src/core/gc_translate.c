@@ -238,6 +238,7 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
         uc_mm = gc_json_get_str(unit_codes, "mm");
     }
     const gc_json *tl_on = gc_json_get(gc_json_get(c->dialect, "toolLength"), "on");
+    const gc_json *after = NULL; /* modes the line's cycle leaves active (Fagor 8065 lathe: G00, G40 and G90 after G68) */
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
         if (t[0] && gc_own_word(c, l, t[0])) continue; /* a cycle's own word (Fagor 8055 lathe: S is a label, M a finish stock) */
@@ -326,6 +327,7 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
             CHG(CH_CYCLE);
             const gc_json *modal = gc_json_get(cyc, "modal");
             st->one_shot = modal && modal->type == GC_JFALSE;
+            if (gc_json_get(cyc, "after")) after = gc_json_get(cyc, "after");
         }
         if (!strcmp(k, "G80") && !(c->lathe && c->okuma)) {
             st->cycle = 0;
@@ -407,6 +409,23 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
                 SET(comp, CP[i][1]);
                 CHG(CH_COMP);
             }
+    }
+    for (size_t i = 0; i < gc_json_len(after); i++) {
+        const char *k = gc_json_str(after->items[i]);
+        if (!k) continue;
+        if (!strcmp(k, "G00") || !strcmp(k, "G01") || !strcmp(k, "G02") || !strcmp(k, "G03")) {
+            SET(motion, k);
+            CHG(CH_MOTION);
+        }
+        if (!strcmp(k, "G40") || !strcmp(k, "G41") || !strcmp(k, "G42")) {
+            SET(comp, k);
+            CHG(CH_COMP);
+        }
+        if (in_group(c, "distance", k)) {
+            st->inc = (!strcmp(k, "G91") || !strcmp(k, "G191"));
+            SET(dist_code, k);
+            CHG(CH_DIST);
+        }
     }
 #undef CHG
     track_carry(c, l, st);

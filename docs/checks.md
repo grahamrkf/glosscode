@@ -36,6 +36,7 @@ A machine definition file will be able to change any rule's severity or turn it 
 | `pgm-name-mismatch` | warning | Heidenhain Klartext: END PGM names another program than BEGIN PGM |
 | `block-number-order` | info | Heidenhain Klartext: a block number that isn't higher than the one before |
 | `pattern-no-cycle` | warning | A Fagor 8055 multiple machining pattern (G60 to G65) with no canned cycle or (MCALL) active to repeat at its points |
+| `cycle-needs-feed-per-min` | error | Fagor 8065 lathe: a live tool cycle (G160 to G163) in G95 with no G94 feed programmed before it |
 | `cycle-stray-word` | info | A word the cycle doesn't use, like Q on a G81 |
 | `missing-label` | error | M97 P, a lathe cycle's P/Q, or a Fagor 8055 G66 label (S, E, D, H, R, I, F, K), pointing to an N number that isn't in the file; on Heidenhain Klartext, a CALL LBL or FN 9 to 12 jump to an LBL that isn't in the file |
 | `no-feed-rate` | error | A G01/G02/G03 move or feed cycle before any F |
