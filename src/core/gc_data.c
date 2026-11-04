@@ -100,13 +100,17 @@ int gc_line_has_tok(const gc_line *l, const char *t)
     return 0;
 }
 
-int gc_is_end(const gc_line *l)
+int gc_is_end(const gc_line *l, int syntax)
 {
-    return gc_line_has_code(l, "M30") || gc_line_has_code(l, "M02");
+    if (gc_line_has_code(l, "M30") || gc_line_has_code(l, "M02")) return 1;
+    for (int i = 0; syntax == GC_SYN_KLARTEXT && i < l->ntok; i++)
+        if (gc_starts_with(l->tok[i], "END PGM")) return 1;
+    return 0;
 }
 
 int gc_is_return(const gc_line *l, int syntax)
 {
+    if (syntax == GC_SYN_KLARTEXT) return gc_line_has_tok(l, "LBL 0"); /* M99 calls a cycle there */
     if (gc_line_has_code(l, "M99") || gc_line_has_tok(l, "RTS")) return 1;
     if (syntax == GC_SYN_FAGOR8060) return gc_line_has_code(l, "M17") || gc_line_has_code(l, "M29") || gc_line_has_tok(l, "#RET");
     return syntax == GC_SYN_FAGOR8055 && gc_line_has_tok(l, "(RET)");
@@ -163,8 +167,106 @@ int gc_label_key(const char *t, char *key, size_t keysz)
     return 1;
 }
 
+/* Klartext: "CALL LBL 5" or 'CALL LBL "NAME" …' at t: the label's length (from t + 9), or 0 */
+static size_t kl_call_lbl(const char *t)
+{
+    if (!gc_starts_with(t, "CALL LBL ")) return 0;
+    const char *p = t + 9;
+    size_t k = 0;
+    if (*p == '"') {
+        k = 1;
+        while (p[k] && p[k] != '"') k++;
+        return p[k] == '"' ? k + 1 : 0;
+    }
+    while (gc_is_digit((unsigned char)p[k])) k++;
+    return k;
+}
+
+int gc_kl_key(const gc_ctx *c, const char *t, char *key, size_t keysz)
+{
+    if (c->syntax != GC_SYN_KLARTEXT || !(t[0] >= 'A' && t[0] <= 'Z')) return 0;
+    if (gc_starts_with(t, "FN ") && gc_is_digit((unsigned char)t[3])) {
+        size_t k = 3;
+        while (gc_is_digit((unsigned char)t[k])) k++;
+        if (t[k] == ':') {
+            char d[32], num[32];
+            snprintf(d, sizeof d, "%.*s", (int)(k - 3 < 31 ? k - 3 : 31), t + 3);
+            gc_js_num(gc_js_parse_int(d), num, sizeof num);
+            snprintf(key, keysz, "FN %s", num);
+            return 1;
+        }
+    }
+    if (!strcmp(t, "LBL 0")) {
+        snprintf(key, keysz, "%s", t);
+        return 1;
+    }
+    const gc_json *K = gc_json_get(gc_json_get(c->data->words, "machineOverrides"), "heidenhain");
+    size_t sp[3], ns = 0;
+    for (size_t q = 0; t[q] && ns < 3; q++)
+        if (t[q] == ' ') sp[ns++] = q;
+    for (int k = (int)(ns + 1 < 3 ? ns + 1 : 3); k > 0; k--) {
+        size_t n = (size_t)k <= ns ? sp[k - 1] : strlen(t);
+        char cand[64];
+        if (n >= sizeof cand) continue;
+        memcpy(cand, t, n);
+        cand[n] = '\0';
+        if (gc_json_truthy(gc_json_get(K, cand)) && !(cand[0] == 'M' && gc_is_digit((unsigned char)cand[1]))) {
+            snprintf(key, keysz, "%s", cand);
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int gc_kl_head(const gc_ctx *c, const gc_line *l, char *key, size_t keysz)
+{
+    for (int i = 0; i < l->ntok; i++)
+        if (!gc_is_comment(l->tok[i], c->syntax) && gc_kl_key(c, l->tok[i], key, keysz)) return 1;
+    return 0;
+}
+
+int gc_kl_move(const char *k)
+{
+    static const char *const M[] = { "L", "LP", "C", "CR", "CT", "CP", "CTP", "FL", "FLT", "FC", "FCT" };
+    for (size_t i = 0; i < sizeof M / sizeof *M; i++)
+        if (!strcmp(k, M[i])) return 1;
+    return (gc_starts_with(k, "APPR ") || gc_starts_with(k, "DEP ")) && k[strlen(k) - 1] != ' ';
+}
+
+int gc_kl_arc(const char *k)
+{
+    static const char *const A[] = { "C", "CR", "CT", "CP", "CTP", "FC", "FCT" };
+    for (size_t i = 0; i < sizeof A / sizeof *A; i++)
+        if (!strcmp(k, A[i])) return 1;
+    return 0;
+}
+
+void gc_kl_label(const char *x, size_t n, char *out, size_t outsz)
+{
+    char d[48];
+    snprintf(d, sizeof d, "%.*s", (int)(n < 47 ? n : 47), x);
+    if (d[0] && gc_all_digits(d)) {
+        char num[32];
+        gc_js_num(gc_js_parse_int(d), num, sizeof num);
+        snprintf(out, outsz, "LBL %s", num);
+    } else
+        snprintf(out, outsz, "LBL %s", d);
+}
+
 int gc_call_target(const gc_line *l, int syntax, char *out, size_t outsz)
 {
+    if (syntax == GC_SYN_KLARTEXT) { /* CALL LBL 5 runs the subprogram at LBL 5; with REP it repeats a section instead */
+        for (int i = 0; i < l->ntok; i++) {
+            size_t k = kl_call_lbl(l->tok[i]);
+            if (!k) continue;
+            const char *rest = l->tok[i] + 9 + k;
+            for (const char *r = strstr(rest, "REP"); r; r = strstr(r + 1, "REP"))
+                if (r == rest || !(gc_is_alpha((unsigned char)r[-1]) || gc_is_digit((unsigned char)r[-1]) || r[-1] == '_')) return 0;
+            gc_kl_label(l->tok[i] + 9, k, out, outsz);
+            return 1;
+        }
+        return 0;
+    }
     /* Fagor: LL NAME, #CALL NAME or #PCALL NAME … calls the local subroutine "%L NAME" */
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i], *p = NULL;
@@ -399,6 +501,19 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
             }
         }
         if (gc_starts_with(l->tok[0], "%L ")) gc_map_add_first(&c->labels, l->tok[0], i);
+        if (c->syntax == GC_SYN_KLARTEXT) { /* the block number, and LBL 5 or LBL "NAME" (not LBL 0) */
+            if (gc_all_digits(l->tok[0]) && l->tok[0][0]) {
+                gc_js_num(gc_js_parse_int(l->tok[0]), num, sizeof num);
+                snprintf(key, sizeof key, "N%s", num);
+                gc_map_add_first(&c->labels, key, i);
+            }
+            for (int k = 0; k < l->ntok; k++)
+                if (gc_starts_with(l->tok[k], "LBL ") && strcmp(l->tok[k], "LBL 0") != 0) {
+                    gc_kl_label(l->tok[k] + 4, strlen(l->tok[k] + 4), key, sizeof key);
+                    gc_map_add_first(&c->labels, key, i);
+                    break;
+                }
+        }
         for (int k = 0; c->syntax == GC_SYN_FAGOR8055 && k < l->ntok; k++) { /* Fagor 8055: (SUB 12) */
             size_t nd;
             const char *d = f55_num(l->tok[k], 1, &nd);

@@ -333,7 +333,7 @@ int gc_ends_with(const char *s, const char *suffix)
 
 int gc_is_comment(const char *t, int syntax)
 {
-    return (t[0] == '(' && syntax != GC_SYN_FAGOR8055) || (t[0] == ';' && t[1]);
+    return (t[0] == '(' && syntax != GC_SYN_FAGOR8055 && syntax != GC_SYN_KLARTEXT) || (t[0] == ';' && t[1]) || (syntax == GC_SYN_KLARTEXT && t[0] == '*');
 }
 
 int gc_is_kw(const char *t)

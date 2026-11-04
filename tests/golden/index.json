@@ -431,6 +431,26 @@
    "generic": true,
    "notes": "",
    "control": "Fagor 8060 / 8065"
+  },
+  "gen.mill.heidenhain": {
+   "name": "Generic Heidenhain TNC 640 (Klartext) mill",
+   "type": "mill",
+   "brand": "heidenhain",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Heidenhain TNC 640 (Klartext)"
   }
  },
  "library": [
@@ -507,6 +527,14 @@
   {
    "example": "tests/cases/FAGOR_8060_LATHE.nc",
    "golden": "tests/golden/FAGOR_8060_LATHE_nc.json"
+  },
+  {
+   "example": "tests/cases/HEIDENHAIN.H",
+   "golden": "tests/golden/HEIDENHAIN_H.json"
+  },
+  {
+   "example": "tests/cases/HEIDENHAIN_CHECKS.H",
+   "golden": "tests/golden/HEIDENHAIN_CHECKS_H.json"
   },
   {
    "example": "tests/cases/LATHE_EDGE.nc",
