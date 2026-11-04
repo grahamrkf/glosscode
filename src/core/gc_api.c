@@ -1,6 +1,7 @@
 /* The JSON interface the UI calls through the webview. Each method takes a JSON object and returns one.
 
-   parse      { "text": "N10 G00 X1.\r\n…" }
+   parse      { "text": "N10 G00 X1.\r\n…", "syntax"?: "fagor8060" }   (syntax: the dialect's blockSyntax; also on tokenize,
+                                                                    serialize and analyze)
               -> { "lines": [ { "tok": ["N10","G00","X1."], "raw": "N10 G00 X1." }, … ],
                    "eob": false, "eol": "\r\n", "finalEol": true }
    serialize  { "lines": [ { "tok": […], "raw": "…" } | ["N10", …], … ], "eob": true, "eol": "\r\n", "finalEol": true }
@@ -35,9 +36,10 @@ static gc_doc *doc_from(const gc_json *p)
     const gc_json *lines = gc_json_get(p, "lines");
     if (!gc_json_is_arr(lines)) {
         const char *text = gc_json_get_str(p, "text");
-        return gc_doc_parse(text ? text : "", text ? strlen(text) : 0);
+        return gc_doc_parse_syntax(text ? text : "", text ? strlen(text) : 0, gc_json_get_str(p, "syntax"));
     }
     gc_doc *doc = gc_doc_new();
+    gc_doc_set_syntax(doc, gc_json_get_str(p, "syntax"));
     for (size_t i = 0; i < lines->n; i++) {
         const gc_json *l = lines->items[i];
         const gc_json *tok = gc_json_is_arr(l) ? l : gc_json_get(l, "tok");
@@ -192,7 +194,7 @@ char *gc_api_call(const gc_data *data, const char *method, const char *params_js
     gc_buf_init(&b);
     if (!strcmp(method, "parse")) {
         const char *text = gc_json_get_str(p, "text");
-        gc_doc *doc = gc_doc_parse(text ? text : "", text ? strlen(text) : 0);
+        gc_doc *doc = gc_doc_parse_syntax(text ? text : "", text ? strlen(text) : 0, gc_json_get_str(p, "syntax"));
         write_doc(&b, doc);
         gc_doc_free(doc);
     } else if (!strcmp(method, "serialize")) {
@@ -207,7 +209,7 @@ char *gc_api_call(const gc_data *data, const char *method, const char *params_js
     } else if (!strcmp(method, "tokenize")) {
         const char *text = gc_json_get_str(p, "text");
         int n;
-        char **t = gc_tokenize(text ? text : "", text ? strlen(text) : 0, &n);
+        char **t = gc_tokenize_syntax(text ? text : "", text ? strlen(text) : 0, gc_json_get_str(p, "syntax"), &n);
         gc_buf_puts(&b, "{\"tok\":[");
         for (int i = 0; i < n; i++) {
             if (i) gc_buf_putc(&b, ',');

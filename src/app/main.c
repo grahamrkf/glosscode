@@ -154,7 +154,6 @@ static char *open_json(const char *path, char *err, size_t errsz)
     gc_buf_puts(&p, "{\"text\":");
     gc_buf_json_str(&p, bytes);
     gc_buf_putc(&p, '}');
-    free(bytes);
     char *doc = gc_api_call(DATA, "parse", gc_buf_str(&p), p.len);
     gc_buf_free(&p);
     gc_buf b;
@@ -163,7 +162,11 @@ static char *open_json(const char *path, char *err, size_t errsz)
     gc_buf_json_str(&b, path);
     gc_buf_puts(&b, ",\"name\":");
     gc_buf_json_str(&b, base_name(path));
-    gc_buf_printf(&b, ",\"latin1\":%s,\"doc\":%s}", latin1 ? "true" : "false", doc);
+    gc_buf_printf(&b, ",\"latin1\":%s,\"doc\":%s,\"text\":", latin1 ? "true" : "false", doc);
+    /* The text too, so the UI can read it again for a control with its own block syntax (Fagor 8060) */
+    gc_buf_json_str(&b, bytes);
+    gc_buf_putc(&b, '}');
+    free(bytes);
     free(doc);
     return gc_buf_take(&b);
 }

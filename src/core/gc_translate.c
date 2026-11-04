@@ -371,14 +371,93 @@ static void cell_set(gc_cell *cell, const char *e, const char *u, const char *d,
     cell->flags = flags;
 }
 
+/* Fagor 8060/8065: labels (N10: and [NAME]), the NR repeat count, and statements read by their first word
+   ($IF, #CALL, %L, LL). Returns 0 for other words. */
+static int fagor_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell)
+{
+    char e[640], d[512];
+    const char *sk = style_key(c);
+    size_t tl = strlen(t);
+    const gc_json *addr = gc_json_get(c->data->words, "address");
+    if (t[0] == 'N' && gc_is_digit((unsigned char)t[1]) && t[tl - 1] == ':') {
+        size_t k = 1;
+        while (gc_is_digit((unsigned char)t[k])) k++;
+        if (k == tl - 1) {
+            snprintf(e, sizeof e, "%s%s", js_str(style_get(gc_json_get(addr, "N"), sk)), t + 1);
+            snprintf(d, sizeof d, "Sequence number %.*s, a label other lines can jump to", (int)(tl - 2), t + 1);
+            cell_set(cell, e, NULL, d, 0);
+            return 1;
+        }
+    }
+    if (t[0] == '[' && tl > 2 && t[tl - 1] == ']') {
+        int ok = 1;
+        for (size_t q = 1; q + 1 < tl; q++)
+            if (!gc_is_alpha((unsigned char)t[q]) && !gc_is_digit((unsigned char)t[q]) && t[q] != '_') ok = 0;
+        if (ok) {
+            snprintf(e, sizeof e, "LABEL%s", t);
+            snprintf(d, sizeof d, "Label %.*s, a place other lines can jump to", (int)(tl - 2), t + 1);
+            cell_set(cell, e, NULL, d, 0);
+            return 1;
+        }
+    }
+    if (t[0] == 'N' && t[1] == 'R' && t[2] && gc_all_digits(t + 2)) {
+        snprintf(e, sizeof e, "%s%s", strcmp(sk, "short") ? "REPEAT" : "x", t + 2);
+        snprintf(d, sizeof d, "Run this line %s times", t + 2);
+        cell_set(cell, e, NULL, d, 0);
+        return 1;
+    }
+    size_t w1 = 0;
+    if (t[0] == '#' || t[0] == '$') {
+        size_t k = 1;
+        while (t[k] >= 'A' && t[k] <= 'Z') k++;
+        if (k > 1) w1 = k;
+    } else if (t[0] == '%') {
+        w1 = (t[1] == 'L' && t[2] == ' ') ? 2 : 1;
+    } else if (t[0] == 'L') {
+        if (t[1] == 'L' && t[2] == ' ') w1 = 2;
+        else if (t[1] == ' ') w1 = 1;
+    }
+    if (w1) {
+        char key[32];
+        if (w1 >= sizeof key) w1 = sizeof key - 1;
+        memcpy(key, t, w1);
+        key[w1] = '\0';
+        const gc_json *en = gc_entry(c, key);
+        const char *rest = t + w1;
+        if (en) {
+            snprintf(e, sizeof e, "%s%s%s", js_str(style_get(en, sk)), (*rest && *rest != ' ') ? " " : "", rest);
+            cell_set(cell, e, NULL, js_str(gc_json_get(en, "desc")), 0);
+        } else {
+            snprintf(e, sizeof e, "?%s", t);
+            snprintf(d, sizeof d, "%s isn't a statement GlossCode knows on this control.", key);
+            cell_set(cell, e, NULL, d, GC_CELL_UNKNOWN);
+        }
+        return 1;
+    }
+    if (st && st->dwell && tl && gc_is_digit((unsigned char)t[tl - 1])) { /* G04 8.5: the time alone */
+        int dots = 0, ok = 1;
+        for (size_t q = 0; q < tl; q++)
+            if (t[q] == '.') dots++;
+            else if (!gc_is_digit((unsigned char)t[q])) ok = 0;
+        if (ok && dots <= 1) {
+            snprintf(e, sizeof e, "%s%s", js_str(style_get(gc_json_get(gc_json_get(addr, "P"), "dwell"), sk)), t);
+            snprintf(d, sizeof d, "Dwell for %s seconds", t);
+            cell_set(cell, e, NULL, d, 0);
+            return 1;
+        }
+    }
+    return 0;
+}
+
 static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell, int ref)
 {
     char e[256], d[512];
     cell->g = gc_strdup(t);
-    if (t[0] == '(') {
+    if (gc_is_comment(t)) {
         cell_set(cell, "", NULL, "Comment, kept as written", GC_CELL_COMMENT);
         return;
     }
+    if (c->fagor && fagor_word(c, t, st, cell)) return;
     if (!gc_is_alpha((unsigned char)t[0]) && t[0] != '#' && t[0] != '/') { /* text that isn't a word, kept as written */
         if (!strcmp(t, ";")) cell_set(cell, ";", NULL, "End of block (;)", 0);
         else if (!strcmp(t, "%")) cell_set(cell, "%", NULL, "Program start or end mark (%), kept as written", 0);
@@ -450,7 +529,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         cell_set(cell, e, NULL, d, 0);
         return;
     }
-    if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1]) && t[0] != 'N') { /* CALL, RTS, GOTO */
+    if (gc_is_kw(t)) { /* CALL, RTS, GOTO */
         const gc_json *en = gc_entry(c, t);
         /* A statement with arguments (Okuma PS LC,[0,0],[-2,55]) reads by its first word, and the rest as written */
         size_t w1 = 0;
@@ -480,6 +559,11 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     gc_num f;
     gc_fmt_num(c, L, raw, st->inch, &f);
     const char *v = f.v;
+    if ((L == 'G' || L == 'M') && t[1] == 'P' && gc_is_digit((unsigned char)t[2])) { /* Fagor: GP0, the code in a parameter */
+        snprintf(d, sizeof d, "%c code from parameter %s, known when the line runs", L, raw);
+        cell_set(cell, t, NULL, d, 0);
+        return;
+    }
     if (L == 'G' || L == 'M') {
         char k[64];
         gc_pad2(t, k, sizeof k);
@@ -549,7 +633,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         return;
     }
     /* Inside a canned cycle, a word can mean something special (Haas G76 A is the tool angle). */
-    if (st->cycle_code[0] && !strchr("FSXYZ", L)) {
+    if (st->cycle_code[0] && (!strchr("FSXYZ", L) || (L == 'Z' && gc_json_truthy(gc_json_get(c->dialect, "cycleRefZ"))))) {
         const gc_json *cw = gc_cycle_word(c, st->cycle_code, L);
         const char *en = gc_json_str(gc_json_at(cw, 2));
         if (en && *en) {
@@ -588,6 +672,14 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     if (L == 'N' && ref) {
         snprintf(e, sizeof e, "%s%s", js_str(style_get(a, sk)), raw);
         snprintf(d, sizeof d, "The line labeled N%s", raw);
+        cell_set(cell, e, NULL, d, 0);
+        return;
+    }
+    /* G04 K0.5 (Fagor 8060), in seconds */
+    if (L == 'K' && st->dwell && gc_json_has_str(gc_json_get(c->dialect, "dwellWords"), "K")) {
+        const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "P"), "dwell");
+        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+        snprintf(d, sizeof d, "Dwell for %s seconds", v);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
@@ -798,7 +890,7 @@ void gc_translate(gc_ctx *c, gc_analysis *a)
         const gc_line *l = &doc->lines[i];
         visit(&w, i, &st);
         if (gc_is_end(l)) break;
-        if (gc_is_return(l) && depth) {
+        if (gc_is_return(l, c->fagor) && depth) {
             i = stack[--depth];
             continue;
         }

@@ -260,10 +260,10 @@ static void check_line(checker *ck, int li)
     const char *first_all = NULL;
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
-        if (t[0] == '(' || t[0] == '/') continue;
+        if (gc_is_comment(t) || t[0] == '/') continue;
         if (!first_all) first_all = t;
         if (!(t[0] >= 'A' && t[0] <= 'Z') && t[0] != '#') continue; /* "%", ";" and other text that isn't a word */
-        if (gc_is_alpha((unsigned char)t[0]) && gc_is_alpha((unsigned char)t[1]) && t[0] != 'N') continue; /* keyword (not a name like NA1) */
+        if (gc_is_kw(t)) continue; /* keyword (not a name like NA1) */
         if (gc_is_macro_tok(t)) continue;
         if (ln.nw >= 256) break;
         word_t *w = &ln.w[ln.nw++];
@@ -299,7 +299,7 @@ static void check_line(checker *ck, int li)
     /* Brackets that don't pair up in an expression */
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
-        if (t[0] == '(' || t[0] == '/') continue;
+        if (gc_is_comment(t) || t[0] == '/') continue;
         int o = 0, cl = 0;
         for (const char *q = t; *q; q++) o += *q == '[', cl += *q == ']';
         if (o == cl) continue;
@@ -313,17 +313,13 @@ static void check_line(checker *ck, int li)
         emit(ck, li, "unbalanced-brackets", &vs, NULL);
     }
     /* N words after the first name lines to jump to (GOTO N90, G85 NA1) */
-    for (int i = 0, k = 0, pk = -1; i < l->ntok; pk = (l->tok[i][0] == '(' || l->tok[i][0] == '/') ? pk : i, i++) {
+    for (int i = 0, k = 0, pk = -1; i < l->ntok; pk = (gc_is_comment(l->tok[i]) || l->tok[i][0] == '/') ? pk : i, i++) {
         const char *t = l->tok[i];
-        if (t[0] == '(' || t[0] == '/') continue;
+        if (gc_is_comment(t) || t[0] == '/') continue;
         if (k++ == 0 || t[0] != 'N') continue;
+        if (c->fagor && t[1] == 'R' && t[2] && gc_all_digits(t + 2)) continue; /* NR3: run the line 3 times */
         char key[64];
-        if (t[1] && gc_all_digits(t + 1)) {
-            char n[32];
-            gc_js_num(gc_js_parse_int(t + 1), n, sizeof n);
-            snprintf(key, sizeof key, "N%s", n);
-        } else
-            snprintf(key, sizeof key, "%s", t);
+        gc_label_key(t, key, sizeof key);
         if (gc_map_get(&c->labels, key, NULL)) continue;
         V0();
         snprintf(tmp2, sizeof tmp2, "%s %s", l->tok[pk], t);
@@ -518,7 +514,7 @@ static void check_line(checker *ck, int li)
             emit(ck, li, "comp-left-on", &vs, NULL);
         }
         st->T = st->pendingT;
-        st->needTlo = 1;
+        st->needTlo = gc_json_is_obj(gc_json_get(D, "toolLength")); /* none on Fagor: D sets the length */
         st->tloOn = 0;
         snprintf(st->tcLine, sizeof st->tcLine, "%s", nLabel);
     }
@@ -1034,7 +1030,7 @@ void gc_check(gc_ctx *c, gc_analysis *a)
         seen[i] = 1;
         check_line(&ck, i);
         if (gc_is_end(l)) break;
-        if (gc_is_return(l) && depth) {
+        if (gc_is_return(l, c->fagor) && depth) {
             i = stack[--depth];
             continue;
         }

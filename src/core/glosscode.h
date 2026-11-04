@@ -47,17 +47,23 @@ typedef struct gc_doc {
     int eob;        /* the file had ';' end-of-block marks */
     char eol[3];    /* the file's line ending: "\r\n", "\n" or "\r" (CRLF for a new file) */
     int final_eol;  /* the last line ended with a line ending */
+    char syntax[16]; /* the control's block syntax ("fagor8060"), "" for the usual one */
 } gc_doc;
 
 /* Splits text into blocks and words. Never fails; bytes that aren't words are skipped, as the
    control would skip them (the raw text keeps them). */
 gc_doc *gc_doc_parse(const char *text, size_t len);
+/* The same for a control with its own block syntax (a dialect's "blockSyntax", such as "fagor8060",
+   where ';' starts a comment and $, # and % statements run to the end of the line). NULL or "" is the usual one. */
+gc_doc *gc_doc_parse_syntax(const char *text, size_t len, const char *syntax);
+void gc_doc_set_syntax(gc_doc *doc, const char *syntax);
 /* Adds one block made of the given words (for building documents from the UI or in tests). */
 void gc_doc_add_line(gc_doc *doc, const char *const *tok, int ntok, const char *raw);
 gc_doc *gc_doc_new(void);
 void gc_doc_free(gc_doc *doc);
 /* Splits one line into words, like the parser does. Free with gc_tokens_free. */
 char **gc_tokenize(const char *line, size_t len, int *ntok);
+char **gc_tokenize_syntax(const char *line, size_t len, const char *syntax, int *ntok);
 void gc_tokens_free(char **tok, int ntok);
 /* Writes the document: each block's words joined by spaces, ';' after each when eob is set, and the
    document's line ending. A block whose raw text still holds the same words is written as raw. */
