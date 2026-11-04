@@ -194,6 +194,7 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
     const gc_json *tl_on = gc_json_get(gc_json_get(c->dialect, "toolLength"), "on");
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
+        if (t[0] && gc_own_word(c, l, t[0])) continue; /* a cycle's own word (Fagor 8055 lathe: S is a label, M a finish stock) */
         if (is_value_word(t, "FSTH") || (strchr("FSTH", t[0]) && gc_is_var_val(t))) {
             if (t[0] == 'H' && wcs_line) {
                 snprintf(st->wcs, sizeof st->wcs, "G15 %s", t);
@@ -632,7 +633,10 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         cell_set(cell, t, NULL, d, 0);
         return;
     }
-    if (L == 'G' || L == 'M') {
+    const gc_json *ownw = st->cycle_code[0] ? gc_json_get(gc_json_get(c->cycles, st->cycle_code), "ownWords") : NULL;
+    char Lo[2] = { L, '\0' };
+    int own = gc_json_has_str(ownw, Lo);
+    if (L == 'G' || (L == 'M' && !own)) {
         char k[64];
         gc_pad2(t, k, sizeof k);
         char ks[72];
@@ -713,7 +717,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         return;
     }
     /* Inside a canned cycle, a word can mean something special (Haas G76 A is the tool angle). */
-    if (st->cycle_code[0] && (!strchr("FSXYZ", L) || (L == 'Z' && gc_json_truthy(gc_json_get(c->dialect, "cycleRefZ"))))) {
+    if (st->cycle_code[0] && (!strchr("FSXYZ", L) || (L == 'Z' && gc_json_truthy(gc_json_get(c->dialect, "cycleRefZ"))) || own)) {
         const gc_json *cw = gc_cycle_word(c, st->cycle_code, L);
         const char *en = gc_json_str(gc_json_at(cw, 2));
         if (en && *en) {

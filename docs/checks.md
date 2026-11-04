@@ -54,7 +54,7 @@ A machine definition file will be able to change any rule's severity or turn it 
 | `cycle-left-on` | warning | A canned cycle still active at a tool change or the program end |
 | `comp-left-on` | warning | Cutter comp still on at a tool change or the program end |
 | `g28-absolute` | warning | `G28 Z0.` under G90, which moves through work Z0 on the way home |
-| `css-no-clamp` | warning | G96 on a lathe before any `G50 S` max RPM |
+| `css-no-clamp` | warning | G96 on a lathe before any max RPM (`G50 S`, or `G92 S` on controls that clamp with G92) |
 | `dwell-no-time` | error | G04 with no time |
 | `dwell-milliseconds` | info | `G04 P500` on a control that reads a whole-number P as milliseconds (set by `dwellNoDecimal` in the dialect; Haas controls, old and NGC, do) |
 | `m-per-block` | error | More M-codes on one line than the control allows (set by `mPerBlock`; Haas allows one, Okuma P200L lathes eight) |

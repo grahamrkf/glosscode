@@ -37,7 +37,8 @@ const SYSTEM_FILES = { "LATHE_SYSTEM_B.nc": ["gen.lathe.fanuclb", "gen.lathe.maz
                        "MITSU_M2.nc": ["gen.mill.mitsubishim2", "gen.mill.mitsubishi"],
                        "FAGOR_8060.nc": ["gen.mill.fagor8060", "gen.mill.fanuc"],
                        "FAGOR_8055.nc": ["gen.mill.fagor8055", "gen.mill.fagor8060"],
-                       "FAGOR_8055_PATTERNS.nc": ["gen.mill.fagor8055"] };
+                       "FAGOR_8055_PATTERNS.nc": ["gen.mill.fagor8055"],
+                       "FAGOR_8055_LATHE.nc": ["gen.lathe.fagor8055", "gen.lathe.fanuc"] };
 let changed = 0;
 const write = (file, out) => {
   if (existsSync(file) && readFileSync(file, "utf8")===out) return;

@@ -391,6 +391,26 @@
    "generic": true,
    "notes": "",
    "control": "Fagor 8055 / 8055i"
+  },
+  "gen.lathe.fagor8055": {
+   "name": "Generic Fagor 8055 / 8055i lathe",
+   "type": "lathe",
+   "brand": "fagor8055",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Fagor 8055 / 8055i"
   }
  },
  "library": [
@@ -451,6 +471,10 @@
   {
    "example": "tests/cases/FAGOR_8055.nc",
    "golden": "tests/golden/FAGOR_8055_nc.json"
+  },
+  {
+   "example": "tests/cases/FAGOR_8055_LATHE.nc",
+   "golden": "tests/golden/FAGOR_8055_LATHE_nc.json"
   },
   {
    "example": "tests/cases/FAGOR_8055_PATTERNS.nc",

@@ -265,6 +265,7 @@ static void check_line(checker *ck, int li)
     memset(&ln, 0, sizeof ln.nw + sizeof ln.nc);
     ln.nw = ln.nc = 0;
     const char *first_all = NULL;
+    int ownM = gc_own_word(c, l, 'M'), ownS = gc_own_word(c, l, 'S');
     for (int i = 0; i < l->ntok; i++) {
         const char *t = l->tok[i];
         if (gc_is_comment(t, c->syntax) || t[0] == '/') continue;
@@ -278,7 +279,7 @@ static void check_line(checker *ck, int li)
         w->L = t[0];
         w->v = t + 1;
         w->n = gc_js_parse_float(t + 1);
-        if (w->L == 'G' || w->L == 'M') gc_pad2(t, ln.codes[ln.nc++], sizeof ln.codes[0]);
+        if (w->L == 'G' || (w->L == 'M' && !ownM)) gc_pad2(t, ln.codes[ln.nc++], sizeof ln.codes[0]);
     }
     const gc_json *groups = c->groups;
     char nLabel[64];
@@ -452,7 +453,12 @@ static void check_line(checker *ck, int li)
         if (code && has(&ln, code) && wl) clampLine = get(&ln, wl[0]);
     }
     if (clampLine) st->clamp = 1;
-    if (has(&ln, "G96") && lathe && gc_json_truthy(sc) && !st->clamp) emit(ck, li, "css-no-clamp", NULL, NULL);
+    if (has(&ln, "G96") && lathe && gc_json_truthy(sc) && !st->clamp) {
+        V0();
+        snprintf(tmp, sizeof tmp, "%s %s", js_or(gc_json_get_str(sc, "code")), js_or(gc_json_get_str(sc, "word")));
+        var(&vs, "clamp", tmp);
+        emit(ck, li, "css-no-clamp", &vs, NULL);
+    }
     const word_t *fW = get(&ln, 'F'), *sW = get(&ln, 'S');
     const gc_json *leadCodes = gc_json_get(D, "leadCodes");
     int leadHit = 0;
@@ -490,7 +496,7 @@ static void check_line(checker *ck, int li)
             }
         }
     }
-    if (sW && !clampLine) st->S = oval(sW->n);
+    if (sW && !clampLine && !ownS) st->S = oval(sW->n);
     if (get(&ln, 'D')) st->D = oval(get(&ln, 'D')->n);
     const word_t *tW = get(&ln, 'T');
     if (tW) {

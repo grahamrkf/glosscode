@@ -42,6 +42,8 @@ void gc_pad2(const char *t, char *out, size_t outsz);
 /* t is a G or M code and pads to c. */
 int gc_is_code(const char *t, const char *c);
 int gc_line_has_code(const gc_line *l, const char *c);
+/* Whether a cycle on this line reads letter L as its own word, not as F, S or M (Fagor 8055 lathe: G68 S is a label). */
+int gc_own_word(const gc_ctx *c, const gc_line *l, char L);
 int gc_line_has_tok(const gc_line *l, const char *t);
 int gc_is_end(const gc_line *l);
 int gc_is_return(const gc_line *l, int syntax);
