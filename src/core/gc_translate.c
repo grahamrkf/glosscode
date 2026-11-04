@@ -17,6 +17,7 @@ enum {
 typedef struct tstate {
     int inch, inc, per_rev, css;
     int cycle, dwell, sub, local, one_shot, zero_shift;
+    char sub_word; /* the subprogram call's program letter when it isn't P (M2/M0 G22 L) */
     char corner[16]; /* Okuma G75/G76 on this line: L is the chamfer or rounding size */
     const gc_json *lib;
     char motion[16], cycle_code[16], plane[16], unit_code[16], dist_code[16], feed_code[16], spin_code[16];
@@ -144,6 +145,7 @@ static void track_carry(const gc_ctx *c, const gc_line *l, tstate *st)
 static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
 {
     st->dwell = st->sub = st->local = 0;
+    st->sub_word = 0;
     /* a lathe G50 (G92 in G code systems B and C: the speedClamp code) with X or Z sets the
        coordinates (zero shift) instead of the spindle limit */
     st->zero_shift = 0;
@@ -297,6 +299,13 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
         }
         if (!strcmp(k, "G04")) st->dwell = 1;
         if (!strcmp(k, "M98") || !strcmp(k, "M97") || !strcmp(k, "G65")) st->sub = 1;
+        {
+            const char *sw = gc_json_get_str(gc_json_get(gc_json_get(c->dialect, "subCalls"), k), "word");
+            if (sw && sw[0] && sw[0] != 'P') {
+                st->sub = 1;
+                st->sub_word = sw[0];
+            }
+        }
         if (!strcmp(k, "M97")) st->local = 1;
         if (!strcmp(k, "G65")) st->lib = gc_lib_for(c, l);
     }
@@ -485,6 +494,20 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         } else {
             cell_set(cell, js_str(style_get(en, sk)), NULL, js_str(gc_json_get(en, "desc")), 0);
         }
+        return;
+    }
+    /* A subprogram call whose program word isn't P (Mitsubishi M2/M0: G22 L2200 P5, P the repeat count) */
+    if (st->sub_word && st->sub_word != 'P' && (L == st->sub_word || L == 'P')) {
+        if (L == 'P') {
+            snprintf(e, sizeof e, "%s%s", strcmp(sk, "short") ? "REPEAT" : "x", v);
+            snprintf(d, sizeof d, "Repeat %s times", v);
+        } else {
+            const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "P"), "sub");
+            if (strcmp(sk, "short")) snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+            else snprintf(e, sizeof e, "%c%s", L, v);
+            snprintf(d, sizeof d, "Program number %s", v);
+        }
+        cell_set(cell, e, NULL, d, 0);
         return;
     }
     /* On a G65 line that calls a library subprogram, each argument reads as the name the library gives it. */

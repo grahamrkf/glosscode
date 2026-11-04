@@ -291,6 +291,46 @@
    "generic": true,
    "notes": "",
    "control": "Mazak EIA/ISO lathe, G code system C"
+  },
+  "gen.mill.mitsubishim2": {
+   "name": "Generic Mitsubishi M700/M70, M2/M0 format mill",
+   "type": "mill",
+   "brand": "mitsubishim2",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Mitsubishi M700/M70, M2/M0 format"
+  },
+  "gen.mill.mitsubishi": {
+   "name": "Generic Mitsubishi M800/M80 (and M700/M70) mill",
+   "type": "mill",
+   "brand": "mitsubishi",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "generic": true,
+   "notes": "",
+   "control": "Mitsubishi M800/M80 (and M700/M70)"
   }
  },
  "library": [
@@ -367,6 +407,10 @@
   {
    "example": "tests/cases/MILL_EDGE.nc",
    "golden": "tests/golden/MILL_EDGE_nc.json"
+  },
+  {
+   "example": "tests/cases/MITSU_M2.nc",
+   "golden": "tests/golden/MITSU_M2_nc.json"
   },
   {
    "example": "tests/cases/NO_END.nc",

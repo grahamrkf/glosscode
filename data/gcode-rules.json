@@ -1075,6 +1075,32 @@
       }
     },
 
+    "mitsubishim2": {
+      "label": "Mitsubishi M700/M70, M2/M0 format",
+      "about": "Mitsubishi's own program format, picked by a parameter instead of the Fanuc-like format: G22 L calls a subprogram and G23 returns, G44 cancels the tool length, G62 is mirror image.",
+      "inherits": "fanuc",
+      "inheritWords": true,
+      "verified": false,
+      "mill": {
+        "source": { "manual": "Mitsubishi M700/M70 Series Programming Manual, M2/M0 format", "section": "G code list and subprograms (section 13.3.1); see docs/manual-reviews/mitsubishi-m800-m700.md" },
+        "modalGroups": {
+          "tool length":  ["G43", "G44"],
+          "stroke check": ["G22.1", "G23.1"],
+          "exact stop":   ["G61", "G63", "G64"],
+          "rotation":     null
+        },
+        "toolLength": { "on": ["G43"], "word": "H", "label": "G43 H" },
+        "subCalls": { "M98": null, "G65": null, "G22": { "word": "L", "target": "program" } },
+        "subReturn": ["G23"],
+        "wordHints": { "G44": null, "G22": { "requires": ["L"] } },
+        "foreign": {
+          "G49": { "severity": "error", "text": "The M2/M0 format has no G49: G44 cancels the tool length." },
+          "M98": { "severity": "warning", "text": "In the M2/M0 format a subprogram is called with G22 L (program) P (repeats), not M98." },
+          "M99": { "severity": "warning", "text": "In the M2/M0 format a subprogram returns with G23, not M99." }
+        }
+      }
+    },
+
     "generic": {
       "label": "Generic",
       "about": "For a program that isn't tied to one control: the common ISO (Fanuc-style) codes that most controls share.",
