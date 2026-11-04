@@ -53,6 +53,7 @@ typedef struct cstate {
     int tloOn;
     int clamp;
     int mcall; /* Fagor 8055: a (MCALL) modal subroutine is on until (MDOFF) */
+    int perMinSeen; /* a feed per minute code has been programmed */
     onum pos[3];
 } cstate;
 
@@ -441,7 +442,10 @@ static void check_line(checker *ck, int li)
         const char *k = ln.codes[i];
         if (gc_json_has_str(gc_json_get(groups, "distance"), k)) st->inc = (!strcmp(k, "G91") || !strcmp(k, "G191"));
         if (!gc_json_get(cycles, k)) {
-            if (!strcmp(k, c->feed_per_min)) st->feed = FEED_MIN;
+            if (!strcmp(k, c->feed_per_min)) {
+                st->feed = FEED_MIN;
+                st->perMinSeen = 1;
+            }
             if (!strcmp(k, c->feed_per_rev)) st->feed = FEED_REV;
             if (!strcmp(k, "G93")) st->feed = FEED_INV;
         }
@@ -713,18 +717,29 @@ static void check_line(checker *ck, int li)
             var(&vs, "word", ln.w[i].t);
             emit(ck, li, "cycle-stray-word", &vs, NULL);
         }
-        for (size_t i = 0; i < gc_json_len(lblWords); i++) {
-            const char *lw = gc_json_str(lblWords->items[i]);
-            const word_t *w = lw ? get(&ln, lw[0]) : NULL;
-            if (!w || gc_is_var_val(w->t)) continue;
-            char n[64];
-            gc_js_num(gc_js_parse_int(w->v), n, sizeof n);
-            snprintf(tmp, sizeof tmp, "N%s", n);
-            if (gc_map_get(&c->labels, tmp, NULL)) continue;
+        /* Labels in another program (Fagor 8065 lathe: the profile in global subroutine Q) can't be checked here */
+        const char *lprog = gc_json_get_str(def, "labelProgram");
+        if (!(lprog && get(&ln, lprog[0])))
+            for (size_t i = 0; i < gc_json_len(lblWords); i++) {
+                const char *lw = gc_json_str(lblWords->items[i]);
+                const word_t *w = lw ? get(&ln, lw[0]) : NULL;
+                if (!w || gc_is_var_val(w->t)) continue;
+                char n[64];
+                gc_js_num(gc_js_parse_int(w->v), n, sizeof n);
+                snprintf(tmp, sizeof tmp, "N%s", n);
+                if (gc_map_get(&c->labels, tmp, NULL)) continue;
+                V0();
+                var(&vs, "word", w->t);
+                var(&vs, "label", tmp);
+                emit(ck, li, "missing-label", &vs, NULL);
+            }
+        if (gc_json_truthy(gc_json_get(def, "needsFeedPerMin")) && st->feed == FEED_REV && !st->perMinSeen) {
             V0();
-            var(&vs, "word", w->t);
-            var(&vs, "label", tmp);
-            emit(ck, li, "missing-label", &vs, NULL);
+            var(&vs, "cycle", cycCode);
+            var(&vs, "name", name);
+            var(&vs, "perRev", c->feed_per_rev);
+            var(&vs, "perMin", c->feed_per_min);
+            emit(ck, li, "cycle-needs-feed-per-min", &vs, NULL);
         }
         if (gc_json_truthy(gc_json_get(def, "speed")) && !st->S.set) {
             V0();
@@ -937,7 +952,9 @@ static void check_line(checker *ck, int li)
                 emit(ck, li, "no-feed-rate", &vs, NULL);
             }
             st->noFwarned = 1;
-        } else if (st->Fmode && st->Fmode != st->feed && !st->Fwarned) {
+        } else if (st->Fmode && st->Fmode != st->feed && !st->Fwarned &&
+                   !(isCycle && st->Fmode == FEED_MIN && gc_json_truthy(gc_json_get(cdef, "needsFeedPerMin")))) {
+            /* a cycle that needs a feed per minute (Fagor 8065 lathe live tool cycles) uses the G94 feed even in G95 */
             st->Fwarned = 1;
             char fs[64];
             gc_js_num(st->F.v, fs, sizeof fs);
@@ -1102,6 +1119,15 @@ static void check_line(checker *ck, int li)
         }
     } else {
         for (int i = 0; i < 3; i++) st->pos[i] = p1[i];
+    }
+    /* Modes a cycle leaves active (Fagor 8065 lathe: G00, G40 and G90 after G66, G68 and G69) */
+    const gc_json *after = gc_json_get(def, "after");
+    for (size_t i = 0; i < gc_json_len(after); i++) {
+        const char *k = gc_json_str(after->items[i]);
+        if (!k) continue;
+        if (is_motion(c, k)) snprintf(st->motion, sizeof st->motion, "%s", k);
+        if (!strcmp(k, "G40") || !strcmp(k, "G41") || !strcmp(k, "G42")) snprintf(st->comp, sizeof st->comp, "%s", k);
+        if (gc_json_has_str(gc_json_get(groups, "distance"), k)) st->inc = (!strcmp(k, "G91") || !strcmp(k, "G191"));
     }
 #undef V0
 }

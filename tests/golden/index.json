@@ -529,6 +529,10 @@
    "golden": "tests/golden/FAGOR_8060_LATHE_nc.json"
   },
   {
+   "example": "tests/cases/FAGOR_8060_LATHE_CHECKS.nc",
+   "golden": "tests/golden/FAGOR_8060_LATHE_CHECKS_nc.json"
+  },
+  {
    "example": "tests/cases/HEIDENHAIN.H",
    "golden": "tests/golden/HEIDENHAIN_H.json"
   },

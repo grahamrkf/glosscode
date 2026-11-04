@@ -123,6 +123,13 @@
    "D1"
   ],
   [
+   "M05"
+  ],
+  [
+   "G94",
+   "F120"
+  ],
+  [
    "G160",
    "X40",
    "Z1",
@@ -146,6 +153,14 @@
    "S1500",
    "F100",
    "N2"
+  ],
+  [
+   "G95",
+   "F0.25"
+  ],
+  [
+   "S180",
+   "M03"
   ],
   [
    "G50",
@@ -331,7 +346,7 @@
      {
       "g": "D1",
       "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G81)"
+      "d": "Safety distance. D0 or left out: the tool goes back along the profile. (G81)"
      },
      {
       "g": "L0.2",
@@ -341,7 +356,7 @@
      {
       "g": "M0.1",
       "e": "FINZ0.1",
-      "d": "Finish stock in Z. (G81)"
+      "d": "Finish stock in Z. Left out, 0. (G81)"
      },
      {
       "g": "H0.1",
@@ -373,7 +388,7 @@
      {
       "g": "D1",
       "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G68)"
+      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
      },
      {
       "g": "L0.2",
@@ -383,7 +398,7 @@
      {
       "g": "M0.1",
       "e": "FINZ0.1",
-      "d": "Finish stock in Z. (G68)"
+      "d": "Finish stock in Z. Left out, it equals L. (G68)"
      },
      {
       "g": "F0.2",
@@ -398,12 +413,12 @@
      {
       "g": "S100",
       "e": "PROFFROM100",
-      "d": "Label of the first line of the profile. (G68)"
+      "d": "Label of the first line of the profile. Not used with P. (G68)"
      },
      {
       "g": "E140",
       "e": "PROFTO140",
-      "d": "Label of the last line of the profile. (G68)"
+      "d": "Label of the last line of the profile. Not used with P. (G68)"
      }
     ],
     [
@@ -487,7 +502,7 @@
      {
       "g": "K1",
       "e": "DWELL1",
-      "d": "Dwell at the bottom. (G88)"
+      "d": "Dwell at the bottom, in hundredths of a second. (G88)"
      }
     ],
     [
@@ -534,7 +549,7 @@
      {
       "g": "A30",
       "e": "INFANG30",
-      "d": "Infeed angle. (G86)"
+      "d": "Infeed angle. Left out, 30°. (G86)"
      }
     ],
     [
@@ -624,8 +639,28 @@
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G83)"
+      "e": "APPR1",
+      "d": "Approach distance before the hole. (G83)"
+     }
+    ],
+    [
+     {
+      "g": "M05",
+      "e": "SPINOFF",
+      "d": "Spindle off"
+     }
+    ],
+    [
+     {
+      "g": "G94",
+      "e": "FEEDMIN",
+      "d": "Feed per minute"
+     },
+     {
+      "g": "F120",
+      "e": "F120.0",
+      "u": "mmpm",
+      "d": "Feed rate 120.0 mm per minute"
      }
     ],
     [
@@ -657,22 +692,22 @@
      {
       "g": "Q0",
       "e": "STARTANG0",
-      "d": "Spindle angle of the first point. (G160)"
+      "d": "Spindle angle of the first hole. (G160)"
      },
      {
       "g": "A90",
       "e": "ANGSTEP90",
-      "d": "Angle between points. (G160)"
+      "d": "Angle between holes. (G160)"
      },
      {
       "g": "J4",
       "e": "COUNT4",
-      "d": "Number of points, counting the first. (G160)"
+      "d": "Number of holes, counting the first. (G160)"
      },
      {
       "g": "S1500",
       "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm. (G160)"
+      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G160)"
      },
      {
       "g": "N2",
@@ -709,33 +744,58 @@
      {
       "g": "Q0",
       "e": "STARTANG0",
-      "d": "Spindle angle of the first point. (G162)"
+      "d": "Spindle angle of the first slot. (G162)"
      },
      {
       "g": "A90",
       "e": "ANGSTEP90",
-      "d": "Angle between points. (G162)"
+      "d": "Angle between slots. (G162)"
      },
      {
       "g": "J4",
       "e": "COUNT4",
-      "d": "Number of points, counting the first. (G162)"
+      "d": "Number of slots, counting the first. (G162)"
      },
      {
       "g": "S1500",
       "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm. (G162)"
+      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G162)"
      },
      {
       "g": "F100",
-      "e": "F100.0",
-      "u": "mmpr",
-      "d": "Feed rate 100.0 mm per rev"
+      "e": "SLOTFEED100.0",
+      "d": "Feed along the slot. Doesn't replace the active feed. (G162)"
      },
      {
       "g": "N2",
       "e": "SPINDLE2",
       "d": "Number of the live tool spindle. (G162)"
+     }
+    ],
+    [
+     {
+      "g": "G95",
+      "e": "FEEDREV",
+      "d": "Feed per revolution"
+     },
+     {
+      "g": "F0.25",
+      "e": "F0.25",
+      "u": "mmpr",
+      "d": "Feed rate 0.25 mm per rev"
+     }
+    ],
+    [
+     {
+      "g": "S180",
+      "e": "S180",
+      "u": "rpm",
+      "d": "Spindle speed 180 RPM"
+     },
+     {
+      "g": "M03",
+      "e": "SPINFWD",
+      "d": "Spindle on, forward (CW)"
      }
     ],
     [
@@ -862,13 +922,7 @@
      "msg": "G96 is on but no G192 S max RPM has been set. Small diameters can overspeed the spindle."
     },
     {
-     "li": 21,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F100.0 mmpr is unusually large for a per-rev feed. Check that G95 (feed per rev) is the mode you meant."
-    },
-    {
-     "li": 22,
+     "li": 26,
      "id": "foreign-code",
      "sev": "warning",
      "msg": "On the Fagor 8060/8065, G50 is a semi-rounded corner, not a speed limit. Limit the spindle speed with G192 S."
@@ -1023,7 +1077,7 @@
      {
       "g": "D1",
       "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G81)"
+      "d": "Safety distance. D0 or left out: the tool goes back along the profile. (G81)"
      },
      {
       "g": "L0.2",
@@ -1033,7 +1087,7 @@
      {
       "g": "M0.1",
       "e": "FINZ0.1",
-      "d": "Finish stock in Z. (G81)"
+      "d": "Finish stock in Z. Left out, 0. (G81)"
      },
      {
       "g": "H0.1",
@@ -1065,7 +1119,7 @@
      {
       "g": "D1",
       "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G68)"
+      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
      },
      {
       "g": "L0.2",
@@ -1075,7 +1129,7 @@
      {
       "g": "M0.1",
       "e": "FINZ0.1",
-      "d": "Finish stock in Z. (G68)"
+      "d": "Finish stock in Z. Left out, it equals L. (G68)"
      },
      {
       "g": "F0.2",
@@ -1090,12 +1144,12 @@
      {
       "g": "S100",
       "e": "PROFFROM100",
-      "d": "Label of the first line of the profile. (G68)"
+      "d": "Label of the first line of the profile. Not used with P. (G68)"
      },
      {
       "g": "E140",
       "e": "PROFTO140",
-      "d": "Label of the last line of the profile. (G68)"
+      "d": "Label of the last line of the profile. Not used with P. (G68)"
      }
     ],
     [
@@ -1179,7 +1233,7 @@
      {
       "g": "K1",
       "e": "DWELL1",
-      "d": "Dwell at the bottom. (G88)"
+      "d": "Dwell at the bottom, in hundredths of a second. (G88)"
      }
     ],
     [
@@ -1226,7 +1280,7 @@
      {
       "g": "A30",
       "e": "INFANG30",
-      "d": "Infeed angle. (G86)"
+      "d": "Infeed angle. Left out, 30°. (G86)"
      }
     ],
     [
@@ -1316,8 +1370,28 @@
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G83)"
+      "e": "APPR1",
+      "d": "Approach distance before the hole. (G83)"
+     }
+    ],
+    [
+     {
+      "g": "M05",
+      "e": "SOFF",
+      "d": "Spindle off"
+     }
+    ],
+    [
+     {
+      "g": "G94",
+      "e": "FPM",
+      "d": "Feed per minute"
+     },
+     {
+      "g": "F120",
+      "e": "F120.0",
+      "u": "mmpm",
+      "d": "Feed rate 120.0 mm per minute"
      }
     ],
     [
@@ -1349,22 +1423,22 @@
      {
       "g": "Q0",
       "e": "STARTANG0",
-      "d": "Spindle angle of the first point. (G160)"
+      "d": "Spindle angle of the first hole. (G160)"
      },
      {
       "g": "A90",
       "e": "ANGSTEP90",
-      "d": "Angle between points. (G160)"
+      "d": "Angle between holes. (G160)"
      },
      {
       "g": "J4",
       "e": "COUNT4",
-      "d": "Number of points, counting the first. (G160)"
+      "d": "Number of holes, counting the first. (G160)"
      },
      {
       "g": "S1500",
       "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm. (G160)"
+      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G160)"
      },
      {
       "g": "N2",
@@ -1401,33 +1475,58 @@
      {
       "g": "Q0",
       "e": "STARTANG0",
-      "d": "Spindle angle of the first point. (G162)"
+      "d": "Spindle angle of the first slot. (G162)"
      },
      {
       "g": "A90",
       "e": "ANGSTEP90",
-      "d": "Angle between points. (G162)"
+      "d": "Angle between slots. (G162)"
      },
      {
       "g": "J4",
       "e": "COUNT4",
-      "d": "Number of points, counting the first. (G162)"
+      "d": "Number of slots, counting the first. (G162)"
      },
      {
       "g": "S1500",
       "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm. (G162)"
+      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G162)"
      },
      {
       "g": "F100",
-      "e": "F100.0",
-      "u": "mmpr",
-      "d": "Feed rate 100.0 mm per rev"
+      "e": "SLOTFEED100.0",
+      "d": "Feed along the slot. Doesn't replace the active feed. (G162)"
      },
      {
       "g": "N2",
       "e": "SPINDLE2",
       "d": "Number of the live tool spindle. (G162)"
+     }
+    ],
+    [
+     {
+      "g": "G95",
+      "e": "FPR",
+      "d": "Feed per revolution"
+     },
+     {
+      "g": "F0.25",
+      "e": "F0.25",
+      "u": "mmpr",
+      "d": "Feed rate 0.25 mm per rev"
+     }
+    ],
+    [
+     {
+      "g": "S180",
+      "e": "S180",
+      "u": "rpm",
+      "d": "Spindle speed 180 RPM"
+     },
+     {
+      "g": "M03",
+      "e": "SFWD",
+      "d": "Spindle on, forward (CW)"
      }
     ],
     [
@@ -1554,13 +1653,7 @@
      "msg": "G96 is on but no G192 S max RPM has been set. Small diameters can overspeed the spindle."
     },
     {
-     "li": 21,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F100.0 mmpr is unusually large for a per-rev feed. Check that G95 (feed per rev) is the mode you meant."
-    },
-    {
-     "li": 22,
+     "li": 26,
      "id": "foreign-code",
      "sev": "warning",
      "msg": "On the Fagor 8060/8065, G50 is a semi-rounded corner, not a speed limit. Limit the spindle speed with G192 S."
@@ -1715,7 +1808,7 @@
      {
       "g": "D1",
       "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G81)"
+      "d": "Safety distance. D0 or left out: the tool goes back along the profile. (G81)"
      },
      {
       "g": "L0.2",
@@ -1725,7 +1818,7 @@
      {
       "g": "M0.1",
       "e": "FINZ0.1",
-      "d": "Finish stock in Z. (G81)"
+      "d": "Finish stock in Z. Left out, 0. (G81)"
      },
      {
       "g": "H0.1",
@@ -1757,7 +1850,7 @@
      {
       "g": "D1",
       "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G68)"
+      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
      },
      {
       "g": "L0.2",
@@ -1767,7 +1860,7 @@
      {
       "g": "M0.1",
       "e": "FINZ0.1",
-      "d": "Finish stock in Z. (G68)"
+      "d": "Finish stock in Z. Left out, it equals L. (G68)"
      },
      {
       "g": "F0.2",
@@ -1782,12 +1875,12 @@
      {
       "g": "S100",
       "e": "PROFFROM100",
-      "d": "Label of the first line of the profile. (G68)"
+      "d": "Label of the first line of the profile. Not used with P. (G68)"
      },
      {
       "g": "E140",
       "e": "PROFTO140",
-      "d": "Label of the last line of the profile. (G68)"
+      "d": "Label of the last line of the profile. Not used with P. (G68)"
      }
     ],
     [
@@ -1871,7 +1964,7 @@
      {
       "g": "K1",
       "e": "DWELL1",
-      "d": "Dwell at the bottom. (G88)"
+      "d": "Dwell at the bottom, in hundredths of a second. (G88)"
      }
     ],
     [
@@ -1918,7 +2011,7 @@
      {
       "g": "A30",
       "e": "INFANG30",
-      "d": "Infeed angle. (G86)"
+      "d": "Infeed angle. Left out, 30°. (G86)"
      }
     ],
     [
@@ -2008,8 +2101,28 @@
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance the tool pulls back. (G83)"
+      "e": "APPR1",
+      "d": "Approach distance before the hole. (G83)"
+     }
+    ],
+    [
+     {
+      "g": "M05",
+      "e": "spindle.off",
+      "d": "Spindle off"
+     }
+    ],
+    [
+     {
+      "g": "G94",
+      "e": "feed.perminute",
+      "d": "Feed per minute"
+     },
+     {
+      "g": "F120",
+      "e": "F120.0",
+      "u": "mmpm",
+      "d": "Feed rate 120.0 mm per minute"
      }
     ],
     [
@@ -2041,22 +2154,22 @@
      {
       "g": "Q0",
       "e": "STARTANG0",
-      "d": "Spindle angle of the first point. (G160)"
+      "d": "Spindle angle of the first hole. (G160)"
      },
      {
       "g": "A90",
       "e": "ANGSTEP90",
-      "d": "Angle between points. (G160)"
+      "d": "Angle between holes. (G160)"
      },
      {
       "g": "J4",
       "e": "COUNT4",
-      "d": "Number of points, counting the first. (G160)"
+      "d": "Number of holes, counting the first. (G160)"
      },
      {
       "g": "S1500",
       "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm. (G160)"
+      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G160)"
      },
      {
       "g": "N2",
@@ -2093,33 +2206,58 @@
      {
       "g": "Q0",
       "e": "STARTANG0",
-      "d": "Spindle angle of the first point. (G162)"
+      "d": "Spindle angle of the first slot. (G162)"
      },
      {
       "g": "A90",
       "e": "ANGSTEP90",
-      "d": "Angle between points. (G162)"
+      "d": "Angle between slots. (G162)"
      },
      {
       "g": "J4",
       "e": "COUNT4",
-      "d": "Number of points, counting the first. (G162)"
+      "d": "Number of slots, counting the first. (G162)"
      },
      {
       "g": "S1500",
       "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm. (G162)"
+      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G162)"
      },
      {
       "g": "F100",
-      "e": "F100.0",
-      "u": "mmpr",
-      "d": "Feed rate 100.0 mm per rev"
+      "e": "SLOTFEED100.0",
+      "d": "Feed along the slot. Doesn't replace the active feed. (G162)"
      },
      {
       "g": "N2",
       "e": "SPINDLE2",
       "d": "Number of the live tool spindle. (G162)"
+     }
+    ],
+    [
+     {
+      "g": "G95",
+      "e": "feed.perrev",
+      "d": "Feed per revolution"
+     },
+     {
+      "g": "F0.25",
+      "e": "F0.25",
+      "u": "mmpr",
+      "d": "Feed rate 0.25 mm per rev"
+     }
+    ],
+    [
+     {
+      "g": "S180",
+      "e": "S180",
+      "u": "rpm",
+      "d": "Spindle speed 180 RPM"
+     },
+     {
+      "g": "M03",
+      "e": "spindle.fwd",
+      "d": "Spindle on, forward (CW)"
      }
     ],
     [
@@ -2246,13 +2384,7 @@
      "msg": "G96 is on but no G192 S max RPM has been set. Small diameters can overspeed the spindle."
     },
     {
-     "li": 21,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F100.0 mmpr is unusually large for a per-rev feed. Check that G95 (feed per rev) is the mode you meant."
-    },
-    {
-     "li": 22,
+     "li": 26,
      "id": "foreign-code",
      "sev": "warning",
      "msg": "On the Fagor 8060/8065, G50 is a semi-rounded corner, not a speed limit. Limit the spindle speed with G192 S."
@@ -2707,6 +2839,26 @@
     ],
     [
      {
+      "g": "M05",
+      "e": "SPINOFF",
+      "d": "Spindle off"
+     }
+    ],
+    [
+     {
+      "g": "G94",
+      "e": "FEEDMIN",
+      "d": "Feed per minute"
+     },
+     {
+      "g": "F120",
+      "e": "F120.0",
+      "u": "mmpm",
+      "d": "Feed rate 120.0 mm per minute"
+     }
+    ],
+    [
+     {
       "g": "G160",
       "e": "?G160",
       "d": "G160 isn't in the dictionary or this machine's file.",
@@ -2814,13 +2966,39 @@
      {
       "g": "F100",
       "e": "F100.0",
-      "u": "mmpr",
-      "d": "Feed rate 100.0 mm per rev"
+      "u": "mmpm",
+      "d": "Feed rate 100.0 mm per minute"
      },
      {
       "g": "N2",
       "e": "REPEAT2",
       "d": "Run this line 2 times"
+     }
+    ],
+    [
+     {
+      "g": "G95",
+      "e": "FEEDREV",
+      "d": "Feed per revolution"
+     },
+     {
+      "g": "F0.25",
+      "e": "F0.25",
+      "u": "mmpr",
+      "d": "Feed rate 0.25 mm per rev"
+     }
+    ],
+    [
+     {
+      "g": "S180",
+      "e": "S180",
+      "u": "rpm",
+      "d": "Spindle speed 180 RPM"
+     },
+     {
+      "g": "M03",
+      "e": "SPINFWD",
+      "d": "Spindle on, forward (CW)"
      }
     ],
     [
@@ -2953,43 +3131,43 @@
      "msg": "G192 isn't in the dictionary or this machine's file."
     },
     {
-     "li": 20,
+     "li": 22,
+     "id": "spindle-off-feed",
+     "sev": "warning",
+     "msg": "This G33 move cuts while the spindle is stopped (M05 is active)."
+    },
+    {
+     "li": 22,
      "id": "unknown-word",
      "sev": "info",
      "msg": "G160 isn't in the dictionary or this machine's file."
     },
     {
-     "li": 20,
+     "li": 22,
      "id": "unknown-word",
      "sev": "info",
      "msg": "B2 isn't in the dictionary or this machine's file."
     },
     {
-     "li": 20,
+     "li": 22,
      "id": "unknown-word",
      "sev": "info",
      "msg": "A90 isn't in the dictionary or this machine's file."
     },
     {
-     "li": 21,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F100.0 mmpr is unusually large for a per-rev feed. Check that G95 (feed per rev) is the mode you meant."
-    },
-    {
-     "li": 21,
+     "li": 23,
      "id": "unknown-word",
      "sev": "info",
      "msg": "G162 isn't in the dictionary or this machine's file."
     },
     {
-     "li": 21,
+     "li": 23,
      "id": "unknown-word",
      "sev": "info",
      "msg": "L20 isn't in the dictionary or this machine's file."
     },
     {
-     "li": 21,
+     "li": 23,
      "id": "unknown-word",
      "sev": "info",
      "msg": "A90 isn't in the dictionary or this machine's file."

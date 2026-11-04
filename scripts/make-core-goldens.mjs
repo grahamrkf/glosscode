@@ -40,6 +40,7 @@ const SYSTEM_FILES = { "LATHE_SYSTEM_B.nc": ["gen.lathe.fanuclb", "gen.lathe.maz
                        "FAGOR_8055_PATTERNS.nc": ["gen.mill.fagor8055"],
                        "FAGOR_8055_LATHE.nc": ["gen.lathe.fagor8055", "gen.lathe.fanuc"],
                        "FAGOR_8060_LATHE.nc": ["gen.lathe.fagor8060", "gen.lathe.fagor8055"],
+                       "FAGOR_8060_LATHE_CHECKS.nc": ["gen.lathe.fagor8060"],
                        "HEIDENHAIN.H": ["gen.mill.heidenhain"],
                        "HEIDENHAIN_CHECKS.H": ["gen.mill.heidenhain"] };
 let changed = 0;
