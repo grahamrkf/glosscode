@@ -335,7 +335,10 @@ int gc_is_var_val(const char *t)
     if (!t || !gc_is_alpha((unsigned char)t[0])) return 0;
     const char *p = t + 1;
     if (*p == '=') return 1;
-    if (*p == '-' || *p == '+') p++;
+    if (*p == '-' || *p == '+') {
+        p++;
+        if (gc_is_alpha((unsigned char)*p)) return 1; /* Okuma: Z-V10 */
+    }
     return *p == '#' || *p == '[';
 }
 

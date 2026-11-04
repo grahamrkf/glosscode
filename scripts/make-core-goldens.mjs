@@ -30,7 +30,7 @@ const A = ctx.__api;
 const MILLS = ["haas_vf2", "fanuc_0imf", "fanuc_0mc", "okuma_m560"], LATHES = ["haas_st10", "okuma_lb3000"];
 const PLASMAS = ["hyp_plasma", "acorn_plasma", "tormach_plasma"];
 const LATHE_FILES = ["LATHE_CHECKS.nc", "SHAFT_OD.nc", "LATHE_EDGE.nc"], PLASMA_FILES = ["PLASMA_BRACKET.nc", "PLASMA_HYPERTHERM.nc", "PLASMA_ACORN.nc"];
-const OKUMA_FILES = ["OKUMA_PLATE.MIN", "OKUMA_CALLS.MIN"], OKUMA_LATHE_FILES = ["OKUMA_LATHE.MIN"];
+const OKUMA_FILES = ["OKUMA_PLATE.MIN", "OKUMA_CALLS.MIN"], OKUMA_LATHE_FILES = ["OKUMA_LATHE.MIN", "OKUMA_GRAPHIC.MIN"];
 let changed = 0;
 const write = (file, out) => {
   if (existsSync(file) && readFileSync(file, "utf8")===out) return;

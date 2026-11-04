@@ -296,6 +296,22 @@ static void check_line(checker *ck, int li)
             var(&vs, "letter", Ls);
             emit(ck, li, "empty-value", &vs, NULL);
         }
+    /* Brackets that don't pair up in an expression */
+    for (int i = 0; i < l->ntok; i++) {
+        const char *t = l->tok[i];
+        if (t[0] == '(' || t[0] == '/') continue;
+        int o = 0, cl = 0;
+        for (const char *q = t; *q; q++) o += *q == '[', cl += *q == ']';
+        if (o == cl) continue;
+        char so[16], sc[16];
+        snprintf(so, sizeof so, "%d", o);
+        snprintf(sc, sizeof sc, "%d", cl);
+        V0();
+        var(&vs, "word", t);
+        var(&vs, "open", so);
+        var(&vs, "close", sc);
+        emit(ck, li, "unbalanced-brackets", &vs, NULL);
+    }
     /* N words after the first name lines to jump to (GOTO N90, G85 NA1) */
     for (int i = 0, k = 0, pk = -1; i < l->ntok; pk = (l->tok[i][0] == '(' || l->tok[i][0] == '/') ? pk : i, i++) {
         const char *t = l->tok[i];

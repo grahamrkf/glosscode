@@ -4,6 +4,7 @@
   "rules": {
     "dup-address":          { "severity": "error",   "title": "Word repeated in a line",            "message": "{letter} appears {count} on this line ({words}). The control uses one of them or alarms.", "why": "Each address letter except G and M can appear once per block." },
     "empty-value":          { "severity": "error",   "title": "Address with no value",              "message": "{letter} has no number after it." },
+    "unbalanced-brackets":  { "severity": "error",   "title": "Brackets that don't match",          "message": "{word} has {open} [ and {close} ]. The control alarms when it reads this line.", "why": "Every [ in an expression needs a ] to close it." },
     "modal-group-clash":    { "severity": "error",   "title": "Two codes from one group",           "message": "{codes} are both {group} codes. Only one can be active, so the control alarms or uses the last one.", "why": "Codes in the same modal group cancel each other." },
     "m-conflict":           { "severity": "error",   "title": "M-codes that contradict each other", "message": "{codes} on the same line contradict each other." },
     "foreign-code":         { "severity": "warning", "title": "Code means something else here",     "message": "{text}" },

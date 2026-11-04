@@ -221,6 +221,10 @@
    "golden": "tests/golden/OKUMA_CALLS_MIN.json"
   },
   {
+   "example": "tests/cases/OKUMA_GRAPHIC.MIN",
+   "golden": "tests/golden/OKUMA_GRAPHIC_MIN.json"
+  },
+  {
    "example": "tests/cases/OKUMA_LATHE.MIN",
    "golden": "tests/golden/OKUMA_LATHE_MIN.json"
   },

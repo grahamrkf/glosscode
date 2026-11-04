@@ -394,7 +394,7 @@ void gc_fmt_num(const gc_ctx *c, char L, const char *raw, int inch, gc_num *out)
     if (!raw || !*raw) return;
     {   /* a macro variable or expression: worked out when the line runs */
         const char *p = (raw[0] == '-' || raw[0] == '+') ? raw + 1 : raw;
-        if (*p == '#' || *p == '[' || raw[0] == '=') {
+        if (*p == '#' || *p == '[' || raw[0] == '=' || (p != raw && gc_is_alpha((unsigned char)*p))) {
             snprintf(out->v, sizeof out->v, "%s", raw);
             return;
         }
