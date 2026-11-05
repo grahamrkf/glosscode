@@ -15,7 +15,7 @@ typedef struct gc_ctx {
     int lathe;
     int okuma;
     int syntax;        /* the dialect's blockSyntax as a GC_SYN_* value (SYNTAX in the mockup) */
-    int style;         /* GC_STYLE_LONG, GC_STYLE_SHORT or GC_STYLE_WORDS */
+    int style;         /* GC_STYLE_WORDS (full words) or GC_STYLE_SHORT */
     gc_json *dialect;  /* owned: the per-type tables merged along the inherits chain */
     gc_json *cycle_help_layers; /* owned array of borrowed pointers' clones: cycleHelp layers, base first */
     const gc_json *groups;      /* dialect.modalGroups */

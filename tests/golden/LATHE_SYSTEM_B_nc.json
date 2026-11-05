@@ -123,914 +123,6 @@
  "runs": [
   {
    "machine": "gen.lathe.fanuclb",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O0201",
-      "e": "PROG0201",
-      "d": "Program number 0201"
-     },
-     {
-      "g": "(G CODE SYSTEM B LATHE)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G20",
-      "e": "INCH",
-      "d": "Inch units"
-     },
-     {
-      "g": "G18",
-      "e": "PLANEXZ",
-      "d": "Arcs in the XZ plane"
-     },
-     {
-      "g": "G95",
-      "e": "FEEDREV",
-      "d": "Feed per revolution"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "G92",
-      "e": "MAXRPM",
-      "d": "Clamp spindle to a max RPM (G50 in system A)"
-     },
-     {
-      "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
-      "d": "Spindle speed 2500 RPM"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "T0101",
-      "e": "TOOL0101",
-      "d": "Tool number 0101"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G96",
-      "e": "MODESFM",
-      "d": "Constant surface speed"
-     },
-     {
-      "g": "S500",
-      "e": "S500",
-      "u": "sfm",
-      "d": "Surface speed 500 surface feet per minute"
-     },
-     {
-      "g": "M03",
-      "e": "SPINFWD",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X2.1",
-      "e": "X2.1",
-      "d": "X position 2.1"
-     },
-     {
-      "g": "Z0.1",
-      "e": "Z0.1",
-      "d": "Z position 0.1"
-     },
-     {
-      "g": "M08",
-      "e": "COOLON",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G77",
-      "e": "TURNCYC",
-      "d": "OD/ID turning cycle"
-     },
-     {
-      "g": "X1.8",
-      "e": "X1.8",
-      "d": "X position 1.8"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "F0.008",
-      "e": "F0.008",
-      "u": "ipr",
-      "d": "Feed rate 0.008 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "X1.6",
-      "e": "X1.6",
-      "d": "X position 1.6"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G79",
-      "e": "FACECYC",
-      "d": "End facing cycle"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": "Z0.",
-      "e": "Z0.0",
-      "d": "Z position 0.0"
-     },
-     {
-      "g": "F0.006",
-      "e": "F0.006",
-      "u": "ipr",
-      "d": "Feed rate 0.006 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "G78",
-      "e": "THDCYC",
-      "d": "Threading cycle"
-     },
-     {
-      "g": "X0.95",
-      "e": "X0.95",
-      "d": "X position 0.95"
-     },
-     {
-      "g": "Z-0.75",
-      "e": "Z-0.75",
-      "d": "Z position -0.75"
-     },
-     {
-      "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
-      "d": "Feed rate 0.0625 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "G91",
-      "e": "INCR",
-      "d": "Incremental positions"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "W0.5",
-      "e": "INCZ0.5",
-      "d": "Incremental Z (lathe) 0.5"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G90",
-      "e": "ABS",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X3.",
-      "e": "X3.0",
-      "d": "X position 3.0"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "G92",
-      "e": "SETCOORD",
-      "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
-     },
-     {
-      "g": "X3.",
-      "e": "X3.0",
-      "d": "X position 3.0"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "SEQ130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X2.",
-      "e": "X2.0",
-      "d": "X position 2.0"
-     },
-     {
-      "g": "Z0.",
-      "e": "Z0.0",
-      "d": "Z position 0.0"
-     },
-     {
-      "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
-      "d": "Feed rate 0.01 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N140",
-      "e": "SEQ140",
-      "d": "Sequence number 140"
-     },
-     {
-      "g": "G33",
-      "e": "THDCUT",
-      "d": "Single thread cut (systems B and C)"
-     },
-     {
-      "g": "Z-0.5",
-      "e": "Z-0.5",
-      "d": "Z position -0.5"
-     },
-     {
-      "g": "F0.05",
-      "e": "F0.05",
-      "u": "ipr",
-      "d": "Feed rate 0.05 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N150",
-      "e": "SEQ150",
-      "d": "Sequence number 150"
-     },
-     {
-      "g": "G94",
-      "e": "FEEDMIN",
-      "d": "Feed per minute"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "F10.",
-      "e": "F10.0",
-      "u": "ipm",
-      "d": "Feed rate 10.0 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N160",
-      "e": "SEQ160",
-      "d": "Sequence number 160"
-     },
-     {
-      "g": "G50",
-      "e": "MAXRPM",
-      "d": "Clamp spindle to a max RPM"
-     },
-     {
-      "g": "S2000",
-      "e": "S2000",
-      "u": "sfm",
-      "d": "Surface speed 2000 surface feet per minute"
-     }
-    ],
-    [
-     {
-      "g": "N170",
-      "e": "SEQ170",
-      "d": "Sequence number 170"
-     },
-     {
-      "g": "G32",
-      "e": "THDCUT",
-      "d": "Single thread cut"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "F0.05",
-      "e": "F0.05",
-      "u": "ipm",
-      "d": "Feed rate 0.05 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N180",
-      "e": "SEQ180",
-      "d": "Sequence number 180"
-     },
-     {
-      "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 17,
-     "id": "foreign-code",
-     "sev": "warning",
-     "msg": "In G code system B G92 sets coordinates and the spindle limit; G50 is system A."
-    },
-    {
-     "li": 18,
-     "id": "foreign-code",
-     "sev": "error",
-     "msg": "In G code system B threading is G33, not G32 (system A)."
-    },
-    {
-     "li": 18,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F0.05 ipm is unusually small for a per-minute feed. Check that G94 (feed per minute) is the mode you meant."
-    }
-   ]
-  },
-  {
-   "machine": "gen.lathe.fanuclb",
-   "style": "short",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O0201",
-      "e": "O0201",
-      "d": "Program number 0201"
-     },
-     {
-      "g": "(G CODE SYSTEM B LATHE)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "N10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G20",
-      "e": "IN",
-      "d": "Inch units"
-     },
-     {
-      "g": "G18",
-      "e": "PXZ",
-      "d": "Arcs in the XZ plane"
-     },
-     {
-      "g": "G95",
-      "e": "FPR",
-      "d": "Feed per revolution"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "N20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "G92",
-      "e": "SMAX",
-      "d": "Clamp spindle to a max RPM (G50 in system A)"
-     },
-     {
-      "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
-      "d": "Spindle speed 2500 RPM"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "N30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "T0101",
-      "e": "T0101",
-      "d": "Tool number 0101"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "N40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G96",
-      "e": "CSS",
-      "d": "Constant surface speed"
-     },
-     {
-      "g": "S500",
-      "e": "S500",
-      "u": "sfm",
-      "d": "Surface speed 500 surface feet per minute"
-     },
-     {
-      "g": "M03",
-      "e": "SFWD",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "N50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G00",
-      "e": "RPD",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X2.1",
-      "e": "X2.1",
-      "d": "X position 2.1"
-     },
-     {
-      "g": "Z0.1",
-      "e": "Z0.1",
-      "d": "Z position 0.1"
-     },
-     {
-      "g": "M08",
-      "e": "CON",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "N60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G77",
-      "e": "TCY",
-      "d": "OD/ID turning cycle"
-     },
-     {
-      "g": "X1.8",
-      "e": "X1.8",
-      "d": "X position 1.8"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "F0.008",
-      "e": "F0.008",
-      "u": "ipr",
-      "d": "Feed rate 0.008 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "N70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "X1.6",
-      "e": "X1.6",
-      "d": "X position 1.6"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "N80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G79",
-      "e": "FCY",
-      "d": "End facing cycle"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": "Z0.",
-      "e": "Z0.0",
-      "d": "Z position 0.0"
-     },
-     {
-      "g": "F0.006",
-      "e": "F0.006",
-      "u": "ipr",
-      "d": "Feed rate 0.006 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "N90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "G78",
-      "e": "TCYC",
-      "d": "Threading cycle"
-     },
-     {
-      "g": "X0.95",
-      "e": "X0.95",
-      "d": "X position 0.95"
-     },
-     {
-      "g": "Z-0.75",
-      "e": "Z-0.75",
-      "d": "Z position -0.75"
-     },
-     {
-      "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
-      "d": "Feed rate 0.0625 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "N100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "G91",
-      "e": "INC",
-      "d": "Incremental positions"
-     },
-     {
-      "g": "G00",
-      "e": "RPD",
-      "d": "Rapid move"
-     },
-     {
-      "g": "W0.5",
-      "e": "iZ0.5",
-      "d": "Incremental Z (lathe) 0.5"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "N110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G90",
-      "e": "ABS",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G00",
-      "e": "RPD",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X3.",
-      "e": "X3.0",
-      "d": "X position 3.0"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "N120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "G92",
-      "e": "SETC",
-      "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
-     },
-     {
-      "g": "X3.",
-      "e": "X3.0",
-      "d": "X position 3.0"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "N130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "G01",
-      "e": "LIN",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X2.",
-      "e": "X2.0",
-      "d": "X position 2.0"
-     },
-     {
-      "g": "Z0.",
-      "e": "Z0.0",
-      "d": "Z position 0.0"
-     },
-     {
-      "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
-      "d": "Feed rate 0.01 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N140",
-      "e": "N140",
-      "d": "Sequence number 140"
-     },
-     {
-      "g": "G33",
-      "e": "THC",
-      "d": "Single thread cut (systems B and C)"
-     },
-     {
-      "g": "Z-0.5",
-      "e": "Z-0.5",
-      "d": "Z position -0.5"
-     },
-     {
-      "g": "F0.05",
-      "e": "F0.05",
-      "u": "ipr",
-      "d": "Feed rate 0.05 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N150",
-      "e": "N150",
-      "d": "Sequence number 150"
-     },
-     {
-      "g": "G94",
-      "e": "FPM",
-      "d": "Feed per minute"
-     },
-     {
-      "g": "G01",
-      "e": "LIN",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "F10.",
-      "e": "F10.0",
-      "u": "ipm",
-      "d": "Feed rate 10.0 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N160",
-      "e": "N160",
-      "d": "Sequence number 160"
-     },
-     {
-      "g": "G50",
-      "e": "SMAX",
-      "d": "Clamp spindle to a max RPM"
-     },
-     {
-      "g": "S2000",
-      "e": "S2000",
-      "u": "sfm",
-      "d": "Surface speed 2000 surface feet per minute"
-     }
-    ],
-    [
-     {
-      "g": "N170",
-      "e": "N170",
-      "d": "Sequence number 170"
-     },
-     {
-      "g": "G32",
-      "e": "THC",
-      "d": "Single thread cut"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "F0.05",
-      "e": "F0.05",
-      "u": "ipm",
-      "d": "Feed rate 0.05 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N180",
-      "e": "N180",
-      "d": "Sequence number 180"
-     },
-     {
-      "g": "M30",
-      "e": "END",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 17,
-     "id": "foreign-code",
-     "sev": "warning",
-     "msg": "In G code system B G92 sets coordinates and the spindle limit; G50 is system A."
-    },
-    {
-     "li": 18,
-     "id": "foreign-code",
-     "sev": "error",
-     "msg": "In G code system B threading is G33, not G32 (system A)."
-    },
-    {
-     "li": 18,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F0.05 ipm is unusually small for a per-minute feed. Check that G94 (feed per minute) is the mode you meant."
-    }
-   ]
-  },
-  {
-   "machine": "gen.lathe.fanuclb",
    "style": "words",
    "words": [
     [
@@ -1061,17 +153,17 @@
      },
      {
       "g": "G20",
-      "e": "units.inch",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G18",
-      "e": "plane.xz",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G95",
-      "e": "feed.perrev",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -1083,7 +175,7 @@
      },
      {
       "g": "G92",
-      "e": "spindle.maxrpm",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM (G50 in system A)"
      },
      {
@@ -1113,7 +205,7 @@
      },
      {
       "g": "G96",
-      "e": "speed.sfm",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -1136,7 +228,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1151,7 +243,7 @@
      },
      {
       "g": "M08",
-      "e": "coolant.on",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1259,12 +351,12 @@
      },
      {
       "g": "G91",
-      "e": "units.incremental",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1281,12 +373,12 @@
      },
      {
       "g": "G90",
-      "e": "units.absolute",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1308,7 +400,7 @@
      },
      {
       "g": "G92",
-      "e": "coords.set",
+      "e": "set.coords",
       "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
      },
      {
@@ -1330,7 +422,7 @@
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1358,7 +450,7 @@
      },
      {
       "g": "G33",
-      "e": "thread.cut",
+      "e": "run.thread",
       "d": "Single thread cut (systems B and C)"
      },
      {
@@ -1381,12 +473,12 @@
      },
      {
       "g": "G94",
-      "e": "feed.perminute",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1409,7 +501,7 @@
      },
      {
       "g": "G50",
-      "e": "spindle.maxrpm",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -1427,7 +519,7 @@
      },
      {
       "g": "G32",
-      "e": "thread.cut",
+      "e": "run.thread",
       "d": "Single thread cut"
      },
      {
@@ -1450,8 +542,462 @@
      },
      {
       "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
+     }
+    ],
+    [
+     {
+      "g": "%",
+      "e": "%",
+      "d": "Program start or end mark (%), kept as written"
+     }
+    ]
+   ],
+   "problems": [
+    {
+     "li": 17,
+     "id": "foreign-code",
+     "sev": "warning",
+     "msg": "In G code system B G92 sets coordinates and the spindle limit; G50 is system A."
+    },
+    {
+     "li": 18,
+     "id": "foreign-code",
+     "sev": "error",
+     "msg": "In G code system B threading is G33, not G32 (system A)."
+    },
+    {
+     "li": 18,
+     "id": "feed-plausibility",
+     "sev": "info",
+     "msg": "F0.05 ipm is unusually small for a per-minute feed. Check that G94 (feed per minute) is the mode you meant."
+    }
+   ]
+  },
+  {
+   "machine": "gen.lathe.fanuclb",
+   "style": "short",
+   "words": [
+    [
+     {
+      "g": "%",
+      "e": "%",
+      "d": "Program start or end mark (%), kept as written"
+     }
+    ],
+    [
+     {
+      "g": "O0201",
+      "e": "O0201",
+      "d": "Program number 0201"
+     },
+     {
+      "g": "(G CODE SYSTEM B LATHE)",
+      "e": "",
+      "d": "Comment, kept as written",
+      "cm": true
+     }
+    ],
+    [
+     {
+      "g": "N10",
+      "e": "N10",
+      "d": "Sequence number 10"
+     },
+     {
+      "g": "G20",
+      "e": "INCH",
+      "d": "Inch units"
+     },
+     {
+      "g": "G18",
+      "e": "XZ",
+      "d": "Arcs in the XZ plane"
+     },
+     {
+      "g": "G95",
+      "e": "FPR",
+      "d": "Feed per revolution"
+     }
+    ],
+    [
+     {
+      "g": "N20",
+      "e": "N20",
+      "d": "Sequence number 20"
+     },
+     {
+      "g": "G92",
+      "e": "SMAX",
+      "d": "Clamp spindle to a max RPM (G50 in system A)"
+     },
+     {
+      "g": "S2500",
+      "e": "S2500",
+      "u": "rpm",
+      "d": "Spindle speed 2500 RPM"
+     }
+    ],
+    [
+     {
+      "g": "N30",
+      "e": "N30",
+      "d": "Sequence number 30"
+     },
+     {
+      "g": "T0101",
+      "e": "T0101",
+      "d": "Tool number 0101"
+     }
+    ],
+    [
+     {
+      "g": "N40",
+      "e": "N40",
+      "d": "Sequence number 40"
+     },
+     {
+      "g": "G96",
+      "e": "SFM",
+      "d": "Constant surface speed"
+     },
+     {
+      "g": "S500",
+      "e": "S500",
+      "u": "sfm",
+      "d": "Surface speed 500 surface feet per minute"
+     },
+     {
+      "g": "M03",
+      "e": "SFWD",
+      "d": "Spindle on, forward (CW)"
+     }
+    ],
+    [
+     {
+      "g": "N50",
+      "e": "N50",
+      "d": "Sequence number 50"
+     },
+     {
+      "g": "G00",
+      "e": "RPD",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X2.1",
+      "e": "X2.1",
+      "d": "X position 2.1"
+     },
+     {
+      "g": "Z0.1",
+      "e": "Z0.1",
+      "d": "Z position 0.1"
+     },
+     {
+      "g": "M08",
+      "e": "CON",
+      "d": "Flood coolant on"
+     }
+    ],
+    [
+     {
+      "g": "N60",
+      "e": "N60",
+      "d": "Sequence number 60"
+     },
+     {
+      "g": "G77",
+      "e": "TURN",
+      "d": "OD/ID turning cycle"
+     },
+     {
+      "g": "X1.8",
+      "e": "X1.8",
+      "d": "X position 1.8"
+     },
+     {
+      "g": "Z-1.",
+      "e": "Z-1.0",
+      "d": "Z position -1.0"
+     },
+     {
+      "g": "F0.008",
+      "e": "F0.008",
+      "u": "ipr",
+      "d": "Feed rate 0.008 inches per rev"
+     }
+    ],
+    [
+     {
+      "g": "N70",
+      "e": "N70",
+      "d": "Sequence number 70"
+     },
+     {
+      "g": "X1.6",
+      "e": "X1.6",
+      "d": "X position 1.6"
+     }
+    ],
+    [
+     {
+      "g": "N80",
+      "e": "N80",
+      "d": "Sequence number 80"
+     },
+     {
+      "g": "G79",
+      "e": "FACE",
+      "d": "End facing cycle"
+     },
+     {
+      "g": "X0.",
+      "e": "X0.0",
+      "d": "X position 0.0"
+     },
+     {
+      "g": "Z0.",
+      "e": "Z0.0",
+      "d": "Z position 0.0"
+     },
+     {
+      "g": "F0.006",
+      "e": "F0.006",
+      "u": "ipr",
+      "d": "Feed rate 0.006 inches per rev"
+     }
+    ],
+    [
+     {
+      "g": "N90",
+      "e": "N90",
+      "d": "Sequence number 90"
+     },
+     {
+      "g": "G78",
+      "e": "THDCY",
+      "d": "Threading cycle"
+     },
+     {
+      "g": "X0.95",
+      "e": "X0.95",
+      "d": "X position 0.95"
+     },
+     {
+      "g": "Z-0.75",
+      "e": "Z-0.75",
+      "d": "Z position -0.75"
+     },
+     {
+      "g": "F0.0625",
+      "e": "F0.0625",
+      "u": "ipr",
+      "d": "Feed rate 0.0625 inches per rev"
+     }
+    ],
+    [
+     {
+      "g": "N100",
+      "e": "N100",
+      "d": "Sequence number 100"
+     },
+     {
+      "g": "G91",
+      "e": "INCR",
+      "d": "Incremental positions"
+     },
+     {
+      "g": "G00",
+      "e": "RPD",
+      "d": "Rapid move"
+     },
+     {
+      "g": "W0.5",
+      "e": "iZ0.5",
+      "d": "Incremental Z (lathe) 0.5"
+     }
+    ],
+    [
+     {
+      "g": "N110",
+      "e": "N110",
+      "d": "Sequence number 110"
+     },
+     {
+      "g": "G90",
+      "e": "ABS",
+      "d": "Absolute positions"
+     },
+     {
+      "g": "G00",
+      "e": "RPD",
+      "d": "Rapid move"
+     },
+     {
+      "g": "X3.",
+      "e": "X3.0",
+      "d": "X position 3.0"
+     },
+     {
+      "g": "Z1.",
+      "e": "Z1.0",
+      "d": "Z position 1.0"
+     }
+    ],
+    [
+     {
+      "g": "N120",
+      "e": "N120",
+      "d": "Sequence number 120"
+     },
+     {
+      "g": "G92",
+      "e": "SETC",
+      "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
+     },
+     {
+      "g": "X3.",
+      "e": "X3.0",
+      "d": "X position 3.0"
+     },
+     {
+      "g": "Z1.",
+      "e": "Z1.0",
+      "d": "Z position 1.0"
+     }
+    ],
+    [
+     {
+      "g": "N130",
+      "e": "N130",
+      "d": "Sequence number 130"
+     },
+     {
+      "g": "G01",
+      "e": "FEED",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "X2.",
+      "e": "X2.0",
+      "d": "X position 2.0"
+     },
+     {
+      "g": "Z0.",
+      "e": "Z0.0",
+      "d": "Z position 0.0"
+     },
+     {
+      "g": "F0.01",
+      "e": "F0.01",
+      "u": "ipr",
+      "d": "Feed rate 0.01 inches per rev"
+     }
+    ],
+    [
+     {
+      "g": "N140",
+      "e": "N140",
+      "d": "Sequence number 140"
+     },
+     {
+      "g": "G33",
+      "e": "THD",
+      "d": "Single thread cut (systems B and C)"
+     },
+     {
+      "g": "Z-0.5",
+      "e": "Z-0.5",
+      "d": "Z position -0.5"
+     },
+     {
+      "g": "F0.05",
+      "e": "F0.05",
+      "u": "ipr",
+      "d": "Feed rate 0.05 inches per rev"
+     }
+    ],
+    [
+     {
+      "g": "N150",
+      "e": "N150",
+      "d": "Sequence number 150"
+     },
+     {
+      "g": "G94",
+      "e": "FPM",
+      "d": "Feed per minute"
+     },
+     {
+      "g": "G01",
+      "e": "FEED",
+      "d": "Straight move at feed rate"
+     },
+     {
+      "g": "Z-1.",
+      "e": "Z-1.0",
+      "d": "Z position -1.0"
+     },
+     {
+      "g": "F10.",
+      "e": "F10.0",
+      "u": "ipm",
+      "d": "Feed rate 10.0 inches per minute"
+     }
+    ],
+    [
+     {
+      "g": "N160",
+      "e": "N160",
+      "d": "Sequence number 160"
+     },
+     {
+      "g": "G50",
+      "e": "SMAX",
+      "d": "Clamp spindle to a max RPM"
+     },
+     {
+      "g": "S2000",
+      "e": "S2000",
+      "u": "sfm",
+      "d": "Surface speed 2000 surface feet per minute"
+     }
+    ],
+    [
+     {
+      "g": "N170",
+      "e": "N170",
+      "d": "Sequence number 170"
+     },
+     {
+      "g": "G32",
+      "e": "THD",
+      "d": "Single thread cut"
+     },
+     {
+      "g": "Z-1.",
+      "e": "Z-1.0",
+      "d": "Z position -1.0"
+     },
+     {
+      "g": "F0.05",
+      "e": "F0.05",
+      "u": "ipm",
+      "d": "Feed rate 0.05 inches per minute"
+     }
+    ],
+    [
+     {
+      "g": "N180",
+      "e": "N180",
+      "d": "Sequence number 180"
+     },
+     {
+      "g": "M30",
+      "e": "END",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -1485,7 +1031,7 @@
   },
   {
    "machine": "gen.lathe.mazaklb",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1515,17 +1061,17 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -1537,7 +1083,7 @@
      },
      {
       "g": "G92",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM (G50 in system A)"
      },
      {
@@ -1567,7 +1113,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -1578,7 +1124,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1590,7 +1136,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1605,7 +1151,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1617,7 +1163,7 @@
      },
      {
       "g": "G77",
-      "e": "TURNCYC",
+      "e": "cycle.turn",
       "d": "OD/ID turning cycle"
      },
      {
@@ -1657,7 +1203,7 @@
      },
      {
       "g": "G79",
-      "e": "FACECYC",
+      "e": "cycle.face",
       "d": "End facing cycle"
      },
      {
@@ -1685,7 +1231,7 @@
      },
      {
       "g": "G78",
-      "e": "THDCYC",
+      "e": "cycle.thread",
       "d": "Threading cycle"
      },
      {
@@ -1713,12 +1259,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1735,12 +1281,12 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1762,7 +1308,7 @@
      },
      {
       "g": "G92",
-      "e": "SETCOORD",
+      "e": "set.coords",
       "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
      },
      {
@@ -1784,7 +1330,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1812,7 +1358,7 @@
      },
      {
       "g": "G33",
-      "e": "THDCUT",
+      "e": "run.thread",
       "d": "Single thread cut (systems B and C)"
      },
      {
@@ -1835,12 +1381,12 @@
      },
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1863,7 +1409,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -1881,7 +1427,7 @@
      },
      {
       "g": "G32",
-      "e": "THDCUT",
+      "e": "run.thread",
       "d": "Single thread cut"
      },
      {
@@ -1904,8 +1450,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -1939,7 +1485,7 @@
   },
   {
    "machine": "gen.lathe.mitsubishilb",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1969,17 +1515,17 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -1991,7 +1537,7 @@
      },
      {
       "g": "G92",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM (G50 in system A)"
      },
      {
@@ -2021,7 +1567,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -2032,7 +1578,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -2044,7 +1590,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2059,7 +1605,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -2071,7 +1617,7 @@
      },
      {
       "g": "G77",
-      "e": "TURNCYC",
+      "e": "cycle.turn",
       "d": "OD/ID turning cycle"
      },
      {
@@ -2111,7 +1657,7 @@
      },
      {
       "g": "G79",
-      "e": "FACECYC",
+      "e": "cycle.face",
       "d": "End facing cycle"
      },
      {
@@ -2139,7 +1685,7 @@
      },
      {
       "g": "G78",
-      "e": "THDCYC",
+      "e": "cycle.thread",
       "d": "Threading cycle"
      },
      {
@@ -2167,12 +1713,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2189,12 +1735,12 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2216,7 +1762,7 @@
      },
      {
       "g": "G92",
-      "e": "SETCOORD",
+      "e": "set.coords",
       "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
      },
      {
@@ -2238,7 +1784,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2266,7 +1812,7 @@
      },
      {
       "g": "G33",
-      "e": "THDCUT",
+      "e": "run.thread",
       "d": "Single thread cut (systems B and C)"
      },
      {
@@ -2289,12 +1835,12 @@
      },
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2317,7 +1863,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -2335,7 +1881,7 @@
      },
      {
       "g": "G32",
-      "e": "THDCUT",
+      "e": "run.thread",
       "d": "Single thread cut"
      },
      {
@@ -2358,8 +1904,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -2393,7 +1939,7 @@
   },
   {
    "machine": "gen.lathe.fanuc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -2423,17 +1969,17 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -2445,7 +1991,7 @@
      },
      {
       "g": "G92",
-      "e": "THDCYC",
+      "e": "cycle.thread",
       "d": "Threading cycle"
      },
      {
@@ -2475,7 +2021,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -2486,7 +2032,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -2498,7 +2044,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2513,7 +2059,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -2624,12 +2170,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2646,12 +2192,12 @@
      },
      {
       "g": "G90",
-      "e": "TURNCYC",
+      "e": "cycle.turn",
       "d": "OD/ID turning cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2673,7 +2219,7 @@
      },
      {
       "g": "G92",
-      "e": "THDCYC",
+      "e": "cycle.thread",
       "d": "Threading cycle"
      },
      {
@@ -2695,7 +2241,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2747,12 +2293,12 @@
      },
      {
       "g": "G94",
-      "e": "FACECYC",
+      "e": "cycle.face",
       "d": "End facing cycle"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2775,7 +2321,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -2793,7 +2339,7 @@
      },
      {
       "g": "G32",
-      "e": "THDCUT",
+      "e": "run.thread",
       "d": "Single thread cut"
      },
      {
@@ -2816,8 +2362,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [

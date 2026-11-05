@@ -127,19 +127,19 @@
  "runs": [
   {
    "machine": "gen.mill.fagor8060",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
       "g": "%PLATE",
-      "e": "PROGRAM PLATE",
+      "e": "prog.name PLATE",
       "d": "Program name"
      }
     ],
     [
      {
       "g": "%L HOLES",
-      "e": "LOCALSUB HOLES",
+      "e": "prog.sub.local HOLES",
       "d": "Start of a local subroutine"
      },
      {
@@ -200,7 +200,7 @@
     [
      {
       "g": "M17",
-      "e": "SUBEND",
+      "e": "call.return",
       "d": "End of subroutine"
      }
     ],
@@ -220,17 +220,17 @@
      },
      {
       "g": "G71",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
@@ -253,7 +253,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -266,19 +266,19 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -307,12 +307,12 @@
     [
      {
       "g": "G99",
-      "e": "RETREF",
+      "e": "cycle.return.r",
       "d": "Cycle returns to the reference plane"
      },
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -340,35 +340,35 @@
     [
      {
       "g": "LL HOLES",
-      "e": "CALLLOC HOLES",
+      "e": "call.local HOLES",
       "d": "Call a local subroutine"
      }
     ],
     [
      {
       "g": "#CALL HOLES",
-      "e": "CALLSUB HOLES",
+      "e": "call.sub HOLES",
       "d": "Call a subroutine"
      }
     ],
     [
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
     [
      {
       "g": "$IF [P1==2] $GOTO [DONE]",
-      "e": "IF [P1==2] $GOTO [DONE]",
+      "e": "flow.if [P1==2] $GOTO [DONE]",
       "d": "If the condition is true, run the lines below"
      }
     ],
     [
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -396,7 +396,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -408,7 +408,7 @@
     [
      {
       "g": "G84",
-      "e": "TAP",
+      "e": "cycle.tap",
       "d": "Tapping cycle"
      },
      {
@@ -452,14 +452,14 @@
     [
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
     [
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -471,14 +471,14 @@
     [
      {
       "g": "#MSG [\"CHECK PART\"]",
-      "e": "MESSAGE [\"CHECK PART\"]",
+      "e": "prog.msg.show [\"CHECK PART\"]",
       "d": "Show a message"
      }
     ],
     [
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -490,7 +490,7 @@
     [
      {
       "g": "M98",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram"
      },
      {
@@ -507,8 +507,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],
@@ -534,14 +534,14 @@
     [
      {
       "g": "%PLATE",
-      "e": "PRG PLATE",
+      "e": "PRGNAME PLATE",
       "d": "Program name"
      }
     ],
     [
      {
       "g": "%L HOLES",
-      "e": "LSUB HOLES",
+      "e": "LSUBDEF HOLES",
       "d": "Start of a local subroutine"
      },
      {
@@ -632,7 +632,7 @@
      },
      {
       "g": "G17",
-      "e": "PXY",
+      "e": "XY",
       "d": "Arcs in the XY plane"
      },
      {
@@ -709,7 +709,7 @@
     [
      {
       "g": "G99",
-      "e": "RREF",
+      "e": "RETR",
       "d": "Cycle returns to the reference plane"
      },
      {
@@ -742,14 +742,14 @@
     [
      {
       "g": "LL HOLES",
-      "e": "CALL HOLES",
+      "e": "LSUB HOLES",
       "d": "Call a local subroutine"
      }
     ],
     [
      {
       "g": "#CALL HOLES",
-      "e": "CALL HOLES",
+      "e": "SUB HOLES",
       "d": "Call a subroutine"
      }
     ],
@@ -770,7 +770,7 @@
     [
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -873,7 +873,7 @@
     [
      {
       "g": "#MSG [\"CHECK PART\"]",
-      "e": "MSG [\"CHECK PART\"]",
+      "e": "MSGSHOW [\"CHECK PART\"]",
       "d": "Show a message"
      }
     ],
@@ -910,409 +910,7 @@
      {
       "g": "M30",
       "e": "END",
-      "d": "End program and rewind"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 25,
-     "id": "foreign-code",
-     "sev": "error",
-     "msg": "Fagor 8060/8065 has no G43. The tool length offset comes from D (D1 on, D0 off) and applies on the next move along the tool axis."
-    },
-    {
-     "li": 26,
-     "id": "foreign-code",
-     "sev": "error",
-     "msg": "Fagor has no M98. Call a subroutine with #CALL name (or LL name for a local %L subroutine)."
-    }
-   ]
-  },
-  {
-   "machine": "gen.mill.fagor8060",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "%PLATE",
-      "e": "program.name PLATE",
-      "d": "Program name"
-     }
-    ],
-    [
-     {
-      "g": "%L HOLES",
-      "e": "sub.local HOLES",
-      "d": "Start of a local subroutine"
-     },
-     {
-      "g": "; four holes, drilling cycle already active",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "X10",
-      "e": "X10",
-      "d": "X position 10"
-     },
-     {
-      "g": "Y10",
-      "e": "Y10",
-      "d": "Y position 10"
-     }
-    ],
-    [
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Y10",
-      "e": "Y10",
-      "d": "Y position 10"
-     }
-    ],
-    [
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Y30",
-      "e": "Y30",
-      "d": "Y position 30"
-     }
-    ],
-    [
-     {
-      "g": "X10",
-      "e": "X10",
-      "d": "X position 10"
-     },
-     {
-      "g": "Y30",
-      "e": "Y30",
-      "d": "Y position 30"
-     }
-    ],
-    [
-     {
-      "g": "M17",
-      "e": "sub.return",
-      "d": "End of subroutine"
-     }
-    ],
-    [
-     {
-      "g": "; main program",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10:",
-      "e": "SEQ10:",
-      "d": "Sequence number 10, a label other lines can jump to"
-     },
-     {
-      "g": "G71",
-      "e": "units.metric",
-      "d": "Millimeter units"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G17",
-      "e": "plane.xy",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "(metric, absolute)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "T1",
-      "e": "TOOL1",
-      "d": "Tool number 1"
-     },
-     {
-      "g": "D1",
-      "e": "DOFS1",
-      "d": "Tool diameter offset number 1"
-     },
-     {
-      "g": "M06",
-      "e": "tool.change",
-      "d": "Tool change"
-     }
-    ],
-    [
-     {
-      "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
-      "d": "Spindle speed 1500 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     },
-     {
-      "g": "M08",
-      "e": "coolant.on",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X0",
-      "e": "X0",
-      "d": "X position 0"
-     },
-     {
-      "g": "Y0",
-      "e": "Y0",
-      "d": "Y position 0"
-     },
-     {
-      "g": "Z50",
-      "e": "Z50",
-      "d": "Z position 50"
-     }
-    ],
-    [
-     {
-      "g": "P1=2",
-      "e": "P1=2",
-      "d": "Sets variable P1 to 2"
-     }
-    ],
-    [
-     {
-      "g": "G99",
-      "e": "return.rplane",
-      "d": "Cycle returns to the reference plane"
-     },
-     {
-      "g": "G81",
-      "e": "cycle.drill",
-      "d": "Drilling cycle"
-     },
-     {
-      "g": "Z2",
-      "e": "REFZ2",
-      "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
-     },
-     {
-      "g": "I-15",
-      "e": "DEPTH-15",
-      "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
-     },
-     {
-      "g": "K0.5",
-      "e": "DWELL0.5",
-      "d": "Dwell at the bottom, in seconds. (G81)"
-     },
-     {
-      "g": "F200",
-      "e": "F200.0",
-      "u": "mmpm",
-      "d": "Feed rate 200.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "LL HOLES",
-      "e": "sub.calllocal HOLES",
-      "d": "Call a local subroutine"
-     }
-    ],
-    [
-     {
-      "g": "#CALL HOLES",
-      "e": "sub.call HOLES",
-      "d": "Call a subroutine"
-     }
-    ],
-    [
-     {
-      "g": "G80",
-      "e": "cycle.off",
-      "d": "Cancel canned cycle"
-     }
-    ],
-    [
-     {
-      "g": "$IF [P1==2] $GOTO [DONE]",
-      "e": "flow.if [P1==2] $GOTO [DONE]",
-      "d": "If the condition is true, run the lines below"
-     }
-    ],
-    [
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "XP1",
-      "e": "XP1",
-      "d": "X position P1"
-     },
-     {
-      "g": "Y5",
-      "e": "Y5",
-      "d": "Y position 5"
-     },
-     {
-      "g": "F300",
-      "e": "F300.0",
-      "u": "mmpm",
-      "d": "Feed rate 300.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "[DONE]",
-      "e": "LABEL[DONE]",
-      "d": "Label DONE, a place other lines can jump to"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "Z50",
-      "e": "Z50",
-      "d": "Z position 50"
-     }
-    ],
-    [
-     {
-      "g": "G84",
-      "e": "cycle.tap",
-      "d": "Tapping cycle"
-     },
-     {
-      "g": "Z2",
-      "e": "REFZ2",
-      "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G84)"
-     },
-     {
-      "g": "I-12",
-      "e": "DEPTH-12",
-      "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G84)"
-     },
-     {
-      "g": "R1",
-      "e": "RIGID1",
-      "d": "R0 normal tapping, R1 rigid tapping. (G84)"
-     },
-     {
-      "g": "J2",
-      "e": "OUTFEED2",
-      "d": "Rigid tapping: the way out runs J times the tapping feed. (G84)"
-     }
-    ],
-    [
-     {
-      "g": "X20",
-      "e": "X20",
-      "d": "X position 20"
-     },
-     {
-      "g": "Y20",
-      "e": "Y20",
-      "d": "Y position 20"
-     },
-     {
-      "g": "NR3",
-      "e": "REPEAT3",
-      "d": "Run this line 3 times"
-     }
-    ],
-    [
-     {
-      "g": "G80",
-      "e": "cycle.off",
-      "d": "Cancel canned cycle"
-     }
-    ],
-    [
-     {
-      "g": "G04",
-      "e": "dwell",
-      "d": "Pause for a set time"
-     },
-     {
-      "g": "K1.5",
-      "e": "SEC1.5",
-      "d": "Dwell for 1.5 seconds"
-     }
-    ],
-    [
-     {
-      "g": "#MSG [\"CHECK PART\"]",
-      "e": "display.message [\"CHECK PART\"]",
-      "d": "Show a message"
-     }
-    ],
-    [
-     {
-      "g": "G43",
-      "e": "toollength.on",
-      "d": "Tool length offset on"
-     },
-     {
-      "g": "Z10",
-      "e": "Z10",
-      "d": "Z position 10"
-     }
-    ],
-    [
-     {
-      "g": "M98",
-      "e": "sub.call",
-      "d": "Call subprogram"
-     },
-     {
-      "g": "P100",
-      "e": "PROG100",
-      "d": "Program number 100"
-     }
-    ],
-    [
-     {
-      "g": "N20:",
-      "e": "SEQ20:",
-      "d": "Sequence number 20, a label other lines can jump to"
-     },
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],
@@ -1333,7 +931,7 @@
   },
   {
    "machine": "gen.mill.fanuc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1443,12 +1041,12 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
@@ -1471,7 +1069,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -1484,19 +1082,19 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1526,12 +1124,12 @@
     [
      {
       "g": "G99",
-      "e": "RETRPLN",
+      "e": "cycle.return.r",
       "d": "Cycle returns to R plane"
      },
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -1577,7 +1175,7 @@
     [
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -1592,7 +1190,7 @@
     [
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1622,7 +1220,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1635,7 +1233,7 @@
     [
      {
       "g": "G84",
-      "e": "TAP",
+      "e": "cycle.tap",
       "d": "Tapping cycle"
      },
      {
@@ -1685,14 +1283,14 @@
     [
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
     [
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -1712,7 +1310,7 @@
     [
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -1725,7 +1323,7 @@
     [
      {
       "g": "M98",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram"
      },
      {
@@ -1742,8 +1340,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],

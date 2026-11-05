@@ -86,7 +86,7 @@
  "runs": [
   {
    "machine": "haas_vf2",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -116,32 +116,32 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -158,7 +158,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -170,12 +170,12 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -196,7 +196,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -208,7 +208,7 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -230,7 +230,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -344,7 +344,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -361,8 +361,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -414,7 +414,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "INCH",
       "d": "Inch units"
      },
      {
@@ -424,12 +424,12 @@
      },
      {
       "g": "G17",
-      "e": "PXY",
+      "e": "XY",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      },
      {
@@ -468,7 +468,7 @@
      },
      {
       "g": "G54",
-      "e": "W1",
+      "e": "WRK1",
       "d": "Work offset 1"
      },
      {
@@ -528,7 +528,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -660,7 +660,7 @@
      {
       "g": "M30",
       "e": "END",
-      "d": "End program and rewind"
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -681,7 +681,7 @@
    ]
   },
   {
-   "machine": "haas_vf2",
+   "machine": "fanuc_0imf",
    "style": "words",
    "words": [
     [
@@ -712,27 +712,27 @@
      },
      {
       "g": "G20",
-      "e": "units.inch",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "units.absolute",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "plane.xy",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "comp.off",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "toollength.off",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
@@ -771,7 +771,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -804,7 +804,7 @@
      },
      {
       "g": "G43",
-      "e": "toollength.on",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -826,7 +826,7 @@
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -940,7 +940,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -957,306 +957,8 @@
      },
      {
       "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 11,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": ", isn't in the dictionary or this machine's file."
-    }
-   ]
-  },
-  {
-   "machine": "fanuc_0imf",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O1020",
-      "e": "PROG1020",
-      "d": "Program number 1020"
-     },
-     {
-      "g": "(CORNER CHAMFER AND RADIUS)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G20",
-      "e": "INCH",
-      "d": "Inch units"
-     },
-     {
-      "g": "G90",
-      "e": "ABS",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G17",
-      "e": "PLANEXY",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "G40",
-      "e": "COMPOFF",
-      "d": "Cutter compensation off"
-     },
-     {
-      "g": "G49",
-      "e": "TLENOFF",
-      "d": "Tool length offset off"
-     },
-     {
-      "g": "G80",
-      "e": "CYCOFF",
-      "d": "Cancel canned cycle"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "T1",
-      "e": "TOOL1",
-      "d": "Tool number 1"
-     },
-     {
-      "g": "M06",
-      "e": "TOOLCHG",
-      "d": "Tool change"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G54",
-      "e": "WORK1",
-      "d": "Work offset 1"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": "Y0.",
-      "e": "Y0.0",
-      "d": "Y position 0.0"
-     },
-     {
-      "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
-      "d": "Spindle speed 3000 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "SPINFWD",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G43",
-      "e": "TLENON",
-      "d": "Tool length offset on"
-     },
-     {
-      "g": "H01",
-      "e": "LOFS01",
-      "d": "Tool length offset number 01"
-     },
-     {
-      "g": "Z0.1",
-      "e": "Z0.1",
-      "d": "Z position 0.1"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-0.1",
-      "e": "Z-0.1",
-      "d": "Z position -0.1"
-     },
-     {
-      "g": "F20.",
-      "e": "F20.0",
-      "u": "ipm",
-      "d": "Feed rate 20.0 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "X2.",
-      "e": "X2.0",
-      "d": "X position 2.0"
-     },
-     {
-      "g": ",C0.1",
-      "e": "CHAMFER0.1",
-      "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.1"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "Y1.5",
-      "e": "Y1.5",
-      "d": "Y position 1.5"
-     },
-     {
-      "g": ",R0.25",
-      "e": "ROUND0.25",
-      "d": "Rounds the corner at the end of this move with this radius 0.25"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": ",C.05",
-      "e": "CHAMFER0.05",
-      "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.05"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "Y0.",
-      "e": "Y0.0",
-      "d": "Y position 0.0"
-     },
-     {
-      "g": ",R1",
-      "e": "ROUND0.0001",
-      "d": "Rounds the corner at the end of this move with this radius 0.0001"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "X1.",
-      "e": "X1.0",
-      "d": "X position 1.0"
-     },
-     {
-      "g": ",",
-      "e": "?,",
-      "d": ", isn't G-code GlossCode can read. It's kept as written.",
-      "unk": true
-     },
-     {
-      "g": "R0.1",
-      "e": "RAD0.1",
-      "d": "Arc radius"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -1278,7 +980,7 @@
   },
   {
    "machine": "fanuc_0mc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1308,32 +1010,32 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -1350,7 +1052,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -1362,12 +1064,12 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1388,7 +1090,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1400,7 +1102,7 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -1422,7 +1124,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1536,7 +1238,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1553,8 +1255,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -1576,7 +1278,7 @@
   },
   {
    "machine": "okuma_m560",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1606,32 +1308,32 @@
      },
      {
       "g": "G20",
-      "e": "INCHCHK",
+      "e": "set.inch.check",
       "d": "Confirm inch input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -1648,7 +1350,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -1660,12 +1362,12 @@
      },
      {
       "g": "G54",
-      "e": "TLENX",
+      "e": "tlen.x",
       "d": "Tool length offset on X (Okuma, not a work offset)"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1686,7 +1388,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1698,7 +1400,7 @@
      },
      {
       "g": "G43",
-      "e": "OFS3DOFF",
+      "e": "tool.offset3d.off",
       "d": "3-D tool offset off (Okuma)"
      },
      {
@@ -1720,7 +1422,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1834,7 +1536,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1851,8 +1553,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [

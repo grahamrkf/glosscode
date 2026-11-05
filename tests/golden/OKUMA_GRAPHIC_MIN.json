@@ -112,7 +112,7 @@
  "runs": [
   {
    "machine": "okuma_lb3000",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -184,14 +184,14 @@
     [
      {
       "g": "DEF WORK",
-      "e": "BLANKDEF WORK",
+      "e": "prog.graphic.blank WORK",
       "d": "Start of the blank shape for the graphic display (DEF WORK, Okuma); nothing moves"
      }
     ],
     [
      {
       "g": "PS LC,[1,0],[-1,30]",
-      "e": "BLANKSHAPE LC,[1,0],[-1,30]",
+      "e": "prog.graphic.shape LC,[1,0],[-1,30]",
       "d": "A blank shape for the graphic display (Okuma); nothing moves"
      },
      {
@@ -204,21 +204,21 @@
     [
      {
       "g": "END",
-      "e": "DEFEND",
+      "e": "prog.graphic.end",
       "d": "End of the blank shape definition (Okuma)"
      }
     ],
     [
      {
       "g": "CLEAR",
-      "e": "GRCLEAR",
+      "e": "prog.graphic.clear",
       "d": "Clear the graphic display (Okuma)"
      }
     ],
     [
      {
       "g": "DRAW",
-      "e": "GRDRAW",
+      "e": "prog.graphic.draw",
       "d": "Draw the blank on the graphic display (Okuma)"
      }
     ],
@@ -230,12 +230,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G50",
-      "e": "SETCOORD",
+      "e": "set.coords",
       "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
      },
      {
@@ -252,7 +252,7 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -264,7 +264,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -275,7 +275,7 @@
      },
      {
       "g": "M42",
-      "e": "GEAR2",
+      "e": "spindle.gear.2",
       "d": "Spindle gear range 2 (Okuma)"
      }
     ],
@@ -287,7 +287,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -298,7 +298,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -310,7 +310,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -337,7 +337,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -360,7 +360,7 @@
      },
      {
       "g": "G76",
-      "e": "ROUND",
+      "e": "set.round.auto",
       "d": "Automatic rounding (Okuma)"
      },
      {
@@ -370,7 +370,7 @@
      },
      {
       "g": "L0.005",
-      "e": "RNDRAD0.005",
+      "e": "set.round.size0.005",
       "d": "Radius of the automatic rounding 0.005"
      }
     ],
@@ -399,7 +399,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -428,7 +428,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -450,8 +450,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -545,14 +545,14 @@
     [
      {
       "g": "DEF WORK",
-      "e": "BDEF WORK",
+      "e": "GRFSTK WORK",
       "d": "Start of the blank shape for the graphic display (DEF WORK, Okuma); nothing moves"
      }
     ],
     [
      {
       "g": "PS LC,[1,0],[-1,30]",
-      "e": "BSHP LC,[1,0],[-1,30]",
+      "e": "GRFSHAP LC,[1,0],[-1,30]",
       "d": "A blank shape for the graphic display (Okuma); nothing moves"
      },
      {
@@ -565,21 +565,21 @@
     [
      {
       "g": "END",
-      "e": "DEND",
+      "e": "GRFEND",
       "d": "End of the blank shape definition (Okuma)"
      }
     ],
     [
      {
       "g": "CLEAR",
-      "e": "GCLR",
+      "e": "GRFCLR",
       "d": "Clear the graphic display (Okuma)"
      }
     ],
     [
      {
       "g": "DRAW",
-      "e": "GDRW",
+      "e": "GRFDRAW",
       "d": "Draw the blank on the graphic display (Okuma)"
      }
     ],
@@ -591,7 +591,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -636,7 +636,7 @@
      },
      {
       "g": "M42",
-      "e": "GR2",
+      "e": "SG2",
       "d": "Spindle gear range 2 (Okuma)"
      }
     ],
@@ -648,7 +648,7 @@
      },
      {
       "g": "G96",
-      "e": "CSS",
+      "e": "SFM",
       "d": "Constant surface speed"
      },
      {
@@ -698,7 +698,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -721,7 +721,7 @@
      },
      {
       "g": "G76",
-      "e": "RND",
+      "e": "ARND",
       "d": "Automatic rounding (Okuma)"
      },
      {
@@ -731,7 +731,7 @@
      },
      {
       "g": "L0.005",
-      "e": "RNR0.005",
+      "e": "ARNDSZ0.005",
       "d": "Radius of the automatic rounding 0.005"
      }
     ],
@@ -812,368 +812,7 @@
      {
       "g": "M30",
       "e": "END",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "\u001a",
-      "e": "EOF",
-      "d": "End-of-file mark (Ctrl+Z) that older systems write after the last line, kept as written"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 20,
-     "id": "unbalanced-brackets",
-     "sev": "error",
-     "msg": "V5=[[V2+V3]/2+V1 has 2 [ and 1 ]. The control alarms when it reads this line."
-    }
-   ]
-  },
-  {
-   "machine": "okuma_lb3000",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "O2001",
-      "e": "PROG2001",
-      "d": "Program number 2001"
-     }
-    ],
-    [
-     {
-      "g": "(GENERIC OKUMA LATHE: GRAPHIC BLANK, VARIABLE SHIFT, ROUNDING)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "V1=0.250",
-      "e": "V1=0.250",
-      "d": "Sets variable V1 to 0.250"
-     },
-     {
-      "g": "(FINISH THICKNESS)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "V2=1.500",
-      "e": "V2=1.500",
-      "d": "Sets variable V2 to 1.500"
-     },
-     {
-      "g": "(ID)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "V3=2.000",
-      "e": "V3=2.000",
-      "d": "Sets variable V3 to 2.000"
-     },
-     {
-      "g": "(OD)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "V9=0.002",
-      "e": "V9=0.002",
-      "d": "Sets variable V9 to 0.002"
-     },
-     {
-      "g": "(FEED)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "DEF WORK",
-      "e": "graphic.blank WORK",
-      "d": "Start of the blank shape for the graphic display (DEF WORK, Okuma); nothing moves"
-     }
-    ],
-    [
-     {
-      "g": "PS LC,[1,0],[-1,30]",
-      "e": "graphic.shape LC,[1,0],[-1,30]",
-      "d": "A blank shape for the graphic display (Okuma); nothing moves"
-     },
-     {
-      "g": "(BLANK)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "END",
-      "e": "graphic.end",
-      "d": "End of the blank shape definition (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "CLEAR",
-      "e": "graphic.clear",
-      "d": "Clear the graphic display (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "DRAW",
-      "e": "graphic.draw",
-      "d": "Draw the blank on the graphic display (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G91",
-      "e": "units.incremental",
-      "d": "Incremental positions"
-     },
-     {
-      "g": "G50",
-      "e": "coords.set",
-      "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
-     },
-     {
-      "g": "Z-V1",
-      "e": "INCZ-V1",
-      "d": "Move -V1 in Z from where the tool is"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G50",
-      "e": "spindle.maxrpm",
-      "d": "Clamp spindle to a max RPM"
-     },
-     {
-      "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
-      "d": "Spindle speed 1500 RPM"
-     },
-     {
-      "g": "M42",
-      "e": "gear.2",
-      "d": "Spindle gear range 2 (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G96",
-      "e": "speed.sfm",
-      "d": "Constant surface speed"
-     },
-     {
-      "g": "S600",
-      "e": "S600",
-      "u": "sfm",
-      "d": "Surface speed 600 surface feet per minute"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X=V2+0.010",
-      "e": "X=V2+0.010",
-      "d": "X position =V2+0.010"
-     },
-     {
-      "g": "Z0.1",
-      "e": "Z0.1",
-      "d": "Z position 0.1"
-     },
-     {
-      "g": "T010101",
-      "e": "TOOL010101",
-      "d": "Tool number 010101"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z0.002",
-      "e": "Z0.002",
-      "d": "Z position 0.002"
-     },
-     {
-      "g": "F=V9",
-      "e": "F=V9",
-      "u": "ipr",
-      "d": "Feed rate =V9 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "G76",
-      "e": "round",
-      "d": "Automatic rounding (Okuma)"
-     },
-     {
-      "g": "X=[[V3-V2]/2]+V2",
-      "e": "X=[[V3-V2]/2]+V2",
-      "d": "X position =[[V3-V2]/2]+V2"
-     },
-     {
-      "g": "L0.005",
-      "e": "round.radius0.005",
-      "d": "Radius of the automatic rounding 0.005"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "X=V3",
-      "e": "X=V3",
-      "d": "X position =V3"
-     },
-     {
-      "g": "Z-0.100",
-      "e": "Z-0.100",
-      "d": "Z position -0.100"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "Z1.0",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "V5=[[V2+V3]/2+V1",
-      "e": "V5=[[V2+V3]/2+V1",
-      "d": "Sets variable V5 to [[V2+V3]/2+V1, worked out when the line runs"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X10.",
-      "e": "X10.0",
-      "d": "X position 10.0"
-     },
-     {
-      "g": "Z10.",
-      "e": "Z10.0",
-      "d": "Z position 10.0"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -1195,7 +834,7 @@
   },
   {
    "machine": "haas_st10",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1318,12 +957,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G50",
-      "e": "SETCOORD",
+      "e": "set.coords",
       "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
      },
      {
@@ -1340,7 +979,7 @@
      },
      {
       "g": "G90",
-      "e": "TURNCYC",
+      "e": "cycle.turn",
       "d": "OD/ID turning cycle"
      }
     ],
@@ -1352,7 +991,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -1376,7 +1015,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -1387,7 +1026,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1399,7 +1038,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1426,7 +1065,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1449,7 +1088,7 @@
      },
      {
       "g": "G76",
-      "e": "THREAD",
+      "e": "cycle.thread",
       "d": "Threading cycle"
      },
      {
@@ -1489,7 +1128,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1518,7 +1157,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1540,8 +1179,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [

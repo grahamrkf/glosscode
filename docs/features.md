@@ -5,23 +5,23 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 ## Shown in the mockup
 
 **Editor**
-- [ ] Interleaved view: an English line above every G-code line
-- [ ] Fixed-width columns (10 characters for long words, 8 for short) so words line up down the whole file
-- [ ] Long and short word styles
-- [ ] Type G-code or type English (View › Edit in). Clicking a G-code word while editing English switches to editing G-code and selects it, and clicking an English word while editing G-code switches back
-- [ ] Autocomplete for English and G-code words
+- [ ] Interleaved view: a gloss line (plain English) above every code line
+- [ ] Fixed-width columns (at least 12 characters for full words, 8 for short) so words line up down the whole file
+- [ ] Full words (`run.feed`, `set.inch`, `cycle.peck`, `machine.tailstock.in`: one of a fixed set of groups, then the action, with a third part for less common codes; control-specific codes are underlined with dots) and short words (View › Gloss words)
+- [ ] Type code or type gloss (View › Edit in). Clicking a code word while editing gloss switches to editing code and selects it, and clicking a gloss word while editing code switches back
+- [ ] Autocomplete for gloss and code words
 - [ ] Keyboard editing by word: ← → move between words, ↑ ↓ between lines, Enter edits and Enter again finishes (the word stays selected), Delete removes the word, typing replaces it
-- [ ] While editing, Space starts a new word to the right; in G-code, typing a letter after a number does too (`G01X` becomes `G01` and `X`)
+- [ ] While editing, Space starts a new word to the right; in code, typing a letter after a number does too (`G01X` becomes `G01` and `X`)
 - [ ] Shift+Enter breaks the line after the selected word, moving the rest to a new numbered line
 - [ ] Paste (Ctrl+V or Edit › Paste) splits the text the way opening a file does. One line goes into the current line with each word in its own cell (`G01X1.Y2.` becomes three words). Several lines, or a whole program, go in as their own lines below the current one, or replace it when it's blank
-- [ ] Select whole lines by dragging the mouse across them, Shift+↑↓ or Shift+click (Ctrl+A selects all). Right-click, or Ctrl+C / Ctrl+X, copies or cuts them as G-code text, the same as Save writes it, with no English. Ctrl+D duplicates them below; Ctrl+V pastes over them; Delete removes them
-- [ ] Caps Lock switches between editing the G-code line and the English line (View › Caps Lock switches between them)
+- [ ] Select whole lines by dragging the mouse across them, Shift+↑↓ or Shift+click (Ctrl+A selects all). Right-click, or Ctrl+C / Ctrl+X, copies or cuts them as code text, the same as Save writes it, with no gloss. Ctrl+D duplicates them below; Ctrl+V pastes over them; Delete removes them
+- [ ] Caps Lock switches between editing the code line and the gloss line (View › Caps Lock switches between them)
 - [ ] Hint text after codes for the words they still need (`G02` shows `R## or I## J##`, `G83` shows `Z## R## Q##`). Clicking R## types the R and hides I and J; clicking I## hides R but keeps J
 - [ ] Mode-clash warnings in the status bar
 - [ ] Auto N numbering on new lines (step 10, midpoint when there's no room)
 - [ ] Renumber that leaves subprogram labels alone
 - [ ] Undo and redo
-- [ ] Find, matching both G-code and English
+- [ ] Find, matching both code and gloss
 - [ ] Sort the words on each line into a consistent order
 - [ ] Menu bar: File, Edit, View, Insert, Program, Simulate
 - [ ] Starts on a home page: recent programs (each with the machine it was opened for), New program, Open, and default machines by file type. Sample programs are a separate download, not part of the program
@@ -29,22 +29,23 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] One tab per open program. Menus, panels and checks act on the active tab; each tab keeps its own machine, selected line and word, undo history and scroll position. Ctrl+Tab switches, Ctrl+W closes (asking first if there are unsaved changes)
 - [ ] File › New… asks which machine the program is for, then opens a blank program in a new tab
 - [ ] Opening a file asks which machine it's for, unless it's in the recent list (the machine used last time) or its extension has a default machine (set on the home page, or by "Always use this machine for .nc files" when asked)
+- [ ] When it asks, controls the file looks written for come first under "Suggested for this file", from its extension (.MIN, .SSB and .SDF for Okuma, .H for Heidenhain, .MPF/.SPF for Siemens, .EIA for Mazak, .NGC for LinuxCNC) and clues in its text (CALL and RTS, BEGIN PGM, %L, (SUB n), O-word subroutines, G187 or M97). The best match is picked, preferring your own machine with one of those controls, and the reason is shown. Nothing opens without your OK; .nc and .tap suggest nothing, since many controls use them
 - [ ] Hole pattern tool (Insert › Hole pattern…): grid (distance, angle and hole count along each axis) or bolt circle (diameter or radius, hole count, start angle, direction, complete circle or an arc by angle or by distance), in the active plane (G17 XY, G18 XZ, G19 YZ), with a preview; inserts one line per hole after the canned-cycle line, absolute or incremental to match G90/G91
-- [ ] Insert › canned cycle by category (drilling, tapping, boring; roughing, finishing, turning and facing, grooving, threading, live tooling): sketch, a box per word with required ones marked, and the finished line with its English; categories the machine can't run are hidden
+- [ ] Insert › canned cycle by category (drilling, tapping, boring; roughing, finishing, turning and facing, grooving, threading, live tooling): sketch, a box per word with required ones marked, and the finished line with its gloss; categories the machine can't run are hidden
 - [ ] Subprogram library (Insert › Subprogram library…, see [subprogram-library.md](subprogram-library.md)): reusable subprograms with named variables, stored in built-in, shop and personal folders. Search, filter to this machine, fill in the values, and insert as a `G65` call or as plain lines worked out from the values (for controls without the macro option). New, edit, make my own copy, delete and export; Insert › Save N1000 to the library… turns a local subprogram into a library one
 - [ ] Lathe options in the machine profile (live tooling, Y axis) that decide which cycles and words are offered
 
 **Reading**
 - [ ] Inline expansion of subprogram calls, marked with purple N numbers; edits change the subprogram
-- [ ] Library calls read by name (`G65 P9101` reads MACRO SLOTMILL, `Z-0.15` reads DEP-0.15) and expand to show the lines they run, in green; the toolpath preview follows them
-- [ ] View › Show: both lines, English only, or G-code only
+- [ ] Library calls read by name (`G65 P9101` reads call.macro sub.slotmill, `Z-0.15` reads DEP-0.15) and expand to show the lines they run, in green; the toolpath preview follows them
+- [ ] View › Show: both lines, gloss only, or code only
 - [ ] View › Layout: words in program order, or columns by word type, most used first (motion and cycle codes, X Y Z, F, S, spindle M-codes…) with rare words at the end. The order is set in the machine's rules
 - [ ] In columns, several words in one cell stack, so that line gets taller instead of the column getting wider
 - [ ] In columns, lines that don't move the machine (program number, safety line, M00, M01, M30, tool change, dwell, reference return, subprogram calls and returns) keep their words in program order from the left
 - [ ] In columns, an empty cell on a motion line shows the modal value still in effect from an earlier line (motion, position, feed, speed, spindle, tool, coolant, cycle R and Q) in grey. View › Modal values in empty cells turns it off
 - [ ] Active-modes panel for the selected line, with a mark on modes set on that line
 - [ ] Line colors: rapid (amber), feed (blue), arc (teal), cycle (magenta)
-- [ ] Canned cycle guide (F1, Help menu, or "How G76 works…" in the side panel): a sketch of how the cycle moves, an example line with every word it takes (English above), and what each word does and whether it's required. A button starts a new line with that cycle
+- [ ] Canned cycle guide (F1, Help menu, or "How G76 works…" in the side panel): a sketch of how the cycle moves, an example line with every word it takes (gloss above), and what each word does and whether it's required. A button starts a new line with that cycle
 
 **Previews**
 - [ ] XY toolpath preview that follows subprogram calls
@@ -66,8 +67,14 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Machine selector (mill or lathe, with brand overrides): Haas, Fanuc and Okuma
 - [ ] Plasma machine type: torch on/off checks in place of the spindle checks, D as the kerf offset, no canned cycles or tool offsets (Hypertherm, Centroid Acorn, Tormach)
 - [ ] End of block: `;` at the end of every line for controls that need it, set per machine profile. Shown after an empty word space in the standard view and written on save. Files that already use `;` are read correctly on any machine
-- [ ] English numbers always show a decimal point; distance words without one show what the control reads (X1 → X0.0001)
+- [ ] Gloss numbers always show a decimal point; distance words without one show what the control reads (X1 → X0.0001)
 - [ ] F and S keep their letter with a small unit (ipm, ipr, mmpm, mmpr, rpm, sfm, smm)
+
+**Converting** (see [converting.md](converting.md))
+- [ ] Program › Convert to another control…: reads the program with its own control, lifts each code to its full gloss word, and writes the target control's code for the same meaning. Values become real numbers (X1 on a Haas is written X0.0001) and dwells are rewritten in the target's units
+- [ ] Review with a level per line: green (direct, toolpath matches), amber (worth a look, with the reason) and red (no match: leave out the code, write a local subprogram in, comment the line out, or keep it). Answers are remembered per pair of controls
+- [ ] The converted program is checked by the target's reading, checks and cycle word lists, and its simulation is compared move by move with the source
+- [ ] The middle format: one readable line per block with full gloss words and real values, which can be copied
 
 **Checks** (see [checks.md](checks.md))
 - [ ] Problems panel with severity filters, margin marks, click or F8 to jump to the line
@@ -97,7 +104,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Preview: zoom, pan, click a move to jump to its line, and measure between two points
 - [ ] Compare two programs side by side
 - [ ] Autosave and a backup copy before each save
-- [ ] Print or export a listing with the English lines
+- [ ] Print or export a listing with the gloss lines
 - [ ] An editor for the word dictionary
 - [ ] Font size zoom, dark theme and adjustable column width
 - [ ] Fast scrolling in very large files (100,000+ lines)

@@ -435,13 +435,15 @@ static void apply_modes(const gc_ctx *c, const gc_line *l, tstate *st)
 
 static const char *style_key(const gc_ctx *c)
 {
-    return c->style == GC_STYLE_SHORT ? "short" : c->style == GC_STYLE_WORDS ? "words" : "long";
+    return c->style == GC_STYLE_SHORT ? "short" : "words";
 }
 
-/* An entry's English word in the chosen style; full words fall back to the long word where an entry has none. */
+/* An entry's gloss word in the chosen style: full words or short. A library subprogram saved before full words
+   existed has only "long", which stands in for its full word. */
 static const gc_json *style_get(const gc_json *o, const char *sk)
 {
     const gc_json *v = gc_json_get(o, sk);
+    if (!v) v = gc_json_get(o, "words");
     return v ? v : gc_json_get(o, "long");
 }
 
@@ -1220,7 +1222,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     /* A letter can read differently on one machine type (D is the kerf on a plasma table). */
     const gc_json *ax = gc_json_get(a, c->type);
-    if (!gc_json_truthy(gc_json_get(ax, "long"))) ax = a;
+    if (!gc_json_truthy(gc_json_get(ax, "words"))) ax = a;
     snprintf(e, sizeof e, "%s%s", js_str(style_get(ax, sk)), v);
     if (*d2) snprintf(d, sizeof d, "%s", d2);
     else snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(ax, "desc")), v);

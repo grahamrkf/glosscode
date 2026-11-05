@@ -56,10 +56,10 @@ for (const { dir, name } of sources){
   const lines = text.split(/\r\n|\n|\r/); if (lines.length > 1 && lines[lines.length-1]==="") lines.pop();
   const machines = SYSTEM_FILES[name] || (LATHE_FILES.includes(name) ? LATHES : OKUMA_LATHE_FILES.includes(name) ? ["okuma_lb3000", "haas_st10"] : PLASMA_FILES.includes(name) ? PLASMAS : OKUMA_FILES.includes(name) ? ["okuma_m560", ...MILLS.filter(m => m!=="okuma_m560")] : MILLS);
   // The words are split the way the first machine's control does (Fagor 8060 has its own block syntax)
-  A.use(machines[0], "long"); const syntax = A.syntax;
+  A.use(machines[0], "words"); const syntax = A.syntax;
   const doc = []; for (const line of lines) A.splitBlocks(line).blocks.forEach(b => doc.push(A.tokenize(b)));
   const runs = [];
-  for (const id of machines) for (const s of id===machines[0] ? ["long", "short", "words"] : ["long"]){
+  for (const id of machines) for (const s of id===machines[0] ? ["words", "short"] : ["words"]){
     A.use(id, s); A.doc = doc.map(t => [...t]); A.translateAll();
     const words = A.view.map(cells => cells.map(c => {
       const o = { g:c.g, e:c.e }; if (c.u) o.u = c.u; o.d = c.d2 || c.d || ""; if (c.unk) o.unk = true; if (c.imp) o.imp = true; if (c.cm) o.cm = true; return o; }));

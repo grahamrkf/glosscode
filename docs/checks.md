@@ -68,9 +68,9 @@ A machine definition file will be able to change any rule's severity or turn it 
 
 `CHECKS_DEMO.nc` and `LATHE_CHECKS.nc` in the mockup have one of these mistakes on almost every line.
 
-## Numbers and units in the English line
+## Numbers and units in the gloss line
 
-- The English line always shows a decimal point: `X1.` reads `X1.0`, and `X.25` reads `X0.25`.
+- The gloss line always shows a decimal point: `X1.` reads `X1.0`, and `X.25` reads `X0.25`.
 - A distance word (X, Y, Z, U, W, I, J, K, R, Q) written without a decimal point is shown the way the control reads it. On Fanuc and Haas that's the smallest increment (Okuma is assumed to match until checked), so `X1` reads `X0.0001` in orange under G20, or `X0.001` under G21, and `missing-decimal` flags it. The per-control setting is `numbers` in the rules file, so a control set up to read whole numbers as units can turn this off.
 - F and S keep their letter, followed by a small unit: `F12.0 ipm`, `F0.008 ipr`, `F300.0 mmpm`, `S2500 rpm`, `S400 sfm`, `S120 smm`. The unit follows the active G94/G95 (G98/G99 on Fanuc-style lathes), G96/G97 and G20/G21.
 
@@ -117,14 +117,16 @@ A plasma table's `process` names the torch: `on` and `off` are the cut on and cu
 
 See [manual-reviews/plasma-hypertherm-tormach-centroid.md](manual-reviews/plasma-hypertherm-tormach-centroid.md).
 
+`fileHints` (beside `dialects`) suggests controls when a file with no default machine is opened. Each rule names `controls`, optional `ext` (lower case, with the dot) and `content` clues (`re`, optional `flags`, and `why`, the reason shown). A content clue counts 3 and an extension 2; the controls of the best-scoring rules go first in the picker. Only add clues that belong to one control family.
+
 `verified: false` marks tables written from general knowledge that still need checking against the control's programming manual. The mockup shows a banner in the Problems panel for those.
 
 ## How much Haas and Okuma support there is today
 
 | Control | Translation | Checks | Confidence |
 |---|---|---|---|
-| Haas mill (NGC) | Good for 2.5-axis work, plus English for G12/G13, G47, G70–G72 bolt patterns, G110–G129 and G154 work offsets, M10–M13 brakes | All rules above, with Haas cycle words (I/J/K peck, J retract on taps, L repeats), M97 local subprograms, one M code per line, P without a decimal as milliseconds | High: checked against the 2025 and 2020 mill manuals (see [manual-reviews/haas-ngc.md](manual-reviews/haas-ngc.md)) |
-| Haas lathe (NGC) | Good for turning, facing, grooving and threading, plus English for work offsets G110–G129 and G154, live tool, chuck, tailstock and sub-spindle M codes, M88/M89 high-pressure coolant, G95 live-tool tap | All rules above, with Haas one-block G71/G72/G73/G76, G90/G92/G94 cycles, G50 S clamp, G84 starting the spindle, one M code per line, P without a decimal as milliseconds | High: checked against the 2020 and 2025 lathe manuals (see [manual-reviews/haas-ngc.md](manual-reviews/haas-ngc.md) and [haas-ngc-lathe-2025.md](manual-reviews/haas-ngc-lathe-2025.md)) |
+| Haas mill (NGC) | Good for 2.5-axis work, plus gloss words for G12/G13, G47, G70–G72 bolt patterns, G110–G129 and G154 work offsets, M10–M13 brakes | All rules above, with Haas cycle words (I/J/K peck, J retract on taps, L repeats), M97 local subprograms, one M code per line, P without a decimal as milliseconds | High: checked against the 2025 and 2020 mill manuals (see [manual-reviews/haas-ngc.md](manual-reviews/haas-ngc.md)) |
+| Haas lathe (NGC) | Good for turning, facing, grooving and threading, plus gloss words for work offsets G110–G129 and G154, live tool, chuck, tailstock and sub-spindle M codes, M88/M89 high-pressure coolant, G95 live-tool tap | All rules above, with Haas one-block G71/G72/G73/G76, G90/G92/G94 cycles, G50 S clamp, G84 starting the spindle, one M code per line, P without a decimal as milliseconds | High: checked against the 2020 and 2025 lathe manuals (see [manual-reviews/haas-ngc.md](manual-reviews/haas-ngc.md) and [haas-ngc-lathe-2025.md](manual-reviews/haas-ngc-lathe-2025.md)) |
 | Fanuc (0i/30i) | Same base as Haas | Same, with Fanuc cycle words and M97 flagged as Haas-only | High |
 | Haas mill, 1995 control (`haas1995`) | Same as Haas mill, plus G87/G88 manual-retract bores, G110–G129 work offsets and M16 | Haas rules with the 1995 cycle words (no P on G73/G83, no J on G74/G84), one M-code per line, P without a decimal as milliseconds, and G93/G95/G96/G154/M88/M89 flagged | High: checked against the June 1995 VF-Series Operator's Manual (see [manual-reviews/haas-vf-1995.md](manual-reviews/haas-vf-1995.md)) |
 | Okuma mill (OSP) | G15 H work offsets, G56 H length offset, G53 offset cancel, CALL / RTS subprograms, M02 | All the generic rules, plus Okuma's traps: G54–G59 (length offsets on Okuma), G43, G28, M97, M98, M99 | Medium: first draft, not yet checked against an OSP manual |
