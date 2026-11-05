@@ -936,7 +936,7 @@
     [
      {
       "g": "%SHAFT8060",
-      "e": "PRG SHAFT8060",
+      "e": "PRGNAME SHAFT8060",
       "d": "Program name"
      }
     ],
@@ -951,7 +951,7 @@
     [
      {
       "g": "G71",
-      "e": "MM",
+      "e": "MET",
       "d": "Millimeter units"
      },
      {
@@ -961,7 +961,7 @@
      },
      {
       "g": "G18",
-      "e": "ZX",
+      "e": "PXZ",
       "d": "ZX plane, the usual plane on a lathe"
      },
      {
@@ -1046,7 +1046,7 @@
     [
      {
       "g": "G81",
-      "e": "TRNS",
+      "e": "TURNSTR",
       "d": "Straight turning"
      },
      {
@@ -1098,7 +1098,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1239,7 +1239,7 @@
     [
      {
       "g": "G86",
-      "e": "THDL",
+      "e": "THDLONG",
       "d": "Threading along Z"
      },
      {
@@ -1345,7 +1345,7 @@
     [
      {
       "g": "G83",
-      "e": "AXDR",
+      "e": "AXLDRL",
       "d": "Drilling or tapping along Z"
      },
      {
@@ -1397,7 +1397,7 @@
     [
      {
       "g": "G160",
-      "e": "FDRL",
+      "e": "FACEDRL",
       "d": "Live tool drilling or tapping on the face"
      },
      {
@@ -1449,7 +1449,7 @@
     [
      {
       "g": "G162",
-      "e": "SSLT",
+      "e": "SIDESLOT",
       "d": "Live tool slot milling on the side"
      },
      {
@@ -1532,7 +1532,7 @@
     [
      {
       "g": "G50",
-      "e": "SRND",
+      "e": "CRNSRND",
       "d": "Semi-rounded corner (modal)"
      },
      {
@@ -1562,7 +1562,7 @@
     [
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
@@ -1574,7 +1574,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1635,7 +1635,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {

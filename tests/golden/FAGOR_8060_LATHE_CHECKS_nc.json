@@ -834,7 +834,7 @@
     [
      {
       "g": "%CHECKS8060",
-      "e": "PRG CHECKS8060",
+      "e": "PRGNAME CHECKS8060",
       "d": "Program name"
      }
     ],
@@ -849,7 +849,7 @@
     [
      {
       "g": "G71",
-      "e": "MM",
+      "e": "MET",
       "d": "Millimeter units"
      },
      {
@@ -859,7 +859,7 @@
      },
      {
       "g": "G18",
-      "e": "ZX",
+      "e": "PXZ",
       "d": "ZX plane, the usual plane on a lathe"
      },
      {
@@ -931,7 +931,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -943,7 +943,7 @@
     [
      {
       "g": "G69",
-      "e": "RGHZ",
+      "e": "RUFZ",
       "d": "Roughing along Z, following a profile"
      },
      {
@@ -997,7 +997,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1039,7 +1039,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1091,7 +1091,7 @@
     [
      {
       "g": "G66",
-      "e": "PREP",
+      "e": "PATRPT",
       "d": "Pattern repeat: roughs by repeating the profile"
      },
      {
@@ -1128,7 +1128,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1175,7 +1175,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1231,7 +1231,7 @@
     [
      {
       "g": "G160",
-      "e": "FDRL",
+      "e": "FACEDRL",
       "d": "Live tool drilling or tapping on the face"
      },
      {
@@ -1303,7 +1303,7 @@
     [
      {
       "g": "G161",
-      "e": "SDRL",
+      "e": "SIDEDRL",
       "d": "Live tool drilling or tapping on the side"
      },
      {
@@ -1398,7 +1398,7 @@
     [
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
@@ -1410,7 +1410,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1444,7 +1444,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {

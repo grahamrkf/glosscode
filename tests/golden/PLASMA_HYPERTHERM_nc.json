@@ -427,7 +427,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -444,7 +444,7 @@
      },
      {
       "g": "G59",
-      "e": "VAR",
+      "e": "VARSET",
       "d": "Set variables (not a work offset on Hypertherm)"
      },
      {
@@ -483,7 +483,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -506,7 +506,7 @@
      },
      {
       "g": "M07",
-      "e": "CON",
+      "e": "CUTON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -535,7 +535,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -612,7 +612,7 @@
      },
      {
       "g": "M08",
-      "e": "COFF",
+      "e": "CUTOFF",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -670,7 +670,7 @@
      },
      {
       "g": "M07",
-      "e": "CON",
+      "e": "CUTON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -682,7 +682,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -699,7 +699,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ]

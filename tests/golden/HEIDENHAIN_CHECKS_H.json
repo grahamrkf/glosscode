@@ -298,7 +298,7 @@
      },
      {
       "g": "BEGIN PGM CHECKS MM",
-      "e": "BEGIN CHECKS MM",
+      "e": "PRGBEG CHECKS MM",
       "d": "Start of the program: its name, then MM or INCH"
      }
     ],
@@ -328,7 +328,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -360,7 +360,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -382,7 +382,7 @@
      },
      {
       "g": "CYCL CALL",
-      "e": "CCALL",
+      "e": "CYCALL",
       "d": "Run the defined cycle once, where the tool is"
      }
     ],
@@ -394,7 +394,7 @@
      },
      {
       "g": "CALL LBL 7",
-      "e": "CALL 7",
+      "e": "SUB 7",
       "d": "Run the subprogram at this label; with REP, repeat the section from the label this many more times"
      }
     ],
@@ -406,7 +406,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -433,7 +433,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {

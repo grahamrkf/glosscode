@@ -534,14 +534,14 @@
     [
      {
       "g": "%PLATE",
-      "e": "PRG PLATE",
+      "e": "PRGNAME PLATE",
       "d": "Program name"
      }
     ],
     [
      {
       "g": "%L HOLES",
-      "e": "LSUB HOLES",
+      "e": "SUBLCL HOLES",
       "d": "Start of a local subroutine"
      },
      {
@@ -622,7 +622,7 @@
      },
      {
       "g": "G71",
-      "e": "MM",
+      "e": "MET",
       "d": "Millimeter units"
      },
      {
@@ -709,7 +709,7 @@
     [
      {
       "g": "G99",
-      "e": "RREF",
+      "e": "RETR",
       "d": "Cycle returns to the reference plane"
      },
      {
@@ -742,14 +742,14 @@
     [
      {
       "g": "LL HOLES",
-      "e": "CALL HOLES",
+      "e": "LSUB HOLES",
       "d": "Call a local subroutine"
      }
     ],
     [
      {
       "g": "#CALL HOLES",
-      "e": "CALL HOLES",
+      "e": "SUB HOLES",
       "d": "Call a subroutine"
      }
     ],
@@ -763,14 +763,14 @@
     [
      {
       "g": "$IF [P1==2] $GOTO [DONE]",
-      "e": "IF [P1==2] $GOTO [DONE]",
+      "e": "IFTHEN [P1==2] $GOTO [DONE]",
       "d": "If the condition is true, run the lines below"
      }
     ],
     [
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -873,7 +873,7 @@
     [
      {
       "g": "#MSG [\"CHECK PART\"]",
-      "e": "MSG [\"CHECK PART\"]",
+      "e": "MSGSHOW [\"CHECK PART\"]",
       "d": "Show a message"
      }
     ],
@@ -909,7 +909,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ]

@@ -583,7 +583,7 @@
     [
      {
       "g": "%PLATE 8055 ,MX,",
-      "e": "HEAD PLATE 8055 ,MX,",
+      "e": "PRGHEAD PLATE 8055 ,MX,",
       "d": "Program header: a comment and the attributes between commas (M modifiable, X executable, H hidden, O machine builder)"
      }
     ],
@@ -603,7 +603,7 @@
      },
      {
       "g": "G71",
-      "e": "MM",
+      "e": "MET",
       "d": "Millimeter units"
      },
      {
@@ -694,7 +694,7 @@
      },
      {
       "g": "G99",
-      "e": "RREF",
+      "e": "RETR",
       "d": "Cycle returns to the reference plane"
      },
      {
@@ -727,14 +727,14 @@
     [
      {
       "g": "(CALL 12)",
-      "e": "CALL 12",
+      "e": "SUB 12",
       "d": "Call subroutine n"
      }
     ],
     [
      {
       "g": "(PCALL 12, A3, P10=20)",
-      "e": "PCAL 12, A3, P10=20",
+      "e": "PCALL 12, A3, P10=20",
       "d": "Call subroutine n with its own local parameters"
      }
     ],
@@ -748,14 +748,14 @@
     [
      {
       "g": "(IF (P1 EQ 2) GOTO N40)",
-      "e": "IF (P1 EQ 2) GOTO N40",
+      "e": "IFTHEN (P1 EQ 2) GOTO N40",
       "d": "If the condition is true, do the first action, otherwise the one after ELSE"
      }
     ],
     [
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -822,7 +822,7 @@
     [
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -863,7 +863,7 @@
     [
      {
       "g": "(MSG \"CHECK PART\")",
-      "e": "MSG \"CHECK PART\"",
+      "e": "MSGSHOW \"CHECK PART\"",
       "d": "Show a message"
      }
     ],
@@ -882,7 +882,7 @@
     [
      {
       "g": "G96",
-      "e": "FCUT",
+      "e": "FEEDCUT",
       "d": "Constant feed at the cutting point"
      },
      {
@@ -920,7 +920,7 @@
     [
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
@@ -935,7 +935,7 @@
     [
      {
       "g": "(SUB 12)",
-      "e": "SUB 12",
+      "e": "SUBSTRT 12",
       "d": "Start of subroutine n"
      }
     ],

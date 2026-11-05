@@ -443,7 +443,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -503,7 +503,7 @@
      },
      {
       "g": "G54",
-      "e": "W1",
+      "e": "WRK1",
       "d": "Work offset 1"
      },
      {
@@ -568,7 +568,7 @@
      },
      {
       "g": "M88",
-      "e": "TSC",
+      "e": "CTHR",
       "d": "Through-spindle coolant on"
      }
     ],
@@ -580,12 +580,12 @@
      },
      {
       "g": "G98",
-      "e": "RINI",
+      "e": "RETINIT",
       "d": "Cycle returns to initial Z"
      },
      {
       "g": "G83",
-      "e": "PCK",
+      "e": "PECK",
       "d": "Peck drilling cycle"
      },
      {
@@ -694,7 +694,7 @@
      },
      {
       "g": "M89",
-      "e": "TSCO",
+      "e": "CTHROFF",
       "d": "Through-spindle coolant off"
      }
     ],
@@ -718,7 +718,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],

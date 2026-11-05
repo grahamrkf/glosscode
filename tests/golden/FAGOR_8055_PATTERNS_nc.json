@@ -993,7 +993,7 @@
     [
      {
       "g": "%PATTERNS 8055 ,MX,",
-      "e": "HEAD PATTERNS 8055 ,MX,",
+      "e": "PRGHEAD PATTERNS 8055 ,MX,",
       "d": "Program header: a comment and the attributes between commas (M modifiable, X executable, H hidden, O machine builder)"
      }
     ],
@@ -1013,7 +1013,7 @@
      },
      {
       "g": "G71",
-      "e": "MM",
+      "e": "MET",
       "d": "Millimeter units"
      },
      {
@@ -1092,7 +1092,7 @@
     [
      {
       "g": "G99",
-      "e": "RREF",
+      "e": "RETR",
       "d": "Cycle returns to the reference plane"
      },
      {
@@ -1120,7 +1120,7 @@
     [
      {
       "g": "G60",
-      "e": "PLIN",
+      "e": "PATLINE",
       "d": "Multiple machining in a straight line"
      },
      {
@@ -1181,7 +1181,7 @@
     [
      {
       "g": "G62",
-      "e": "PGRD",
+      "e": "PATGRID",
       "d": "Multiple machining in a grid"
      },
      {
@@ -1247,7 +1247,7 @@
     [
      {
       "g": "G63",
-      "e": "PCIR",
+      "e": "PATCIR",
       "d": "Multiple machining in a full circle"
      },
      {
@@ -1280,7 +1280,7 @@
     [
      {
       "g": "G64",
-      "e": "PARC",
+      "e": "PATARC",
       "d": "Multiple machining in an arc"
      },
      {
@@ -1318,7 +1318,7 @@
     [
      {
       "g": "G65",
-      "e": "PCHD",
+      "e": "PATCHRD",
       "d": "Multiple machining along a chord"
      },
      {
@@ -1345,7 +1345,7 @@
     [
      {
       "g": "G79",
-      "e": "CYPR",
+      "e": "CYCHG",
       "d": "Change the active cycle's parameters"
      },
      {
@@ -1357,7 +1357,7 @@
     [
      {
       "g": "G61",
-      "e": "PRCT",
+      "e": "PATRECT",
       "d": "Multiple machining in a rectangle"
      },
      {
@@ -1396,7 +1396,7 @@
     [
      {
       "g": "G60",
-      "e": "PLIN",
+      "e": "PATLINE",
       "d": "Multiple machining in a straight line"
      },
      {
@@ -1413,7 +1413,7 @@
     [
      {
       "g": "G61",
-      "e": "PRCT",
+      "e": "PATRECT",
       "d": "Multiple machining in a rectangle"
      },
      {
@@ -1430,7 +1430,7 @@
     [
      {
       "g": "G66",
-      "e": "IPKT",
+      "e": "PKTIRR",
       "d": "Irregular pocket cycle"
      },
      {
@@ -1467,7 +1467,7 @@
     [
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
@@ -1479,7 +1479,7 @@
      },
      {
       "g": "G67",
-      "e": "PKRG",
+      "e": "PKTRUF",
       "d": "Irregular pocket roughing"
      },
      {
@@ -1533,7 +1533,7 @@
      },
      {
       "g": "G68",
-      "e": "PKFN",
+      "e": "PKTFIN",
       "d": "Irregular pocket finishing"
      },
      {
@@ -1614,7 +1614,7 @@
     [
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1669,7 +1669,7 @@
     [
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1707,7 +1707,7 @@
     [
      {
       "g": "G66",
-      "e": "IPKT",
+      "e": "PKTIRR",
       "d": "Irregular pocket cycle"
      },
      {
@@ -1724,7 +1724,7 @@
     [
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ]

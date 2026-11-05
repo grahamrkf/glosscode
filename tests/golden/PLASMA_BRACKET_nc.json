@@ -599,7 +599,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -616,7 +616,7 @@
      },
      {
       "g": "M36",
-      "e": "PROC",
+      "e": "PROCSEL",
       "d": "Select the process"
      }
     ],
@@ -658,7 +658,7 @@
      },
      {
       "g": "M07",
-      "e": "CON",
+      "e": "CUTON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -687,7 +687,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -759,7 +759,7 @@
      },
      {
       "g": "M08",
-      "e": "COFF",
+      "e": "CUTOFF",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -801,7 +801,7 @@
      },
      {
       "g": "M07",
-      "e": "CON",
+      "e": "CUTON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -830,7 +830,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -858,7 +858,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -875,7 +875,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -924,7 +924,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -941,7 +941,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -970,7 +970,7 @@
      },
      {
       "g": "M08",
-      "e": "COFF",
+      "e": "CUTOFF",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -1004,7 +1004,7 @@
      },
      {
       "g": "M02",
-      "e": "PEND",
+      "e": "END",
       "d": "End program"
      }
     ]

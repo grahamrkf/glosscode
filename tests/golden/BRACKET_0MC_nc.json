@@ -775,7 +775,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -845,7 +845,7 @@
      },
      {
       "g": "G54",
-      "e": "W1",
+      "e": "WRK1",
       "d": "Work offset 1"
      },
      {
@@ -932,7 +932,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1015,7 +1015,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1109,7 +1109,7 @@
      },
      {
       "g": "G54",
-      "e": "W1",
+      "e": "WRK1",
       "d": "Work offset 1"
      },
      {
@@ -1196,12 +1196,12 @@
      },
      {
       "g": "G99",
-      "e": "RRPL",
+      "e": "RETR",
       "d": "Cycle returns to R plane"
      },
      {
       "g": "G83",
-      "e": "PCK",
+      "e": "PECK",
       "d": "Peck drilling cycle"
      },
      {
@@ -1298,7 +1298,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -1325,7 +1325,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      },
      {

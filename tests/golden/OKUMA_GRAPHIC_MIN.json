@@ -545,14 +545,14 @@
     [
      {
       "g": "DEF WORK",
-      "e": "BDEF WORK",
+      "e": "GRFBLNK WORK",
       "d": "Start of the blank shape for the graphic display (DEF WORK, Okuma); nothing moves"
      }
     ],
     [
      {
       "g": "PS LC,[1,0],[-1,30]",
-      "e": "BSHP LC,[1,0],[-1,30]",
+      "e": "GRFSHAP LC,[1,0],[-1,30]",
       "d": "A blank shape for the graphic display (Okuma); nothing moves"
      },
      {
@@ -565,21 +565,21 @@
     [
      {
       "g": "END",
-      "e": "DEND",
+      "e": "GRFEND",
       "d": "End of the blank shape definition (Okuma)"
      }
     ],
     [
      {
       "g": "CLEAR",
-      "e": "GCLR",
+      "e": "GRFCLR",
       "d": "Clear the graphic display (Okuma)"
      }
     ],
     [
      {
       "g": "DRAW",
-      "e": "GDRW",
+      "e": "GRFDRAW",
       "d": "Draw the blank on the graphic display (Okuma)"
      }
     ],
@@ -591,7 +591,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -648,7 +648,7 @@
      },
      {
       "g": "G96",
-      "e": "CSS",
+      "e": "SFM",
       "d": "Constant surface speed"
      },
      {
@@ -698,7 +698,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -721,7 +721,7 @@
      },
      {
       "g": "G76",
-      "e": "RND",
+      "e": "ARND",
       "d": "Automatic rounding (Okuma)"
      },
      {
@@ -731,7 +731,7 @@
      },
      {
       "g": "L0.005",
-      "e": "RNR0.005",
+      "e": "ARNDSZ0.005",
       "d": "Radius of the automatic rounding 0.005"
      }
     ],
@@ -811,7 +811,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],

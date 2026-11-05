@@ -390,7 +390,7 @@
      },
      {
       "g": "G15",
-      "e": "WSEL",
+      "e": "WRKSEL",
       "d": "Select work offset by H number (Okuma)"
      },
      {
@@ -412,7 +412,7 @@
      },
      {
       "g": "G21",
-      "e": "MMCK",
+      "e": "MMCHK",
       "d": "Confirm metric input (Okuma; units come from a parameter)"
      },
      {
@@ -529,7 +529,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JMP",
+      "e": "GOTO",
       "d": "Jump to a sequence name (Okuma)"
      },
      {
@@ -546,7 +546,7 @@
      },
      {
       "g": "M02",
-      "e": "PEND",
+      "e": "END",
       "d": "End program"
      }
     ],
@@ -587,7 +587,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {

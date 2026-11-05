@@ -256,7 +256,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -307,7 +307,7 @@
     [
      {
       "g": "/",
-      "e": "BDEL",
+      "e": "BLKDEL",
       "d": "Block delete: the control skips this line while Block Delete is on"
      },
      {
@@ -317,7 +317,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -385,7 +385,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      },
      {

@@ -422,7 +422,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -480,7 +480,7 @@
      },
      {
       "g": "G96",
-      "e": "CSS",
+      "e": "SFM",
       "d": "Constant surface speed"
      },
      {
@@ -530,7 +530,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -676,7 +676,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],

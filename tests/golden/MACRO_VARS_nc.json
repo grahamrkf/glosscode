@@ -1587,7 +1587,7 @@
      },
      {
       "g": "G54",
-      "e": "W1",
+      "e": "WRK1",
       "d": "Work offset 1"
      },
      {
@@ -1664,7 +1664,7 @@
      },
      {
       "g": "G98",
-      "e": "RINI",
+      "e": "RETINIT",
       "d": "Cycle returns to initial Z"
      },
      {
@@ -1761,7 +1761,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -1778,7 +1778,7 @@
      },
      {
       "g": "M01",
-      "e": "OSTP",
+      "e": "OPSTOP",
       "d": "Optional stop"
      }
     ],
@@ -1862,7 +1862,7 @@
     [
      {
       "g": "/",
-      "e": "BDEL",
+      "e": "BLKDEL",
       "d": "Block delete: the control skips this line while Block Delete is on"
      },
      {
@@ -1985,7 +1985,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -2037,7 +2037,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
@@ -2320,7 +2320,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -2381,7 +2381,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -2426,7 +2426,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -2487,7 +2487,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -2526,7 +2526,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -2581,7 +2581,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -2620,7 +2620,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -2675,7 +2675,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {

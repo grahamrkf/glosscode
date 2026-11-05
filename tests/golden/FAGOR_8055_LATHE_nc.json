@@ -1006,7 +1006,7 @@
     [
      {
       "g": "%SHAFT 8055 ,MX,",
-      "e": "HEAD SHAFT 8055 ,MX,",
+      "e": "PRGHEAD SHAFT 8055 ,MX,",
       "d": "Program header: a comment and the attributes between commas (M modifiable, X executable, H hidden, O machine builder)"
      }
     ],
@@ -1026,7 +1026,7 @@
      },
      {
       "g": "G71",
-      "e": "MM",
+      "e": "MET",
       "d": "Millimeter units"
      },
      {
@@ -1036,7 +1036,7 @@
      },
      {
       "g": "G18",
-      "e": "ZX",
+      "e": "PXZ",
       "d": "ZX plane, the usual plane on a lathe"
      },
      {
@@ -1053,7 +1053,7 @@
     [
      {
       "g": "G92",
-      "e": "PRST",
+      "e": "SETC",
       "d": "Coordinate preset, or with S the spindle speed limit"
      },
      {
@@ -1126,7 +1126,7 @@
     [
      {
       "g": "G81",
-      "e": "TRNS",
+      "e": "TURNSTR",
       "d": "Straight turning"
      },
      {
@@ -1178,7 +1178,7 @@
     [
      {
       "g": "G82",
-      "e": "FCS",
+      "e": "FACESTR",
       "d": "Straight facing"
      },
      {
@@ -1210,7 +1210,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1267,7 +1267,7 @@
     [
      {
       "g": "G66",
-      "e": "PREP",
+      "e": "PATRPT",
       "d": "Pattern repeat: roughs by repeating the profile"
      },
      {
@@ -1398,7 +1398,7 @@
     [
      {
       "g": "G86",
-      "e": "THDL",
+      "e": "THDLONG",
       "d": "Threading along Z"
      },
      {
@@ -1509,7 +1509,7 @@
     [
      {
       "g": "G83",
-      "e": "AXDR",
+      "e": "AXLDRL",
       "d": "Drilling or tapping along Z"
      },
      {
@@ -1546,7 +1546,7 @@
     [
      {
       "g": "G60",
-      "e": "FDRL",
+      "e": "FACEDRL",
       "d": "Live tool drilling or tapping on the face"
      },
      {
@@ -1593,7 +1593,7 @@
     [
      {
       "g": "G81",
-      "e": "TRNS",
+      "e": "TURNSTR",
       "d": "Straight turning"
      },
      {
@@ -1622,7 +1622,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1671,7 +1671,7 @@
     [
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
@@ -1683,7 +1683,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1744,7 +1744,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {

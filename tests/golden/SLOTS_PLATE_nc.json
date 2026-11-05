@@ -566,7 +566,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -626,7 +626,7 @@
      },
      {
       "g": "G54",
-      "e": "W1",
+      "e": "WRK1",
       "d": "Work offset 1"
      },
      {
@@ -911,7 +911,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -928,7 +928,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],

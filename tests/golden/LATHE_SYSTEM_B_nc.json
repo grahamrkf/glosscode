@@ -607,7 +607,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -659,7 +659,7 @@
      },
      {
       "g": "G96",
-      "e": "CSS",
+      "e": "SFM",
       "d": "Constant surface speed"
      },
      {
@@ -709,7 +709,7 @@
      },
      {
       "g": "G77",
-      "e": "TCY",
+      "e": "TURN",
       "d": "OD/ID turning cycle"
      },
      {
@@ -749,7 +749,7 @@
      },
      {
       "g": "G79",
-      "e": "FCY",
+      "e": "FACE",
       "d": "End facing cycle"
      },
      {
@@ -777,7 +777,7 @@
      },
      {
       "g": "G78",
-      "e": "TCYC",
+      "e": "THDCY",
       "d": "Threading cycle"
      },
      {
@@ -805,7 +805,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -876,7 +876,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -904,7 +904,7 @@
      },
      {
       "g": "G33",
-      "e": "THC",
+      "e": "THD",
       "d": "Single thread cut (systems B and C)"
      },
      {
@@ -932,7 +932,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -973,7 +973,7 @@
      },
      {
       "g": "G32",
-      "e": "THC",
+      "e": "THD",
       "d": "Single thread cut"
      },
      {
@@ -996,7 +996,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],

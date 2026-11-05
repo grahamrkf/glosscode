@@ -1706,7 +1706,7 @@
      },
      {
       "g": "BEGIN PGM PLATE MM",
-      "e": "BEGIN PLATE MM",
+      "e": "PRGBEG PLATE MM",
       "d": "Start of the program: its name, then MM or INCH"
      }
     ],
@@ -1718,7 +1718,7 @@
      },
      {
       "g": "BLK FORM 0.1 Z",
-      "e": "BLKMIN Z",
+      "e": "STKMIN Z",
       "d": "Workpiece blank: the tool axis and the corner with the smallest coordinates"
      },
      {
@@ -1745,7 +1745,7 @@
      },
      {
       "g": "BLK FORM 0.2",
-      "e": "BLKMAX",
+      "e": "STKMAX",
       "d": "Workpiece blank: the corner with the largest coordinates"
      },
      {
@@ -1819,7 +1819,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -1851,7 +1851,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -1883,7 +1883,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -1916,7 +1916,7 @@
      },
      {
       "g": "APPR LCT",
-      "e": "APLCT",
+      "e": "APPR",
       "d": "Approach along a line, then a tangent arc"
      },
      {
@@ -1954,7 +1954,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -1988,7 +1988,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2005,7 +2005,7 @@
      },
      {
       "g": "CC",
-      "e": "CC",
+      "e": "POLE",
       "d": "Circle center and pole (the tool doesn't move)"
      },
      {
@@ -2027,7 +2027,7 @@
      },
      {
       "g": "C",
-      "e": "C",
+      "e": "ARC",
       "d": "Arc around the circle center CC"
      },
      {
@@ -2054,7 +2054,7 @@
      },
      {
       "g": "CR",
-      "e": "CR",
+      "e": "ARCR",
       "d": "Arc with a radius"
      },
      {
@@ -2086,7 +2086,7 @@
      },
      {
       "g": "CT",
-      "e": "CT",
+      "e": "ARCTAN",
       "d": "Arc tangent to the element before"
      },
      {
@@ -2108,7 +2108,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2137,7 +2137,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2159,7 +2159,7 @@
      },
      {
       "g": "DEP LCT",
-      "e": "DPLCT",
+      "e": "DEP",
       "d": "Depart along a tangent arc, then a line"
      },
      {
@@ -2192,7 +2192,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2256,7 +2256,7 @@
      },
      {
       "g": "CYCL DEF 200 DRILLING",
-      "e": "CDEF 200 DRILLING",
+      "e": "CYDEF 200 DRILLING",
       "d": "Cycle definition: sets the cycle up without running it. Cycle 200: Drilling"
      },
      {
@@ -2377,7 +2377,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2414,7 +2414,7 @@
      },
      {
       "g": "CYCL CALL",
-      "e": "CCALL",
+      "e": "CYCALL",
       "d": "Run the defined cycle once, where the tool is"
      }
     ],
@@ -2426,7 +2426,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2451,7 +2451,7 @@
      },
      {
       "g": "M99",
-      "e": "CC1",
+      "e": "CALL1",
       "d": "Run the cycle once, at the end of this move"
      }
     ],
@@ -2463,7 +2463,7 @@
      },
      {
       "g": "PATTERN DEF",
-      "e": "PAT",
+      "e": "PATDEF",
       "d": "Pattern definition: the points CYCL CALL PAT runs at"
      },
      {
@@ -2499,7 +2499,7 @@
      },
      {
       "g": "CYCL CALL PAT",
-      "e": "CCPAT",
+      "e": "CALLPAT",
       "d": "Run the defined cycle at every point of the pattern"
      },
      {
@@ -2553,7 +2553,7 @@
      },
      {
       "g": "CYCL DEF 251 RECTANGULAR POCKET",
-      "e": "CDEF 251 RECTANGULAR POCKET",
+      "e": "CYDEF 251 RECTANGULAR POCKET",
       "d": "Cycle definition: sets the cycle up without running it. Cycle 251: Rectangular pocket"
      },
      {
@@ -2674,7 +2674,7 @@
      },
      {
       "g": "CYCL CALL POS",
-      "e": "CCPOS",
+      "e": "CALLPOS",
       "d": "Run the defined cycle once at this position"
      },
      {
@@ -2701,7 +2701,7 @@
      },
      {
       "g": "FN 0: Q1 = +0",
-      "e": "FN0 Q1 = +0",
+      "e": "QSET Q1 = +0",
       "d": "Sets a Q parameter"
      }
     ],
@@ -2725,7 +2725,7 @@
      },
      {
       "g": "CALL LBL 1",
-      "e": "CALL 1",
+      "e": "SUB 1",
       "d": "Run the subprogram at this label; with REP, repeat the section from the label this many more times"
      }
     ],
@@ -2749,7 +2749,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2777,7 +2777,7 @@
      },
      {
       "g": "CALL LBL 2 REP 2",
-      "e": "CALL 2 REP 2",
+      "e": "SUB 2 REP 2",
       "d": "Run the subprogram at this label; with REP, repeat the section from the label this many more times"
      }
     ],
@@ -2789,7 +2789,7 @@
      },
      {
       "g": "FN 9: IF +Q1 EQU +0 GOTO LBL 3",
-      "e": "FN9 IF +Q1 EQU +0 GOTO LBL 3",
+      "e": "QIFEQ IF +Q1 EQU +0 GOTO LBL 3",
       "d": "Jump to the label if the two values are equal"
      }
     ],
@@ -2801,7 +2801,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2840,7 +2840,7 @@
      },
      {
       "g": "CC",
-      "e": "CC",
+      "e": "POLE",
       "d": "Circle center and pole (the tool doesn't move)"
      },
      {
@@ -2862,7 +2862,7 @@
      },
      {
       "g": "LP",
-      "e": "LP",
+      "e": "POLLINE",
       "d": "Straight line in polar coordinates, from the pole CC"
      },
      {
@@ -2894,7 +2894,7 @@
      },
      {
       "g": "CP",
-      "e": "CP",
+      "e": "POLARC",
       "d": "Arc in polar coordinates around the pole CC"
      },
      {
@@ -2922,7 +2922,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2942,7 +2942,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
@@ -2966,7 +2966,7 @@
      },
      {
       "g": "L",
-      "e": "L",
+      "e": "LINE",
       "d": "Straight line"
      },
      {
@@ -2998,7 +2998,7 @@
      },
      {
       "g": "LBL 0",
-      "e": "LBL0",
+      "e": "RET",
       "d": "End of a subprogram: go back to the block after the call"
      }
     ],

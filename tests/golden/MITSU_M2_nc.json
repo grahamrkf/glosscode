@@ -377,7 +377,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      }
     ],
@@ -461,7 +461,7 @@
      },
      {
       "g": "G22",
-      "e": "CALL",
+      "e": "SUB",
       "d": "Call a subprogram: L the program, P the repeat count (M2/M0 format)"
      },
      {
@@ -483,7 +483,7 @@
      },
      {
       "g": "G62",
-      "e": "MIR",
+      "e": "MIRON",
       "d": "Mirror image (M2/M0 format)"
      },
      {
@@ -500,7 +500,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -569,7 +569,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],

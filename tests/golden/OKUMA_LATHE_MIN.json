@@ -922,7 +922,7 @@
      },
      {
       "g": "G96",
-      "e": "CSS",
+      "e": "SFM",
       "d": "Constant surface speed"
      },
      {
@@ -972,7 +972,7 @@
      },
      {
       "g": "G85",
-      "e": "LRUF",
+      "e": "LAPRUF",
       "d": "LAP roughing, longitudinal (Okuma)"
      },
      {
@@ -1037,7 +1037,7 @@
      },
      {
       "g": "G81",
-      "e": "CTZ",
+      "e": "LAPCNTZ",
       "d": "Start of longitudinal LAP contour (Okuma)"
      }
     ],
@@ -1071,7 +1071,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1150,7 +1150,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1179,7 +1179,7 @@
      },
      {
       "g": "G80",
-      "e": "CEND",
+      "e": "LAPEND",
       "d": "End of LAP contour definition (Okuma)"
      }
     ],
@@ -1213,7 +1213,7 @@
      },
      {
       "g": "G87",
-      "e": "LFIN",
+      "e": "LAPFIN",
       "d": "LAP finishing (Okuma)"
      },
      {
@@ -1252,7 +1252,7 @@
      },
      {
       "g": "G74",
-      "e": "GRX",
+      "e": "FGRV",
       "d": "Grooving or drilling cycle on a face (Okuma)"
      },
      {
@@ -1290,7 +1290,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1376,7 +1376,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -1410,7 +1410,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JMP",
+      "e": "GOTO",
       "d": "Jump to a sequence name (Okuma)"
      },
      {
@@ -1427,7 +1427,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
@@ -1439,7 +1439,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JMP",
+      "e": "GOTO",
       "d": "Jump to a sequence name (Okuma)"
      },
      {

@@ -889,7 +889,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "IMP",
       "d": "Inch units"
      },
      {
@@ -949,7 +949,7 @@
      },
      {
       "g": "G54",
-      "e": "W1",
+      "e": "WRK1",
       "d": "Work offset 1"
      },
      {
@@ -1010,7 +1010,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1045,7 +1045,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1100,7 +1100,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1140,7 +1140,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -1199,7 +1199,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1238,12 +1238,12 @@
      },
      {
       "g": "G98",
-      "e": "RINI",
+      "e": "RETINIT",
       "d": "Cycle returns to initial Z"
      },
      {
       "g": "G83",
-      "e": "PCK",
+      "e": "PECK",
       "d": "Peck drilling cycle"
      },
      {
@@ -1428,7 +1428,7 @@
      },
      {
       "g": "M30",
-      "e": "END",
+      "e": "ENDRW",
       "d": "End program and rewind"
      }
     ],
