@@ -270,7 +270,7 @@
      },
      {
       "g": "M42",
-      "e": "gear.2",
+      "e": "spindle.gear.2",
       "d": "Spindle gear range 2 (Okuma)"
      }
     ],
@@ -910,7 +910,7 @@
      },
      {
       "g": "M42",
-      "e": "GR2",
+      "e": "SG2",
       "d": "Spindle gear range 2 (Okuma)"
      }
     ],
@@ -1054,7 +1054,7 @@
      },
      {
       "g": "G42",
-      "e": "CCR",
+      "e": "TRR",
       "d": "Cutter compensation right"
      },
      {
@@ -1167,7 +1167,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      }
     ],

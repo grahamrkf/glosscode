@@ -458,7 +458,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      },
      {
@@ -1546,7 +1546,7 @@
      },
      {
       "g": "G43",
-      "e": "offset3d.off",
+      "e": "tool.offset3d.off",
       "d": "3-D tool offset off (Okuma)"
      },
      {
@@ -1561,7 +1561,7 @@
      },
      {
       "g": "M88",
-      "e": "dust.off",
+      "e": "machine.dust.off",
       "d": "Dust collector off (Okuma)"
      }
     ],
@@ -1687,7 +1687,7 @@
      },
      {
       "g": "M89",
-      "e": "dust.on",
+      "e": "machine.dust.on",
       "d": "Dust collector on (Okuma)"
      }
     ],

@@ -184,14 +184,14 @@
     [
      {
       "g": "DEF WORK",
-      "e": "graphic.blank WORK",
+      "e": "prog.graphic.blank WORK",
       "d": "Start of the blank shape for the graphic display (DEF WORK, Okuma); nothing moves"
      }
     ],
     [
      {
       "g": "PS LC,[1,0],[-1,30]",
-      "e": "graphic.shape LC,[1,0],[-1,30]",
+      "e": "prog.graphic.shape LC,[1,0],[-1,30]",
       "d": "A blank shape for the graphic display (Okuma); nothing moves"
      },
      {
@@ -204,21 +204,21 @@
     [
      {
       "g": "END",
-      "e": "graphic.end",
+      "e": "prog.graphic.end",
       "d": "End of the blank shape definition (Okuma)"
      }
     ],
     [
      {
       "g": "CLEAR",
-      "e": "graphic.clear",
+      "e": "prog.graphic.clear",
       "d": "Clear the graphic display (Okuma)"
      }
     ],
     [
      {
       "g": "DRAW",
-      "e": "graphic.draw",
+      "e": "prog.graphic.draw",
       "d": "Draw the blank on the graphic display (Okuma)"
      }
     ],
@@ -275,7 +275,7 @@
      },
      {
       "g": "M42",
-      "e": "gear.2",
+      "e": "spindle.gear.2",
       "d": "Spindle gear range 2 (Okuma)"
      }
     ],
@@ -360,7 +360,7 @@
      },
      {
       "g": "G76",
-      "e": "corner.round.auto",
+      "e": "set.round.auto",
       "d": "Automatic rounding (Okuma)"
      },
      {
@@ -370,7 +370,7 @@
      },
      {
       "g": "L0.005",
-      "e": "corner.round.size0.005",
+      "e": "set.round.size0.005",
       "d": "Radius of the automatic rounding 0.005"
      }
     ],
@@ -545,7 +545,7 @@
     [
      {
       "g": "DEF WORK",
-      "e": "GRFBLNK WORK",
+      "e": "GRFSTK WORK",
       "d": "Start of the blank shape for the graphic display (DEF WORK, Okuma); nothing moves"
      }
     ],
@@ -636,7 +636,7 @@
      },
      {
       "g": "M42",
-      "e": "GR2",
+      "e": "SG2",
       "d": "Spindle gear range 2 (Okuma)"
      }
     ],

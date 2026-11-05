@@ -222,7 +222,7 @@
      },
      {
       "g": "G62",
-      "e": "mirror.on",
+      "e": "set.mirror.on",
       "d": "Mirror image (M2/M0 format)"
      },
      {
@@ -722,7 +722,7 @@
      },
      {
       "g": "G22",
-      "e": "limits.on",
+      "e": "machine.limits.on",
       "d": "Stored stroke check on"
      },
      {
@@ -745,7 +745,7 @@
      },
      {
       "g": "G62",
-      "e": "corner.override",
+      "e": "set.corner.override",
       "d": "Automatic corner override"
      },
      {

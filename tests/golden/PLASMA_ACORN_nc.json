@@ -520,7 +520,7 @@
      },
      {
       "g": "G42",
-      "e": "CCR",
+      "e": "TRR",
       "d": "Cutter compensation right"
      },
      {
@@ -593,7 +593,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      },
      {
@@ -949,7 +949,7 @@
      },
      {
       "g": "M65",
-      "e": "material.select",
+      "e": "torch.material",
       "d": "Select a material profile (Acorn plasma)"
      },
      {
@@ -1211,7 +1211,7 @@
      },
      {
       "g": "M62",
-      "e": "output.on.sync",
+      "e": "machine.output.onsync",
       "d": "Digital output on, synced with motion"
      }
     ],
@@ -1250,7 +1250,7 @@
      },
      {
       "g": "M65",
-      "e": "output.off",
+      "e": "machine.output.off",
       "d": "Digital output off now"
      },
      {

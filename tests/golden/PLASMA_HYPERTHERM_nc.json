@@ -126,7 +126,7 @@
      },
      {
       "g": "G59",
-      "e": "vars.set",
+      "e": "set.vars",
       "d": "Set variables (not a work offset on Hypertherm)"
      },
      {
@@ -188,7 +188,7 @@
      },
      {
       "g": "M07",
-      "e": "cut.on",
+      "e": "torch.on",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -294,7 +294,7 @@
      },
      {
       "g": "M08",
-      "e": "cut.off",
+      "e": "torch.off",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -352,7 +352,7 @@
      },
      {
       "g": "M07",
-      "e": "cut.on",
+      "e": "torch.on",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -506,7 +506,7 @@
      },
      {
       "g": "M07",
-      "e": "CUTON",
+      "e": "PLON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -518,7 +518,7 @@
      },
      {
       "g": "G41",
-      "e": "CCL",
+      "e": "TRL",
       "d": "Cutter compensation left"
      },
      {
@@ -612,7 +612,7 @@
      },
      {
       "g": "M08",
-      "e": "CUTOFF",
+      "e": "PLOFF",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -624,7 +624,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      }
     ],
@@ -670,7 +670,7 @@
      },
      {
       "g": "M07",
-      "e": "CUTON",
+      "e": "PLON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -1019,7 +1019,7 @@
      },
      {
       "g": "M30",
-      "e": "custom.m30",
+      "e": "machine.custom.m30",
       "d": "Custom M code: does nothing unless the machine defines it"
      }
     ]

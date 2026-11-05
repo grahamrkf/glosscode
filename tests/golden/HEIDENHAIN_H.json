@@ -395,7 +395,7 @@
      },
      {
       "g": "BLK FORM 0.1 Z",
-      "e": "blank.min Z",
+      "e": "prog.blank.min Z",
       "d": "Workpiece blank: the tool axis and the corner with the smallest coordinates"
      },
      {
@@ -422,7 +422,7 @@
      },
      {
       "g": "BLK FORM 0.2",
-      "e": "blank.max",
+      "e": "prog.blank.max",
       "d": "Workpiece blank: the corner with the largest coordinates"
      },
      {
@@ -1378,7 +1378,7 @@
      },
      {
       "g": "FN 0: Q1 = +0",
-      "e": "q.assign Q1 = +0",
+      "e": "param.assign Q1 = +0",
       "d": "Sets a Q parameter"
      }
     ],
@@ -1414,7 +1414,7 @@
      },
      {
       "g": "LBL 2",
-      "e": "label 2",
+      "e": "prog.label 2",
       "d": "Label: a place a call or a jump goes to"
      }
     ],
@@ -1466,7 +1466,7 @@
      },
      {
       "g": "FN 9: IF +Q1 EQU +0 GOTO LBL 3",
-      "e": "q.ifequal IF +Q1 EQU +0 GOTO LBL 3",
+      "e": "param.ifequal IF +Q1 EQU +0 GOTO LBL 3",
       "d": "Jump to the label if the two values are equal"
      }
     ],
@@ -1505,7 +1505,7 @@
      },
      {
       "g": "LBL 3",
-      "e": "label 3",
+      "e": "prog.label 3",
       "d": "Label: a place a call or a jump goes to"
      }
     ],
@@ -1631,7 +1631,7 @@
      },
      {
       "g": "LBL 1",
-      "e": "label 1",
+      "e": "prog.label 1",
       "d": "Label: a place a call or a jump goes to"
      }
     ],
@@ -1829,7 +1829,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -1866,7 +1866,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -1893,7 +1893,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -2202,7 +2202,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -2392,7 +2392,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -2441,7 +2441,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -2759,7 +2759,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -2811,7 +2811,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -2877,7 +2877,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -2932,7 +2932,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {
@@ -2981,7 +2981,7 @@
      },
      {
       "g": "R0",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "No tool radius compensation"
      },
      {

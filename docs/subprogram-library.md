@@ -59,7 +59,7 @@ When the lines are written in, a comment line goes first with the values used, s
 
 ![Editing a library subprogram](images/library-editor.png)
 
-- **Name**, **gloss word** (full, such as `sub.slotmill`, 20 characters at most; short, 8 at most), **program number**, **category**, **tags**, which machines it **works on**, **units**, which folder it's **saved in**, and **private**.
+- **Name**, **gloss word** (full, such as `sub.slotmill`, 28 characters at most; short, 8 at most), **program number**, **category**, **tags**, which machines it **works on**, **units**, which folder it's **saved in**, and **private**.
 - **Variables**: letter (the `#` number is shown next to it), gloss name, kind (distance, feed, speed, count, angle, seconds), required, default, and what it is. **Add from body** adds a variable for each `#1`–`#26` the body reads that isn't one yet.
 - **Body**: the O program exactly as it runs on the control.
 - Problems show as you type. A save is blocked by missing names or gloss words, a letter used twice, or no machine ticked. Warnings cover an O number another library subprogram already uses, a `#` the body reads that isn't a variable (so it's always empty), a variable the body never reads, a body that doesn't start with its O number or doesn't end with M99, and a body that can't be written in (it uses something the reader below doesn't support). A built-in subprogram opens read-only, and **Make my own copy** saves an editable copy in your library with the next free O number.

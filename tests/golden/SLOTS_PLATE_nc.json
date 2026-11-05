@@ -581,7 +581,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      },
      {
@@ -1919,7 +1919,7 @@
      },
      {
       "g": "G43",
-      "e": "offset3d.off",
+      "e": "tool.offset3d.off",
       "d": "3-D tool offset off (Okuma)"
      },
      {

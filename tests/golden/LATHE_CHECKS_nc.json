@@ -1151,7 +1151,7 @@
      },
      {
       "g": "G76",
-      "e": "corner.round.auto",
+      "e": "set.round.auto",
       "d": "Automatic rounding (Okuma)"
      },
      {

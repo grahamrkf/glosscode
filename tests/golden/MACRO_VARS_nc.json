@@ -681,7 +681,7 @@
     [
      {
       "g": "/",
-      "e": "block.delete",
+      "e": "prog.block.delete",
       "d": "Block delete: the control skips this line while Block Delete is on"
      },
      {
@@ -3044,7 +3044,7 @@
     [
      {
       "g": "/",
-      "e": "block.delete",
+      "e": "prog.block.delete",
       "d": "Block delete: the control skips this line while Block Delete is on"
      },
      {
@@ -4260,7 +4260,7 @@
     [
      {
       "g": "/",
-      "e": "block.delete",
+      "e": "prog.block.delete",
       "d": "Block delete: the control skips this line while Block Delete is on"
      },
      {
@@ -5238,7 +5238,7 @@
      },
      {
       "g": "G43",
-      "e": "offset3d.off",
+      "e": "tool.offset3d.off",
       "d": "3-D tool offset off (Okuma)"
      },
      {
@@ -5459,7 +5459,7 @@
      },
      {
       "g": "G43",
-      "e": "offset3d.off",
+      "e": "tool.offset3d.off",
       "d": "3-D tool offset off (Okuma)"
      },
      {
@@ -5476,7 +5476,7 @@
     [
      {
       "g": "/",
-      "e": "block.delete",
+      "e": "prog.block.delete",
       "d": "Block delete: the control skips this line while Block Delete is on"
      },
      {

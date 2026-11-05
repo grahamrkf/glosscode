@@ -2017,7 +2017,7 @@
     [
      {
       "g": "G68",
-      "e": "turret.mirror.on",
+      "e": "machine.turretmirror.on",
       "d": "Mirror image for the opposite turret (Fanuc lathe)"
      },
      {
@@ -2481,7 +2481,7 @@
     [
      {
       "g": "G68",
-      "e": "turret.mirror.on",
+      "e": "machine.turretmirror.on",
       "d": "Mirror image for the opposite turret (Fanuc lathe)"
      },
      {

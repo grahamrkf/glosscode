@@ -673,7 +673,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      }
     ],
@@ -1166,7 +1166,7 @@
      },
      {
       "g": "G21",
-      "e": "atc.home",
+      "e": "tool.atc.home",
       "d": "Return the ATC to its home position (Okuma lathe)"
      },
      {
@@ -1482,7 +1482,7 @@
      },
      {
       "g": "G76",
-      "e": "corner.round.auto",
+      "e": "set.round.auto",
       "d": "Automatic rounding (Okuma)"
      },
      {
@@ -1566,7 +1566,7 @@
      },
      {
       "g": "G28",
-      "e": "torque.limit.off",
+      "e": "machine.torquelimit.off",
       "d": "Torque limit off (Okuma lathe)"
      },
      {

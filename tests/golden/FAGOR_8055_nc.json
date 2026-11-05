@@ -424,7 +424,7 @@
     [
      {
       "g": "(MSG \"CHECK PART\")",
-      "e": "msg.show \"CHECK PART\"",
+      "e": "prog.msg.show \"CHECK PART\"",
       "d": "Show a message"
      }
     ],
@@ -496,7 +496,7 @@
     [
      {
       "g": "(SUB 12)",
-      "e": "sub.start 12",
+      "e": "prog.sub.start 12",
       "d": "Start of subroutine n"
      }
     ],

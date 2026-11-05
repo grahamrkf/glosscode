@@ -139,7 +139,7 @@
     [
      {
       "g": "%L HOLES",
-      "e": "sub.local HOLES",
+      "e": "prog.sub.local HOLES",
       "d": "Start of a local subroutine"
      },
      {
@@ -471,7 +471,7 @@
     [
      {
       "g": "#MSG [\"CHECK PART\"]",
-      "e": "msg.show [\"CHECK PART\"]",
+      "e": "prog.msg.show [\"CHECK PART\"]",
       "d": "Show a message"
      }
     ],
@@ -541,7 +541,7 @@
     [
      {
       "g": "%L HOLES",
-      "e": "SUBLCL HOLES",
+      "e": "LSUBDEF HOLES",
       "d": "Start of a local subroutine"
      },
      {

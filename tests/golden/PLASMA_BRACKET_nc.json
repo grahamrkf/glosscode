@@ -176,7 +176,7 @@
      },
      {
       "g": "M36",
-      "e": "process.select",
+      "e": "torch.process",
       "d": "Select the process"
      }
     ],
@@ -218,7 +218,7 @@
      },
      {
       "g": "M07",
-      "e": "cut.on",
+      "e": "torch.on",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -319,7 +319,7 @@
      },
      {
       "g": "M08",
-      "e": "cut.off",
+      "e": "torch.off",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -361,7 +361,7 @@
      },
      {
       "g": "M07",
-      "e": "cut.on",
+      "e": "torch.on",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -530,7 +530,7 @@
      },
      {
       "g": "M08",
-      "e": "cut.off",
+      "e": "torch.off",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -616,7 +616,7 @@
      },
      {
       "g": "M36",
-      "e": "PROCSEL",
+      "e": "PLPROC",
       "d": "Select the process"
      }
     ],
@@ -658,7 +658,7 @@
      },
      {
       "g": "M07",
-      "e": "CUTON",
+      "e": "PLON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -670,7 +670,7 @@
      },
      {
       "g": "G41",
-      "e": "CCL",
+      "e": "TRL",
       "d": "Cutter compensation left"
      },
      {
@@ -747,7 +747,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      }
     ],
@@ -759,7 +759,7 @@
      },
      {
       "g": "M08",
-      "e": "CUTOFF",
+      "e": "PLOFF",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -801,7 +801,7 @@
      },
      {
       "g": "M07",
-      "e": "CUTON",
+      "e": "PLON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -813,7 +813,7 @@
      },
      {
       "g": "G41",
-      "e": "CCL",
+      "e": "TRL",
       "d": "Cutter compensation left"
      },
      {
@@ -958,7 +958,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      }
     ],
@@ -970,7 +970,7 @@
      },
      {
       "g": "M08",
-      "e": "CUTOFF",
+      "e": "PLOFF",
       "d": "Cut off: the torch stops"
      }
     ],

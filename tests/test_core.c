@@ -229,7 +229,7 @@ static void test_controls(const gc_data *data)
     m1 = gc_json_parse(e1, strlen(e1), err, sizeof err);
     a = gc_analyze(data, m1, doc, GC_STYLE_WORDS);
     CHECK_STR(a->cells[0][1].e, "cycle.skip", "G30 is the skip cycle on an Okuma lathe");
-    CHECK_STR(a->cells[1][1].e, "tailstock.thrusthigh", "M99 is tailstock thrust high on an OSP-E100L");
+    CHECK_STR(a->cells[1][1].e, "machine.tailstock.thrusthigh", "M99 is tailstock thrust high on an OSP-E100L");
     gc_analysis_free(a);
     gc_json_free(m1);
     gc_doc_free(doc);

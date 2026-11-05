@@ -7,7 +7,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 **Editor**
 - [ ] Interleaved view: a gloss line (plain English) above every code line
 - [ ] Fixed-width columns (at least 12 characters for full words, 8 for short) so words line up down the whole file
-- [ ] Full words (`run.feed`, `set.inch`, `cycle.peck`: a group, then the action, with a third part for less common codes) and short words (View › Gloss words)
+- [ ] Full words (`run.feed`, `set.inch`, `cycle.peck`, `machine.tailstock.in`: one of a fixed set of groups, then the action, with a third part for less common codes; control-specific codes are underlined with dots) and short words (View › Gloss words)
 - [ ] Type code or type gloss (View › Edit in). Clicking a code word while editing gloss switches to editing code and selects it, and clicking a gloss word while editing code switches back
 - [ ] Autocomplete for gloss and code words
 - [ ] Keyboard editing by word: ← → move between words, ↑ ↓ between lines, Enter edits and Enter again finishes (the word stays selected), Delete removes the word, typing replaces it

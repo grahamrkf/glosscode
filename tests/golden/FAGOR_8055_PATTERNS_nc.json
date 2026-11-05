@@ -654,7 +654,7 @@
     [
      {
       "g": "G66",
-      "e": "pocket.irregular",
+      "e": "cycle.pocket.irregular",
       "d": "Irregular pocket cycle"
      },
      {
@@ -703,7 +703,7 @@
      },
      {
       "g": "G67",
-      "e": "pocket.rough",
+      "e": "cycle.pocket.rough",
       "d": "Irregular pocket roughing"
      },
      {
@@ -757,7 +757,7 @@
      },
      {
       "g": "G68",
-      "e": "pocket.finish",
+      "e": "cycle.pocket.finish",
       "d": "Irregular pocket finishing"
      },
      {
@@ -931,7 +931,7 @@
     [
      {
       "g": "G66",
-      "e": "pocket.irregular",
+      "e": "cycle.pocket.irregular",
       "d": "Irregular pocket cycle"
      },
      {

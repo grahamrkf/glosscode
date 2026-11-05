@@ -422,7 +422,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      },
      {
@@ -985,7 +985,7 @@
      },
      {
       "g": "G15",
-      "e": "polar.off",
+      "e": "set.polar.off",
       "d": "Polar coordinates off"
      },
      {
@@ -1293,7 +1293,7 @@
      },
      {
       "g": "G15",
-      "e": "polar.off",
+      "e": "set.polar.off",
       "d": "Polar coordinates off"
      },
      {

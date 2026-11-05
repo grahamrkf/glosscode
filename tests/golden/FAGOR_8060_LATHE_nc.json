@@ -801,7 +801,7 @@
     [
      {
       "g": "G50",
-      "e": "corner.semiround",
+      "e": "set.corner.semiround",
       "d": "Semi-rounded corner (modal)"
      },
      {
@@ -2273,7 +2273,7 @@
     [
      {
       "g": "G50",
-      "e": "corner.semiround",
+      "e": "set.corner.semiround",
       "d": "Semi-rounded corner (modal)"
      },
      {
