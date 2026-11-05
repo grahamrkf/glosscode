@@ -108,10 +108,11 @@ int gc_is_end(const gc_line *l, int syntax)
     return 0;
 }
 
-int gc_is_return(const gc_line *l, int syntax)
+int gc_is_return(const gc_line *l, int syntax, int okuma)
 {
     if (syntax == GC_SYN_KLARTEXT) return gc_line_has_tok(l, "LBL 0"); /* M99 calls a cycle there */
-    if (gc_line_has_code(l, "M99") || gc_line_has_tok(l, "RTS")) return 1;
+    /* Okuma subprograms end with RTS; on an Okuma lathe M99 is tailstock thrust high */
+    if ((!okuma && gc_line_has_code(l, "M99")) || gc_line_has_tok(l, "RTS")) return 1;
     if (syntax == GC_SYN_FAGOR8060) return gc_line_has_code(l, "M17") || gc_line_has_code(l, "M29") || gc_line_has_tok(l, "#RET");
     return syntax == GC_SYN_FAGOR8055 && gc_line_has_tok(l, "(RET)");
 }

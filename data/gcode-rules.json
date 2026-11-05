@@ -817,6 +817,7 @@
       },
       "lathe": {
         "source": { "manual": "Okuma OSP-P200L Programming Manual 5238-E", "revision": "3rd edition, Aug. 2007", "section": "Sections 1, 2, 4, 5, 7, 12 and the G and M code tables" },
+        "numbers": { "noDecimal": "asWritten" },
         "modalGroups": {
           "motion":      ["G00", "G01", "G02", "G03", "G31", "G32", "G33", "G34", "G35"],
           "feed mode":   ["G94", "G95"],

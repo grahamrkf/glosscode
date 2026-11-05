@@ -1894,9 +1894,8 @@
      },
      {
       "g": "Q140",
-      "e": "STARTS0.0140",
-      "d": "Number of starts for a multi-start thread. (G71)",
-      "imp": true
+      "e": "STARTS140",
+      "d": "Number of starts for a multi-start thread. (G71)"
      },
      {
       "g": "U0.4",
@@ -1979,9 +1978,8 @@
      },
      {
       "g": "Q999",
-      "e": "PECK0.0999",
-      "d": "No decimal point, so this reads as 0.0999 in. Write Q999. for 999 in.",
-      "imp": true
+      "e": "PECK999",
+      "d": "Peck depth 999"
      }
     ],
     [
@@ -2202,12 +2200,6 @@
     },
     {
      "li": 11,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Q140 has no decimal point, so the control reads it as Q0.0140 in. Write Q140. if you mean 140 in."
-    },
-    {
-     "li": 11,
      "id": "cycle-stray-word",
      "sev": "info",
      "msg": "G71 (Thread cutting, compound, along Z) doesn't use P120, so it is ignored or alarms."
@@ -2217,12 +2209,6 @@
      "id": "cycle-stray-word",
      "sev": "info",
      "msg": "G71 (Thread cutting, compound, along Z) doesn't use W0.1, so it is ignored or alarms."
-    },
-    {
-     "li": 15,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Q999 has no decimal point, so the control reads it as Q0.0999 in. Write Q999. if you mean 999 in."
     },
     {
      "li": 16,

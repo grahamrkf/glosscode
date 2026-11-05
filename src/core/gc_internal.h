@@ -56,7 +56,7 @@ int gc_kl_move(const char *key);
 int gc_kl_arc(const char *key);
 /* "LBL 5" (leading zeros dropped) or 'LBL "NAME"' from the n characters at x: klLabel() */
 void gc_kl_label(const char *x, size_t n, char *out, size_t outsz);
-int gc_is_return(const gc_line *l, int syntax);
+int gc_is_return(const gc_line *l, int syntax, int okuma);
 /* Writes the label a line jumps to ("N1000", "O1200") into out; returns 0 when it calls nothing. */
 int gc_call_target(const gc_line *l, int syntax, char *out, size_t outsz);
 /* "N90" or "N90:" -> "N90", anything else ("NA1") as it is: labelKey() in the mockup. */
