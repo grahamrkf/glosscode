@@ -17,10 +17,10 @@ GlossCode is a G-code editor that shows a gloss line in plain English above ever
 Every code word sits in a fixed-width column, and its gloss word sits directly above it:
 
 ```
-SEQ40         spindle.fwd   set.rpm       S6000rpm
+N40           spindle.fwd   set.rpm       S6000rpm
 N40           M03           G97           S6000
 
-SEQ50         tlen.on       LOFS01        Z1.0          cool.on
+N50           tlen.on       LOFS01        Z1.0          cool.on
 N50           G43           H01           Z1.0          M08
 ```
 
@@ -72,7 +72,7 @@ The gloss words come from a dictionary of consistent abbreviations ([`data/gcode
 - Menu bar (File, Edit, View, Insert, Program, Simulate), undo and redo, and Find that matches both code and gloss.
 - Starts on a home page with recent programs, New program and Open. Each open program gets a tab, and each tab remembers its machine and the selected line and word.
 - A new program asks which machine it's for. A file opened before reopens with the same machine; any other file uses the default machine for its extension (.nc, .MIN…) if one is set, and otherwise asks, with the controls the file looks written for (from its extension and its text: CALL and RTS mean Okuma, BEGIN PGM Klartext) suggested at the top.
-- Edit either line. View › Edit in (or Caps Lock) switches between typing code and typing gloss, and clicking a word on the other line switches to it, with autocomplete from the dictionary (type `cool` to get `cool.on`, `cool.off`, `cool.thru` and the other coolant words the machine has).
+- Edit either line. View › Edit in switches between typing code (the default) and typing gloss. Two options in the View menu, both off by default, also switch it: Caps Lock, and clicking a word on the other line. Typing has autocomplete from the dictionary (type `cool` to get `cool.on`, `cool.off`, `cool.thru` and the other coolant words the machine has).
 - Keyboard editing by word: arrows move between words and lines, Enter edits and Enter again finishes, Space starts the next word, Shift+Enter breaks the line. Pasting a few lines or a whole program puts each line in its own row and each word in its own cell. Drag across lines (or Shift+↑↓) and right-click to copy, cut or duplicate them; Ctrl+D duplicates a section.
 - Grey hint text after a code shows the words it still needs (`G02` shows `R## or I## J##`). Click one to fill it in; picking R hides I and J.
 - A canned cycle guide (F1) with a sketch of each cycle, an example line, and what every word does.
