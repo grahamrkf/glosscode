@@ -357,7 +357,7 @@
      {
       "g": "M02",
       "e": "prog.end",
-      "d": "End program"
+      "d": "End program (most controls now treat it like M30)"
      }
     ]
    ],
@@ -688,7 +688,7 @@
      {
       "g": "M02",
       "e": "END",
-      "d": "End program"
+      "d": "End program (most controls now treat it like M30)"
      }
     ]
    ],
@@ -1316,7 +1316,7 @@
      {
       "g": "M02",
       "e": "prog.end",
-      "d": "End program"
+      "d": "End program (most controls now treat it like M30)"
      }
     ]
    ],

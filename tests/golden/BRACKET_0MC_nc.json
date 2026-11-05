@@ -733,8 +733,8 @@
      },
      {
       "g": "M30",
-      "e": "prog.rewind",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      },
      {
       "g": ";",
@@ -1325,8 +1325,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRW",
-      "d": "End program and rewind"
+      "e": "END",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      },
      {
       "g": ";",
@@ -1917,8 +1917,8 @@
      },
      {
       "g": "M30",
-      "e": "prog.rewind",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      },
      {
       "g": ";",
@@ -2509,8 +2509,8 @@
      },
      {
       "g": "M30",
-      "e": "prog.rewind",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      },
      {
       "g": ";",
@@ -3101,8 +3101,8 @@
      },
      {
       "g": "M30",
-      "e": "prog.rewind",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      },
      {
       "g": ";",
