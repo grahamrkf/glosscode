@@ -622,7 +622,7 @@
      },
      {
       "g": "G71",
-      "e": "MET",
+      "e": "MM",
       "d": "Millimeter units"
      },
      {
@@ -632,7 +632,7 @@
      },
      {
       "g": "G17",
-      "e": "PXY",
+      "e": "XY",
       "d": "Arcs in the XY plane"
      },
      {
@@ -763,7 +763,7 @@
     [
      {
       "g": "$IF [P1==2] $GOTO [DONE]",
-      "e": "IFTHEN [P1==2] $GOTO [DONE]",
+      "e": "IF [P1==2] $GOTO [DONE]",
       "d": "If the condition is true, run the lines below"
      }
     ],

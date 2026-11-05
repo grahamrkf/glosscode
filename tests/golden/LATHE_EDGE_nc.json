@@ -658,12 +658,12 @@
      },
      {
       "g": "G21",
-      "e": "MET",
+      "e": "MM",
       "d": "Millimeter units"
      },
      {
       "g": "G18",
-      "e": "PXZ",
+      "e": "XZ",
       "d": "Arcs in the XZ plane"
      },
      {

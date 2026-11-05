@@ -1026,7 +1026,7 @@
      },
      {
       "g": "G71",
-      "e": "MET",
+      "e": "MM",
       "d": "Millimeter units"
      },
      {
@@ -1036,7 +1036,7 @@
      },
      {
       "g": "G18",
-      "e": "PXZ",
+      "e": "XZ",
       "d": "ZX plane, the usual plane on a lathe"
      },
      {
