@@ -266,7 +266,7 @@
           "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
         },
         "foreign": { "M97": null, "M88": null, "M89": null },
-        "engrave": { "code": "G47", "charWidth": 0.75, "verified": false,
+        "engrave": { "code": "G47", "charWidth": 1.0, "verified": false,
                      "note": "G47 P0/P1 text engraving: J is the character height and X Y the start. Letter widths vary and aren't given, so the simulation draws each line of text as one rectangle J tall and an estimated charWidth x J per character long, open on the right. A P1 serial number that carries on along the same baseline sets where the text before it ends." }
       },
       "lathe": {
