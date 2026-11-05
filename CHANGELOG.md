@@ -4,6 +4,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+## [0.1.8] - 2026-11-05
+
 ### Machines
 - Opening a file with no default machine suggests the controls it looks written for, at the top of the picker's control list under "Suggested for this file". Clues come from the extension (.MIN, .SSB and .SDF for Okuma, .H for Heidenhain, .MPF and .SPF for Siemens, .EIA for Mazak, .NGC for LinuxCNC) and the text (CALL and RTS for Okuma, BEGIN PGM for Klartext, %L or #CALL for Fagor 8060, (SUB n) for Fagor 8055, O-word subroutines for LinuxCNC, G187 or M97 for Haas). The best match is picked, preferring one of your own machines with a suggested control, and the reason is shown; you still confirm it. .nc and .tap suggest nothing, since too many controls use them. The clues are in `fileHints` in gcode-rules.json.
 
@@ -17,6 +19,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - **Program › Convert to another control…** converts the open program to another control of the same machine type, so far for controls that write Fanuc-style blocks. Each code is matched by its full gloss word, not its number. Values without a decimal point are written as the number the source control reads, and dwells are rewritten in the target's units. Each line is green (direct), amber (worth a look, with the reason) or red (no match). For a red line you can leave out the code, write a local subprogram's lines in (Haas M97), comment the line out, or keep it, and the answer is remembered for that pair of controls. The result is checked by the target's own checks and by comparing the two toolpaths move by move. It opens in a new tab with a header saying it is converted and not proven. The review can also show and copy the middle format that every conversion goes through. See [docs/converting.md](docs/converting.md).
 
 ### Simulation
+- On a mill, the Z timeline gives each kind of step its own symbol (drilling, pecking, tapping, boring, ramps, helixes, dwells, stops and tool changes), with steps going down on the left of the line's column and up on the right. A red dot shows where the tool is.
+- Chamfers and corner radii written with `,C` and `,R` are drawn in the toolpath, with the lines out to the sharp corner shown grey and dashed. The gloss row reads them as CHAMFER and ROUND.
 - A distance written with no decimal point (X1) now moves to the value the control reads, 0.0001 in on Haas and Fanuc-style controls, the same as the gloss row shows. Before, the toolpath used 1.
 
 ### Editor
