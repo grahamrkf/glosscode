@@ -505,6 +505,14 @@
    "golden": "tests/golden/SLOTS_PLATE_nc.json"
   },
   {
+   "example": "tests/cases/CORNERS_LATHE.nc",
+   "golden": "tests/golden/CORNERS_LATHE_nc.json"
+  },
+  {
+   "example": "tests/cases/CORNERS_MILL.nc",
+   "golden": "tests/golden/CORNERS_MILL_nc.json"
+  },
+  {
    "example": "tests/cases/EOB_LATIN1.nc",
    "golden": "tests/golden/EOB_LATIN1_nc.json"
   },

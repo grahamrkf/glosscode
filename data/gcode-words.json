@@ -108,6 +108,8 @@
     "K": { "words": "ARCK", "short": "K", "desc": "Arc center offset in Z" },
     "R": { "arc": { "words": "RAD", "short": "R" }, "cycle": { "words": "RPLN", "short": "R" } },
     "Q": { "words": "PECK", "short": "Q", "desc": "Peck depth" },
+    ",C": { "words": "CHAMFER", "short": ",C", "desc": "Chamfers the corner at the end of this move, starting this far before the corner", "verified": false },
+    ",R": { "words": "ROUND", "short": ",R", "desc": "Rounds the corner at the end of this move with this radius", "verified": false },
     "P": { "dwell": { "words": "SEC", "short": "P" }, "sub": { "words": "PROG", "short": "P" } },
     "F": {
       "perMin": { "inch": "IPM", "mm": "MMPM" },

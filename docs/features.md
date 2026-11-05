@@ -59,6 +59,9 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Expanded simulation view: large toolpath at the top left, a few program lines centered on the active line, Z by line and active modes on the right
 - [ ] Z-by-line timeline in execution order, centered on the selected line
 - [ ] Timeline value picker: Z (X radius on a lathe), feed rate or spindle speed; on plasma, feed rate or Z with a torch-on band and process change marks
+- [ ] Mill Z timeline symbols: moves down on the left of a line's column and up on the right; drill, dwell, peck (G83 loops, G73 ticks), tap, bore (G85, G86, G76, G89), ramp, helix (a loop per circuit), G04, M00 (filled square), M01 (empty square), tool change, Z home, M05, program end, and hatched block delete lines; hover a symbol for its name
+- [ ] A red dot on the timeline where the tool is, following each move while the simulation runs
+- [ ] ,C chamfer and ,R corner radius on G01 moves: drawn in the toolpath, with the lines out to the sharp corner grey and dashed
 
 **Files and machines**
 - [ ] Machine selector (mill or lathe, with brand overrides): Haas, Fanuc and Okuma

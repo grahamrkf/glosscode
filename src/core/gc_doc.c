@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 static int is_word_char(int c)
 {
@@ -636,6 +637,18 @@ char **gc_tokenize_syntax(const char *s, size_t len, const char *syntax, int *nt
         }
         if (is_space(ch)) {
             i++;
+            continue;
+        }
+        /* A corner word: ",C0.05" chamfers and ",R0.06" rounds the corner at the end of a G01 move (Fanuc style) */
+        if (ch == ',' && i + 2 < len && s[i + 1] && strchr("CRcr", s[i + 1]) &&
+            (s[i + 2] == '-' || s[i + 2] == '+' || s[i + 2] == '.' || gc_is_digit((unsigned char)s[i + 2]))) {
+            size_t e = i + 2;
+            if (s[e] == '-' || s[e] == '+') e++;
+            while (e < len && (gc_is_digit((unsigned char)s[e]) || s[e] == '.')) e++;
+            char *t = gc_strndup(s + i, e - i);
+            t[1] = (char)toupper((unsigned char)t[1]);
+            push_tok(&out, &n, &cap, t);
+            i = e;
             continue;
         }
         if (!gc_is_alpha(ch)) { /* "%", ";", stray symbols or numbers: kept as written, one word per run */
