@@ -2,7 +2,7 @@
   "glosscode": "subprogram/1",
   "id": "slot-mill",
   "name": "Straight slot, ramped",
-  "word": { "long": "SLOTMILL", "short": "SLOT" },
+  "word": { "words": "sub.slotmill", "short": "SLOT" },
   "program": 9101,
   "category": "Slots and keyways",
   "tags": ["slot", "keyway", "ramp", "step down"],

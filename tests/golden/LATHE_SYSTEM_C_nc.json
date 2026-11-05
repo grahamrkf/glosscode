@@ -105,7 +105,7 @@
  "runs": [
   {
    "machine": "gen.lathe.fanuclc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -135,17 +135,17 @@
      },
      {
       "g": "G70",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units (system C)"
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -157,7 +157,7 @@
      },
      {
       "g": "G92",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM (G50 in system A)"
      },
      {
@@ -187,7 +187,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -198,7 +198,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -210,7 +210,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -225,7 +225,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -237,7 +237,7 @@
      },
      {
       "g": "G73",
-      "e": "RUFCYC",
+      "e": "cycle.rough",
       "d": "OD/ID roughing cycle"
      },
      {
@@ -275,7 +275,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -292,7 +292,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -321,7 +321,7 @@
      },
      {
       "g": "G72",
-      "e": "FINCYC",
+      "e": "cycle.finish",
       "d": "Finishing cycle"
      },
      {
@@ -343,7 +343,7 @@
      },
      {
       "g": "G20",
-      "e": "TURNCYC",
+      "e": "cycle.turn",
       "d": "OD/ID turning cycle"
      },
      {
@@ -371,7 +371,7 @@
      },
      {
       "g": "G24",
-      "e": "FACECYC",
+      "e": "cycle.face",
       "d": "End facing cycle"
      },
      {
@@ -399,7 +399,7 @@
      },
      {
       "g": "G21",
-      "e": "THDCYC",
+      "e": "cycle.thread",
       "d": "Threading cycle"
      },
      {
@@ -427,12 +427,12 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -454,7 +454,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -834,7 +834,7 @@
    "problems": []
   },
   {
-   "machine": "gen.lathe.fanuclc",
+   "machine": "gen.lathe.mazaklc",
    "style": "words",
    "words": [
     [
@@ -865,17 +865,17 @@
      },
      {
       "g": "G70",
-      "e": "units.inch",
+      "e": "set.inch",
       "d": "Inch units (system C)"
      },
      {
       "g": "G18",
-      "e": "plane.xz",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G95",
-      "e": "feed.perrev",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -887,7 +887,7 @@
      },
      {
       "g": "G92",
-      "e": "spindle.maxrpm",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM (G50 in system A)"
      },
      {
@@ -917,7 +917,7 @@
      },
      {
       "g": "G96",
-      "e": "speed.sfm",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -940,7 +940,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -955,7 +955,7 @@
      },
      {
       "g": "M08",
-      "e": "coolant.on",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1005,7 +1005,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1022,7 +1022,7 @@
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1157,12 +1157,12 @@
      },
      {
       "g": "G90",
-      "e": "units.absolute",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1184,372 +1184,7 @@
      },
      {
       "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": []
-  },
-  {
-   "machine": "gen.lathe.mazaklc",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O0202",
-      "e": "PROG0202",
-      "d": "Program number 0202"
-     },
-     {
-      "g": "(G CODE SYSTEM C LATHE)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G70",
-      "e": "INCH",
-      "d": "Inch units (system C)"
-     },
-     {
-      "g": "G18",
-      "e": "PLANEXZ",
-      "d": "Arcs in the XZ plane"
-     },
-     {
-      "g": "G95",
-      "e": "FEEDREV",
-      "d": "Feed per revolution"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "G92",
-      "e": "MAXRPM",
-      "d": "Clamp spindle to a max RPM (G50 in system A)"
-     },
-     {
-      "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
-      "d": "Spindle speed 2500 RPM"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "T0101",
-      "e": "TOOL0101",
-      "d": "Tool number 0101"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G96",
-      "e": "MODESFM",
-      "d": "Constant surface speed"
-     },
-     {
-      "g": "S500",
-      "e": "S500",
-      "u": "sfm",
-      "d": "Surface speed 500 surface feet per minute"
-     },
-     {
-      "g": "M03",
-      "e": "SPINFWD",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X2.1",
-      "e": "X2.1",
-      "d": "X position 2.1"
-     },
-     {
-      "g": "Z0.1",
-      "e": "Z0.1",
-      "d": "Z position 0.1"
-     },
-     {
-      "g": "M08",
-      "e": "COOLON",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G73",
-      "e": "RUFCYC",
-      "d": "OD/ID roughing cycle"
-     },
-     {
-      "g": "P70",
-      "e": "FROM70",
-      "d": "First line of the contour, N70"
-     },
-     {
-      "g": "Q90",
-      "e": "TO90",
-      "d": "Last line of the contour, N90"
-     },
-     {
-      "g": "U0.02",
-      "e": "INCX0.02",
-      "d": "Incremental X (lathe) 0.02"
-     },
-     {
-      "g": "W0.005",
-      "e": "INCZ0.005",
-      "d": "Incremental Z (lathe) 0.005"
-     },
-     {
-      "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
-      "d": "Feed rate 0.01 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X1.",
-      "e": "X1.0",
-      "d": "X position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "X2.1",
-      "e": "X2.1",
-      "d": "X position 2.1"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "G72",
-      "e": "FINCYC",
-      "d": "Finishing cycle"
-     },
-     {
-      "g": "P70",
-      "e": "FROM70",
-      "d": "First line of the contour, N70"
-     },
-     {
-      "g": "Q90",
-      "e": "TO90",
-      "d": "Last line of the contour, N90"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G20",
-      "e": "TURNCYC",
-      "d": "OD/ID turning cycle"
-     },
-     {
-      "g": "X1.8",
-      "e": "X1.8",
-      "d": "X position 1.8"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "F0.008",
-      "e": "F0.008",
-      "u": "ipr",
-      "d": "Feed rate 0.008 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "G24",
-      "e": "FACECYC",
-      "d": "End facing cycle"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": "Z0.",
-      "e": "Z0.0",
-      "d": "Z position 0.0"
-     },
-     {
-      "g": "F0.006",
-      "e": "F0.006",
-      "u": "ipr",
-      "d": "Feed rate 0.006 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "SEQ130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "G21",
-      "e": "THDCYC",
-      "d": "Threading cycle"
-     },
-     {
-      "g": "X0.95",
-      "e": "X0.95",
-      "d": "X position 0.95"
-     },
-     {
-      "g": "Z-0.75",
-      "e": "Z-0.75",
-      "d": "Z position -0.75"
-     },
-     {
-      "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
-      "d": "Feed rate 0.0625 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N140",
-      "e": "SEQ140",
-      "d": "Sequence number 140"
-     },
-     {
-      "g": "G90",
-      "e": "ABS",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X3.",
-      "e": "X3.0",
-      "d": "X position 3.0"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N150",
-      "e": "SEQ150",
-      "d": "Sequence number 150"
-     },
-     {
-      "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -1565,7 +1200,7 @@
   },
   {
    "machine": "gen.lathe.fanuc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1595,17 +1230,17 @@
      },
      {
       "g": "G70",
-      "e": "FINCYC",
+      "e": "cycle.finish",
       "d": "Finishing cycle"
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -1617,7 +1252,7 @@
      },
      {
       "g": "G92",
-      "e": "THDCYC",
+      "e": "cycle.thread",
       "d": "Threading cycle"
      },
      {
@@ -1647,7 +1282,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -1658,7 +1293,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1670,7 +1305,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1685,7 +1320,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1697,7 +1332,7 @@
      },
      {
       "g": "G73",
-      "e": "PATHRUF",
+      "e": "cycle.pathrough",
       "d": "Irregular-path roughing cycle"
      },
      {
@@ -1735,7 +1370,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1752,7 +1387,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1781,7 +1416,7 @@
      },
      {
       "g": "G72",
-      "e": "FACERUF",
+      "e": "cycle.facerough",
       "d": "Face roughing cycle"
      },
      {
@@ -1803,7 +1438,7 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
@@ -1860,7 +1495,7 @@
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
@@ -1888,12 +1523,12 @@
      },
      {
       "g": "G90",
-      "e": "TURNCYC",
+      "e": "cycle.turn",
       "d": "OD/ID turning cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1915,7 +1550,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],

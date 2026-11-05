@@ -212,12 +212,12 @@
  "runs": [
   {
    "machine": "gen.mill.fagor8055",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
       "g": "%PATTERNS 8055 ,MX,",
-      "e": "PROGHEAD PATTERNS 8055 ,MX,",
+      "e": "prog.header PATTERNS 8055 ,MX,",
       "d": "Program header: a comment and the attributes between commas (M modifiable, X executable, H hidden, O machine builder)"
      }
     ],
@@ -237,22 +237,22 @@
      },
      {
       "g": "G71",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length compensation on"
      }
     ],
@@ -269,7 +269,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -282,19 +282,19 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -316,12 +316,12 @@
     [
      {
       "g": "G99",
-      "e": "RETREF",
+      "e": "cycle.return.r",
       "d": "Cycle returns to the reference plane"
      },
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -344,7 +344,7 @@
     [
      {
       "g": "G60",
-      "e": "PTNLINE",
+      "e": "pattern.line",
       "d": "Multiple machining in a straight line"
      },
      {
@@ -371,7 +371,7 @@
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -388,7 +388,7 @@
     [
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -405,7 +405,7 @@
     [
      {
       "g": "G62",
-      "e": "PTNGRID",
+      "e": "pattern.grid",
       "d": "Multiple machining in a grid"
      },
      {
@@ -437,7 +437,7 @@
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -454,7 +454,7 @@
     [
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -471,7 +471,7 @@
     [
      {
       "g": "G63",
-      "e": "PTNCIRC",
+      "e": "pattern.circle",
       "d": "Multiple machining in a full circle"
      },
      {
@@ -504,7 +504,7 @@
     [
      {
       "g": "G64",
-      "e": "PTNARC",
+      "e": "pattern.arc",
       "d": "Multiple machining in an arc"
      },
      {
@@ -542,7 +542,7 @@
     [
      {
       "g": "G65",
-      "e": "PTNCHORD",
+      "e": "pattern.chord",
       "d": "Multiple machining along a chord"
      },
      {
@@ -569,7 +569,7 @@
     [
      {
       "g": "G79",
-      "e": "CYCPARAM",
+      "e": "cycle.change",
       "d": "Change the active cycle's parameters"
      },
      {
@@ -581,7 +581,7 @@
     [
      {
       "g": "G61",
-      "e": "PTNRECT",
+      "e": "pattern.rect",
       "d": "Multiple machining in a rectangle"
      },
      {
@@ -613,14 +613,14 @@
     [
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
     [
      {
       "g": "G60",
-      "e": "PTNLINE",
+      "e": "pattern.line",
       "d": "Multiple machining in a straight line"
      },
      {
@@ -637,7 +637,7 @@
     [
      {
       "g": "G61",
-      "e": "PTNRECT",
+      "e": "pattern.rect",
       "d": "Multiple machining in a rectangle"
      },
      {
@@ -654,7 +654,7 @@
     [
      {
       "g": "G66",
-      "e": "IRRPKT",
+      "e": "pocket.irregular",
       "d": "Irregular pocket cycle"
      },
      {
@@ -691,7 +691,7 @@
     [
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -703,7 +703,7 @@
      },
      {
       "g": "G67",
-      "e": "PKTROUGH",
+      "e": "pocket.rough",
       "d": "Irregular pocket roughing"
      },
      {
@@ -757,7 +757,7 @@
      },
      {
       "g": "G68",
-      "e": "PKTFIN",
+      "e": "pocket.finish",
       "d": "Irregular pocket finishing"
      },
      {
@@ -811,12 +811,12 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
@@ -838,7 +838,7 @@
     [
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -876,7 +876,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -893,7 +893,7 @@
     [
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -931,7 +931,7 @@
     [
      {
       "g": "G66",
-      "e": "IRRPKT",
+      "e": "pocket.irregular",
       "d": "Irregular pocket cycle"
      },
      {
@@ -948,7 +948,7 @@
     [
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ]
@@ -1725,782 +1725,6 @@
      {
       "g": "M30",
       "e": "END",
-      "d": "End program and rewind"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 19,
-     "id": "pattern-no-cycle",
-     "sev": "warning",
-     "msg": "G60 (Linear pattern) machines the active canned cycle at each point, but no canned cycle or (MCALL) is active here."
-    },
-    {
-     "li": 20,
-     "id": "code-missing-word",
-     "sev": "error",
-     "msg": "G61 (Rectangular pattern) needs two of Y, J and D."
-    },
-    {
-     "li": 20,
-     "id": "pattern-no-cycle",
-     "sev": "warning",
-     "msg": "G61 (Rectangular pattern) machines the active canned cycle at each point, but no canned cycle or (MCALL) is active here."
-    },
-    {
-     "li": 35,
-     "id": "missing-label",
-     "sev": "error",
-     "msg": "S500 points to N500, which isn't in this file."
-    },
-    {
-     "li": 35,
-     "id": "missing-label",
-     "sev": "error",
-     "msg": "E510 points to N510, which isn't in this file."
-    }
-   ]
-  },
-  {
-   "machine": "gen.mill.fagor8055",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "%PATTERNS 8055 ,MX,",
-      "e": "program.header PATTERNS 8055 ,MX,",
-      "d": "Program header: a comment and the attributes between commas (M modifiable, X executable, H hidden, O machine builder)"
-     }
-    ],
-    [
-     {
-      "g": "; patterns and an irregular pocket",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G71",
-      "e": "units.metric",
-      "d": "Millimeter units"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G17",
-      "e": "plane.xy",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "G43",
-      "e": "toollength.on",
-      "d": "Tool length compensation on"
-     }
-    ],
-    [
-     {
-      "g": "T2",
-      "e": "TOOL2",
-      "d": "Tool number 2"
-     },
-     {
-      "g": "D2",
-      "e": "DOFS2",
-      "d": "Tool diameter offset number 2"
-     },
-     {
-      "g": "M06",
-      "e": "tool.change",
-      "d": "Tool change"
-     }
-    ],
-    [
-     {
-      "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
-      "d": "Spindle speed 2000 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     },
-     {
-      "g": "M08",
-      "e": "coolant.on",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X0",
-      "e": "X0",
-      "d": "X position 0"
-     },
-     {
-      "g": "Y0",
-      "e": "Y0",
-      "d": "Y position 0"
-     },
-     {
-      "g": "Z20",
-      "e": "Z20",
-      "d": "Z position 20"
-     }
-    ],
-    [
-     {
-      "g": "G99",
-      "e": "return.rplane",
-      "d": "Cycle returns to the reference plane"
-     },
-     {
-      "g": "G81",
-      "e": "cycle.drill",
-      "d": "Drilling cycle"
-     },
-     {
-      "g": "Z2",
-      "e": "REFZ2",
-      "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
-     },
-     {
-      "g": "I-10",
-      "e": "DEPTH-10",
-      "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
-     },
-     {
-      "g": "F150",
-      "e": "F150.0",
-      "u": "mmpm",
-      "d": "Feed rate 150.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "G60",
-      "e": "pattern.line",
-      "d": "Multiple machining in a straight line"
-     },
-     {
-      "g": "A0",
-      "e": "ANGLE0",
-      "d": "Angle of the pattern line from the X axis (G60)"
-     },
-     {
-      "g": "X40",
-      "e": "LENGTH40",
-      "d": "Length of the pattern (G60)"
-     },
-     {
-      "g": "I10",
-      "e": "STEP10",
-      "d": "Distance between points (G60)"
-     },
-     {
-      "g": "P2",
-      "e": "SKIP2",
-      "d": "Points to skip: P5 skips point 5, P10.013 points 10 to 13 (G60)"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X0",
-      "e": "X0",
-      "d": "X position 0"
-     },
-     {
-      "g": "Y50",
-      "e": "Y50",
-      "d": "Y position 50"
-     }
-    ],
-    [
-     {
-      "g": "G81",
-      "e": "cycle.drill",
-      "d": "Drilling cycle"
-     },
-     {
-      "g": "Z2",
-      "e": "REFZ2",
-      "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
-     },
-     {
-      "g": "I-10",
-      "e": "DEPTH-10",
-      "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
-     }
-    ],
-    [
-     {
-      "g": "G62",
-      "e": "pattern.grid",
-      "d": "Multiple machining in a grid"
-     },
-     {
-      "g": "X30",
-      "e": "LENGTHX30",
-      "d": "Length of the pattern along its first side (G62)"
-     },
-     {
-      "g": "I15",
-      "e": "STEPX15",
-      "d": "Distance between points along the first side (G62)"
-     },
-     {
-      "g": "Y20",
-      "e": "LENGTHY20",
-      "d": "Length of the pattern along its second side (G62)"
-     },
-     {
-      "g": "D3",
-      "e": "COUNTY3",
-      "d": "Points along the second side, counting the first (G62)"
-     },
-     {
-      "g": "P4.005",
-      "e": "SKIP4.005",
-      "d": "Points to skip: P5 skips point 5, P10.013 points 10 to 13 (G62)"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X100",
-      "e": "X100",
-      "d": "X position 100"
-     },
-     {
-      "g": "Y50",
-      "e": "Y50",
-      "d": "Y position 50"
-     }
-    ],
-    [
-     {
-      "g": "G81",
-      "e": "cycle.drill",
-      "d": "Drilling cycle"
-     },
-     {
-      "g": "Z2",
-      "e": "REFZ2",
-      "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
-     },
-     {
-      "g": "I-8",
-      "e": "DEPTH-8",
-      "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
-     }
-    ],
-    [
-     {
-      "g": "G63",
-      "e": "pattern.circle",
-      "d": "Multiple machining in a full circle"
-     },
-     {
-      "g": "X20",
-      "e": "CENTERX20",
-      "d": "Distance in X from the first point to the center (G63)"
-     },
-     {
-      "g": "Y0",
-      "e": "CENTERY0",
-      "d": "Distance in Y from the first point to the center (G63)"
-     },
-     {
-      "g": "K6",
-      "e": "COUNT6",
-      "d": "Number of points on the circle, counting the first (G63)"
-     },
-     {
-      "g": "C3",
-      "e": "MOVE3",
-      "d": "How the tool moves between points: C0 rapid, C1 straight line, C2 clockwise arc, C3 counterclockwise arc (G63)"
-     },
-     {
-      "g": "F400",
-      "e": "F400.0",
-      "u": "mmpm",
-      "d": "Feed rate 400.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "G64",
-      "e": "pattern.arc",
-      "d": "Multiple machining in an arc"
-     },
-     {
-      "g": "X20",
-      "e": "CENTERX20",
-      "d": "Distance in X from the first point to the center (G64)"
-     },
-     {
-      "g": "Y0",
-      "e": "CENTERY0",
-      "d": "Distance in Y from the first point to the center (G64)"
-     },
-     {
-      "g": "B90",
-      "e": "ARC90",
-      "d": "Angle the pattern covers (+ counterclockwise) (G64)"
-     },
-     {
-      "g": "I30",
-      "e": "ANGSTEP30",
-      "d": "Angle between points (G64)"
-     },
-     {
-      "g": "C1",
-      "e": "MOVE1",
-      "d": "How the tool moves between points: C0 rapid, C1 straight line, C2 clockwise arc, C3 counterclockwise arc (G64)"
-     },
-     {
-      "g": "F400",
-      "e": "F400.0",
-      "u": "mmpm",
-      "d": "Feed rate 400.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "G65",
-      "e": "pattern.chord",
-      "d": "Multiple machining along a chord"
-     },
-     {
-      "g": "X20",
-      "e": "CENTERX20",
-      "d": "Distance in X from the first point to the center (G65)"
-     },
-     {
-      "g": "Y0",
-      "e": "CENTERY0",
-      "d": "Distance in Y from the first point to the center (G65)"
-     },
-     {
-      "g": "A45",
-      "e": "BISECT45",
-      "d": "Angle of the line that bisects the chord (G65)"
-     },
-     {
-      "g": "C0",
-      "e": "MOVE0",
-      "d": "How the tool moves between points: C0 rapid, C1 straight line, C2 clockwise arc, C3 counterclockwise arc (G65)"
-     }
-    ],
-    [
-     {
-      "g": "G79",
-      "e": "cycle.change",
-      "d": "Change the active cycle's parameters"
-     },
-     {
-      "g": "I-12",
-      "e": "DEPTH-12",
-      "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
-     }
-    ],
-    [
-     {
-      "g": "G61",
-      "e": "pattern.rect",
-      "d": "Multiple machining in a rectangle"
-     },
-     {
-      "g": "X20",
-      "e": "LENGTHX20",
-      "d": "Length of the pattern along its first side (G61)"
-     },
-     {
-      "g": "K3",
-      "e": "COUNTX3",
-      "d": "Points along the first side, counting the first (G61)"
-     },
-     {
-      "g": "Y10",
-      "e": "LENGTHY10",
-      "d": "Length of the pattern along its second side (G61)"
-     },
-     {
-      "g": "J10",
-      "e": "STEPY10",
-      "d": "Distance between points along the second side (G61)"
-     },
-     {
-      "g": "A30",
-      "e": "ANGLE30",
-      "d": "Angle of the first side from the X axis (G61)"
-     }
-    ],
-    [
-     {
-      "g": "G80",
-      "e": "cycle.off",
-      "d": "Cancel canned cycle"
-     }
-    ],
-    [
-     {
-      "g": "G60",
-      "e": "pattern.line",
-      "d": "Multiple machining in a straight line"
-     },
-     {
-      "g": "X40",
-      "e": "LENGTH40",
-      "d": "Length of the pattern (G60)"
-     },
-     {
-      "g": "K5",
-      "e": "COUNT5",
-      "d": "Number of points, counting the first (G60)"
-     }
-    ],
-    [
-     {
-      "g": "G61",
-      "e": "pattern.rect",
-      "d": "Multiple machining in a rectangle"
-     },
-     {
-      "g": "X10",
-      "e": "LENGTHX10",
-      "d": "Length of the pattern along its first side (G61)"
-     },
-     {
-      "g": "I5",
-      "e": "STEPX5",
-      "d": "Distance between points along the first side (G61)"
-     }
-    ],
-    [
-     {
-      "g": "G66",
-      "e": "pocket.irregular",
-      "d": "Irregular pocket cycle"
-     },
-     {
-      "g": "R100",
-      "e": "ROUGHFROM100",
-      "d": "Label of the first line of the roughing operation (G66)"
-     },
-     {
-      "g": "I100",
-      "e": "ROUGHTO100",
-      "d": "Label of the last line of the roughing operation (G66)"
-     },
-     {
-      "g": "F200",
-      "e": "FINFROM200",
-      "d": "Label of the first line of the finishing operation (G66)"
-     },
-     {
-      "g": "K200",
-      "e": "FINTO200",
-      "d": "Label of the last line of the finishing operation (G66)"
-     },
-     {
-      "g": "S300",
-      "e": "PROFFROM300",
-      "d": "Label of the first line of the pocket profile (G66)"
-     },
-     {
-      "g": "E340",
-      "e": "PROFTO340",
-      "d": "Label of the last line of the pocket profile (G66)"
-     }
-    ],
-    [
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "G67",
-      "e": "pocket.rough",
-      "d": "Irregular pocket roughing"
-     },
-     {
-      "g": "B4",
-      "e": "DEPTHSTEP4",
-      "d": "Depth of each pass (G67)"
-     },
-     {
-      "g": "C3",
-      "e": "STEPOVER3",
-      "d": "Step over between passes (G67)"
-     },
-     {
-      "g": "I-12",
-      "e": "DEPTH-12",
-      "d": "Depth of the pocket (absolute) (G67)"
-     },
-     {
-      "g": "R2",
-      "e": "REFZ2",
-      "d": "Reference plane (absolute) (G67)"
-     },
-     {
-      "g": "T3",
-      "e": "TOOL3",
-      "d": "Tool number 3"
-     },
-     {
-      "g": "D3",
-      "e": "DOFS3",
-      "d": "Tool diameter offset number 3"
-     },
-     {
-      "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
-      "d": "Spindle speed 1500 RPM"
-     },
-     {
-      "g": "F300",
-      "e": "F300.0",
-      "u": "mmpm",
-      "d": "Feed rate 300.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N200",
-      "e": "SEQ200",
-      "d": "Sequence number 200"
-     },
-     {
-      "g": "G68",
-      "e": "pocket.finish",
-      "d": "Irregular pocket finishing"
-     },
-     {
-      "g": "B0",
-      "e": "DEPTHSTEP0",
-      "d": "Depth of each finishing pass (G68)"
-     },
-     {
-      "g": "L0.5",
-      "e": "STOCK0.5",
-      "d": "Side stock to leave (G68)"
-     },
-     {
-      "g": "I-12",
-      "e": "DEPTH-12",
-      "d": "Depth of the pocket (absolute) (G68)"
-     },
-     {
-      "g": "R2",
-      "e": "REFZ2",
-      "d": "Reference plane (absolute) (G68)"
-     },
-     {
-      "g": "T4",
-      "e": "TOOL4",
-      "d": "Tool number 4"
-     },
-     {
-      "g": "D4",
-      "e": "DOFS4",
-      "d": "Tool diameter offset number 4"
-     },
-     {
-      "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
-      "d": "Spindle speed 2500 RPM"
-     },
-     {
-      "g": "F200",
-      "e": "F200.0",
-      "u": "mmpm",
-      "d": "Feed rate 200.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N300",
-      "e": "SEQ300",
-      "d": "Sequence number 300"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "X10",
-      "e": "X10",
-      "d": "X position 10"
-     },
-     {
-      "g": "Y10",
-      "e": "Y10",
-      "d": "Y position 10"
-     },
-     {
-      "g": "Z0",
-      "e": "Z0",
-      "d": "Z position 0"
-     }
-    ],
-    [
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X60",
-      "e": "X60",
-      "d": "X position 60"
-     }
-    ],
-    [
-     {
-      "g": "Y40",
-      "e": "Y40",
-      "d": "Y position 40"
-     }
-    ],
-    [
-     {
-      "g": "X10",
-      "e": "X10",
-      "d": "X position 10"
-     }
-    ],
-    [
-     {
-      "g": "Y10",
-      "e": "Y10",
-      "d": "Y position 10"
-     }
-    ],
-    [
-     {
-      "g": "N310",
-      "e": "SEQ310",
-      "d": "Sequence number 310"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X25",
-      "e": "X25",
-      "d": "X position 25"
-     },
-     {
-      "g": "Y20",
-      "e": "Y20",
-      "d": "Y position 20"
-     }
-    ],
-    [
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X35",
-      "e": "X35",
-      "d": "X position 35"
-     }
-    ],
-    [
-     {
-      "g": "Y30",
-      "e": "Y30",
-      "d": "Y position 30"
-     }
-    ],
-    [
-     {
-      "g": "X25",
-      "e": "X25",
-      "d": "X position 25"
-     }
-    ],
-    [
-     {
-      "g": "N340",
-      "e": "SEQ340",
-      "d": "Sequence number 340"
-     },
-     {
-      "g": "Y20",
-      "e": "Y20",
-      "d": "Y position 20"
-     }
-    ],
-    [
-     {
-      "g": "G66",
-      "e": "pocket.irregular",
-      "d": "Irregular pocket cycle"
-     },
-     {
-      "g": "S500",
-      "e": "PROFFROM500",
-      "d": "Label of the first line of the pocket profile (G66)"
-     },
-     {
-      "g": "E510",
-      "e": "PROFTO510",
-      "d": "Label of the last line of the pocket profile (G66)"
-     }
-    ],
-    [
-     {
-      "g": "M30",
-      "e": "program.endrewind",
       "d": "End program and rewind"
      }
     ]

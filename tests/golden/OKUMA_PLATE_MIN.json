@@ -112,7 +112,7 @@
  "runs": [
   {
    "machine": "okuma_m560",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -142,7 +142,7 @@
      },
      {
       "g": "G15",
-      "e": "WORKSEL",
+      "e": "work.select",
       "d": "Select work offset by H number (Okuma)"
      },
      {
@@ -159,27 +159,27 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "MMCHK",
+      "e": "set.mm.check",
       "d": "Confirm metric input (Okuma; units come from a parameter)"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -196,7 +196,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      },
      {
@@ -214,7 +214,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -236,7 +236,7 @@
      },
      {
       "g": "G56",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on Z (Okuma)"
      },
      {
@@ -257,7 +257,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -269,7 +269,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -281,7 +281,7 @@
      },
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -331,12 +331,12 @@
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -346,7 +346,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -358,7 +358,7 @@
      },
      {
       "g": "CALL",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram (Okuma)"
      },
      {
@@ -375,7 +375,7 @@
      },
      {
       "g": "G54",
-      "e": "TLENX",
+      "e": "tlen.x",
       "d": "Tool length offset on X (Okuma, not a work offset)"
      },
      {
@@ -403,7 +403,7 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -415,7 +415,7 @@
      },
      {
       "g": "M02",
-      "e": "PRGEND",
+      "e": "prog.end",
       "d": "End program"
      }
     ],
@@ -440,7 +440,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -479,7 +479,7 @@
      },
      {
       "g": "RTS",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram (Okuma)"
      }
     ],
@@ -891,398 +891,8 @@
    ]
   },
   {
-   "machine": "okuma_m560",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O1100",
-      "e": "PROG1100",
-      "d": "Program number 1100"
-     },
-     {
-      "g": "(OKUMA PLATE)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G15",
-      "e": "work.select",
-      "d": "Select work offset by H number (Okuma)"
-     },
-     {
-      "g": "H1",
-      "e": "WOFS1",
-      "d": "Work offset number 1"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "G17",
-      "e": "plane.xy",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "G21",
-      "e": "units.mmcheck",
-      "d": "Confirm metric input (Okuma; units come from a parameter)"
-     },
-     {
-      "g": "G40",
-      "e": "comp.off",
-      "d": "Cutter compensation off"
-     },
-     {
-      "g": "G80",
-      "e": "cycle.off",
-      "d": "Cancel canned cycle"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "T5",
-      "e": "TOOL5",
-      "d": "Tool number 5"
-     },
-     {
-      "g": "M06",
-      "e": "tool.change",
-      "d": "Tool change"
-     },
-     {
-      "g": "(10MM DRILL)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X20.",
-      "e": "X20.0",
-      "d": "X position 20.0"
-     },
-     {
-      "g": "Y20.",
-      "e": "Y20.0",
-      "d": "Y position 20.0"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G56",
-      "e": "toollength.on",
-      "d": "Tool length offset on Z (Okuma)"
-     },
-     {
-      "g": "H5",
-      "e": "LOFS5",
-      "d": "Tool length offset number 5"
-     },
-     {
-      "g": "Z50.",
-      "e": "Z50.0",
-      "d": "Z position 50.0"
-     },
-     {
-      "g": "S1200",
-      "e": "S1200",
-      "u": "rpm",
-      "d": "Spindle speed 1200 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "M08",
-      "e": "coolant.on",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "G81",
-      "e": "cycle.drill",
-      "d": "Drilling cycle"
-     },
-     {
-      "g": "X20.",
-      "e": "X20.0",
-      "d": "X position 20.0"
-     },
-     {
-      "g": "Y20.",
-      "e": "Y20.0",
-      "d": "Y position 20.0"
-     },
-     {
-      "g": "Z-15.",
-      "e": "Z-15.0",
-      "d": "Z position -15.0"
-     },
-     {
-      "g": "R3.",
-      "e": "RPLN3.0",
-      "d": "Retract plane for the drilling cycle"
-     },
-     {
-      "g": "F120.",
-      "e": "F120.0",
-      "u": "ipm",
-      "d": "Feed rate 120.0 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "X60.",
-      "e": "X60.0",
-      "d": "X position 60.0"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "G80",
-      "e": "cycle.off",
-      "d": "Cancel canned cycle"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "Z50.",
-      "e": "Z50.0",
-      "d": "Z position 50.0"
-     },
-     {
-      "g": "M09",
-      "e": "coolant.off",
-      "d": "Coolant off"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "CALL",
-      "e": "sub.call",
-      "d": "Call subprogram (Okuma)"
-     },
-     {
-      "g": "O1200",
-      "e": "PROG1200",
-      "d": "Program number 1200"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G54",
-      "e": "toollength.x",
-      "d": "Tool length offset on X (Okuma, not a work offset)"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": "Y0.",
-      "e": "Y0.0",
-      "d": "Y position 0.0"
-     },
-     {
-      "g": "(G54 IS A FANUC HABIT)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "M05",
-      "e": "spindle.off",
-      "d": "Spindle off"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "SEQ130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "M02",
-      "e": "program.end",
-      "d": "End program"
-     }
-    ],
-    [
-     {
-      "g": "O1200",
-      "e": "PROG1200",
-      "d": "Program number 1200"
-     },
-     {
-      "g": "(CLEAR PASS)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N1000",
-      "e": "SEQ1000",
-      "d": "Sequence number 1000"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X80.",
-      "e": "X80.0",
-      "d": "X position 80.0"
-     },
-     {
-      "g": "Y20.",
-      "e": "Y20.0",
-      "d": "Y position 20.0"
-     }
-    ],
-    [
-     {
-      "g": "N1010",
-      "e": "SEQ1010",
-      "d": "Sequence number 1010"
-     },
-     {
-      "g": "X80.",
-      "e": "X80.0",
-      "d": "X position 80.0"
-     },
-     {
-      "g": "Y60.",
-      "e": "Y60.0",
-      "d": "Y position 60.0"
-     }
-    ],
-    [
-     {
-      "g": "N1020",
-      "e": "SEQ1020",
-      "d": "Sequence number 1020"
-     },
-     {
-      "g": "RTS",
-      "e": "sub.return",
-      "d": "Return from subprogram (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 12,
-     "id": "foreign-code",
-     "sev": "error",
-     "msg": "On Okuma, G54 is the X-axis tool length offset, not work offset 1. Select work offsets with G15 H1."
-    }
-   ]
-  },
-  {
    "machine": "haas_vf2",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1330,27 +940,27 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -1367,7 +977,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      },
      {
@@ -1385,7 +995,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1407,7 +1017,7 @@
      },
      {
       "g": "G56",
-      "e": "WORK3",
+      "e": "work.3",
       "d": "Work offset 3"
      },
      {
@@ -1428,7 +1038,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1440,7 +1050,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1452,7 +1062,7 @@
      },
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -1502,12 +1112,12 @@
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1517,7 +1127,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -1547,7 +1157,7 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
@@ -1575,7 +1185,7 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -1587,7 +1197,7 @@
      },
      {
       "g": "M02",
-      "e": "PRGEND",
+      "e": "prog.end",
       "d": "End program"
      }
     ],
@@ -1612,7 +1222,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1693,7 +1303,7 @@
   },
   {
    "machine": "fanuc_0imf",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1723,7 +1333,7 @@
      },
      {
       "g": "G15",
-      "e": "POLAROFF",
+      "e": "polar.off",
       "d": "Polar coordinates off"
      },
      {
@@ -1740,27 +1350,27 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -1777,7 +1387,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      },
      {
@@ -1795,7 +1405,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1817,7 +1427,7 @@
      },
      {
       "g": "G56",
-      "e": "WORK3",
+      "e": "work.3",
       "d": "Work offset 3"
      },
      {
@@ -1838,7 +1448,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1850,7 +1460,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1862,7 +1472,7 @@
      },
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -1912,12 +1522,12 @@
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1927,7 +1537,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -1957,7 +1567,7 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
@@ -1985,7 +1595,7 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -1997,7 +1607,7 @@
      },
      {
       "g": "M02",
-      "e": "PRGEND",
+      "e": "prog.end",
       "d": "End program"
      }
     ],
@@ -2022,7 +1632,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2097,7 +1707,7 @@
   },
   {
    "machine": "fanuc_0mc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -2127,7 +1737,7 @@
      },
      {
       "g": "G15",
-      "e": "POLAROFF",
+      "e": "polar.off",
       "d": "Polar coordinates off"
      },
      {
@@ -2144,27 +1754,27 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -2181,7 +1791,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      },
      {
@@ -2199,7 +1809,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2221,7 +1831,7 @@
      },
      {
       "g": "G56",
-      "e": "WORK3",
+      "e": "work.3",
       "d": "Work offset 3"
      },
      {
@@ -2242,7 +1852,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -2254,7 +1864,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -2266,7 +1876,7 @@
      },
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      },
      {
@@ -2316,12 +1926,12 @@
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2331,7 +1941,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -2361,7 +1971,7 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
@@ -2389,7 +1999,7 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -2401,7 +2011,7 @@
      },
      {
       "g": "M02",
-      "e": "PRGEND",
+      "e": "prog.end",
       "d": "End program"
      }
     ],
@@ -2426,7 +2036,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {

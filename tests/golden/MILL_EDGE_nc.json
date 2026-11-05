@@ -211,7 +211,7 @@
  "runs": [
   {
    "machine": "haas_vf2",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -241,32 +241,32 @@
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -283,7 +283,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -295,12 +295,12 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -336,7 +336,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -348,7 +348,7 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -370,7 +370,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -398,7 +398,7 @@
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -425,7 +425,7 @@
      },
      {
       "g": "G03",
-      "e": "ARCCCW",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -452,12 +452,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -485,17 +485,17 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -518,12 +518,12 @@
      },
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -566,12 +566,12 @@
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G03",
-      "e": "ARCCCW",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -598,7 +598,7 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
@@ -622,7 +622,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      }
     ],
@@ -634,7 +634,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -651,12 +651,12 @@
      },
      {
       "g": "G41",
-      "e": "COMPLEFT",
+      "e": "ccomp.left",
       "d": "Cutter compensation left"
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -683,7 +683,7 @@
      },
      {
       "g": "G83",
-      "e": "PECKDRL",
+      "e": "cycle.peck",
       "d": "Peck drilling cycle"
      },
      {
@@ -744,12 +744,12 @@
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -766,7 +766,7 @@
      },
      {
       "g": "G28",
-      "e": "HOMEREF",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
@@ -788,7 +788,7 @@
      },
      {
       "g": "M97",
-      "e": "LOCSUB",
+      "e": "call.local",
       "d": "Local subprogram call"
      },
      {
@@ -805,7 +805,7 @@
      },
      {
       "g": "M97",
-      "e": "LOCSUB",
+      "e": "call.local",
       "d": "Local subprogram call"
      },
      {
@@ -822,12 +822,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -888,7 +888,7 @@
      },
      {
       "g": "M98",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram"
      },
      {
@@ -905,12 +905,12 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -922,7 +922,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -934,7 +934,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -951,7 +951,7 @@
      },
      {
       "g": "M99",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram"
      }
     ],
@@ -971,7 +971,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -989,7 +989,7 @@
     [
      {
       "g": "M99",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram"
      }
     ]
@@ -2146,7 +2146,7 @@
    ]
   },
   {
-   "machine": "haas_vf2",
+   "machine": "fanuc_0imf",
    "style": "words",
    "words": [
     [
@@ -2177,27 +2177,27 @@
      },
      {
       "g": "G21",
-      "e": "units.metric",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "units.absolute",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "plane.xy",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "comp.off",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "toollength.off",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
@@ -2236,7 +2236,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2284,7 +2284,7 @@
      },
      {
       "g": "G43",
-      "e": "toollength.on",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -2306,7 +2306,7 @@
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2334,7 +2334,7 @@
      },
      {
       "g": "G02",
-      "e": "arc.cw",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -2361,7 +2361,7 @@
      },
      {
       "g": "G03",
-      "e": "arc.ccw",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -2388,12 +2388,12 @@
      },
      {
       "g": "G91",
-      "e": "units.incremental",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2421,17 +2421,17 @@
      },
      {
       "g": "G90",
-      "e": "units.absolute",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G95",
-      "e": "feed.perrev",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2454,12 +2454,12 @@
      },
      {
       "g": "G94",
-      "e": "feed.perminute",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G02",
-      "e": "arc.cw",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -2502,12 +2502,12 @@
      },
      {
       "g": "G18",
-      "e": "plane.xz",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G03",
-      "e": "arc.ccw",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -2534,7 +2534,7 @@
      },
      {
       "g": "G17",
-      "e": "plane.xy",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
@@ -2558,7 +2558,7 @@
      },
      {
       "g": "G04",
-      "e": "dwell",
+      "e": "run.pause",
       "d": "Pause for a set time"
      }
     ],
@@ -2570,7 +2570,7 @@
      },
      {
       "g": "G04",
-      "e": "dwell",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -2587,12 +2587,12 @@
      },
      {
       "g": "G41",
-      "e": "comp.left",
+      "e": "ccomp.left",
       "d": "Cutter compensation left"
      },
      {
       "g": "G02",
-      "e": "arc.cw",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -2685,7 +2685,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2702,7 +2702,7 @@
      },
      {
       "g": "G28",
-      "e": "home.return",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
@@ -2724,8 +2724,9 @@
      },
      {
       "g": "M97",
-      "e": "sub.local",
-      "d": "Local subprogram call"
+      "e": "?M97",
+      "d": "M97 isn't in the dictionary or this machine's file.",
+      "unk": true
      },
      {
       "g": "P1000",
@@ -2741,8 +2742,9 @@
      },
      {
       "g": "M97",
-      "e": "sub.local",
-      "d": "Local subprogram call"
+      "e": "?M97",
+      "d": "M97 isn't in the dictionary or this machine's file.",
+      "unk": true
      },
      {
       "g": "P2000",
@@ -2758,12 +2760,12 @@
      },
      {
       "g": "G65",
-      "e": "macro.call",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -2824,7 +2826,7 @@
      },
      {
       "g": "M98",
-      "e": "sub.call",
+      "e": "call.sub",
       "d": "Call subprogram"
      },
      {
@@ -2846,7 +2848,7 @@
      },
      {
       "g": "M09",
-      "e": "coolant.off",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -2858,7 +2860,7 @@
      },
      {
       "g": "M30",
-      "e": "program.endrewind",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -2870,7 +2872,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2887,7 +2889,7 @@
      },
      {
       "g": "M99",
-      "e": "sub.return",
+      "e": "call.return",
       "d": "Return from subprogram"
      }
     ],
@@ -2907,7 +2909,7 @@
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2925,977 +2927,7 @@
     [
      {
       "g": "M99",
-      "e": "sub.return",
-      "d": "Return from subprogram"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 4,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "X10 has no decimal point, so the control reads it as X0.010 mm. Write X10. if you mean 10 mm."
-    },
-    {
-     "li": 4,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Y-5 has no decimal point, so the control reads it as Y-0.005 mm. Write Y-5. if you mean -5 mm."
-    },
-    {
-     "li": 4,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Z100 has no decimal point, so the control reads it as Z0.100 mm. Write Z100. if you mean 100 mm."
-    },
-    {
-     "li": 4,
-     "id": "tlo-missing",
-     "sev": "warning",
-     "msg": "First Z move after the tool change on N20, but G43 H hasn't been called for this tool."
-    },
-    {
-     "li": 6,
-     "id": "rapid-below-zero",
-     "sev": "info",
-     "msg": "Rapid to Z-3.0, below Z0. If Z0 is the top of the part, this rapids into it."
-    },
-    {
-     "li": 7,
-     "id": "empty-value",
-     "sev": "error",
-     "msg": "X has no number after it."
-    },
-    {
-     "li": 7,
-     "id": "empty-value",
-     "sev": "error",
-     "msg": "F has no number after it."
-    },
-    {
-     "li": 7,
-     "id": "dup-address",
-     "sev": "error",
-     "msg": "X appears twice on this line (X, X20.). The control uses one of them or alarms."
-    },
-    {
-     "li": 8,
-     "id": "arc-full-circle-r",
-     "sev": "error",
-     "msg": "The arc starts and ends at the same point, which R can't describe. Use I and J."
-    },
-    {
-     "li": 9,
-     "id": "arc-full-circle-r",
-     "sev": "error",
-     "msg": "The arc starts and ends at the same point, which R can't describe. Use I and J."
-    },
-    {
-     "li": 12,
-     "id": "arc-r-and-ijk",
-     "sev": "warning",
-     "msg": "This arc has both R and I and J. Most controls use R and ignore the others."
-    },
-    {
-     "li": 13,
-     "id": "arc-radius-mismatch",
-     "sev": "warning",
-     "msg": "Start is 5 from the center but the end is 5.831 from it (off by 0.831)."
-    },
-    {
-     "li": 14,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "U1. isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 14,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "W2. isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 15,
-     "id": "dwell-no-time",
-     "sev": "error",
-     "msg": "G04 needs P or X for the dwell time."
-    },
-    {
-     "li": 16,
-     "id": "dwell-milliseconds",
-     "sev": "info",
-     "msg": "P500 has no decimal point, so this control reads it as 500 milliseconds (0.5 s). Write P500. if you mean 500 seconds."
-    },
-    {
-     "li": 17,
-     "id": "comp-start-on-arc",
-     "sev": "error",
-     "msg": "G41 has to start on a G00 or G01 move, not an arc."
-    },
-    {
-     "li": 17,
-     "id": "comp-no-d",
-     "sev": "warning",
-     "msg": "G41 turns on cutter comp but no D offset has been given."
-    },
-    {
-     "li": 17,
-     "id": "arc-radius-mismatch",
-     "sev": "warning",
-     "msg": "Start is 1 from the center but the end is 6.4031 from it (off by 5.4031)."
-    },
-    {
-     "li": 18,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Q1 has no decimal point, so the control reads it as Q0.001 mm. Write Q1. if you mean 1 mm."
-    },
-    {
-     "li": 18,
-     "id": "cycle-stray-word",
-     "sev": "info",
-     "msg": "G83 (Peck drill) doesn't use A3, so it is ignored or alarms."
-    },
-    {
-     "li": 18,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "A3 isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 21,
-     "id": "g28-absolute",
-     "sev": "warning",
-     "msg": "G28 under G90 moves through work position Z0. Y0. on the way home. Use G28 G91 with Z0. Y0. instead."
-    },
-    {
-     "li": 23,
-     "id": "missing-label",
-     "sev": "error",
-     "msg": "M97 P2000 points to N2000, which isn't in this file."
-    },
-    {
-     "li": 24,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "J1 has no decimal point, so the control reads it as J0.001 mm. Write J1. if you mean 1 mm."
-    },
-    {
-     "li": 24,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "W3 has no decimal point, so the control reads it as W0.003 mm. Write W3. if you mean 3 mm."
-    },
-    {
-     "li": 24,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "W3 isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 26,
-     "id": "m-per-block",
-     "sev": "error",
-     "msg": "This control allows 1 M-code per line, and this line has 2 (M05, M09)."
-    },
-    {
-     "li": 27,
-     "id": "comp-left-on",
-     "sev": "warning",
-     "msg": "G41 is still active at the program end. Add G40 first."
-    },
-    {
-     "li": 31,
-     "id": "spindle-off-feed",
-     "sev": "warning",
-     "msg": "This G01 move cuts while the spindle is stopped (M05 is active)."
-    }
-   ]
-  },
-  {
-   "machine": "fanuc_0imf",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O0100",
-      "e": "PROG0100",
-      "d": "Program number 0100"
-     },
-     {
-      "g": "(MILL EDGE CASES)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G21",
-      "e": "METRIC",
-      "d": "Millimeter units"
-     },
-     {
-      "g": "G90",
-      "e": "ABS",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G17",
-      "e": "PLANEXY",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "G40",
-      "e": "COMPOFF",
-      "d": "Cutter compensation off"
-     },
-     {
-      "g": "G49",
-      "e": "TLENOFF",
-      "d": "Tool length offset off"
-     },
-     {
-      "g": "G80",
-      "e": "CYCOFF",
-      "d": "Cancel canned cycle"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "T5",
-      "e": "TOOL5",
-      "d": "Tool number 5"
-     },
-     {
-      "g": "M06",
-      "e": "TOOLCHG",
-      "d": "Tool change"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G54",
-      "e": "WORK1",
-      "d": "Work offset 1"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X10",
-      "e": "X0.010",
-      "d": "No decimal point, so this reads as 0.010 mm. Write X10. for 10 mm.",
-      "imp": true
-     },
-     {
-      "g": "Y-5",
-      "e": "Y-0.005",
-      "d": "No decimal point, so this reads as -0.005 mm. Write Y-5. for -5 mm.",
-      "imp": true
-     },
-     {
-      "g": "Z100",
-      "e": "Z0.100",
-      "d": "No decimal point, so this reads as 0.100 mm. Write Z100. for 100 mm.",
-      "imp": true
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "S1200",
-      "e": "S1200",
-      "u": "rpm",
-      "d": "Spindle speed 1200 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "SPINFWD",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G43",
-      "e": "TLENON",
-      "d": "Tool length offset on"
-     },
-     {
-      "g": "H5",
-      "e": "LOFS5",
-      "d": "Tool length offset number 5"
-     },
-     {
-      "g": "Z-3.",
-      "e": "Z-3.0",
-      "d": "Z position -3.0"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X",
-      "e": "X",
-      "d": "X position "
-     },
-     {
-      "g": "X20.",
-      "e": "X20.0",
-      "d": "X position 20.0"
-     },
-     {
-      "g": "F",
-      "e": "F",
-      "u": "mmpm",
-      "d": "Feed rate  mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "G02",
-      "e": "ARCCW",
-      "d": "Clockwise arc"
-     },
-     {
-      "g": "X20.",
-      "e": "X20.0",
-      "d": "X position 20.0"
-     },
-     {
-      "g": "Y-5.",
-      "e": "Y-5.0",
-      "d": "Y position -5.0"
-     },
-     {
-      "g": "R5.",
-      "e": "RAD5.0",
-      "d": "Arc radius"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G03",
-      "e": "ARCCCW",
-      "d": "Counterclockwise arc"
-     },
-     {
-      "g": "X20.",
-      "e": "X20.0",
-      "d": "X position 20.0"
-     },
-     {
-      "g": "Y-5.",
-      "e": "Y-5.0",
-      "d": "Y position -5.0"
-     },
-     {
-      "g": "R5.",
-      "e": "RAD5.0",
-      "d": "Arc radius"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "G91",
-      "e": "INCR",
-      "d": "Incremental positions"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X5.",
-      "e": "INCX5.0",
-      "d": "Move 5.0 in X from where the tool is"
-     },
-     {
-      "g": "Y5.",
-      "e": "INCY5.0",
-      "d": "Move 5.0 in Y from where the tool is"
-     },
-     {
-      "g": "F300.",
-      "e": "F300.0",
-      "u": "mmpm",
-      "d": "Feed rate 300.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "G90",
-      "e": "ABS",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G95",
-      "e": "FEEDREV",
-      "d": "Feed per revolution"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": "F.1",
-      "e": "F0.1",
-      "u": "mmpr",
-      "d": "Feed rate 0.1 mm per rev"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G94",
-      "e": "FEEDMIN",
-      "d": "Feed per minute"
-     },
-     {
-      "g": "G02",
-      "e": "ARCCW",
-      "d": "Clockwise arc"
-     },
-     {
-      "g": "X10.",
-      "e": "X10.0",
-      "d": "X position 10.0"
-     },
-     {
-      "g": "Y0.",
-      "e": "Y0.0",
-      "d": "Y position 0.0"
-     },
-     {
-      "g": "I5.",
-      "e": "ARCI5.0",
-      "d": "Arc center offset in X 5.0"
-     },
-     {
-      "g": "J0.",
-      "e": "ARCJ0.0",
-      "d": "Arc center offset in Y 0.0"
-     },
-     {
-      "g": "R5.",
-      "e": "RAD5.0",
-      "d": "Arc radius"
-     },
-     {
-      "g": "F200.",
-      "e": "F200.0",
-      "u": "mmpm",
-      "d": "Feed rate 200.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "G18",
-      "e": "PLANEXZ",
-      "d": "Arcs in the XZ plane"
-     },
-     {
-      "g": "G03",
-      "e": "ARCCCW",
-      "d": "Counterclockwise arc"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": "Z0.",
-      "e": "Z0.0",
-      "d": "Z position 0.0"
-     },
-     {
-      "g": "I-5.",
-      "e": "ARCI-5.0",
-      "d": "Arc center offset in X -5.0"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "SEQ130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "G17",
-      "e": "PLANEXY",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "U1.",
-      "e": "?U",
-      "d": "U is only used on lathes.",
-      "unk": true
-     },
-     {
-      "g": "W2.",
-      "e": "?W",
-      "d": "W is only used on lathes.",
-      "unk": true
-     }
-    ],
-    [
-     {
-      "g": "N140",
-      "e": "SEQ140",
-      "d": "Sequence number 140"
-     },
-     {
-      "g": "G04",
-      "e": "DWELL",
-      "d": "Pause for a set time"
-     }
-    ],
-    [
-     {
-      "g": "N145",
-      "e": "SEQ145",
-      "d": "Sequence number 145"
-     },
-     {
-      "g": "G04",
-      "e": "DWELL",
-      "d": "Pause for a set time"
-     },
-     {
-      "g": "P500",
-      "e": "SEC500",
-      "d": "Dwell for 500 seconds"
-     }
-    ],
-    [
-     {
-      "g": "N150",
-      "e": "SEQ150",
-      "d": "Sequence number 150"
-     },
-     {
-      "g": "G41",
-      "e": "COMPLEFT",
-      "d": "Cutter compensation left"
-     },
-     {
-      "g": "G02",
-      "e": "ARCCW",
-      "d": "Clockwise arc"
-     },
-     {
-      "g": "X5.",
-      "e": "X5.0",
-      "d": "X position 5.0"
-     },
-     {
-      "g": "Y5.",
-      "e": "Y5.0",
-      "d": "Y position 5.0"
-     },
-     {
-      "g": "I1.",
-      "e": "ARCI1.0",
-      "d": "Arc center offset in X 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N160",
-      "e": "SEQ160",
-      "d": "Sequence number 160"
-     },
-     {
-      "g": "G83",
-      "e": "PECKDRL",
-      "d": "Peck drilling cycle"
-     },
-     {
-      "g": "X1.",
-      "e": "X1.0",
-      "d": "X position 1.0"
-     },
-     {
-      "g": "Y1.",
-      "e": "Y1.0",
-      "d": "Y position 1.0"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "R1.",
-      "e": "RPLN1.0",
-      "d": "Retract plane for the drilling cycle"
-     },
-     {
-      "g": "Q1",
-      "e": "PECK0.001",
-      "d": "No decimal point, so this reads as 0.001 mm. Write Q1. for 1 mm.",
-      "imp": true
-     },
-     {
-      "g": "P2",
-      "e": "SEC2",
-      "d": "Dwell for 2 seconds"
-     },
-     {
-      "g": "A3",
-      "e": "?A",
-      "d": "Address letter A isn't in the dictionary.",
-      "unk": true
-     }
-    ],
-    [
-     {
-      "g": "N170",
-      "e": "SEQ170",
-      "d": "Sequence number 170"
-     },
-     {
-      "g": "X2.",
-      "e": "X2.0",
-      "d": "X position 2.0"
-     }
-    ],
-    [
-     {
-      "g": "N180",
-      "e": "SEQ180",
-      "d": "Sequence number 180"
-     },
-     {
-      "g": "G80",
-      "e": "CYCOFF",
-      "d": "Cancel canned cycle"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "Z50.",
-      "e": "Z50.0",
-      "d": "Z position 50.0"
-     }
-    ],
-    [
-     {
-      "g": "N185",
-      "e": "SEQ185",
-      "d": "Sequence number 185"
-     },
-     {
-      "g": "G28",
-      "e": "HOMEREF",
-      "d": "Return to machine home"
-     },
-     {
-      "g": "Z0.",
-      "e": "Z0.0",
-      "d": "Z position 0.0"
-     },
-     {
-      "g": "Y0.",
-      "e": "Y0.0",
-      "d": "Y position 0.0"
-     }
-    ],
-    [
-     {
-      "g": "N190",
-      "e": "SEQ190",
-      "d": "Sequence number 190"
-     },
-     {
-      "g": "M97",
-      "e": "?M97",
-      "d": "M97 isn't in the dictionary or this machine's file.",
-      "unk": true
-     },
-     {
-      "g": "P1000",
-      "e": "LBL1000",
-      "d": "Jump to the line labeled N1000 and run it until M99"
-     }
-    ],
-    [
-     {
-      "g": "N195",
-      "e": "SEQ195",
-      "d": "Sequence number 195"
-     },
-     {
-      "g": "M97",
-      "e": "?M97",
-      "d": "M97 isn't in the dictionary or this machine's file.",
-      "unk": true
-     },
-     {
-      "g": "P2000",
-      "e": "LBL2000",
-      "d": "Jump to the line labeled N2000 and run it until M99"
-     }
-    ],
-    [
-     {
-      "g": "N200",
-      "e": "SEQ200",
-      "d": "Sequence number 200"
-     },
-     {
-      "g": "G65",
-      "e": "MACRO",
-      "d": "Call a macro subprogram, passing values to it"
-     },
-     {
-      "g": "P9101",
-      "e": "SLOTMILL",
-      "d": "Library subprogram O9101: Straight slot, ramped"
-     },
-     {
-      "g": "X1.",
-      "e": "STX1.0",
-      "d": "X at the start of the slot: 1.0 (#24 in O9101)"
-     },
-     {
-      "g": "Y1.",
-      "e": "STY1.0",
-      "d": "Y at the start of the slot: 1.0 (#25 in O9101)"
-     },
-     {
-      "g": "I3.",
-      "e": "ENX3.0",
-      "d": "X at the end of the slot: 3.0 (#4 in O9101)"
-     },
-     {
-      "g": "J1",
-      "e": "ENY0.001",
-      "d": "Y at the end of the slot: 0.001 (#5 in O9101)",
-      "imp": true
-     },
-     {
-      "g": "Z-0.5",
-      "e": "DEP-0.5",
-      "d": "Final depth (negative, Z0 is the top): -0.5 (#26 in O9101)"
-     },
-     {
-      "g": "Q0.1",
-      "e": "STEP0.1",
-      "d": "How much deeper each pass goes: 0.1 (#17 in O9101)"
-     },
-     {
-      "g": "F100.",
-      "e": "FEED100.0",
-      "u": "mmpm",
-      "d": "Cutting feed along the slot: 100.0 mmpm (#9 in O9101)"
-     },
-     {
-      "g": "E50.",
-      "e": "RAMP50.0",
-      "u": "mmpm",
-      "d": "Feed for the ramp passes (defaults to half of FEED): 50.0 mmpm (#8 in O9101)"
-     },
-     {
-      "g": "W3",
-      "e": "?W",
-      "d": "Straight slot, ramped has no W variable.",
-      "unk": true
-     }
-    ],
-    [
-     {
-      "g": "N210",
-      "e": "SEQ210",
-      "d": "Sequence number 210"
-     },
-     {
-      "g": "M98",
-      "e": "SUBCALL",
-      "d": "Call subprogram"
-     },
-     {
-      "g": "P1234",
-      "e": "PROG1234",
-      "d": "Program number 1234"
-     }
-    ],
-    [
-     {
-      "g": "N220",
-      "e": "SEQ220",
-      "d": "Sequence number 220"
-     },
-     {
-      "g": "M05",
-      "e": "SPINOFF",
-      "d": "Spindle off"
-     },
-     {
-      "g": "M09",
-      "e": "COOLOFF",
-      "d": "Coolant off"
-     }
-    ],
-    [
-     {
-      "g": "N230",
-      "e": "SEQ230",
-      "d": "Sequence number 230"
-     },
-     {
-      "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "N1000",
-      "e": "SEQ1000",
-      "d": "Sequence number 1000"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "Z5.",
-      "e": "Z5.0",
-      "d": "Z position 5.0"
-     }
-    ],
-    [
-     {
-      "g": "N1010",
-      "e": "SEQ1010",
-      "d": "Sequence number 1010"
-     },
-     {
-      "g": "M99",
-      "e": "SUBRET",
-      "d": "Return from subprogram"
-     }
-    ],
-    [
-     {
-      "g": "(TRAILING SUB NEVER CALLED)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N3000",
-      "e": "SEQ3000",
-      "d": "Sequence number 3000"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-1.",
-      "e": "Z-1.0",
-      "d": "Z position -1.0"
-     },
-     {
-      "g": "F10",
-      "e": "F10.0",
-      "u": "mmpm",
-      "d": "Feed rate 10.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "M99",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram"
      }
     ]
@@ -4091,7 +3123,7 @@
   },
   {
    "machine": "fanuc_0mc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -4121,32 +3153,32 @@
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -4163,7 +3195,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -4175,12 +3207,12 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -4216,7 +3248,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -4228,7 +3260,7 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -4250,7 +3282,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -4278,7 +3310,7 @@
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -4305,7 +3337,7 @@
      },
      {
       "g": "G03",
-      "e": "ARCCCW",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -4332,12 +3364,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -4365,17 +3397,17 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -4398,12 +3430,12 @@
      },
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -4446,12 +3478,12 @@
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G03",
-      "e": "ARCCCW",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -4478,7 +3510,7 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
@@ -4502,7 +3534,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      }
     ],
@@ -4514,7 +3546,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -4531,12 +3563,12 @@
      },
      {
       "g": "G41",
-      "e": "COMPLEFT",
+      "e": "ccomp.left",
       "d": "Cutter compensation left"
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -4563,7 +3595,7 @@
      },
      {
       "g": "G83",
-      "e": "PECKDRL",
+      "e": "cycle.peck",
       "d": "Peck drilling cycle"
      },
      {
@@ -4624,12 +3656,12 @@
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -4646,7 +3678,7 @@
      },
      {
       "g": "G28",
-      "e": "HOMEREF",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
@@ -4704,12 +3736,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -4770,7 +3802,7 @@
      },
      {
       "g": "M98",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram"
      },
      {
@@ -4787,12 +3819,12 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -4804,7 +3836,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -4816,7 +3848,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -4833,7 +3865,7 @@
      },
      {
       "g": "M99",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram"
      }
     ],
@@ -4853,7 +3885,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -4871,7 +3903,7 @@
     [
      {
       "g": "M99",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram"
      }
     ]
@@ -5067,7 +4099,7 @@
   },
   {
    "machine": "okuma_m560",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -5097,32 +4129,32 @@
      },
      {
       "g": "G21",
-      "e": "MMCHK",
+      "e": "set.mm.check",
       "d": "Confirm metric input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -5139,7 +4171,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -5151,12 +4183,12 @@
      },
      {
       "g": "G54",
-      "e": "TLENX",
+      "e": "tlen.x",
       "d": "Tool length offset on X (Okuma, not a work offset)"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -5189,7 +4221,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -5201,7 +4233,7 @@
      },
      {
       "g": "G43",
-      "e": "OFS3DOFF",
+      "e": "offset3d.off",
       "d": "3-D tool offset off (Okuma)"
      },
      {
@@ -5223,7 +4255,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -5251,7 +4283,7 @@
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -5278,7 +4310,7 @@
      },
      {
       "g": "G03",
-      "e": "ARCCCW",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -5305,12 +4337,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -5338,17 +4370,17 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -5371,12 +4403,12 @@
      },
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -5419,12 +4451,12 @@
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G03",
-      "e": "ARCCCW",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -5451,7 +4483,7 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
@@ -5475,7 +4507,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      }
     ],
@@ -5487,7 +4519,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -5504,12 +4536,12 @@
      },
      {
       "g": "G41",
-      "e": "COMPLEFT",
+      "e": "ccomp.left",
       "d": "Cutter compensation left"
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -5536,7 +4568,7 @@
      },
      {
       "g": "G83",
-      "e": "PECKDRL",
+      "e": "cycle.peck",
       "d": "Peck drilling cycle"
      },
      {
@@ -5596,12 +4628,12 @@
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -5618,7 +4650,7 @@
      },
      {
       "g": "G28",
-      "e": "HOMEREF",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
@@ -5676,12 +4708,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -5741,7 +4773,7 @@
      },
      {
       "g": "M98",
-      "e": "OILMISTH",
+      "e": "cool.oilmist",
       "d": "Horizontal-spindle oil-mist coolant mode (Okuma)"
      },
      {
@@ -5758,12 +4790,12 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -5775,7 +4807,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -5787,7 +4819,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -5804,7 +4836,7 @@
      },
      {
       "g": "M99",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram"
      }
     ],
@@ -5824,7 +4856,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -5842,7 +4874,7 @@
     [
      {
       "g": "M99",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram"
      }
     ]

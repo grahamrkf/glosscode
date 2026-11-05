@@ -76,7 +76,7 @@
  "runs": [
   {
    "machine": "gen.mill.mitsubishim2",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -106,17 +106,17 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      }
     ],
@@ -133,7 +133,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -145,7 +145,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -166,7 +166,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -178,7 +178,7 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -200,7 +200,7 @@
      },
      {
       "g": "G22",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call a subprogram: L the program, P the repeat count (M2/M0 format)"
      },
      {
@@ -222,7 +222,7 @@
      },
      {
       "g": "G62",
-      "e": "MIRROR",
+      "e": "mirror.on",
       "d": "Mirror image (M2/M0 format)"
      },
      {
@@ -239,7 +239,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -262,7 +262,7 @@
      },
      {
       "g": "G44",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset cancel (M2/M0 format; there's no G49)"
      },
      {
@@ -279,7 +279,7 @@
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      }
     ],
@@ -291,7 +291,7 @@
      },
      {
       "g": "M98",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram"
      },
      {
@@ -308,7 +308,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -597,7 +597,7 @@
    ]
   },
   {
-   "machine": "gen.mill.mitsubishim2",
+   "machine": "gen.mill.mitsubishi",
    "style": "words",
    "words": [
     [
@@ -628,17 +628,17 @@
      },
      {
       "g": "G90",
-      "e": "units.absolute",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "plane.xy",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G20",
-      "e": "units.inch",
+      "e": "set.inch",
       "d": "Inch units"
      }
     ],
@@ -667,7 +667,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -700,7 +700,7 @@
      },
      {
       "g": "G43",
-      "e": "toollength.on",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -722,268 +722,7 @@
      },
      {
       "g": "G22",
-      "e": "sub.call",
-      "d": "Call a subprogram: L the program, P the repeat count (M2/M0 format)"
-     },
-     {
-      "g": "L2200",
-      "e": "PROG2200",
-      "d": "Program number 2200"
-     },
-     {
-      "g": "P5",
-      "e": "REPEAT5",
-      "d": "Repeat 5 times"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G62",
-      "e": "mirror.on",
-      "d": "Mirror image (M2/M0 format)"
-     },
-     {
-      "g": "X1.",
-      "e": "X1.0",
-      "d": "X position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-0.1",
-      "e": "Z-0.1",
-      "d": "Z position -0.1"
-     },
-     {
-      "g": "F10.",
-      "e": "F10.0",
-      "u": "ipm",
-      "d": "Feed rate 10.0 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G44",
-      "e": "toollength.off",
-      "d": "Tool length offset cancel (M2/M0 format; there's no G49)"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "G49",
-      "e": "toollength.off",
-      "d": "Tool length offset off"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "M98",
-      "e": "sub.call",
-      "d": "Call subprogram"
-     },
-     {
-      "g": "P2200",
-      "e": "PROG2200",
-      "d": "Program number 2200"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 10,
-     "id": "foreign-code",
-     "sev": "error",
-     "msg": "The M2/M0 format has no G49: G44 cancels the tool length."
-    },
-    {
-     "li": 11,
-     "id": "foreign-code",
-     "sev": "warning",
-     "msg": "In the M2/M0 format a subprogram is called with G22 L (program) P (repeats), not M98."
-    }
-   ]
-  },
-  {
-   "machine": "gen.mill.mitsubishi",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O0301",
-      "e": "PROG0301",
-      "d": "Program number 0301"
-     },
-     {
-      "g": "(M2/M0 FORMAT MILL)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G90",
-      "e": "ABS",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G17",
-      "e": "PLANEXY",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "G20",
-      "e": "INCH",
-      "d": "Inch units"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "T1",
-      "e": "TOOL1",
-      "d": "Tool number 1"
-     },
-     {
-      "g": "M06",
-      "e": "TOOLCHG",
-      "d": "Tool change"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X0.",
-      "e": "X0.0",
-      "d": "X position 0.0"
-     },
-     {
-      "g": "Y0.",
-      "e": "Y0.0",
-      "d": "Y position 0.0"
-     },
-     {
-      "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
-      "d": "Spindle speed 2000 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "SPINFWD",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G43",
-      "e": "TLENON",
-      "d": "Tool length offset on"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     },
-     {
-      "g": "H01",
-      "e": "LOFS01",
-      "d": "Tool length offset number 01"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G22",
-      "e": "STRKON",
+      "e": "limits.on",
       "d": "Stored stroke check on"
      },
      {
@@ -1006,7 +745,7 @@
      },
      {
       "g": "G62",
-      "e": "CORNOVR",
+      "e": "corner.override",
       "d": "Automatic corner override"
      },
      {
@@ -1023,7 +762,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1046,7 +785,7 @@
      },
      {
       "g": "G44",
-      "e": "TLENNEG",
+      "e": "tlen.minus",
       "d": "Tool length offset, minus direction"
      },
      {
@@ -1063,7 +802,7 @@
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      }
     ],
@@ -1075,7 +814,7 @@
      },
      {
       "g": "M98",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram"
      },
      {
@@ -1092,7 +831,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],

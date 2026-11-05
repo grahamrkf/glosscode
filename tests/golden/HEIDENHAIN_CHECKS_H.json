@@ -56,7 +56,7 @@
  "runs": [
   {
    "machine": "gen.mill.heidenhain",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -66,7 +66,7 @@
      },
      {
       "g": "BEGIN PGM CHECKS MM",
-      "e": "PROGSTART CHECKS MM",
+      "e": "prog.begin CHECKS MM",
       "d": "Start of the program: its name, then MM or INCH"
      }
     ],
@@ -78,7 +78,7 @@
      },
      {
       "g": "TOOL CALL 1 Z",
-      "e": "TOOLCALL 1 Z",
+      "e": "tool.call 1 Z",
       "d": "Tool call: the tool, its axis, then the spindle speed, feed and oversizes"
      },
      {
@@ -96,7 +96,7 @@
      },
      {
       "g": "L",
-      "e": "LINE",
+      "e": "run.line",
       "d": "Straight line"
      },
      {
@@ -111,7 +111,7 @@
      },
      {
       "g": "R0",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "No tool radius compensation"
      },
      {
@@ -128,7 +128,7 @@
      },
      {
       "g": "L",
-      "e": "LINE",
+      "e": "run.line",
       "d": "Straight line"
      },
      {
@@ -150,7 +150,7 @@
      },
      {
       "g": "CYCL CALL",
-      "e": "CYCCALL",
+      "e": "cycle.call",
       "d": "Run the defined cycle once, where the tool is"
      }
     ],
@@ -162,7 +162,7 @@
      },
      {
       "g": "CALL LBL 7",
-      "e": "CALLSUB 7",
+      "e": "call.sub 7",
       "d": "Run the subprogram at this label; with REP, repeat the section from the label this many more times"
      }
     ],
@@ -174,7 +174,7 @@
      },
      {
       "g": "L",
-      "e": "LINE",
+      "e": "run.line",
       "d": "Straight line"
      },
      {
@@ -184,12 +184,12 @@
      },
      {
       "g": "M3",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      },
      {
       "g": "M5",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -201,7 +201,7 @@
      },
      {
       "g": "L",
-      "e": "LINE",
+      "e": "run.line",
       "d": "Straight line"
      },
      {
@@ -230,7 +230,7 @@
      },
      {
       "g": "END PGM OTHER MM",
-      "e": "PROGEND OTHER MM",
+      "e": "prog.end OTHER MM",
       "d": "End of the program"
      }
     ]
@@ -463,238 +463,6 @@
      {
       "g": "END PGM OTHER MM",
       "e": "END OTHER MM",
-      "d": "End of the program"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 3,
-     "id": "no-feed-rate",
-     "sev": "error",
-     "msg": "This L move runs at feed rate, but no F has been set yet."
-    },
-    {
-     "li": 3,
-     "id": "spindle-off-feed",
-     "sev": "warning",
-     "msg": "This L move cuts while the spindle is stopped (it was never started)."
-    },
-    {
-     "li": 4,
-     "id": "cycle-call-no-def",
-     "sev": "error",
-     "msg": "CYCL CALL runs a cycle, but no CYCL DEF comes before it."
-    },
-    {
-     "li": 5,
-     "id": "missing-label",
-     "sev": "error",
-     "msg": "CALL LBL 7 points to LBL 7, which isn't in this file."
-    },
-    {
-     "li": 6,
-     "id": "m-conflict",
-     "sev": "error",
-     "msg": "M03 and M05 on the same line contradict each other."
-    },
-    {
-     "li": 7,
-     "id": "block-number-order",
-     "sev": "info",
-     "msg": "Block 4 comes after block 6."
-    },
-    {
-     "li": 7,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "ZZ+3 isn't in the dictionary or this machine's file."
-    },
-    {
-     "li": 8,
-     "id": "pgm-name-mismatch",
-     "sev": "warning",
-     "msg": "END PGM OTHER doesn't match BEGIN PGM CHECKS."
-    }
-   ]
-  },
-  {
-   "machine": "gen.mill.heidenhain",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "0",
-      "e": "SEQ0",
-      "d": "Block 0"
-     },
-     {
-      "g": "BEGIN PGM CHECKS MM",
-      "e": "program.begin CHECKS MM",
-      "d": "Start of the program: its name, then MM or INCH"
-     }
-    ],
-    [
-     {
-      "g": "1",
-      "e": "SEQ1",
-      "d": "Block 1"
-     },
-     {
-      "g": "TOOL CALL 1 Z",
-      "e": "tool.call 1 Z",
-      "d": "Tool call: the tool, its axis, then the spindle speed, feed and oversizes"
-     },
-     {
-      "g": "S1000",
-      "e": "S1000",
-      "u": "rpm",
-      "d": "Spindle speed 1000 RPM"
-     }
-    ],
-    [
-     {
-      "g": "2",
-      "e": "SEQ2",
-      "d": "Block 2"
-     },
-     {
-      "g": "L",
-      "e": "path.line",
-      "d": "Straight line"
-     },
-     {
-      "g": "X+0",
-      "e": "X0",
-      "d": "X position 0"
-     },
-     {
-      "g": "Y+0",
-      "e": "Y0",
-      "d": "Y position 0"
-     },
-     {
-      "g": "R0",
-      "e": "comp.off",
-      "d": "No tool radius compensation"
-     },
-     {
-      "g": "FMAX",
-      "e": "RAPID",
-      "d": "Rapid traverse, this block only"
-     }
-    ],
-    [
-     {
-      "g": "3",
-      "e": "SEQ3",
-      "d": "Block 3"
-     },
-     {
-      "g": "L",
-      "e": "path.line",
-      "d": "Straight line"
-     },
-     {
-      "g": "X+10",
-      "e": "X10",
-      "d": "X position 10"
-     },
-     {
-      "g": "Y+5",
-      "e": "Y5",
-      "d": "Y position 5"
-     }
-    ],
-    [
-     {
-      "g": "4",
-      "e": "SEQ4",
-      "d": "Block 4"
-     },
-     {
-      "g": "CYCL CALL",
-      "e": "cycle.call",
-      "d": "Run the defined cycle once, where the tool is"
-     }
-    ],
-    [
-     {
-      "g": "5",
-      "e": "SEQ5",
-      "d": "Block 5"
-     },
-     {
-      "g": "CALL LBL 7",
-      "e": "sub.call 7",
-      "d": "Run the subprogram at this label; with REP, repeat the section from the label this many more times"
-     }
-    ],
-    [
-     {
-      "g": "6",
-      "e": "SEQ6",
-      "d": "Block 6"
-     },
-     {
-      "g": "L",
-      "e": "path.line",
-      "d": "Straight line"
-     },
-     {
-      "g": "X+20",
-      "e": "X20",
-      "d": "X position 20"
-     },
-     {
-      "g": "M3",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     },
-     {
-      "g": "M5",
-      "e": "spindle.off",
-      "d": "Spindle off"
-     }
-    ],
-    [
-     {
-      "g": "4",
-      "e": "SEQ4",
-      "d": "Block 4"
-     },
-     {
-      "g": "L",
-      "e": "path.line",
-      "d": "Straight line"
-     },
-     {
-      "g": "X+5",
-      "e": "X5",
-      "d": "X position 5"
-     },
-     {
-      "g": "F100",
-      "e": "F100.0",
-      "u": "mmpm",
-      "d": "Feed rate 100.0 mm per minute"
-     },
-     {
-      "g": "ZZ+3",
-      "e": "?ZZ+3",
-      "d": "ZZ isn't a Klartext word GlossCode knows.",
-      "unk": true
-     }
-    ],
-    [
-     {
-      "g": "7",
-      "e": "SEQ7",
-      "d": "Block 7"
-     },
-     {
-      "g": "END PGM OTHER MM",
-      "e": "program.end OTHER MM",
       "d": "End of the program"
      }
     ]

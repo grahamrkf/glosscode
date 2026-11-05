@@ -200,12 +200,12 @@
  "runs": [
   {
    "machine": "gen.lathe.fagor8060",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
       "g": "%SHAFT8060",
-      "e": "PROGRAM SHAFT8060",
+      "e": "prog.name SHAFT8060",
       "d": "Program name"
      }
     ],
@@ -220,34 +220,34 @@
     [
      {
       "g": "G71",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G18",
-      "e": "PLANEZX",
+      "e": "set.xz",
       "d": "ZX plane, the usual plane on a lathe"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed: S in m/min or ft/min"
      }
     ],
     [
      {
       "g": "G192",
-      "e": "SMAX",
+      "e": "set.smax",
       "d": "Spindle speed limit (S)"
      },
      {
@@ -278,19 +278,19 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -315,7 +315,7 @@
     [
      {
       "g": "G81",
-      "e": "TURNSTR",
+      "e": "cycle.turn.straight",
       "d": "Straight turning"
      },
      {
@@ -367,7 +367,7 @@
     [
      {
       "g": "G68",
-      "e": "ROUGHX",
+      "e": "cycle.rough.x",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -424,7 +424,7 @@
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -453,7 +453,7 @@
     [
      {
       "g": "G97",
-      "e": "MODERPM",
+      "e": "set.rpm",
       "d": "Spindle speed in rpm"
      },
      {
@@ -464,14 +464,14 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
     [
      {
       "g": "G88",
-      "e": "GROOVEX",
+      "e": "cycle.groove.x",
       "d": "Grooving along X"
      },
      {
@@ -508,7 +508,7 @@
     [
      {
       "g": "G86",
-      "e": "THDLONG",
+      "e": "cycle.thread.long",
       "d": "Threading along Z"
      },
      {
@@ -555,7 +555,7 @@
     [
      {
       "g": "G33",
-      "e": "THREAD",
+      "e": "run.thread",
       "d": "Threading, constant pitch: K (or I) is the pitch"
      },
      {
@@ -577,7 +577,7 @@
     [
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -607,14 +607,14 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
     [
      {
       "g": "G83",
-      "e": "AXDRILL",
+      "e": "cycle.axial.drill",
       "d": "Drilling or tapping along Z"
      },
      {
@@ -646,14 +646,14 @@
     [
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
     [
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
@@ -666,7 +666,7 @@
     [
      {
       "g": "G160",
-      "e": "FACEDRL",
+      "e": "cycle.face.drill",
       "d": "Live tool drilling or tapping on the face"
      },
      {
@@ -718,7 +718,7 @@
     [
      {
       "g": "G162",
-      "e": "SIDESLOT",
+      "e": "cycle.side.slot",
       "d": "Live tool slot milling on the side"
      },
      {
@@ -775,7 +775,7 @@
     [
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
@@ -794,14 +794,14 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
     [
      {
       "g": "G50",
-      "e": "SEMIRND",
+      "e": "corner.semiround",
       "d": "Semi-rounded corner (modal)"
      },
      {
@@ -814,7 +814,7 @@
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -831,7 +831,7 @@
     [
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -843,7 +843,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -872,7 +872,7 @@
     [
      {
       "g": "G03",
-      "e": "ARCCCW",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -904,7 +904,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1661,744 +1661,13 @@
    ]
   },
   {
-   "machine": "gen.lathe.fagor8060",
+   "machine": "gen.lathe.fagor8055",
    "style": "words",
    "words": [
     [
      {
       "g": "%SHAFT8060",
-      "e": "program.name SHAFT8060",
-      "d": "Program name"
-     }
-    ],
-    [
-     {
-      "g": "; turning, grooving, threading and live tool",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "G71",
-      "e": "units.metric",
-      "d": "Millimeter units"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G18",
-      "e": "plane.zx",
-      "d": "ZX plane, the usual plane on a lathe"
-     },
-     {
-      "g": "G95",
-      "e": "feed.perrev",
-      "d": "Feed per revolution"
-     },
-     {
-      "g": "G96",
-      "e": "speed.css",
-      "d": "Constant surface speed: S in m/min or ft/min"
-     }
-    ],
-    [
-     {
-      "g": "G192",
-      "e": "speed.limit",
-      "d": "Spindle speed limit (S)"
-     },
-     {
-      "g": "S3000",
-      "e": "S3000",
-      "u": "smm",
-      "d": "Surface speed 3000 surface meters per minute"
-     }
-    ],
-    [
-     {
-      "g": "T1",
-      "e": "TOOL1",
-      "d": "Tool number 1"
-     },
-     {
-      "g": "D1",
-      "e": "DOFS1",
-      "d": "Tool diameter offset number 1"
-     }
-    ],
-    [
-     {
-      "g": "S180",
-      "e": "S180",
-      "u": "smm",
-      "d": "Surface speed 180 surface meters per minute"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     },
-     {
-      "g": "M08",
-      "e": "coolant.on",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X60",
-      "e": "X60",
-      "d": "X position 60"
-     },
-     {
-      "g": "Z5",
-      "e": "Z5",
-      "d": "Z position 5"
-     }
-    ],
-    [
-     {
-      "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
-      "d": "Feed rate 0.25 mm per rev"
-     }
-    ],
-    [
-     {
-      "g": "G81",
-      "e": "cycle.turnstraight",
-      "d": "Straight turning"
-     },
-     {
-      "g": "X50",
-      "e": "X50",
-      "d": "X position 50"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "Q40",
-      "e": "ENDX40",
-      "d": "End point in X. (G81)"
-     },
-     {
-      "g": "R-30",
-      "e": "ENDZ-30",
-      "d": "End point in Z. (G81)"
-     },
-     {
-      "g": "C2",
-      "e": "PASS2",
-      "d": "Depth of each pass. (G81)"
-     },
-     {
-      "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance. D0 or left out: the tool goes back along the profile. (G81)"
-     },
-     {
-      "g": "L0.2",
-      "e": "FINX0.2",
-      "d": "Finish stock in X (radius). (G81)"
-     },
-     {
-      "g": "M0.1",
-      "e": "FINZ0.1",
-      "d": "Finish stock in Z. Left out, 0. (G81)"
-     },
-     {
-      "g": "H0.1",
-      "e": "FINFEED0.1",
-      "d": "Finish pass feed. None or 0: no finish pass. (G81)"
-     }
-    ],
-    [
-     {
-      "g": "G68",
-      "e": "cycle.roughx",
-      "d": "Roughing along X, following a profile"
-     },
-     {
-      "g": "X50",
-      "e": "X50",
-      "d": "X position 50"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "C2",
-      "e": "PASS2",
-      "d": "Depth of each pass. (G68)"
-     },
-     {
-      "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
-     },
-     {
-      "g": "L0.2",
-      "e": "FINX0.2",
-      "d": "Finish stock in X (radius). (G68)"
-     },
-     {
-      "g": "M0.1",
-      "e": "FINZ0.1",
-      "d": "Finish stock in Z. Left out, it equals L. (G68)"
-     },
-     {
-      "g": "F0.2",
-      "e": "LASTFEED0.2",
-      "d": "Feed for the last roughing pass. (G68)"
-     },
-     {
-      "g": "H0.1",
-      "e": "FINFEED0.1",
-      "d": "Finish pass feed. None or 0: no finish pass. (G68)"
-     },
-     {
-      "g": "S100",
-      "e": "PROFFROM100",
-      "d": "Label of the first line of the profile. Not used with P. (G68)"
-     },
-     {
-      "g": "E140",
-      "e": "PROFTO140",
-      "d": "Label of the last line of the profile. Not used with P. (G68)"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X100",
-      "e": "X100",
-      "d": "X position 100"
-     },
-     {
-      "g": "Z50",
-      "e": "Z50",
-      "d": "Z position 50"
-     }
-    ],
-    [
-     {
-      "g": "T2",
-      "e": "TOOL2",
-      "d": "Tool number 2"
-     },
-     {
-      "g": "D2",
-      "e": "DOFS2",
-      "d": "Tool diameter offset number 2"
-     }
-    ],
-    [
-     {
-      "g": "G97",
-      "e": "speed.rpm",
-      "d": "Spindle speed in rpm"
-     },
-     {
-      "g": "S800",
-      "e": "S800",
-      "u": "rpm",
-      "d": "Spindle speed 800 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "G88",
-      "e": "cycle.groovex",
-      "d": "Grooving along X"
-     },
-     {
-      "g": "X45",
-      "e": "X45",
-      "d": "X position 45"
-     },
-     {
-      "g": "Z-20",
-      "e": "Z-20",
-      "d": "Z position -20"
-     },
-     {
-      "g": "Q36",
-      "e": "ENDX36",
-      "d": "End point in X. (G88)"
-     },
-     {
-      "g": "R-26",
-      "e": "ENDZ-26",
-      "d": "End point in Z. (G88)"
-     },
-     {
-      "g": "C3",
-      "e": "PASS3",
-      "d": "Step between plunges. (G88)"
-     },
-     {
-      "g": "K1",
-      "e": "DWELL1",
-      "d": "Dwell at the bottom, in hundredths of a second. (G88)"
-     }
-    ],
-    [
-     {
-      "g": "G86",
-      "e": "cycle.threadlong",
-      "d": "Threading along Z"
-     },
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "Q40",
-      "e": "ENDX40",
-      "d": "End point in X. (G86)"
-     },
-     {
-      "g": "R-18",
-      "e": "ENDZ-18",
-      "d": "End point in Z. (G86)"
-     },
-     {
-      "g": "I0.92",
-      "e": "DEPTH0.92",
-      "d": "Thread depth. (G86)"
-     },
-     {
-      "g": "B0.2",
-      "e": "PASS0.2",
-      "d": "Pass depth. (G86)"
-     },
-     {
-      "g": "C1.5",
-      "e": "PITCH1.5",
-      "d": "Thread pitch. (G86)"
-     },
-     {
-      "g": "A30",
-      "e": "INFANG30",
-      "d": "Infeed angle. Left out, 30°. (G86)"
-     }
-    ],
-    [
-     {
-      "g": "G33",
-      "e": "thread.cut",
-      "d": "Threading, constant pitch: K (or I) is the pitch"
-     },
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Z-15",
-      "e": "Z-15",
-      "d": "Z position -15"
-     },
-     {
-      "g": "K1.5",
-      "e": "PITCH1.5",
-      "d": "Thread pitch along Z (G33)"
-     }
-    ],
-    [
-     {
-      "g": "G04",
-      "e": "dwell",
-      "d": "Pause for a set time"
-     },
-     {
-      "g": "K1.5",
-      "e": "SEC1.5",
-      "d": "Dwell for 1.5 seconds"
-     }
-    ],
-    [
-     {
-      "g": "T3",
-      "e": "TOOL3",
-      "d": "Tool number 3"
-     },
-     {
-      "g": "D3",
-      "e": "DOFS3",
-      "d": "Tool diameter offset number 3"
-     }
-    ],
-    [
-     {
-      "g": "S1200",
-      "e": "S1200",
-      "u": "rpm",
-      "d": "Spindle speed 1200 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "G83",
-      "e": "cycle.axialdrill",
-      "d": "Drilling or tapping along Z"
-     },
-     {
-      "g": "X0",
-      "e": "X0",
-      "d": "X position 0"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "I25",
-      "e": "DEPTH25",
-      "d": "Depth. (G83)"
-     },
-     {
-      "g": "B5",
-      "e": "PECK5",
-      "d": "Peck depth. B0 taps. (G83)"
-     },
-     {
-      "g": "D1",
-      "e": "APPR1",
-      "d": "Approach distance before the hole. (G83)"
-     }
-    ],
-    [
-     {
-      "g": "M05",
-      "e": "spindle.off",
-      "d": "Spindle off"
-     }
-    ],
-    [
-     {
-      "g": "G94",
-      "e": "feed.perminute",
-      "d": "Feed per minute"
-     },
-     {
-      "g": "F120",
-      "e": "F120.0",
-      "u": "mmpm",
-      "d": "Feed rate 120.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "G160",
-      "e": "cycle.facedrill",
-      "d": "Live tool drilling or tapping on the face"
-     },
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Z1",
-      "e": "Z1",
-      "d": "Z position 1"
-     },
-     {
-      "g": "I5",
-      "e": "DEPTH5",
-      "d": "Depth. (G160)"
-     },
-     {
-      "g": "B2",
-      "e": "PECK2",
-      "d": "Peck depth. B0 taps. (G160)"
-     },
-     {
-      "g": "Q0",
-      "e": "STARTANG0",
-      "d": "Spindle angle of the first hole. (G160)"
-     },
-     {
-      "g": "A90",
-      "e": "ANGSTEP90",
-      "d": "Angle between holes. (G160)"
-     },
-     {
-      "g": "J4",
-      "e": "COUNT4",
-      "d": "Number of holes, counting the first. (G160)"
-     },
-     {
-      "g": "S1500",
-      "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G160)"
-     },
-     {
-      "g": "N2",
-      "e": "SPINDLE2",
-      "d": "Number of the live tool spindle. (G160)"
-     }
-    ],
-    [
-     {
-      "g": "G162",
-      "e": "cycle.sideslot",
-      "d": "Live tool slot milling on the side"
-     },
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Z-5",
-      "e": "Z-5",
-      "d": "Z position -5"
-     },
-     {
-      "g": "L20",
-      "e": "LENGTH20",
-      "d": "Slot length. (G162)"
-     },
-     {
-      "g": "I3",
-      "e": "DEPTH3",
-      "d": "Slot depth. (G162)"
-     },
-     {
-      "g": "Q0",
-      "e": "STARTANG0",
-      "d": "Spindle angle of the first slot. (G162)"
-     },
-     {
-      "g": "A90",
-      "e": "ANGSTEP90",
-      "d": "Angle between slots. (G162)"
-     },
-     {
-      "g": "J4",
-      "e": "COUNT4",
-      "d": "Number of slots, counting the first. (G162)"
-     },
-     {
-      "g": "S1500",
-      "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G162)"
-     },
-     {
-      "g": "F100",
-      "e": "SLOTFEED100.0",
-      "d": "Feed along the slot. Doesn't replace the active feed. (G162)"
-     },
-     {
-      "g": "N2",
-      "e": "SPINDLE2",
-      "d": "Number of the live tool spindle. (G162)"
-     }
-    ],
-    [
-     {
-      "g": "G95",
-      "e": "feed.perrev",
-      "d": "Feed per revolution"
-     },
-     {
-      "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
-      "d": "Feed rate 0.25 mm per rev"
-     }
-    ],
-    [
-     {
-      "g": "S180",
-      "e": "S180",
-      "u": "rpm",
-      "d": "Spindle speed 180 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "G50",
-      "e": "corner.semiround",
-      "d": "Semi-rounded corner (modal)"
-     },
-     {
-      "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
-      "d": "Spindle speed 2500 RPM"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X100",
-      "e": "X100",
-      "d": "X position 100"
-     },
-     {
-      "g": "Z50",
-      "e": "Z50",
-      "d": "Z position 50"
-     }
-    ],
-    [
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "N100:",
-      "e": "SEQ100:",
-      "d": "Sequence number 100, a label other lines can jump to"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X20",
-      "e": "X20",
-      "d": "X position 20"
-     },
-     {
-      "g": "Z0",
-      "e": "Z0",
-      "d": "Z position 0"
-     }
-    ],
-    [
-     {
-      "g": "X30",
-      "e": "X30",
-      "d": "X position 30"
-     },
-     {
-      "g": "Z-10",
-      "e": "Z-10",
-      "d": "Z position -10"
-     }
-    ],
-    [
-     {
-      "g": "G03",
-      "e": "arc.ccw",
-      "d": "Counterclockwise arc"
-     },
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Z-15",
-      "e": "Z-15",
-      "d": "Z position -15"
-     },
-     {
-      "g": "I0",
-      "e": "ARCI0",
-      "d": "Arc center offset in X 0"
-     },
-     {
-      "g": "K-5",
-      "e": "ARCK-5",
-      "d": "Arc center offset in Z -5"
-     }
-    ],
-    [
-     {
-      "g": "N140:",
-      "e": "SEQ140:",
-      "d": "Sequence number 140, a label other lines can jump to"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-30",
-      "e": "Z-30",
-      "d": "Z position -30"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 2,
-     "id": "css-no-clamp",
-     "sev": "warning",
-     "msg": "G96 is on but no G192 S max RPM has been set. Small diameters can overspeed the spindle."
-    },
-    {
-     "li": 26,
-     "id": "foreign-code",
-     "sev": "warning",
-     "msg": "On the Fagor 8060/8065, G50 is a semi-rounded corner, not a speed limit. Limit the spindle speed with G192 S."
-    }
-   ]
-  },
-  {
-   "machine": "gen.lathe.fagor8055",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "%SHAFT8060",
-      "e": "PROGHEAD SHAFT8060",
+      "e": "prog.header SHAFT8060",
       "d": "Program header: a comment and the attributes between commas (M modifiable, X executable, H hidden, O machine builder)"
      }
     ],
@@ -2413,27 +1682,27 @@
     [
      {
       "g": "G71",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G18",
-      "e": "PLANEZX",
+      "e": "set.xz",
       "d": "ZX plane, the usual plane on a lathe"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed: S in m/min or ft/min"
      }
     ],
@@ -2472,19 +1741,19 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2509,7 +1778,7 @@
     [
      {
       "g": "G81",
-      "e": "TURNSTR",
+      "e": "cycle.turn.straight",
       "d": "Straight turning"
      },
      {
@@ -2561,7 +1830,7 @@
     [
      {
       "g": "G68",
-      "e": "ROUGHX",
+      "e": "cycle.rough.x",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -2618,7 +1887,7 @@
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2647,7 +1916,7 @@
     [
      {
       "g": "G97",
-      "e": "MODERPM",
+      "e": "set.rpm",
       "d": "Spindle speed in rpm"
      },
      {
@@ -2658,14 +1927,14 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
     [
      {
       "g": "G88",
-      "e": "GROOVEX",
+      "e": "cycle.groove.x",
       "d": "Grooving along X"
      },
      {
@@ -2702,7 +1971,7 @@
     [
      {
       "g": "G86",
-      "e": "THDLONG",
+      "e": "cycle.thread.long",
       "d": "Threading along Z"
      },
      {
@@ -2749,7 +2018,7 @@
     [
      {
       "g": "G33",
-      "e": "THREAD",
+      "e": "run.thread",
       "d": "Threading, constant pitch: L is the pitch, Q the spindle angle where it starts"
      },
      {
@@ -2771,7 +2040,7 @@
     [
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Dwell for K hundredths of a second; alone, it stops block preparation"
      },
      {
@@ -2801,14 +2070,14 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
     [
      {
       "g": "G83",
-      "e": "AXDRILL",
+      "e": "cycle.axial.drill",
       "d": "Drilling or tapping along Z"
      },
      {
@@ -2840,14 +2109,14 @@
     [
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
     [
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
@@ -2978,7 +2247,7 @@
     [
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
@@ -2997,14 +2266,14 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
     [
      {
       "g": "G50",
-      "e": "SEMIRND",
+      "e": "corner.semiround",
       "d": "Semi-rounded corner (modal)"
      },
      {
@@ -3017,7 +2286,7 @@
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -3034,7 +2303,7 @@
     [
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -3046,7 +2315,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -3075,7 +2344,7 @@
     [
      {
       "g": "G03",
-      "e": "ARCCCW",
+      "e": "run.ccw",
       "d": "Counterclockwise arc"
      },
      {
@@ -3107,7 +2376,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {

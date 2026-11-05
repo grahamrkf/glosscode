@@ -112,7 +112,7 @@
  "runs": [
   {
    "machine": "haas_vf2",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -150,32 +150,32 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -192,7 +192,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      },
      {
@@ -210,12 +210,12 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -243,7 +243,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -255,7 +255,7 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -270,7 +270,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -282,12 +282,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -340,12 +340,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -398,12 +398,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9110",
-      "e": "HELIXBORE",
+      "e": "sub.helixbore",
       "d": "Library subprogram O9110: Counterbore, helical"
      },
      {
@@ -456,7 +456,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -466,7 +466,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -478,7 +478,7 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -490,12 +490,12 @@
      },
      {
       "g": "G28",
-      "e": "HOMEREF",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
@@ -512,7 +512,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -943,7 +943,7 @@
    "problems": []
   },
   {
-   "machine": "haas_vf2",
+   "machine": "fanuc_0imf",
    "style": "words",
    "words": [
     [
@@ -982,27 +982,27 @@
      },
      {
       "g": "G20",
-      "e": "units.inch",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "units.absolute",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "plane.xy",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "comp.off",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "toollength.off",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
@@ -1047,7 +1047,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1087,7 +1087,7 @@
      },
      {
       "g": "G43",
-      "e": "toollength.on",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -1102,7 +1102,7 @@
      },
      {
       "g": "M08",
-      "e": "coolant.on",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1114,12 +1114,12 @@
      },
      {
       "g": "G65",
-      "e": "macro.call",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -1172,12 +1172,12 @@
      },
      {
       "g": "G65",
-      "e": "macro.call",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -1230,12 +1230,12 @@
      },
      {
       "g": "G65",
-      "e": "macro.call",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9110",
-      "e": "HELIXBORE",
+      "e": "sub.helixbore",
       "d": "Library subprogram O9110: Counterbore, helical"
      },
      {
@@ -1288,7 +1288,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1298,7 +1298,7 @@
      },
      {
       "g": "M09",
-      "e": "coolant.off",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -1322,12 +1322,12 @@
      },
      {
       "g": "G28",
-      "e": "home.return",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
       "g": "G91",
-      "e": "units.incremental",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
@@ -1344,423 +1344,7 @@
      },
      {
       "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": []
-  },
-  {
-   "machine": "fanuc_0imf",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O1003",
-      "e": "PROG1003",
-      "d": "Program number 1003"
-     },
-     {
-      "g": "(SLOTS PLATE)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "(SLOTS AND COUNTERBORE FROM THE SUBPROGRAM LIBRARY)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G20",
-      "e": "INCH",
-      "d": "Inch units"
-     },
-     {
-      "g": "G90",
-      "e": "ABS",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G17",
-      "e": "PLANEXY",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "G40",
-      "e": "COMPOFF",
-      "d": "Cutter compensation off"
-     },
-     {
-      "g": "G49",
-      "e": "TLENOFF",
-      "d": "Tool length offset off"
-     },
-     {
-      "g": "G80",
-      "e": "CYCOFF",
-      "d": "Cancel canned cycle"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "T6",
-      "e": "TOOL6",
-      "d": "Tool number 6"
-     },
-     {
-      "g": "M06",
-      "e": "TOOLCHG",
-      "d": "Tool change"
-     },
-     {
-      "g": "(1/4 END MILL)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G54",
-      "e": "WORK1",
-      "d": "Work offset 1"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X0.5",
-      "e": "X0.5",
-      "d": "X position 0.5"
-     },
-     {
-      "g": "Y0.5",
-      "e": "Y0.5",
-      "d": "Y position 0.5"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "S6000",
-      "e": "S6000",
-      "u": "rpm",
-      "d": "Spindle speed 6000 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "SPINFWD",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G43",
-      "e": "TLENON",
-      "d": "Tool length offset on"
-     },
-     {
-      "g": "H06",
-      "e": "LOFS06",
-      "d": "Tool length offset number 06"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     },
-     {
-      "g": "M08",
-      "e": "COOLON",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G65",
-      "e": "MACRO",
-      "d": "Call a macro subprogram, passing values to it"
-     },
-     {
-      "g": "P9101",
-      "e": "SLOTMILL",
-      "d": "Library subprogram O9101: Straight slot, ramped"
-     },
-     {
-      "g": "X0.5",
-      "e": "STX0.5",
-      "d": "X at the start of the slot: 0.5 (#24 in O9101)"
-     },
-     {
-      "g": "Y0.5",
-      "e": "STY0.5",
-      "d": "Y at the start of the slot: 0.5 (#25 in O9101)"
-     },
-     {
-      "g": "I2.5",
-      "e": "ENX2.5",
-      "d": "X at the end of the slot: 2.5 (#4 in O9101)"
-     },
-     {
-      "g": "J0.5",
-      "e": "ENY0.5",
-      "d": "Y at the end of the slot: 0.5 (#5 in O9101)"
-     },
-     {
-      "g": "Z-0.15",
-      "e": "DEP-0.15",
-      "d": "Final depth (negative, Z0 is the top): -0.15 (#26 in O9101)"
-     },
-     {
-      "g": "Q0.05",
-      "e": "STEP0.05",
-      "d": "How much deeper each pass goes: 0.05 (#17 in O9101)"
-     },
-     {
-      "g": "R0.1",
-      "e": "CLR0.1",
-      "d": "Rapid to this height before and after: 0.1 (#18 in O9101)"
-     },
-     {
-      "g": "F15.",
-      "e": "FEED15.0",
-      "u": "ipm",
-      "d": "Cutting feed along the slot: 15.0 ipm (#9 in O9101)"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "G65",
-      "e": "MACRO",
-      "d": "Call a macro subprogram, passing values to it"
-     },
-     {
-      "g": "P9101",
-      "e": "SLOTMILL",
-      "d": "Library subprogram O9101: Straight slot, ramped"
-     },
-     {
-      "g": "X0.5",
-      "e": "STX0.5",
-      "d": "X at the start of the slot: 0.5 (#24 in O9101)"
-     },
-     {
-      "g": "Y1.5",
-      "e": "STY1.5",
-      "d": "Y at the start of the slot: 1.5 (#25 in O9101)"
-     },
-     {
-      "g": "I2.5",
-      "e": "ENX2.5",
-      "d": "X at the end of the slot: 2.5 (#4 in O9101)"
-     },
-     {
-      "g": "J1.5",
-      "e": "ENY1.5",
-      "d": "Y at the end of the slot: 1.5 (#5 in O9101)"
-     },
-     {
-      "g": "Z-0.15",
-      "e": "DEP-0.15",
-      "d": "Final depth (negative, Z0 is the top): -0.15 (#26 in O9101)"
-     },
-     {
-      "g": "Q0.05",
-      "e": "STEP0.05",
-      "d": "How much deeper each pass goes: 0.05 (#17 in O9101)"
-     },
-     {
-      "g": "R0.1",
-      "e": "CLR0.1",
-      "d": "Rapid to this height before and after: 0.1 (#18 in O9101)"
-     },
-     {
-      "g": "F15.",
-      "e": "FEED15.0",
-      "u": "ipm",
-      "d": "Cutting feed along the slot: 15.0 ipm (#9 in O9101)"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G65",
-      "e": "MACRO",
-      "d": "Call a macro subprogram, passing values to it"
-     },
-     {
-      "g": "P9110",
-      "e": "HELIXBORE",
-      "d": "Library subprogram O9110: Counterbore, helical"
-     },
-     {
-      "g": "X3.5",
-      "e": "CX3.5",
-      "d": "X at the center of the bore: 3.5 (#24 in O9110)"
-     },
-     {
-      "g": "Y1.",
-      "e": "CY1.0",
-      "d": "Y at the center of the bore: 1.0 (#25 in O9110)"
-     },
-     {
-      "g": "D0.75",
-      "e": "BORE0.75",
-      "d": "Bore diameter: 0.75 (#7 in O9110)"
-     },
-     {
-      "g": "C0.25",
-      "e": "TDIA0.25",
-      "d": "End mill diameter (must be smaller than BORE): 0.25 (#3 in O9110)"
-     },
-     {
-      "g": "Z-0.2",
-      "e": "DEP-0.2",
-      "d": "Depth of the counterbore (negative): -0.2 (#26 in O9110)"
-     },
-     {
-      "g": "Q0.03",
-      "e": "PTCH0.03",
-      "d": "How far down each turn goes: 0.03 (#17 in O9110)"
-     },
-     {
-      "g": "R0.1",
-      "e": "CLR0.1",
-      "d": "Rapid to this height before and after: 0.1 (#18 in O9110)"
-     },
-     {
-      "g": "F12.",
-      "e": "FEED12.0",
-      "u": "ipm",
-      "d": "Feed around the helix: 12.0 ipm (#9 in O9110)"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "Z1.",
-      "e": "Z1.0",
-      "d": "Z position 1.0"
-     },
-     {
-      "g": "M09",
-      "e": "COOLOFF",
-      "d": "Coolant off"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "M05",
-      "e": "SPINOFF",
-      "d": "Spindle off"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G28",
-      "e": "HOMEREF",
-      "d": "Return to machine home"
-     },
-     {
-      "g": "G91",
-      "e": "INCR",
-      "d": "Incremental positions"
-     },
-     {
-      "g": "Z0.",
-      "e": "INCZ0.0",
-      "d": "Move 0.0 in Z from where the tool is"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -1776,7 +1360,7 @@
   },
   {
    "machine": "fanuc_0mc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1814,32 +1398,32 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -1856,7 +1440,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      },
      {
@@ -1874,12 +1458,12 @@
      },
      {
       "g": "G54",
-      "e": "WORK1",
+      "e": "work.1",
       "d": "Work offset 1"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1907,7 +1491,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1919,7 +1503,7 @@
      },
      {
       "g": "G43",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on"
      },
      {
@@ -1934,7 +1518,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1946,12 +1530,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -2004,12 +1588,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -2062,12 +1646,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9110",
-      "e": "HELIXBORE",
+      "e": "sub.helixbore",
       "d": "Library subprogram O9110: Counterbore, helical"
      },
      {
@@ -2120,7 +1704,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2130,7 +1714,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -2142,7 +1726,7 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -2154,12 +1738,12 @@
      },
      {
       "g": "G28",
-      "e": "HOMEREF",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
@@ -2176,7 +1760,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -2192,7 +1776,7 @@
   },
   {
    "machine": "okuma_m560",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -2230,32 +1814,32 @@
      },
      {
       "g": "G20",
-      "e": "INCHCHK",
+      "e": "set.inch.check",
       "d": "Confirm inch input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G49",
-      "e": "TLENOFF",
+      "e": "tlen.off",
       "d": "Tool length offset off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -2272,7 +1856,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      },
      {
@@ -2290,12 +1874,12 @@
      },
      {
       "g": "G54",
-      "e": "TLENX",
+      "e": "tlen.x",
       "d": "Tool length offset on X (Okuma, not a work offset)"
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2323,7 +1907,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -2335,7 +1919,7 @@
      },
      {
       "g": "G43",
-      "e": "OFS3DOFF",
+      "e": "offset3d.off",
       "d": "3-D tool offset off (Okuma)"
      },
      {
@@ -2350,7 +1934,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -2362,12 +1946,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -2420,12 +2004,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9101",
-      "e": "SLOTMILL",
+      "e": "sub.slotmill",
       "d": "Library subprogram O9101: Straight slot, ramped"
      },
      {
@@ -2478,12 +2062,12 @@
      },
      {
       "g": "G65",
-      "e": "MACRO",
+      "e": "call.macro",
       "d": "Call a macro subprogram, passing values to it"
      },
      {
       "g": "P9110",
-      "e": "HELIXBORE",
+      "e": "sub.helixbore",
       "d": "Library subprogram O9110: Counterbore, helical"
      },
      {
@@ -2536,7 +2120,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2546,7 +2130,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -2558,7 +2142,7 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -2570,12 +2154,12 @@
      },
      {
       "g": "G28",
-      "e": "HOMEREF",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
@@ -2592,7 +2176,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],

@@ -17,18 +17,18 @@ GlossCode is a G-code editor that shows a gloss line in plain English above ever
 Every code word sits in a fixed-width column, and its gloss word sits directly above it:
 
 ```
-SEQ40      SPINFWD    MODERPM    S6000rpm
-N40        M03        G97        S6000
+SEQ40         spindle.fwd   set.rpm       S6000rpm
+N40           M03           G97           S6000
 
-SEQ50      TLENON     LOFS01     Z1.0       COOLON
-N50        G43        H01        Z1.0       M08
+SEQ50         tlen.on       LOFS01        Z1.0          cool.on
+N50           G43           H01           Z1.0          M08
 ```
 
-The gloss words come from a dictionary of consistent abbreviations ([`data/gcode-words.json`](data/gcode-words.json)). Each word has a long style (`SPINFWD`, 10 columns wide) and a short style (`SFWD`, 8 columns wide). Numbers always show their decimal point (`X1.` reads `X1.0`), and a distance written without one is shown the way the control reads it, so `X1` reads `X0.0001`. Feeds and speeds keep their letter and get a small unit that follows the active modes, so `S600` reads `S600 rpm` under G97 and `S600 sfm` under G96.
+The gloss words come from a dictionary of consistent abbreviations ([`data/gcode-words.json`](data/gcode-words.json)). Each code has a full word and a short one. Full words (the default) name what the code does in two or three parts: a group, then the action, such as `run.rapid` (G00), `run.feed` (G01), `set.inch` (G20), `tlen.on` (G43) and `cycle.peck` (G83). `run` is for moves and other things the machine does on that line, `set` for modes that stay in effect, and a feature name (`ccomp`, `tlen`, `cool`, `spindle`, `cycle`, `call`) for the rest. Short words (`SFWD`, 8 columns wide) are the compact style. Address letters keep a short prefix before their value (`SEQ40`, `TOOL1`, `LOFS01`). Numbers always show their decimal point (`X1.` reads `X1.0`), and a distance written without one is shown the way the control reads it, so `X1` reads `X0.0001`. Feeds and speeds keep their letter and get a small unit that follows the active modes, so `S600` reads `S600 rpm` under G97 and `S600 sfm` under G96.
 
-| Long words | Short words | Gloss only |
+| Full words | Short words | Gloss only |
 |---|---|---|
-| ![Long words](docs/images/editor-overview.png) | ![Short words](docs/images/short-words.png) | ![Gloss only](docs/images/english-only.png) |
+| ![Full words](docs/images/editor-overview.png) | ![Short words](docs/images/short-words.png) | ![Gloss only](docs/images/english-only.png) |
 
 | Columns by word type | Simulation | Find |
 |---|---|---|
@@ -117,7 +117,7 @@ More detail is in [`docs/architecture.md`](docs/architecture.md). Releases, inst
 ## Repository layout
 
 ```
-data/gcode-words.json   Starter abbreviation dictionary (long and short styles, mill/lathe splits, Haas and Okuma overrides)
+data/gcode-words.json   Gloss dictionary (full and short words, mill/lathe splits, Haas and Okuma overrides)
 data/gcode-rules.json   Problems-panel rules and per-control tables (modal groups, canned cycle words, dialect traps)
 data/library/           Built-in subprogram library (reusable subprograms with variables)
 src/core/               The core in portable C: parser, mode tracking, gloss words, checks, JSON interface

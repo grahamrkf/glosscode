@@ -92,7 +92,7 @@
  "runs": [
   {
    "machine": "haas_st10",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -122,17 +122,17 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G99",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -162,7 +162,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -180,7 +180,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -191,7 +191,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -203,7 +203,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -218,7 +218,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -230,7 +230,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -300,7 +300,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -329,12 +329,12 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      },
      {
       "g": "G97",
-      "e": "MODERPM",
+      "e": "set.rpm",
       "d": "Constant RPM"
      },
      {
@@ -352,7 +352,7 @@
      },
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -364,7 +364,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -376,7 +376,7 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],
@@ -691,7 +691,7 @@
    "problems": []
   },
   {
-   "machine": "haas_st10",
+   "machine": "okuma_lb3000",
    "style": "words",
    "words": [
     [
@@ -722,17 +722,17 @@
      },
      {
       "g": "G20",
-      "e": "units.inch",
-      "d": "Inch units"
+      "e": "run.home",
+      "d": "Return to home position (Okuma lathe)"
      },
      {
       "g": "G18",
-      "e": "plane.xz",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G99",
-      "e": "feed.perrev",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
@@ -762,7 +762,7 @@
      },
      {
       "g": "G50",
-      "e": "spindle.maxrpm",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -780,7 +780,7 @@
      },
      {
       "g": "G96",
-      "e": "speed.sfm",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -803,7 +803,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -818,7 +818,7 @@
      },
      {
       "g": "M08",
-      "e": "coolant.on",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -830,7 +830,7 @@
      },
      {
       "g": "G01",
-      "e": "move.linear",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -900,7 +900,7 @@
      },
      {
       "g": "G00",
-      "e": "move.rapid",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -934,7 +934,7 @@
      },
      {
       "g": "G97",
-      "e": "speed.rpm",
+      "e": "set.rpm",
       "d": "Constant RPM"
      },
      {
@@ -964,7 +964,7 @@
      },
      {
       "g": "M09",
-      "e": "coolant.off",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -976,307 +976,7 @@
      },
      {
       "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": []
-  },
-  {
-   "machine": "okuma_lb3000",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O2001",
-      "e": "PROG2001",
-      "d": "Program number 2001"
-     },
-     {
-      "g": "(SHAFT OD)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G20",
-      "e": "HOMERET",
-      "d": "Return to home position (Okuma lathe)"
-     },
-     {
-      "g": "G18",
-      "e": "PLANEXZ",
-      "d": "Arcs in the XZ plane"
-     },
-     {
-      "g": "G99",
-      "e": "FEEDREV",
-      "d": "Feed per revolution"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "T0101",
-      "e": "TOOL0101",
-      "d": "Tool number 0101"
-     },
-     {
-      "g": "(OD TURN)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G50",
-      "e": "MAXRPM",
-      "d": "Clamp spindle to a max RPM"
-     },
-     {
-      "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
-      "d": "Spindle speed 3000 RPM"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G96",
-      "e": "MODESFM",
-      "d": "Constant surface speed"
-     },
-     {
-      "g": "S400",
-      "e": "S400",
-      "u": "sfm",
-      "d": "Surface speed 400 surface feet per minute"
-     },
-     {
-      "g": "M03",
-      "e": "SPINFWD",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X1.6",
-      "e": "X1.6",
-      "d": "X position 1.6"
-     },
-     {
-      "g": "Z0.1",
-      "e": "Z0.1",
-      "d": "Z position 0.1"
-     },
-     {
-      "g": "M08",
-      "e": "COOLON",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G01",
-      "e": "LINEAR",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X1.25",
-      "e": "X1.25",
-      "d": "X position 1.25"
-     },
-     {
-      "g": "F.01",
-      "e": "F0.01",
-      "u": "ipr",
-      "d": "Feed rate 0.01 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "Z-1.5",
-      "e": "Z-1.5",
-      "d": "Z position -1.5"
-     },
-     {
-      "g": "F.008",
-      "e": "F0.008",
-      "u": "ipr",
-      "d": "Feed rate 0.008 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "X1.5",
-      "e": "X1.5",
-      "d": "X position 1.5"
-     },
-     {
-      "g": "Z-1.75",
-      "e": "Z-1.75",
-      "d": "Z position -1.75"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "Z-2.5",
-      "e": "Z-2.5",
-      "d": "Z position -2.5"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "G00",
-      "e": "RAPID",
-      "d": "Rapid move"
-     },
-     {
-      "g": "U0.1",
-      "e": "INCX0.1",
-      "d": "Incremental X (lathe) 0.1"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "Z0.1",
-      "e": "Z0.1",
-      "d": "Z position 0.1"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "M03",
-      "e": "SPINFWD",
-      "d": "Spindle on, forward (CW)"
-     },
-     {
-      "g": "G97",
-      "e": "MODERPM",
-      "d": "Constant RPM"
-     },
-     {
-      "g": "S600",
-      "e": "S600",
-      "u": "rpm",
-      "d": "Spindle speed 600 RPM"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "SEQ130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "M05",
-      "e": "SPINOFF",
-      "d": "Spindle off"
-     }
-    ],
-    [
-     {
-      "g": "N135",
-      "e": "SEQ135",
-      "d": "Sequence number 135"
-     },
-     {
-      "g": "M09",
-      "e": "COOLOFF",
-      "d": "Coolant off"
-     }
-    ],
-    [
-     {
-      "g": "N140",
-      "e": "SEQ140",
-      "d": "Sequence number 140"
-     },
-     {
-      "g": "M30",
-      "e": "ENDRESET",
+      "e": "prog.rewind",
       "d": "End program and rewind"
      }
     ],

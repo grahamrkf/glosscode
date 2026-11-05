@@ -183,10 +183,10 @@ static void test_machine_overrides(const gc_data *data)
     gc_doc *doc = gc_doc_parse(prog, strlen(prog));
     char err[200];
     const char *plain = "{\"type\":\"mill\",\"brand\":\"haas\"}";
-    const char *shop = "{\"type\":\"mill\",\"brand\":\"haas\",\"codes\":{\"M51\":{\"long\":\"VISEOPEN\",\"short\":\"VOPN\",\"desc\":\"Open the vise\"}},"
+    const char *shop = "{\"type\":\"mill\",\"brand\":\"haas\",\"codes\":{\"M51\":{\"words\":\"vise.open\",\"short\":\"VOPN\",\"desc\":\"Open the vise\"}},"
                        "\"checks\":{\"missing-decimal\":\"off\",\"unknown-word\":\"error\"},\"mConflicts\":[[\"M51\",\"M52\"]]}";
     gc_json *m1 = gc_json_parse(plain, strlen(plain), err, sizeof err), *m2 = gc_json_parse(shop, strlen(shop), err, sizeof err);
-    gc_analysis *a = gc_analyze(data, m1, doc, GC_STYLE_LONG);
+    gc_analysis *a = gc_analyze(data, m1, doc, GC_STYLE_WORDS);
     CHECK(find_problem(a, "missing-decimal") != NULL, "X1 is flagged by default");
     CHECK(a->cells[3][1].flags & GC_CELL_UNKNOWN, "M51 is unknown on a plain Haas");
     CHECK(!strcmp(a->modes[2].motion, "G00") && a->modes[2].has_pos[0] && a->modes[2].pos[0] == 0.0001, "X1 is at 0.0001 in");
@@ -211,12 +211,12 @@ static void test_controls(const gc_data *data)
     char err[200];
     const char *u10 = "{\"type\":\"lathe\",\"brand\":\"okumau10l\"}", *rt = "{\"type\":\"router\",\"brand\":\"generic\"}";
     gc_json *m1 = gc_json_parse(u10, strlen(u10), err, sizeof err), *m2 = gc_json_parse(rt, strlen(rt), err, sizeof err);
-    gc_analysis *a = gc_analyze(data, m1, doc, GC_STYLE_LONG);
+    gc_analysis *a = gc_analyze(data, m1, doc, GC_STYLE_WORDS);
     CHECK(!strcmp(a->modes[1].wcs, ""), "an OSP-U10L lathe has no G54 work offset");
-    CHECK_STR(a->cells[2][2].e, "SETCOORD", "G91 G50 Z-V1 is a zero shift on an OSP-U10L lathe");
+    CHECK_STR(a->cells[2][2].e, "set.coords", "G91 G50 Z-V1 is a zero shift on an OSP-U10L lathe");
     gc_analysis_free(a);
-    a = gc_analyze(data, m2, doc, GC_STYLE_LONG);
-    CHECK_STR(a->cells[1][1].e, "RAPID", "a generic router reads G00");
+    a = gc_analyze(data, m2, doc, GC_STYLE_WORDS);
+    CHECK_STR(a->cells[1][1].e, "run.rapid", "a generic router reads G00");
     gc_analysis_free(a);
     gc_json_free(m1);
     gc_json_free(m2);
@@ -227,9 +227,9 @@ static void test_controls(const gc_data *data)
     const char *p2 = "N10 G30\nN20 M99\n";
     doc = gc_doc_parse(p2, strlen(p2));
     m1 = gc_json_parse(e1, strlen(e1), err, sizeof err);
-    a = gc_analyze(data, m1, doc, GC_STYLE_LONG);
-    CHECK_STR(a->cells[0][1].e, "SKIPCYC", "G30 is the skip cycle on an Okuma lathe");
-    CHECK_STR(a->cells[1][1].e, "TSTHRHI", "M99 is tailstock thrust high on an OSP-E100L");
+    a = gc_analyze(data, m1, doc, GC_STYLE_WORDS);
+    CHECK_STR(a->cells[0][1].e, "cycle.skip", "G30 is the skip cycle on an Okuma lathe");
+    CHECK_STR(a->cells[1][1].e, "tailstock.thrusthigh", "M99 is tailstock thrust high on an OSP-E100L");
     gc_analysis_free(a);
     gc_json_free(m1);
     gc_doc_free(doc);

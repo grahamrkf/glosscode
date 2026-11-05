@@ -560,7 +560,7 @@ const gc_json *gc_entry(const gc_ctx *c, const char *key)
     }
     const gc_json *e = gc_json_get(gc_json_get(c->data->words, "codes"), key);
     if (!e) return NULL;
-    if (gc_json_truthy(gc_json_get(e, "long"))) return e;
+    if (gc_json_truthy(gc_json_get(e, "words")) || gc_json_truthy(gc_json_get(e, "short"))) return e;
     const gc_json *t = gc_json_get(e, c->type);
     if ((!t || t->type == GC_JNULL) && c->base_type) t = gc_json_get(e, c->base_type);
     return (t && t->type != GC_JNULL) ? t : NULL;

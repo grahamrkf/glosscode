@@ -4,6 +4,10 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Gloss words
+- Every full word is renamed to one pattern: a group, then the action, with a third part for less common codes. `run.*` is for moves and other things the machine does on that line (G00 `run.rapid`, G01 `run.feed`, G02 `run.cw`, G04 `run.pause`, G28 `run.home`), `set.*` for modes that stay in effect (G17 `set.xy`, G20 `set.inch`, G90 `set.abs`, G94 `set.fpm`, G96 `set.sfm`, lathe G50 S `set.smax`), and a feature name for the rest (G41 `ccomp.left`, G43 `tlen.on`, M08 `cool.on`, G65 `call.macro`, G83 `cycle.peck`). Codes that mean the same thing on different controls now share one full word (the Okuma G85 LAP roughing is `cycle.lap.rough`, Fagor's (SUB n) and Haas's M97 calls are `call.sub` and `call.local`).
+- The long word style (SPINFWD) is gone. Full words are the default; short words (SFWD) stay. Address letters keep their prefix (SEQ10, TOOL1). Library subprograms have a full word (`sub.slotmill`) in place of a long one; library and machine files that still have a long word read it as the full word.
+
 ### Editor
 - The two lines are now called **code** and **gloss** instead of G-code and English, since the code line can be any control's language (Klartext too) and the gloss could later be in other languages. View › Edit in reads Gloss / Code, View › Show reads Gloss and code / Gloss only / Code only, the word style group is Gloss words, and the status bar says Editing gloss or Editing code.
 
