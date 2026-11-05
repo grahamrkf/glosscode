@@ -117,6 +117,8 @@ A plasma table's `process` names the torch: `on` and `off` are the cut on and cu
 
 See [manual-reviews/plasma-hypertherm-tormach-centroid.md](manual-reviews/plasma-hypertherm-tormach-centroid.md).
 
+`fileHints` (beside `dialects`) suggests controls when a file with no default machine is opened. Each rule names `controls`, optional `ext` (lower case, with the dot) and `content` clues (`re`, optional `flags`, and `why`, the reason shown). A content clue counts 3 and an extension 2; the controls of the best-scoring rules go first in the picker. Only add clues that belong to one control family.
+
 `verified: false` marks tables written from general knowledge that still need checking against the control's programming manual. The mockup shows a banner in the Problems panel for those.
 
 ## How much Haas and Okuma support there is today

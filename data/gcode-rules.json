@@ -53,6 +53,30 @@
     "plasma": { "label": "Plasma", "base": "mill", "timeline": ["feed", "z"], "about": "A plasma machine starts from its control's mill tables and words, then the control's plasma table on top (fanuc.plasma for the Fanuc-style chain). A control with no mill tables (Hypertherm) has only its plasma table. timeline lists the values the Z-by-line timeline can plot, the first being the default: z (or x, the lathe radius), feed (the feed rate) and speed (the spindle speed while it turns). A machine with a process (process.on) also shows a band where the torch is on and marks the lines with a process.changes code (a material or process change, since plasma power is set on the power supply, not in the program)." }
   },
 
+  "fileHints": {
+    "about": "Clues that suggest which control a file was written for when it's opened and has no default yet. A matching clue puts its controls in a Suggested group at the top of the machine picker and picks the first one; nothing is chosen without the user. Content clues are regular expressions tried on the first 64 KB and count more than the extension. Only list clues that belong to one control family: .nc and .tap are used by too many controls to suggest anything.",
+    "rules": [
+      { "controls": ["okumau10l", "okuma7000l", "okumae100l", "okuma"], "ext": [".min", ".ssb", ".sdf"],
+        "content": [ { "re": "\\bCALL\\s+O[A-Z0-9]", "why": "CALL O… subprogram calls" },
+                     { "re": "^\\s*(N\\w+\\s+)?RTS\\b", "flags": "m", "why": "RTS at the end of a subprogram" } ] },
+      { "controls": ["heidenhain"], "ext": [".h"],
+        "content": [ { "re": "^\\s*\\d*\\s*BEGIN PGM\\b", "flags": "m", "why": "BEGIN PGM" } ] },
+      { "controls": ["fagor8060"],
+        "content": [ { "re": "^\\s*%L\\s", "flags": "m", "why": "%L local subroutines" },
+                     { "re": "(#CALL|#MSG|\\$IF|\\$GOTO)\\b", "why": "#CALL, #MSG, $IF or $GOTO statements" } ] },
+      { "controls": ["fagor8055"],
+        "content": [ { "re": "\\(\\s*(SUB|CALL|PCALL)\\s+\\d+\\s*[,)]", "why": "(SUB n) or (CALL n) statements" },
+                     { "re": "\\(\\s*RET\\s*\\)", "why": "(RET) statements" } ] },
+      { "controls": ["siemensiso"], "ext": [".mpf", ".spf"],
+        "content": [ { "re": "\\bG291\\b", "why": "G291 (ISO mode)" } ] },
+      { "controls": ["mazak", "mazaklb", "mazaklc"], "ext": [".eia"] },
+      { "controls": ["linuxcnc", "tormach"], "ext": [".ngc"],
+        "content": [ { "re": "^\\s*(N\\d+\\s*)?O(\\d+|<[^>]+>)\\s+(SUB|CALL|IF|WHILE|DO|REPEAT|ENDSUB)\\b", "flags": "im", "why": "O-word subroutines and loops" } ] },
+      { "controls": ["haas", "haasclassic", "haas1995"],
+        "content": [ { "re": "\\b(G187|G154\\s*P|M97\\s*P)", "why": "Haas codes (G187, G154 P or M97)" } ] }
+    ]
+  },
+
   "dialects": {
     "fanuc": {
       "label": "Fanuc-style (0i, 30i and compatibles)",
