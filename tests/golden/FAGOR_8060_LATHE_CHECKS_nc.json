@@ -751,7 +751,7 @@
     [
      {
       "g": "N10:",
-      "e": "SEQ10:",
+      "e": "N10:",
       "d": "Sequence number 10, a label other lines can jump to"
      },
      {
@@ -785,7 +785,7 @@
     [
      {
       "g": "N20:",
-      "e": "SEQ20:",
+      "e": "N20:",
       "d": "Sequence number 20, a label other lines can jump to"
      },
      {

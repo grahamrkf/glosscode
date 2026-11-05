@@ -838,7 +838,7 @@
     [
      {
       "g": "N100:",
-      "e": "SEQ100:",
+      "e": "N100:",
       "d": "Sequence number 100, a label other lines can jump to"
      },
      {
@@ -899,7 +899,7 @@
     [
      {
       "g": "N140:",
-      "e": "SEQ140:",
+      "e": "N140:",
       "d": "Sequence number 140, a label other lines can jump to"
      },
      {
@@ -2310,7 +2310,7 @@
     [
      {
       "g": "N100:",
-      "e": "SEQ100:",
+      "e": "N100:",
       "d": "Sequence number 100:"
      },
      {
@@ -2371,7 +2371,7 @@
     [
      {
       "g": "N140:",
-      "e": "SEQ140:",
+      "e": "N140:",
       "d": "Sequence number 140:"
      },
      {

@@ -215,7 +215,7 @@
     [
      {
       "g": "N10:",
-      "e": "SEQ10:",
+      "e": "N10:",
       "d": "Sequence number 10, a label other lines can jump to"
      },
      {
@@ -502,7 +502,7 @@
     [
      {
       "g": "N20:",
-      "e": "SEQ20:",
+      "e": "N20:",
       "d": "Sequence number 20, a label other lines can jump to"
      },
      {
@@ -1030,7 +1030,7 @@
     [
      {
       "g": "N10:",
-      "e": "SEQ10:",
+      "e": "N10:",
       "d": "Sequence number 10:"
      },
      {
@@ -1276,7 +1276,7 @@
      },
      {
       "g": "NR3",
-      "e": "SEQR3",
+      "e": "NR3",
       "d": "The line labeled NR3"
      }
     ],
@@ -1335,7 +1335,7 @@
     [
      {
       "g": "N20:",
-      "e": "SEQ20:",
+      "e": "N20:",
       "d": "Sequence number 20:"
      },
      {
