@@ -817,6 +817,7 @@
       },
       "lathe": {
         "source": { "manual": "Okuma OSP-P200L Programming Manual 5238-E", "revision": "3rd edition, Aug. 2007", "section": "Sections 1, 2, 4, 5, 7, 12 and the G and M code tables" },
+        "numbers": { "noDecimal": "asWritten" },
         "modalGroups": {
           "motion":      ["G00", "G01", "G02", "G03", "G31", "G32", "G33", "G34", "G35"],
           "feed mode":   ["G94", "G95"],
@@ -884,6 +885,13 @@
       "inherits": "okuma",
       "inheritWords": true,
       "source": "Okuma OSP7000L/OSP700L Programming 3812-E (1994); see docs/manual-reviews/okuma-osp7000l-u10l.md. Same tables as the Okuma lathe until the differences from the P200L/P300L are recorded.",
+      "lathe": {}
+    },
+    "okumae100l": {
+      "label": "Okuma OSP-E100L",
+      "inherits": "okuma",
+      "inheritWords": true,
+      "source": "Okuma OSP-E100L Programming Manual 4283-E (LE33-011-R2), 2nd edition, Jan. 2000; see docs/manual-reviews/okuma-osp-e100l.md. The same lathe language as the P200L and U10L, so the Okuma lathe tables apply.",
       "lathe": {}
     },
     "fanuclb": {

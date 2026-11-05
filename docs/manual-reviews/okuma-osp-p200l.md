@@ -52,7 +52,7 @@ No confidentiality notice was found in the extract. The manual still stays out o
 
 ## Not settled or not added
 
-- **No-decimal numbers.** Pp. 20–21 say what a whole number means depends on the unit-system parameter (1 µm, 10 µm or 1 mm; 1/10000 in or 1 in). The table in the extract is scrambled, so it isn't clear which reading is the usual one. The `missing-decimal` behavior is left as it was; check pp. 20–21 in the PDF.
+- **No-decimal numbers.** Pp. 20–21 say what a whole number means depends on the unit-system parameter (1 µm, 10 µm or 1 mm; 1/10000 in or 1 in). The table in the extract is scrambled, so it isn't clear which reading is the usual one. The `missing-decimal` behavior was left as it was at first. Since 2026-11-05 Okuma lathes read whole numbers as written (X1 = X1.000, the 1 mm system, which Graham confirmed on his shop's lathe); see [okuma-osp-e100l.md](okuma-osp-e100l.md).
 - **Units.** Since G20/G21 don't set units, the editor needs the units from the machine profile. Profiles don't have a units setting yet, so Okuma lathe programs are treated as inch.
 - **Names.** Sequence and program names can be up to four letters or digits, and `N0123` and `N123` are different names (pp. 2–3). The editor still treats N and O labels as numbers.
 - **U and W** are LAP allowances on Okuma, not incremental moves (p. 5). The English still reads them as incremental.

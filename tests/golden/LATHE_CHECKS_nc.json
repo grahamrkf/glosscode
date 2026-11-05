@@ -1391,9 +1391,8 @@
      },
      {
       "g": "Q90",
-      "e": "STARTS0.0090",
-      "d": "Number of starts for a multi-start thread. (G71)",
-      "imp": true
+      "e": "STARTS90",
+      "d": "Number of starts for a multi-start thread. (G71)"
      },
      {
       "g": "U0.02",
@@ -1499,9 +1498,8 @@
      },
      {
       "g": "Q95",
-      "e": "PECK0.0095",
-      "d": "No decimal point, so this reads as 0.0095 in. Write Q95. for 95 in.",
-      "imp": true
+      "e": "PECK95",
+      "d": "Peck depth 95"
      }
     ],
     [
@@ -1653,12 +1651,6 @@
     },
     {
      "li": 6,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Q90 has no decimal point, so the control reads it as Q0.0090 in. Write Q90. if you mean 90 in."
-    },
-    {
-     "li": 6,
      "id": "cycle-stray-word",
      "sev": "info",
      "msg": "G71 (Thread cutting, compound, along Z) doesn't use P60, so it is ignored or alarms."
@@ -1674,12 +1666,6 @@
      "id": "feed-plausibility",
      "sev": "info",
      "msg": "F10.0 ipr is unusually large for a per-rev feed. Check that G95 (feed per rev) is the mode you meant."
-    },
-    {
-     "li": 11,
-     "id": "missing-decimal",
-     "sev": "warning",
-     "msg": "Q95 has no decimal point, so the control reads it as Q0.0095 in. Write Q95. if you mean 95 in."
     },
     {
      "li": 13,

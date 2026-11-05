@@ -6011,12 +6011,6 @@
      "msg": "Okuma mills have no M99. Subprograms end with RTS."
     },
     {
-     "li": 31,
-     "id": "spindle-off-feed",
-     "sev": "warning",
-     "msg": "This G01 move cuts while the spindle is stopped (M05 is active)."
-    },
-    {
      "li": 32,
      "id": "foreign-code",
      "sev": "warning",

@@ -108,10 +108,11 @@ int gc_is_end(const gc_line *l, int syntax)
     return 0;
 }
 
-int gc_is_return(const gc_line *l, int syntax)
+int gc_is_return(const gc_line *l, int syntax, int okuma)
 {
     if (syntax == GC_SYN_KLARTEXT) return gc_line_has_tok(l, "LBL 0"); /* M99 calls a cycle there */
-    if (gc_line_has_code(l, "M99") || gc_line_has_tok(l, "RTS")) return 1;
+    /* Okuma subprograms end with RTS; on an Okuma lathe M99 is tailstock thrust high */
+    if ((!okuma && gc_line_has_code(l, "M99")) || gc_line_has_tok(l, "RTS")) return 1;
     if (syntax == GC_SYN_FAGOR8060) return gc_line_has_code(l, "M17") || gc_line_has_code(l, "M29") || gc_line_has_tok(l, "#RET");
     return syntax == GC_SYN_FAGOR8055 && gc_line_has_tok(l, "(RET)");
 }
@@ -363,7 +364,7 @@ void gc_ctx_init(gc_ctx *c, const gc_data *data, const gc_json *machine, const g
     if (!c->type || (strcmp(c->type, "lathe") != 0 && !gc_json_is_obj(gc_json_get(types, c->type)))) c->type = "mill";
     c->base_type = gc_json_get_str(gc_json_get(types, c->type), "base");
     c->lathe = strcmp(c->type, "lathe") == 0;
-    /* Okuma's own language on any Okuma control (okuma, okumau10l, okuma7000l): the word chain reaches "okuma"
+    /* Okuma's own language on any Okuma control (okuma, okumau10l, okuma7000l, okumae100l): the word chain reaches "okuma"
        (isOkuma() in the mockup) */
     c->okuma = 0;
     {
@@ -592,8 +593,9 @@ static int lib_fits(const gc_ctx *c, const gc_json *e)
     snprintf(a, sizeof a, "%s.%s", c->brand, c->type);
     snprintf(b, sizeof b, "fanuc.%s", c->type);
     /* EXTENDS: Haas and Generic run Fanuc-style programs; the older Okuma lathe controls run Okuma ones */
-    if (!strcmp(c->brand, "okumau10l") || !strcmp(c->brand, "okuma7000l")) snprintf(b, sizeof b, "okuma.%s", c->type);
-    int ext = !strcmp(c->brand, "haas") || !strcmp(c->brand, "generic") || !strcmp(c->brand, "okumau10l") || !strcmp(c->brand, "okuma7000l");
+    int old_okuma = !strcmp(c->brand, "okumau10l") || !strcmp(c->brand, "okuma7000l") || !strcmp(c->brand, "okumae100l");
+    if (old_okuma) snprintf(b, sizeof b, "okuma.%s", c->type);
+    int ext = !strcmp(c->brand, "haas") || !strcmp(c->brand, "generic") || old_okuma;
     for (size_t i = 0; i < gc_json_len(ms); i++) {
         const char *id = gc_json_str(ms->items[i]);
         if (id && (strcmp(id, a) == 0 || (ext && strcmp(id, b) == 0))) return 1;

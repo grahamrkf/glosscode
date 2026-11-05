@@ -1330,7 +1330,7 @@ void gc_check(gc_ctx *c, gc_analysis *a)
         seen[i] = 1;
         check_line(&ck, i);
         if (gc_is_end(l, c->syntax)) break;
-        if (gc_is_return(l, c->syntax) && depth) {
+        if (gc_is_return(l, c->syntax, c->okuma) && depth) {
             i = stack[--depth];
             continue;
         }

@@ -1310,7 +1310,7 @@ void gc_translate(gc_ctx *c, gc_analysis *a)
         const gc_line *l = &doc->lines[i];
         visit(&w, i, &st);
         if (gc_is_end(l, c->syntax)) break;
-        if (gc_is_return(l, c->syntax) && depth) {
+        if (gc_is_return(l, c->syntax, c->okuma) && depth) {
             i = stack[--depth];
             continue;
         }
