@@ -127,7 +127,7 @@
  "runs": [
   {
    "machine": "haas_st10",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -150,22 +150,22 @@
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G99",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      }
     ],
@@ -189,7 +189,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -200,7 +200,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -212,7 +212,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -230,7 +230,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -252,7 +252,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -292,12 +292,12 @@
      },
      {
       "g": "G98",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -338,7 +338,7 @@
      },
      {
       "g": "G71",
-      "e": "RUFCYC",
+      "e": "cycle.rough",
       "d": "OD/ID roughing cycle"
      },
      {
@@ -360,7 +360,7 @@
      },
      {
       "g": "G71",
-      "e": "RUFCYC",
+      "e": "cycle.rough",
       "d": "OD/ID roughing cycle"
      },
      {
@@ -398,7 +398,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -415,7 +415,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -444,7 +444,7 @@
      },
      {
       "g": "G70",
-      "e": "FINCYC",
+      "e": "cycle.finish",
       "d": "Finishing cycle"
      },
      {
@@ -466,7 +466,7 @@
      },
      {
       "g": "G76",
-      "e": "THREAD",
+      "e": "cycle.thread",
       "d": "Threading cycle"
      },
      {
@@ -509,7 +509,7 @@
      },
      {
       "g": "G32",
-      "e": "THDCUT",
+      "e": "run.thread",
       "d": "Single thread cut"
      },
      {
@@ -532,7 +532,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -549,7 +549,7 @@
      },
      {
       "g": "G28",
-      "e": "HOMEREF",
+      "e": "run.home",
       "d": "Return to machine home"
      },
      {
@@ -571,8 +571,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],
@@ -663,7 +663,7 @@
      },
      {
       "g": "G18",
-      "e": "PXZ",
+      "e": "XZ",
       "d": "Arcs in the XZ plane"
      },
      {
@@ -673,7 +673,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      }
     ],
@@ -697,7 +697,7 @@
      },
      {
       "g": "G96",
-      "e": "CSS",
+      "e": "SFM",
       "d": "Constant surface speed"
      },
      {
@@ -760,7 +760,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -805,7 +805,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -923,7 +923,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -974,7 +974,7 @@
      },
      {
       "g": "G76",
-      "e": "THD",
+      "e": "THDCY",
       "d": "Threading cycle"
      },
      {
@@ -1017,7 +1017,7 @@
      },
      {
       "g": "G32",
-      "e": "THC",
+      "e": "THD",
       "d": "Single thread cut"
      },
      {
@@ -1080,515 +1080,7 @@
      {
       "g": "M30",
       "e": "END",
-      "d": "End program and rewind"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 3,
-     "id": "css-no-clamp",
-     "sev": "warning",
-     "msg": "G96 is on but no G50 S max RPM has been set. Small diameters can overspeed the spindle."
-    },
-    {
-     "li": 9,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F2.0 mmpm is unusually small for a per-minute feed. Check that G98 (feed per minute) is the mode you meant."
-    },
-    {
-     "li": 10,
-     "id": "cycle-missing-word",
-     "sev": "error",
-     "msg": "G71 (OD/ID roughing) needs P: the first line of the contour."
-    },
-    {
-     "li": 10,
-     "id": "cycle-missing-word",
-     "sev": "error",
-     "msg": "G71 (OD/ID roughing) needs Q: the last line of the contour."
-    },
-    {
-     "li": 10,
-     "id": "cycle-missing-word",
-     "sev": "error",
-     "msg": "G71 (OD/ID roughing) needs D: the depth of each pass."
-    },
-    {
-     "li": 11,
-     "id": "cycle-missing-word",
-     "sev": "error",
-     "msg": "G71 (OD/ID roughing) needs D: the depth of each pass."
-    },
-    {
-     "li": 11,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F0.25 mmpm is unusually small for a per-minute feed. Check that G98 (feed per minute) is the mode you meant."
-    },
-    {
-     "li": 15,
-     "id": "missing-label",
-     "sev": "error",
-     "msg": "Q999 points to N999, which isn't in this file."
-    },
-    {
-     "li": 17,
-     "id": "feed-plausibility",
-     "sev": "info",
-     "msg": "F1.0 mmpm is unusually small for a per-minute feed. Check that G98 (feed per minute) is the mode you meant."
-    }
-   ]
-  },
-  {
-   "machine": "haas_st10",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "O0200",
-      "e": "PROG0200",
-      "d": "Program number 0200"
-     },
-     {
-      "g": "(LATHE EDGE CASES)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G21",
-      "e": "units.metric",
-      "d": "Millimeter units"
-     },
-     {
-      "g": "G18",
-      "e": "plane.xz",
-      "d": "Arcs in the XZ plane"
-     },
-     {
-      "g": "G99",
-      "e": "feed.perrev",
-      "d": "Feed per revolution"
-     },
-     {
-      "g": "G40",
-      "e": "comp.off",
-      "d": "Cutter compensation off"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "T0303",
-      "e": "TOOL0303",
-      "d": "Tool number 0303"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G96",
-      "e": "speed.sfm",
-      "d": "Constant surface speed"
-     },
-     {
-      "g": "S180",
-      "e": "S180",
-      "u": "smm",
-      "d": "Surface speed 180 surface meters per minute"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G50",
-      "e": "spindle.maxrpm",
-      "d": "Clamp spindle to a max RPM"
-     },
-     {
-      "g": "S2500",
-      "e": "S2500",
-      "u": "smm",
-      "d": "Surface speed 2500 surface meters per minute"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X50.",
-      "e": "X50.0",
-      "d": "X position 50.0"
-     },
-     {
-      "g": "Z2.",
-      "e": "Z2.0",
-      "d": "Z position 2.0"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-20.",
-      "e": "Z-20.0",
-      "d": "Z position -20.0"
-     },
-     {
-      "g": "F0.2",
-      "e": "F0.2",
-      "u": "mmpr",
-      "d": "Feed rate 0.2 mm per rev"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "U-4.",
-      "e": "INCX-4.0",
-      "d": "Incremental X (lathe) -4.0"
-     },
-     {
-      "g": "W-1.",
-      "e": "INCZ-1.0",
-      "d": "Incremental Z (lathe) -1.0"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G98",
-      "e": "feed.perminute",
-      "d": "Feed per minute"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X40.",
-      "e": "X40.0",
-      "d": "X position 40.0"
-     },
-     {
-      "g": "F150.",
-      "e": "F150.0",
-      "u": "mmpm",
-      "d": "Feed rate 150.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "X38.",
-      "e": "X38.0",
-      "d": "X position 38.0"
-     },
-     {
-      "g": "F2.",
-      "e": "F2.0",
-      "u": "mmpm",
-      "d": "Feed rate 2.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "G71",
-      "e": "cycle.rough",
-      "d": "OD/ID roughing cycle"
-     },
-     {
-      "g": "U1.",
-      "e": "ALLOWX1.0",
-      "d": "Finish stock left on X for G70, as a diameter. (G71)"
-     },
-     {
-      "g": "R0.5",
-      "e": "TYPE0.5",
-      "d": "R1 turns on Type II roughing for pockets in the profile. (G71)"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G71",
-      "e": "cycle.rough",
-      "d": "OD/ID roughing cycle"
-     },
-     {
-      "g": "P120",
-      "e": "FROM120",
-      "d": "First line of the contour, N120"
-     },
-     {
-      "g": "Q140",
-      "e": "TO140",
-      "d": "Last line of the contour, N140"
-     },
-     {
-      "g": "U0.4",
-      "e": "ALLOWX0.4",
-      "d": "Finish stock left on X for G70, as a diameter. (G71)"
-     },
-     {
-      "g": "W0.1",
-      "e": "ALLOWZ0.1",
-      "d": "Finish stock left on Z for G70. (G71)"
-     },
-     {
-      "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpm",
-      "d": "Feed rate 0.25 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X20.",
-      "e": "X20.0",
-      "d": "X position 20.0"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "SEQ130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-10.",
-      "e": "Z-10.0",
-      "d": "Z position -10.0"
-     }
-    ],
-    [
-     {
-      "g": "N140",
-      "e": "SEQ140",
-      "d": "Sequence number 140"
-     },
-     {
-      "g": "X40.",
-      "e": "X40.0",
-      "d": "X position 40.0"
-     }
-    ],
-    [
-     {
-      "g": "N150",
-      "e": "SEQ150",
-      "d": "Sequence number 150"
-     },
-     {
-      "g": "G70",
-      "e": "cycle.finish",
-      "d": "Finishing cycle"
-     },
-     {
-      "g": "P120",
-      "e": "FROM120",
-      "d": "First line of the contour, N120"
-     },
-     {
-      "g": "Q999",
-      "e": "TO999",
-      "d": "Last line of the contour, N999"
-     }
-    ],
-    [
-     {
-      "g": "N160",
-      "e": "SEQ160",
-      "d": "Sequence number 160"
-     },
-     {
-      "g": "G76",
-      "e": "cycle.thread",
-      "d": "Threading cycle"
-     },
-     {
-      "g": "X30.",
-      "e": "X30.0",
-      "d": "X position 30.0"
-     },
-     {
-      "g": "Z-15.",
-      "e": "Z-15.0",
-      "d": "Z position -15.0"
-     },
-     {
-      "g": "K1.2",
-      "e": "THDHT1.2",
-      "d": "Thread height, as a radius. (G76)"
-     },
-     {
-      "g": "D0.3",
-      "e": "DEPTH0.3",
-      "d": "Depth of the first pass. Later passes get shallower to keep the chip load even. (G76)"
-     },
-     {
-      "g": "F1.5",
-      "e": "F1.5",
-      "u": "mmpm",
-      "d": "Feed rate 1.5 mm per minute"
-     },
-     {
-      "g": "A60",
-      "e": "ANGLE60",
-      "d": "Tool tip angle, 0 to 120 degrees, no decimal point. The tool feeds in along the flank at half this angle. (G76)"
-     }
-    ],
-    [
-     {
-      "g": "N170",
-      "e": "SEQ170",
-      "d": "Sequence number 170"
-     },
-     {
-      "g": "G32",
-      "e": "thread.cut",
-      "d": "Single thread cut"
-     },
-     {
-      "g": "Z-5.",
-      "e": "Z-5.0",
-      "d": "Z position -5.0"
-     },
-     {
-      "g": "F1.",
-      "e": "F1.0",
-      "u": "mmpm",
-      "d": "Feed rate 1.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "N180",
-      "e": "SEQ180",
-      "d": "Sequence number 180"
-     },
-     {
-      "g": "G04",
-      "e": "dwell",
-      "d": "Pause for a set time"
-     },
-     {
-      "g": "X1.5",
-      "e": "X1.5",
-      "d": "X position 1.5"
-     }
-    ],
-    [
-     {
-      "g": "N190",
-      "e": "SEQ190",
-      "d": "Sequence number 190"
-     },
-     {
-      "g": "G28",
-      "e": "home.return",
-      "d": "Return to machine home"
-     },
-     {
-      "g": "U0.",
-      "e": "INCX0.0",
-      "d": "Incremental X (lathe) 0.0"
-     },
-     {
-      "g": "W0.",
-      "e": "INCZ0.0",
-      "d": "Incremental Z (lathe) 0.0"
-     }
-    ],
-    [
-     {
-      "g": "N200",
-      "e": "SEQ200",
-      "d": "Sequence number 200"
-     },
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],
@@ -1651,7 +1143,7 @@
   },
   {
    "machine": "okuma_lb3000",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1674,22 +1166,22 @@
      },
      {
       "g": "G21",
-      "e": "ATCHOME",
+      "e": "tool.atc.home",
       "d": "Return the ATC to its home position (Okuma lathe)"
      },
      {
       "g": "G18",
-      "e": "PLANEXZ",
+      "e": "set.xz",
       "d": "Arcs in the XZ plane"
      },
      {
       "g": "G99",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      }
     ],
@@ -1713,7 +1205,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -1724,7 +1216,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1736,7 +1228,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -1754,7 +1246,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1776,7 +1268,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1816,12 +1308,12 @@
      },
      {
       "g": "G98",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1862,7 +1354,7 @@
      },
      {
       "g": "G71",
-      "e": "THDLONG",
+      "e": "cycle.thread.long",
       "d": "Compound threading, longitudinal (Okuma)"
      },
      {
@@ -1884,7 +1376,7 @@
      },
      {
       "g": "G71",
-      "e": "THDLONG",
+      "e": "cycle.thread.long",
       "d": "Compound threading, longitudinal (Okuma)"
      },
      {
@@ -1922,7 +1414,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1939,7 +1431,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1968,7 +1460,7 @@
      },
      {
       "g": "G70",
-      "e": "FINCYC",
+      "e": "cycle.finish",
       "d": "Finishing cycle"
      },
      {
@@ -1990,7 +1482,7 @@
      },
      {
       "g": "G76",
-      "e": "ROUND",
+      "e": "set.round.auto",
       "d": "Automatic rounding (Okuma)"
      },
      {
@@ -2034,7 +1526,7 @@
      },
      {
       "g": "G32",
-      "e": "THDCYCX",
+      "e": "cycle.thread.x",
       "d": "Thread cycle on an end face (Okuma)"
      },
      {
@@ -2057,7 +1549,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -2074,7 +1566,7 @@
      },
      {
       "g": "G28",
-      "e": "TRQLIMOFF",
+      "e": "machine.torquelimit.off",
       "d": "Torque limit off (Okuma lathe)"
      },
      {
@@ -2096,8 +1588,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],

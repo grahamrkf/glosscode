@@ -175,12 +175,12 @@
  "runs": [
   {
    "machine": "gen.lathe.fagor8060",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
       "g": "%CHECKS8060",
-      "e": "PROGRAM CHECKS8060",
+      "e": "prog.name CHECKS8060",
       "d": "Program name"
      }
     ],
@@ -195,27 +195,27 @@
     [
      {
       "g": "G71",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G18",
-      "e": "PLANEZX",
+      "e": "set.xz",
       "d": "ZX plane, the usual plane on a lathe"
      },
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      },
      {
       "g": "G97",
-      "e": "MODERPM",
+      "e": "set.rpm",
       "d": "Spindle speed in rpm"
      }
     ],
@@ -240,14 +240,14 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -272,12 +272,12 @@
     [
      {
       "g": "G42",
-      "e": "COMPRGHT",
+      "e": "ccomp.right",
       "d": "Cutter compensation right"
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -289,7 +289,7 @@
     [
      {
       "g": "G69",
-      "e": "ROUGHZ",
+      "e": "cycle.rough.z",
       "d": "Roughing along Z, following a profile"
      },
      {
@@ -343,7 +343,7 @@
     [
      {
       "g": "G68",
-      "e": "ROUGHX",
+      "e": "cycle.rough.x",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -385,7 +385,7 @@
     [
      {
       "g": "G68",
-      "e": "ROUGHX",
+      "e": "cycle.rough.x",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -437,7 +437,7 @@
     [
      {
       "g": "G66",
-      "e": "PTNREPT",
+      "e": "cycle.pattern.repeat",
       "d": "Pattern repeat: roughs by repeating the profile"
      },
      {
@@ -474,7 +474,7 @@
     [
      {
       "g": "G68",
-      "e": "ROUGHX",
+      "e": "cycle.rough.x",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -521,7 +521,7 @@
     [
      {
       "g": "G68",
-      "e": "ROUGHX",
+      "e": "cycle.rough.x",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -558,7 +558,7 @@
     [
      {
       "g": "M05",
-      "e": "SPINOFF",
+      "e": "spindle.off",
       "d": "Spindle off"
      }
     ],
@@ -577,7 +577,7 @@
     [
      {
       "g": "G160",
-      "e": "FACEDRL",
+      "e": "cycle.face.drill",
       "d": "Live tool drilling or tapping on the face"
      },
      {
@@ -629,7 +629,7 @@
     [
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      },
      {
@@ -642,14 +642,14 @@
     [
      {
       "g": "G95",
-      "e": "FEEDREV",
+      "e": "set.fpr",
       "d": "Feed per revolution"
      }
     ],
     [
      {
       "g": "G161",
-      "e": "SIDEDRL",
+      "e": "cycle.side.drill",
       "d": "Live tool drilling or tapping on the side"
      },
      {
@@ -714,14 +714,14 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
     [
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -744,8 +744,8 @@
     [
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -756,7 +756,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -790,7 +790,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -834,7 +834,7 @@
     [
      {
       "g": "%CHECKS8060",
-      "e": "PRG CHECKS8060",
+      "e": "PRGNAME CHECKS8060",
       "d": "Program name"
      }
     ],
@@ -859,7 +859,7 @@
      },
      {
       "g": "G18",
-      "e": "ZX",
+      "e": "XZ",
       "d": "ZX plane, the usual plane on a lathe"
      },
      {
@@ -926,12 +926,12 @@
     [
      {
       "g": "G42",
-      "e": "CCR",
+      "e": "TRR",
       "d": "Cutter compensation right"
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -943,7 +943,7 @@
     [
      {
       "g": "G69",
-      "e": "RGHZ",
+      "e": "RUFZ",
       "d": "Roughing along Z, following a profile"
      },
      {
@@ -997,7 +997,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1039,7 +1039,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1091,7 +1091,7 @@
     [
      {
       "g": "G66",
-      "e": "PREP",
+      "e": "PATRPT",
       "d": "Pattern repeat: roughs by repeating the profile"
      },
      {
@@ -1128,7 +1128,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1175,7 +1175,7 @@
     [
      {
       "g": "G68",
-      "e": "RGHX",
+      "e": "RUFX",
       "d": "Roughing along X, following a profile"
      },
      {
@@ -1231,7 +1231,7 @@
     [
      {
       "g": "G160",
-      "e": "FDRL",
+      "e": "FACEDRL",
       "d": "Live tool drilling or tapping on the face"
      },
      {
@@ -1303,7 +1303,7 @@
     [
      {
       "g": "G161",
-      "e": "SDRL",
+      "e": "SIDEDRL",
       "d": "Live tool drilling or tapping on the side"
      },
      {
@@ -1399,7 +1399,7 @@
      {
       "g": "M30",
       "e": "END",
-      "d": "End program and rewind"
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -1410,7 +1410,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1444,661 +1444,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-30",
-      "e": "Z-30",
-      "d": "Z position -30"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 13,
-     "id": "missing-label",
-     "sev": "error",
-     "msg": "S500 points to N500, which isn't in this file."
-    },
-    {
-     "li": 13,
-     "id": "missing-label",
-     "sev": "error",
-     "msg": "E600 points to N600, which isn't in this file."
-    },
-    {
-     "li": 14,
-     "id": "cycle-missing-choice",
-     "sev": "error",
-     "msg": "G68 (Roughing along X) needs S, E or P or Q."
-    },
-    {
-     "li": 17,
-     "id": "cycle-needs-feed-per-min",
-     "sev": "error",
-     "msg": "G160 (Face drilling or tapping) runs in G95 (feed per rev) here, but no G94 feed was programmed before it. The control alarms."
-    }
-   ]
-  },
-  {
-   "machine": "gen.lathe.fagor8060",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "%CHECKS8060",
-      "e": "program.name CHECKS8060",
-      "d": "Program name"
-     }
-    ],
-    [
-     {
-      "g": "; profile forms, labels in another program, cycle end modes and live tool feeds",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "G71",
-      "e": "units.metric",
-      "d": "Millimeter units"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G18",
-      "e": "plane.zx",
-      "d": "ZX plane, the usual plane on a lathe"
-     },
-     {
-      "g": "G95",
-      "e": "feed.perrev",
-      "d": "Feed per revolution"
-     },
-     {
-      "g": "G97",
-      "e": "speed.rpm",
-      "d": "Spindle speed in rpm"
-     }
-    ],
-    [
-     {
-      "g": "T1",
-      "e": "TOOL1",
-      "d": "Tool number 1"
-     },
-     {
-      "g": "D1",
-      "e": "DOFS1",
-      "d": "Tool diameter offset number 1"
-     }
-    ],
-    [
-     {
-      "g": "S1000",
-      "e": "S1000",
-      "u": "rpm",
-      "d": "Spindle speed 1000 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X60",
-      "e": "X60",
-      "d": "X position 60"
-     },
-     {
-      "g": "Z5",
-      "e": "Z5",
-      "d": "Z position 5"
-     }
-    ],
-    [
-     {
-      "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
-      "d": "Feed rate 0.25 mm per rev"
-     }
-    ],
-    [
-     {
-      "g": "G42",
-      "e": "comp.right",
-      "d": "Cutter compensation right"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X55",
-      "e": "X55",
-      "d": "X position 55"
-     }
-    ],
-    [
-     {
-      "g": "G69",
-      "e": "cycle.roughz",
-      "d": "Roughing along Z, following a profile"
-     },
-     {
-      "g": "X50",
-      "e": "X50",
-      "d": "X position 50"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "C2",
-      "e": "PASS2",
-      "d": "Depth of each pass. (G69)"
-     },
-     {
-      "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G69)"
-     },
-     {
-      "g": "L0.2",
-      "e": "FINX0.2",
-      "d": "Finish stock in X (radius). (G69)"
-     },
-     {
-      "g": "M0.1",
-      "e": "FINZ0.1",
-      "d": "Finish stock in Z. Left out, it equals L. (G69)"
-     },
-     {
-      "g": "P20",
-      "e": "PROFSUB20",
-      "d": "Local subroutine that holds the whole profile; S and E are then ignored. (G69)"
-     }
-    ],
-    [
-     {
-      "g": "X60",
-      "e": "X60",
-      "d": "X position 60"
-     },
-     {
-      "g": "Z10",
-      "e": "Z10",
-      "d": "Z position 10"
-     }
-    ],
-    [
-     {
-      "g": "G68",
-      "e": "cycle.roughx",
-      "d": "Roughing along X, following a profile"
-     },
-     {
-      "g": "X50",
-      "e": "X50",
-      "d": "X position 50"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "C2",
-      "e": "PASS2",
-      "d": "Depth of each pass. (G68)"
-     },
-     {
-      "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
-     },
-     {
-      "g": "L0.2",
-      "e": "FINX0.2",
-      "d": "Finish stock in X (radius). (G68)"
-     },
-     {
-      "g": "M0.1",
-      "e": "FINZ0.1",
-      "d": "Finish stock in Z. Left out, it equals L. (G68)"
-     },
-     {
-      "g": "Q300",
-      "e": "PROFPRG300",
-      "d": "Global subroutine that holds the profile, alone or with S and E. (G68)"
-     }
-    ],
-    [
-     {
-      "g": "G68",
-      "e": "cycle.roughx",
-      "d": "Roughing along X, following a profile"
-     },
-     {
-      "g": "X50",
-      "e": "X50",
-      "d": "X position 50"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "C2",
-      "e": "PASS2",
-      "d": "Depth of each pass. (G68)"
-     },
-     {
-      "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
-     },
-     {
-      "g": "L0.2",
-      "e": "FINX0.2",
-      "d": "Finish stock in X (radius). (G68)"
-     },
-     {
-      "g": "M0.1",
-      "e": "FINZ0.1",
-      "d": "Finish stock in Z. Left out, it equals L. (G68)"
-     },
-     {
-      "g": "Q300",
-      "e": "PROFPRG300",
-      "d": "Global subroutine that holds the profile, alone or with S and E. (G68)"
-     },
-     {
-      "g": "S10",
-      "e": "PROFFROM10",
-      "d": "Label of the first line of the profile. Not used with P. (G68)"
-     },
-     {
-      "g": "E20",
-      "e": "PROFTO20",
-      "d": "Label of the last line of the profile. Not used with P. (G68)"
-     }
-    ],
-    [
-     {
-      "g": "G66",
-      "e": "cycle.patternrepeat",
-      "d": "Pattern repeat: roughs by repeating the profile"
-     },
-     {
-      "g": "X50",
-      "e": "X50",
-      "d": "X position 50"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "I5",
-      "e": "STOCK5",
-      "d": "Stock to remove. (G66)"
-     },
-     {
-      "g": "C2",
-      "e": "PASS2",
-      "d": "Depth of each pass. (G66)"
-     },
-     {
-      "g": "S10",
-      "e": "PROFFROM10",
-      "d": "Label of the first line of the profile. Not used with P. (G66)"
-     },
-     {
-      "g": "E20",
-      "e": "PROFTO20",
-      "d": "Label of the last line of the profile. Not used with P. (G66)"
-     }
-    ],
-    [
-     {
-      "g": "G68",
-      "e": "cycle.roughx",
-      "d": "Roughing along X, following a profile"
-     },
-     {
-      "g": "X50",
-      "e": "X50",
-      "d": "X position 50"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "C2",
-      "e": "PASS2",
-      "d": "Depth of each pass. (G68)"
-     },
-     {
-      "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
-     },
-     {
-      "g": "L0.2",
-      "e": "FINX0.2",
-      "d": "Finish stock in X (radius). (G68)"
-     },
-     {
-      "g": "M0.1",
-      "e": "FINZ0.1",
-      "d": "Finish stock in Z. Left out, it equals L. (G68)"
-     },
-     {
-      "g": "S500",
-      "e": "PROFFROM500",
-      "d": "Label of the first line of the profile. Not used with P. (G68)"
-     },
-     {
-      "g": "E600",
-      "e": "PROFTO600",
-      "d": "Label of the last line of the profile. Not used with P. (G68)"
-     }
-    ],
-    [
-     {
-      "g": "G68",
-      "e": "cycle.roughx",
-      "d": "Roughing along X, following a profile"
-     },
-     {
-      "g": "X50",
-      "e": "X50",
-      "d": "X position 50"
-     },
-     {
-      "g": "Z2",
-      "e": "Z2",
-      "d": "Z position 2"
-     },
-     {
-      "g": "C2",
-      "e": "PASS2",
-      "d": "Depth of each pass. (G68)"
-     },
-     {
-      "g": "D1",
-      "e": "SAFETY1",
-      "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
-     },
-     {
-      "g": "L0.2",
-      "e": "FINX0.2",
-      "d": "Finish stock in X (radius). (G68)"
-     },
-     {
-      "g": "M0.1",
-      "e": "FINZ0.1",
-      "d": "Finish stock in Z. Left out, it equals L. (G68)"
-     }
-    ],
-    [
-     {
-      "g": "M05",
-      "e": "spindle.off",
-      "d": "Spindle off"
-     }
-    ],
-    [
-     {
-      "g": "T3",
-      "e": "TOOL3",
-      "d": "Tool number 3"
-     },
-     {
-      "g": "D3",
-      "e": "DOFS3",
-      "d": "Tool diameter offset number 3"
-     }
-    ],
-    [
-     {
-      "g": "G160",
-      "e": "cycle.facedrill",
-      "d": "Live tool drilling or tapping on the face"
-     },
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Z1",
-      "e": "Z1",
-      "d": "Z position 1"
-     },
-     {
-      "g": "I5",
-      "e": "DEPTH5",
-      "d": "Depth. (G160)"
-     },
-     {
-      "g": "B2",
-      "e": "PECK2",
-      "d": "Peck depth. B0 taps. (G160)"
-     },
-     {
-      "g": "Q0",
-      "e": "STARTANG0",
-      "d": "Spindle angle of the first hole. (G160)"
-     },
-     {
-      "g": "A90",
-      "e": "ANGSTEP90",
-      "d": "Angle between holes. (G160)"
-     },
-     {
-      "g": "J4",
-      "e": "COUNT4",
-      "d": "Number of holes, counting the first. (G160)"
-     },
-     {
-      "g": "S1500",
-      "e": "LIVERPM1500",
-      "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G160)"
-     },
-     {
-      "g": "N2",
-      "e": "SPINDLE2",
-      "d": "Number of the live tool spindle. (G160)"
-     }
-    ],
-    [
-     {
-      "g": "G94",
-      "e": "feed.perminute",
-      "d": "Feed per minute"
-     },
-     {
-      "g": "F150",
-      "e": "F150.0",
-      "u": "mmpm",
-      "d": "Feed rate 150.0 mm per minute"
-     }
-    ],
-    [
-     {
-      "g": "G95",
-      "e": "feed.perrev",
-      "d": "Feed per revolution"
-     }
-    ],
-    [
-     {
-      "g": "G161",
-      "e": "cycle.sidedrill",
-      "d": "Live tool drilling or tapping on the side"
-     },
-     {
-      "g": "X40",
-      "e": "X40",
-      "d": "X position 40"
-     },
-     {
-      "g": "Z-10",
-      "e": "Z-10",
-      "d": "Z position -10"
-     },
-     {
-      "g": "I5",
-      "e": "DEPTH5",
-      "d": "Depth. (G161)"
-     },
-     {
-      "g": "B2",
-      "e": "PECK2",
-      "d": "Peck depth. B0 taps. (G161)"
-     },
-     {
-      "g": "Q0",
-      "e": "STARTANG0",
-      "d": "Spindle angle of the first hole. (G161)"
-     },
-     {
-      "g": "A90",
-      "e": "ANGSTEP90",
-      "d": "Angle between holes. (G161)"
-     },
-     {
-      "g": "J4",
-      "e": "COUNT4",
-      "d": "Number of holes, counting the first. (G161)"
-     },
-     {
-      "g": "N2",
-      "e": "SPINDLE2",
-      "d": "Number of the live tool spindle. (G161)"
-     }
-    ],
-    [
-     {
-      "g": "T1",
-      "e": "TOOL1",
-      "d": "Tool number 1"
-     },
-     {
-      "g": "D1",
-      "e": "DOFS1",
-      "d": "Tool diameter offset number 1"
-     }
-    ],
-    [
-     {
-      "g": "S1000",
-      "e": "S1000",
-      "u": "rpm",
-      "d": "Spindle speed 1000 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X100",
-      "e": "X100",
-      "d": "X position 100"
-     },
-     {
-      "g": "Z50",
-      "e": "Z50",
-      "d": "Z position 50"
-     },
-     {
-      "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
-      "d": "Feed rate 0.25 mm per rev"
-     }
-    ],
-    [
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "N10:",
-      "e": "SEQ10:",
-      "d": "Sequence number 10, a label other lines can jump to"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X20",
-      "e": "X20",
-      "d": "X position 20"
-     },
-     {
-      "g": "Z0",
-      "e": "Z0",
-      "d": "Z position 0"
-     }
-    ],
-    [
-     {
-      "g": "X30",
-      "e": "X30",
-      "d": "X position 30"
-     },
-     {
-      "g": "Z-10",
-      "e": "Z-10",
-      "d": "Z position -10"
-     }
-    ],
-    [
-     {
-      "g": "N20:",
-      "e": "SEQ20:",
-      "d": "Sequence number 20, a label other lines can jump to"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {

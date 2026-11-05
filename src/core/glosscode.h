@@ -125,7 +125,7 @@ typedef struct gc_analysis {
     int dialect_verified;
 } gc_analysis;
 
-enum { GC_STYLE_LONG = 0, GC_STYLE_SHORT = 1, GC_STYLE_WORDS = 2 };
+enum { GC_STYLE_WORDS = 0, GC_STYLE_SHORT = 1 };
 
 /* machine is a machine profile object: { "type": "mill"|"lathe", "brand": "haas", "eob": false,
    "macro": true, "liveTooling": false, "yAxis": false, "codes": {…}, "checks": {…} }. "codes" and

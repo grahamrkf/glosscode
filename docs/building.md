@@ -2,7 +2,7 @@
 
 GlossCode is one program built from three parts:
 
-- **The core** (`src/core/`): portable C99, standard library only. It reads G-code, tracks modes in the order the control runs the lines, gives each word its English word, and runs the checks. Everything it knows about codes and controls comes from `data/`.
+- **The core** (`src/core/`): portable C99, standard library only. It reads G-code, tracks modes in the order the control runs the lines, gives each word its gloss word, and runs the checks. Everything it knows about codes and controls comes from `data/`.
 - **The platform file** (`src/platform/`): `platform_win32.c` on Windows, `platform_posix.c` on Linux. Reading and writing files, the settings and cache folders, portable mode, opening links.
 - **The shell** (`src/app/`): opens a [webview](https://github.com/webview/webview) window, shows the UI (`src/ui/index.html`, compiled in), and connects it to the core and the system file dialogs ([nativefiledialog-extended](https://github.com/btzy/nativefiledialog-extended)).
 
@@ -51,7 +51,7 @@ ctest --test-dir build
 | Test | What it checks |
 |---|---|
 | `test_core` | Number formatting, the JSON reader, splitting lines into words, reading and writing files (line endings, `;`, Latin-1), machine profile overrides, the JSON interface, and 300 random programs that must not crash the core |
-| `test_golden` | The core against the mockup: every word's English, unit and description, and every problem, for each sample program on each machine |
+| `test_golden` | The core against the mockup: every word's gloss, unit and description, and every problem, for each sample program on each machine |
 | `app_smoke` | The program itself: opens a sample through the app's functions, runs the core, saves a copy with one line changed, and checks that nothing else in the file changed |
 
 `test_golden` compares against files in `tests/golden/`, which `node scripts/make-core-goldens.mjs` writes by running the mockup's own JavaScript on every program in `examples/` and `tests/cases/`. After changing the mockup's translation or checks, or the data files, run it again; CI fails if the files are out of date. If the core and the mockup disagree, the test prints the word or problem that differs.
@@ -84,7 +84,7 @@ In the program, `window.GlossCodeNative` is set before the page loads (`src/app/
 
 Saving keeps every line that wasn't changed exactly as it was read (spacing, `%`, block delete `/`, macro text), writes changed lines from their words, keeps the file's line endings, and writes a Latin-1 file back as Latin-1. The file is written to a temporary file first and then swapped in, so a failed save never leaves half a file.
 
-The UI still draws its English words and problems with its own JavaScript, which `test_golden` keeps identical to the core. Moving the drawing over to `GlossCodeNative.core("analyze", …)` is the next step.
+The UI still draws its gloss words and problems with its own JavaScript, which `test_golden` keeps identical to the core. Moving the drawing over to `GlossCodeNative.core("analyze", …)` is the next step.
 
 The sample programs aren't built into the program. In `src/ui/index.html` they sit between `/* samples */` and `/* end samples */` markers, and `cmake/strip-samples.cmake` replaces everything between them with `null` in the copy that gets embedded, so the program starts on its home page with no samples. `scripts/package-examples.sh` puts `examples/` and the example library files in their own download, `GlossCode-<version>-examples.zip`.
 
