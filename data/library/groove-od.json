@@ -2,7 +2,7 @@
   "glosscode": "subprogram/1",
   "id": "groove-od-peck",
   "name": "OD groove, pecked",
-  "word": { "long": "GROOVEOD", "short": "GRVOD" },
+  "word": { "words": "sub.grooveod", "short": "GRVOD" },
   "program": 9201,
   "category": "Grooves",
   "tags": ["groove", "peck", "chip break", "OD"],

@@ -91,7 +91,7 @@
  "runs": [
   {
    "machine": "hyp_plasma",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -109,12 +109,12 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -126,7 +126,7 @@
      },
      {
       "g": "G59",
-      "e": "SETVAR",
+      "e": "set.vars",
       "d": "Set variables (not a work offset on Hypertherm)"
      },
      {
@@ -143,7 +143,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -165,7 +165,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -188,7 +188,7 @@
      },
      {
       "g": "M07",
-      "e": "CUTON",
+      "e": "torch.on",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -200,7 +200,7 @@
      },
      {
       "g": "G41",
-      "e": "COMPLEFT",
+      "e": "ccomp.left",
       "d": "Cutter compensation left"
      },
      {
@@ -217,7 +217,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -245,7 +245,7 @@
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -277,7 +277,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -294,7 +294,7 @@
      },
      {
       "g": "M08",
-      "e": "CUTOFF",
+      "e": "torch.off",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -306,7 +306,7 @@
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      }
     ],
@@ -318,7 +318,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -340,7 +340,7 @@
      },
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      }
     ],
@@ -352,7 +352,7 @@
      },
      {
       "g": "M07",
-      "e": "CUTON",
+      "e": "torch.on",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -364,7 +364,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -381,8 +381,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],
@@ -427,7 +427,7 @@
      },
      {
       "g": "G20",
-      "e": "IN",
+      "e": "INCH",
       "d": "Inch units"
      },
      {
@@ -444,7 +444,7 @@
      },
      {
       "g": "G59",
-      "e": "VAR",
+      "e": "VARSET",
       "d": "Set variables (not a work offset on Hypertherm)"
      },
      {
@@ -483,7 +483,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -506,7 +506,7 @@
      },
      {
       "g": "M07",
-      "e": "CON",
+      "e": "PLON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -518,7 +518,7 @@
      },
      {
       "g": "G41",
-      "e": "CCL",
+      "e": "TRL",
       "d": "Cutter compensation left"
      },
      {
@@ -535,7 +535,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -612,7 +612,7 @@
      },
      {
       "g": "M08",
-      "e": "COFF",
+      "e": "PLOFF",
       "d": "Cut off: the torch stops"
      }
     ],
@@ -624,7 +624,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      }
     ],
@@ -670,7 +670,7 @@
      },
      {
       "g": "M07",
-      "e": "CON",
+      "e": "PLON",
       "d": "Cut on: the torch fires"
      }
     ],
@@ -682,7 +682,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -700,325 +700,7 @@
      {
       "g": "M30",
       "e": "END",
-      "d": "End program and rewind"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 4,
-     "id": "torch-off-cut",
-     "sev": "warning",
-     "msg": "This G01 move runs at feed rate while the torch is off (it was never turned on)."
-    },
-    {
-     "li": 13,
-     "id": "foreign-code",
-     "sev": "error",
-     "msg": "Hypertherm controls don't support G94. The feed rate is always per minute."
-    },
-    {
-     "li": 16,
-     "id": "torch-on-at-end",
-     "sev": "warning",
-     "msg": "The program ends with the torch on (M07 is active). Turn it off with M08 first."
-    }
-   ]
-  },
-  {
-   "machine": "hyp_plasma",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "(PLASMA BRACKET, HYPERTHERM CUT CODES)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G20",
-      "e": "units.inch",
-      "d": "Inch units"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "G59",
-      "e": "vars.set",
-      "d": "Set variables (not a work offset on Hypertherm)"
-     },
-     {
-      "g": "X0.5",
-      "e": "X0.5",
-      "d": "X position 0.5"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X1.",
-      "e": "X1.0",
-      "d": "X position 1.0"
-     },
-     {
-      "g": "Y1.",
-      "e": "Y1.0",
-      "d": "Y position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X2.",
-      "e": "X2.0",
-      "d": "X position 2.0"
-     },
-     {
-      "g": "F150.",
-      "e": "F150.0",
-      "u": "ipm",
-      "d": "Feed rate 150.0 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "M07",
-      "e": "cut.on",
-      "d": "Cut on: the torch fires"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G41",
-      "e": "comp.left",
-      "d": "Cutter compensation left"
-     },
-     {
-      "g": "D1",
-      "e": "KERF1",
-      "d": "Kerf compensation offset 1"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X4.",
-      "e": "X4.0",
-      "d": "X position 4.0"
-     },
-     {
-      "g": "Y1.",
-      "e": "Y1.0",
-      "d": "Y position 1.0"
-     },
-     {
-      "g": "F120.",
-      "e": "F120.0",
-      "u": "ipm",
-      "d": "Feed rate 120.0 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G02",
-      "e": "arc.cw",
-      "d": "Clockwise arc"
-     },
-     {
-      "g": "X5.",
-      "e": "X5.0",
-      "d": "X position 5.0"
-     },
-     {
-      "g": "Y2.",
-      "e": "Y2.0",
-      "d": "Y position 2.0"
-     },
-     {
-      "g": "I0.",
-      "e": "ARCI0.0",
-      "d": "Arc center offset in X 0.0"
-     },
-     {
-      "g": "J1.",
-      "e": "ARCJ1.0",
-      "d": "Arc center offset in Y 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "G04",
-      "e": "dwell",
-      "d": "Pause for a set time"
-     },
-     {
-      "g": "X0.5",
-      "e": "X0.5",
-      "d": "X position 0.5"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "M08",
-      "e": "cut.off",
-      "d": "Cut off: the torch stops"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G40",
-      "e": "comp.off",
-      "d": "Cutter compensation off"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X6.",
-      "e": "X6.0",
-      "d": "X position 6.0"
-     },
-     {
-      "g": "Y1.",
-      "e": "Y1.0",
-      "d": "Y position 1.0"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "SEQ130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "G94",
-      "e": "feed.perminute",
-      "d": "Feed per minute"
-     }
-    ],
-    [
-     {
-      "g": "N140",
-      "e": "SEQ140",
-      "d": "Sequence number 140"
-     },
-     {
-      "g": "M07",
-      "e": "cut.on",
-      "d": "Cut on: the torch fires"
-     }
-    ],
-    [
-     {
-      "g": "N150",
-      "e": "SEQ150",
-      "d": "Sequence number 150"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X7.",
-      "e": "X7.0",
-      "d": "X position 7.0"
-     }
-    ],
-    [
-     {
-      "g": "N160",
-      "e": "SEQ160",
-      "d": "Sequence number 160"
-     },
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],
@@ -1045,7 +727,7 @@
   },
   {
    "machine": "acorn_plasma",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1063,12 +745,12 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -1080,7 +762,7 @@
      },
      {
       "g": "G59",
-      "e": "WORK6",
+      "e": "work.6",
       "d": "Work offset 6"
      },
      {
@@ -1097,7 +779,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1119,7 +801,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1155,7 +837,7 @@
      },
      {
       "g": "G41",
-      "e": "COMPLEFT",
+      "e": "ccomp.left",
       "d": "Cutter compensation left"
      },
      {
@@ -1172,7 +854,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1200,7 +882,7 @@
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -1232,7 +914,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -1249,7 +931,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1261,7 +943,7 @@
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      }
     ],
@@ -1273,7 +955,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1295,7 +977,7 @@
      },
      {
       "g": "G94",
-      "e": "INVTOFF",
+      "e": "set.fpm",
       "d": "Inverse time off: feed per minute"
      }
     ],
@@ -1320,7 +1002,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1337,7 +1019,7 @@
      },
      {
       "g": "M30",
-      "e": "CUSTOM30",
+      "e": "machine.custom.m30",
       "d": "Custom M code: does nothing unless the machine defines it"
      }
     ]
@@ -1371,7 +1053,7 @@
   },
   {
    "machine": "tormach_plasma",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1389,12 +1071,12 @@
      },
      {
       "g": "G20",
-      "e": "INCH",
+      "e": "set.inch",
       "d": "Inch units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -1406,7 +1088,7 @@
      },
      {
       "g": "G59",
-      "e": "WORK6",
+      "e": "work.6",
       "d": "Work offset 6"
      },
      {
@@ -1423,7 +1105,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1445,7 +1127,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1468,7 +1150,7 @@
      },
      {
       "g": "M07",
-      "e": "MISTON",
+      "e": "cool.mist",
       "d": "Mist coolant on"
      }
     ],
@@ -1480,7 +1162,7 @@
      },
      {
       "g": "G41",
-      "e": "COMPLEFT",
+      "e": "ccomp.left",
       "d": "Cutter compensation left"
      },
      {
@@ -1497,7 +1179,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1525,7 +1207,7 @@
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -1557,7 +1239,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -1574,7 +1256,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -1586,7 +1268,7 @@
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      }
     ],
@@ -1598,7 +1280,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1620,7 +1302,7 @@
      },
      {
       "g": "G94",
-      "e": "FEEDMIN",
+      "e": "set.fpm",
       "d": "Feed per minute"
      }
     ],
@@ -1632,7 +1314,7 @@
      },
      {
       "g": "M07",
-      "e": "MISTON",
+      "e": "cool.mist",
       "d": "Mist coolant on"
      }
     ],
@@ -1644,7 +1326,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1661,8 +1343,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ]
    ],

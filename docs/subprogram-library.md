@@ -13,7 +13,7 @@ Some operations get reused across many programs, and only a few numbers change b
 - **There are two ways to insert one:**
   - **Call it**: one line, `G65 P9101 X0.5 Y0.5 I2.5 J0.5 Z-0.15 F15.`. The O program has to be loaded on the control.
   - **Write the lines in**: GlossCode works out the moves from the values and inserts plain G-code. This works on any control, including ones without the macro option, but changing a value later means inserting it again.
-- **Calls read in the gloss.** On a call line, `P9101` reads `SLOTMILL` and each value reads by its variable's name (`DEP-0.15`, `FEED15.0`ipm). **▸ show O9101** lists the lines the call runs, in green, under the call. The toolpath preview and the Z timeline follow them.
+- **Calls read in the gloss.** On a call line, `P9101` reads `sub.slotmill` and each value reads by its variable's name (`DEP-0.15`, `FEED15.0`ipm). **▸ show O9101** lists the lines the call runs, in green, under the call. The toolpath preview and the Z timeline follow them.
 - **Finding and managing** happens in the same window: search, filter to this machine, and New, Edit, Make my own copy, Delete and Export. Insert › Save N1000 to the library… turns a subprogram that's already in the program into a library one.
 - **Storage follows the machine definition files.** Built-in, shop and personal folders, each with a `library` folder. Private or shared is decided by where the file lives, and `"private": true` makes Export ask first (see [machine-definitions.md](machine-definitions.md#where-files-live)).
 
@@ -43,13 +43,13 @@ The Insert menu has a **Subprogram library** group under the canned cycles:
 
 ![Writing the lines in](images/library-inline.png)
 
-When the lines are written in, a comment line goes first with the values used, such as `(SLOTMILL O9101 X0.5 Y2.5 I2.5 J2.5 Z-0.15 Q0.05 R0.1 F15.)`, so you can tell later where the lines came from and insert it again with the same values. The lines get N numbers when Auto N is on and there's room, the same way the hole pattern tool numbers its lines.
+When the lines are written in, a comment line goes first with the values used, such as `(sub.slotmill O9101 X0.5 Y2.5 I2.5 J2.5 Z-0.15 Q0.05 R0.1 F15.)`, so you can tell later where the lines came from and insert it again with the same values. The lines get N numbers when Auto N is on and there's room, the same way the hole pattern tool numbers its lines.
 
 ### In the program
 
 ![A library call shown inline](images/library-call-expanded.png)
 
-- `G65` reads **MACRO**, and `P9101` reads the subprogram's gloss word (**SLOTMILL**). Each value reads by its variable's name. Hovering shows what each one is and which `#` variable it fills.
+- `G65` reads **call.macro**, and `P9101` reads the subprogram's gloss word (**sub.slotmill**). Each value reads by its variable's name. Hovering shows what each one is and which `#` variable it fills.
 - **▸ show O9101** lists the lines the call runs, worked out from the values on that line, with a green bar and **⤷** in the margin. They're read-only: change a value on the call line, or edit the subprogram in the library. **Program › Show all subprograms** opens these too.
 - The toolpath preview, simulation and Z timeline follow the call.
 - A `G65 P` whose program isn't in any library folder gets **O9999 isn't in the library**. That's fine if it's on the control; GlossCode just can't show what it does.
@@ -59,7 +59,7 @@ When the lines are written in, a comment line goes first with the values used, s
 
 ![Editing a library subprogram](images/library-editor.png)
 
-- **Name**, **gloss word** (long, 10 letters at most; short, 8 at most), **program number**, **category**, **tags**, which machines it **works on**, **units**, which folder it's **saved in**, and **private**.
+- **Name**, **gloss word** (full, such as `sub.slotmill`, 28 characters at most; short, 8 at most), **program number**, **category**, **tags**, which machines it **works on**, **units**, which folder it's **saved in**, and **private**.
 - **Variables**: letter (the `#` number is shown next to it), gloss name, kind (distance, feed, speed, count, angle, seconds), required, default, and what it is. **Add from body** adds a variable for each `#1`–`#26` the body reads that isn't one yet.
 - **Body**: the O program exactly as it runs on the control.
 - Problems show as you type. A save is blocked by missing names or gloss words, a letter used twice, or no machine ticked. Warnings cover an O number another library subprogram already uses, a `#` the body reads that isn't a variable (so it's always empty), a variable the body never reads, a body that doesn't start with its O number or doesn't end with M99, and a body that can't be written in (it uses something the reader below doesn't support). A built-in subprogram opens read-only, and **Make my own copy** saves an editable copy in your library with the next free O number.
@@ -74,7 +74,7 @@ One JSON file per subprogram. Examples: [`data/library/slot-mill.json`](../data/
   "glosscode": "subprogram/1",          // format version
   "id": "slot-mill",                    // unique across all folders; also the file name
   "name": "Straight slot, ramped",
-  "word": { "long": "SLOTMILL", "short": "SLOT" },   // what P9101 reads as
+  "word": { "words": "sub.slotmill", "short": "SLOT" },   // what P9101 reads as
   "program": 9101,                      // the O number it has on the control
   "category": "Slots and keyways",      // groups the list
   "tags": ["slot", "keyway", "ramp"],   // extra search words

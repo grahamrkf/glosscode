@@ -85,7 +85,7 @@ If a file named `portable` sits beside the .exe, GlossCode keeps settings, perso
 
 ## Data files
 
-- `data/gcode-words.json`: the base dictionary. Each code has `long` and `short` words and a description. Codes that differ between machine types have `mill` and `lathe` entries.
+- `data/gcode-words.json`: the base dictionary. Each code has a full word (`words`, such as `run.rapid`), a `short` word and a description. Codes that differ between machine types have `mill` and `lathe` entries.
 - `data/gcode-rules.json`: the checks' messages and severities, and per-control tables (Fanuc, Haas, Okuma; mill and lathe) that inherit from each other. The same tables drive the hint text for missing words (`wordHints` plus the cycle word lists), and `cycleHelp` holds the canned cycle guide's text.
 - Machine profiles (`machines/<id>.json`, see machine definitions below): name, control, dialect, mill or lathe, limits, brand codes, and `eob` (true when every line must end with `;`). The parser treats `;` as an end of block on every machine; the writer adds it when the profile says so.
 - The mockup embeds both files. After changing either, run `node scripts/sync-mockup-data.mjs`.

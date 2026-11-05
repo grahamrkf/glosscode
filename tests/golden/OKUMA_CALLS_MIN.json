@@ -80,7 +80,7 @@
  "runs": [
   {
    "machine": "okuma_m560",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -110,7 +110,7 @@
      },
      {
       "g": "G15",
-      "e": "WORKSEL",
+      "e": "work.select",
       "d": "Select work offset by H number (Okuma)"
      },
      {
@@ -127,27 +127,27 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "MMCHK",
+      "e": "set.mm.check",
       "d": "Confirm metric input (Okuma; units come from a parameter)"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -164,7 +164,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -176,7 +176,7 @@
      },
      {
       "g": "G56",
-      "e": "TLENON",
+      "e": "tlen.on",
       "d": "Tool length offset on Z (Okuma)"
      },
      {
@@ -203,7 +203,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -215,7 +215,7 @@
      },
      {
       "g": "CALL",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram (Okuma)"
      },
      {
@@ -232,7 +232,7 @@
      },
      {
       "g": "CALL",
-      "e": "SUBCALL",
+      "e": "call.sub",
       "d": "Call subprogram (Okuma)"
      },
      {
@@ -249,7 +249,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JUMP",
+      "e": "flow.goto",
       "d": "Jump to a sequence name (Okuma)"
      },
      {
@@ -266,8 +266,8 @@
      },
      {
       "g": "M02",
-      "e": "PRGEND",
-      "d": "End program"
+      "e": "prog.end",
+      "d": "End program (most controls now treat it like M30)"
      }
     ],
     [
@@ -285,7 +285,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -307,7 +307,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -325,7 +325,7 @@
     [
      {
       "g": "RTS",
-      "e": "SUBRET",
+      "e": "call.return",
       "d": "Return from subprogram (Okuma)"
      }
     ],
@@ -390,7 +390,7 @@
      },
      {
       "g": "G15",
-      "e": "WSEL",
+      "e": "WRKSEL",
       "d": "Select work offset by H number (Okuma)"
      },
      {
@@ -407,12 +407,12 @@
      },
      {
       "g": "G17",
-      "e": "PXY",
+      "e": "XY",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "MMCK",
+      "e": "MMCHK",
       "d": "Confirm metric input (Okuma; units come from a parameter)"
      },
      {
@@ -422,7 +422,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      },
      {
@@ -529,7 +529,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JMP",
+      "e": "GOTO",
       "d": "Jump to a sequence name (Okuma)"
      },
      {
@@ -546,8 +546,8 @@
      },
      {
       "g": "M02",
-      "e": "PEND",
-      "d": "End program"
+      "e": "END",
+      "d": "End program (most controls now treat it like M30)"
      }
     ],
     [
@@ -587,7 +587,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -639,288 +639,8 @@
    ]
   },
   {
-   "machine": "okuma_m560",
-   "style": "words",
-   "words": [
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ],
-    [
-     {
-      "g": "O1300",
-      "e": "PROG1300",
-      "d": "Program number 1300"
-     },
-     {
-      "g": "(OKUMA CALLS)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "G15",
-      "e": "work.select",
-      "d": "Select work offset by H number (Okuma)"
-     },
-     {
-      "g": "H2",
-      "e": "WOFS2",
-      "d": "Work offset number 2"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "G17",
-      "e": "plane.xy",
-      "d": "Arcs in the XY plane"
-     },
-     {
-      "g": "G21",
-      "e": "units.mmcheck",
-      "d": "Confirm metric input (Okuma; units come from a parameter)"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     },
-     {
-      "g": "G40",
-      "e": "comp.off",
-      "d": "Cutter compensation off"
-     },
-     {
-      "g": "G80",
-      "e": "cycle.off",
-      "d": "Cancel canned cycle"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "T1",
-      "e": "TOOL1",
-      "d": "Tool number 1"
-     },
-     {
-      "g": "M06",
-      "e": "tool.change",
-      "d": "Tool change"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G56",
-      "e": "toollength.on",
-      "d": "Tool length offset on Z (Okuma)"
-     },
-     {
-      "g": "H",
-      "e": "LOFS",
-      "d": "Tool length offset number "
-     },
-     {
-      "g": "A1",
-      "e": "?A",
-      "d": "Address letter A isn't in the dictionary.",
-      "unk": true
-     },
-     {
-      "g": "Z50.",
-      "e": "Z50.0",
-      "d": "Z position 50.0"
-     },
-     {
-      "g": "S1000",
-      "e": "S1000",
-      "u": "rpm",
-      "d": "Spindle speed 1000 RPM"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "CALL",
-      "e": "sub.call",
-      "d": "Call subprogram (Okuma)"
-     },
-     {
-      "g": "O1400",
-      "e": "PROG1400",
-      "d": "Program number 1400"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "CALL",
-      "e": "sub.call",
-      "d": "Call subprogram (Okuma)"
-     },
-     {
-      "g": "O9999",
-      "e": "PROG9999",
-      "d": "Program number 9999"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "GOTO",
-      "e": "jump",
-      "d": "Jump to a sequence name (Okuma)"
-     },
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "The line labeled N10"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "M02",
-      "e": "program.end",
-      "d": "End program"
-     }
-    ],
-    [
-     {
-      "g": "O1400",
-      "e": "PROG1400",
-      "d": "Program number 1400"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X5.",
-      "e": "X5.0",
-      "d": "X position 5.0"
-     },
-     {
-      "g": "Y5.",
-      "e": "Y5.0",
-      "d": "Y position 5.0"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-2.",
-      "e": "Z-2.0",
-      "d": "Z position -2.0"
-     },
-     {
-      "g": "F100",
-      "e": "F100.0",
-      "u": "ipm",
-      "d": "Feed rate 100.0 inches per minute"
-     }
-    ],
-    [
-     {
-      "g": "RTS",
-      "e": "sub.return",
-      "d": "Return from subprogram (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 5,
-     "id": "empty-value",
-     "sev": "error",
-     "msg": "H has no number after it."
-    },
-    {
-     "li": 5,
-     "id": "tlo-h-mismatch",
-     "sev": "info",
-     "msg": "H is used with T1. Usually the H number matches the tool number."
-    },
-    {
-     "li": 5,
-     "id": "unknown-word",
-     "sev": "info",
-     "msg": "A1 isn't in the dictionary or this machine's file."
-    }
-   ]
-  },
-  {
    "machine": "haas_vf2",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -968,27 +688,27 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -1005,7 +725,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -1017,7 +737,7 @@
      },
      {
       "g": "G56",
-      "e": "WORK3",
+      "e": "work.3",
       "d": "Work offset 3"
      },
      {
@@ -1044,7 +764,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1110,8 +830,8 @@
      },
      {
       "g": "M02",
-      "e": "PRGEND",
-      "d": "End program"
+      "e": "prog.end",
+      "d": "End program (most controls now treat it like M30)"
      }
     ],
     [
@@ -1129,7 +849,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1151,7 +871,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1235,7 +955,7 @@
   },
   {
    "machine": "fanuc_0imf",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1265,7 +985,7 @@
      },
      {
       "g": "G15",
-      "e": "POLAROFF",
+      "e": "set.polar.off",
       "d": "Polar coordinates off"
      },
      {
@@ -1282,27 +1002,27 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -1319,7 +1039,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -1331,7 +1051,7 @@
      },
      {
       "g": "G56",
-      "e": "WORK3",
+      "e": "work.3",
       "d": "Work offset 3"
      },
      {
@@ -1358,7 +1078,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1424,8 +1144,8 @@
      },
      {
       "g": "M02",
-      "e": "PRGEND",
-      "d": "End program"
+      "e": "prog.end",
+      "d": "End program (most controls now treat it like M30)"
      }
     ],
     [
@@ -1443,7 +1163,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1465,7 +1185,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -1543,7 +1263,7 @@
   },
   {
    "machine": "fanuc_0mc",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -1573,7 +1293,7 @@
      },
      {
       "g": "G15",
-      "e": "POLAROFF",
+      "e": "set.polar.off",
       "d": "Polar coordinates off"
      },
      {
@@ -1590,27 +1310,27 @@
      },
      {
       "g": "G17",
-      "e": "PLANEXY",
+      "e": "set.xy",
       "d": "Arcs in the XY plane"
      },
      {
       "g": "G21",
-      "e": "METRIC",
+      "e": "set.mm",
       "d": "Millimeter units"
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -1627,7 +1347,7 @@
      },
      {
       "g": "M06",
-      "e": "TOOLCHG",
+      "e": "tool.change",
       "d": "Tool change"
      }
     ],
@@ -1639,7 +1359,7 @@
      },
      {
       "g": "G56",
-      "e": "WORK3",
+      "e": "work.3",
       "d": "Work offset 3"
      },
      {
@@ -1666,7 +1386,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -1732,8 +1452,8 @@
      },
      {
       "g": "M02",
-      "e": "PRGEND",
-      "d": "End program"
+      "e": "prog.end",
+      "d": "End program (most controls now treat it like M30)"
      }
     ],
     [
@@ -1751,7 +1471,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -1773,7 +1493,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {

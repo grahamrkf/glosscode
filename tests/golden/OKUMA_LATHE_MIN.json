@@ -187,7 +187,7 @@
  "runs": [
   {
    "machine": "okuma_lb3000",
-   "style": "long",
+   "style": "words",
    "words": [
     [
      {
@@ -259,7 +259,7 @@
      },
      {
       "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -270,7 +270,7 @@
      },
      {
       "g": "M42",
-      "e": "GEAR2",
+      "e": "spindle.gear.2",
       "d": "Spindle gear range 2 (Okuma)"
      }
     ],
@@ -282,7 +282,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -293,7 +293,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -305,7 +305,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -320,7 +320,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -332,7 +332,7 @@
      },
      {
       "g": "G85",
-      "e": "LAPRUF",
+      "e": "cycle.lap.rough",
       "d": "LAP roughing, longitudinal (Okuma)"
      },
      {
@@ -370,7 +370,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -385,7 +385,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -397,7 +397,7 @@
      },
      {
       "g": "G81",
-      "e": "CONTZ",
+      "e": "cycle.lap.contz",
       "d": "Start of longitudinal LAP contour (Okuma)"
      }
     ],
@@ -409,12 +409,12 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
       "g": "G42",
-      "e": "COMPRGHT",
+      "e": "ccomp.right",
       "d": "Cutter compensation right"
      },
      {
@@ -431,7 +431,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -483,7 +483,7 @@
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -510,7 +510,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -527,7 +527,7 @@
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      }
     ],
@@ -539,7 +539,7 @@
      },
      {
       "g": "G80",
-      "e": "CONTEND",
+      "e": "cycle.lap.end",
       "d": "End of LAP contour definition (Okuma)"
      }
     ],
@@ -551,7 +551,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -573,7 +573,7 @@
      },
      {
       "g": "G87",
-      "e": "LAPFIN",
+      "e": "cycle.lap.finish",
       "d": "LAP finishing (Okuma)"
      },
      {
@@ -590,7 +590,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -612,7 +612,7 @@
      },
      {
       "g": "G74",
-      "e": "GROOVEX",
+      "e": "cycle.facegroove",
       "d": "Grooving or drilling cycle on a face (Okuma)"
      },
      {
@@ -650,7 +650,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -673,7 +673,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -690,7 +690,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -736,12 +736,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G50",
-      "e": "SETCOORD",
+      "e": "set.coords",
       "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
      },
      {
@@ -758,7 +758,7 @@
      },
      {
       "g": "G90",
-      "e": "ABS",
+      "e": "set.abs",
       "d": "Absolute positions"
      }
     ],
@@ -770,7 +770,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JUMP",
+      "e": "flow.goto",
       "d": "Jump to a sequence name (Okuma)"
      },
      {
@@ -787,8 +787,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -799,7 +799,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JUMP",
+      "e": "flow.goto",
       "d": "Jump to a sequence name (Okuma)"
      },
      {
@@ -910,7 +910,7 @@
      },
      {
       "g": "M42",
-      "e": "GR2",
+      "e": "SG2",
       "d": "Spindle gear range 2 (Okuma)"
      }
     ],
@@ -922,7 +922,7 @@
      },
      {
       "g": "G96",
-      "e": "CSS",
+      "e": "SFM",
       "d": "Constant surface speed"
      },
      {
@@ -972,7 +972,7 @@
      },
      {
       "g": "G85",
-      "e": "LRUF",
+      "e": "LAPRUF",
       "d": "LAP roughing, longitudinal (Okuma)"
      },
      {
@@ -1037,7 +1037,7 @@
      },
      {
       "g": "G81",
-      "e": "CTZ",
+      "e": "LAPCNTZ",
       "d": "Start of longitudinal LAP contour (Okuma)"
      }
     ],
@@ -1054,7 +1054,7 @@
      },
      {
       "g": "G42",
-      "e": "CCR",
+      "e": "TRR",
       "d": "Cutter compensation right"
      },
      {
@@ -1071,7 +1071,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1150,7 +1150,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1167,7 +1167,7 @@
      },
      {
       "g": "G40",
-      "e": "CCOFF",
+      "e": "TROFF",
       "d": "Cutter compensation off"
      }
     ],
@@ -1179,7 +1179,7 @@
      },
      {
       "g": "G80",
-      "e": "CEND",
+      "e": "LAPEND",
       "d": "End of LAP contour definition (Okuma)"
      }
     ],
@@ -1213,7 +1213,7 @@
      },
      {
       "g": "G87",
-      "e": "LFIN",
+      "e": "LAPFIN",
       "d": "LAP finishing (Okuma)"
      },
      {
@@ -1252,7 +1252,7 @@
      },
      {
       "g": "G74",
-      "e": "GRX",
+      "e": "FGRV",
       "d": "Grooving or drilling cycle on a face (Okuma)"
      },
      {
@@ -1290,7 +1290,7 @@
      },
      {
       "g": "G01",
-      "e": "LIN",
+      "e": "FEED",
       "d": "Straight move at feed rate"
      },
      {
@@ -1376,7 +1376,7 @@
      },
      {
       "g": "G91",
-      "e": "INC",
+      "e": "INCR",
       "d": "Incremental positions"
      },
      {
@@ -1410,7 +1410,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JMP",
+      "e": "GOTO",
       "d": "Jump to a sequence name (Okuma)"
      },
      {
@@ -1428,7 +1428,7 @@
      {
       "g": "M30",
       "e": "END",
-      "d": "End program and rewind"
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [
@@ -1439,7 +1439,7 @@
      },
      {
       "g": "GOTO",
-      "e": "JMP",
+      "e": "GOTO",
       "d": "Jump to a sequence name (Okuma)"
      },
      {
@@ -1466,7 +1466,7 @@
    ]
   },
   {
-   "machine": "okuma_lb3000",
+   "machine": "haas_st10",
    "style": "words",
    "words": [
     [
@@ -1539,647 +1539,7 @@
      },
      {
       "g": "G50",
-      "e": "spindle.maxrpm",
-      "d": "Clamp spindle to a max RPM"
-     },
-     {
-      "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
-      "d": "Spindle speed 2000 RPM"
-     },
-     {
-      "g": "M42",
-      "e": "gear.2",
-      "d": "Spindle gear range 2 (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "N30",
-      "e": "SEQ30",
-      "d": "Sequence number 30"
-     },
-     {
-      "g": "G96",
-      "e": "speed.sfm",
-      "d": "Constant surface speed"
-     },
-     {
-      "g": "S600",
-      "e": "S600",
-      "u": "sfm",
-      "d": "Surface speed 600 surface feet per minute"
-     },
-     {
-      "g": "M03",
-      "e": "spindle.fwd",
-      "d": "Spindle on, forward (CW)"
-     }
-    ],
-    [
-     {
-      "g": "N40",
-      "e": "SEQ40",
-      "d": "Sequence number 40"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X1.4",
-      "e": "X1.4",
-      "d": "X position 1.4"
-     },
-     {
-      "g": "Z0.05",
-      "e": "Z0.05",
-      "d": "Z position 0.05"
-     },
-     {
-      "g": "M08",
-      "e": "coolant.on",
-      "d": "Flood coolant on"
-     }
-    ],
-    [
-     {
-      "g": "N50",
-      "e": "SEQ50",
-      "d": "Sequence number 50"
-     },
-     {
-      "g": "G85",
-      "e": "lap.rough",
-      "d": "LAP roughing, longitudinal (Okuma)"
-     },
-     {
-      "g": "NA1",
-      "e": "SEQA1",
-      "d": "The line labeled NA1"
-     },
-     {
-      "g": "D0.1",
-      "e": "DOFS0.1",
-      "d": "Tool diameter offset number 0.1"
-     },
-     {
-      "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
-      "d": "Feed rate 0.01 inches per rev"
-     },
-     {
-      "g": "U0.02",
-      "e": "INCX0.02",
-      "d": "Incremental X (lathe) 0.02"
-     },
-     {
-      "g": "W0.005",
-      "e": "INCZ0.005",
-      "d": "Incremental Z (lathe) 0.005"
-     }
-    ],
-    [
-     {
-      "g": "N60",
-      "e": "SEQ60",
-      "d": "Sequence number 60"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X8.",
-      "e": "X8.0",
-      "d": "X position 8.0"
-     },
-     {
-      "g": "Z5.",
-      "e": "Z5.0",
-      "d": "Z position 5.0"
-     },
-     {
-      "g": "M09",
-      "e": "coolant.off",
-      "d": "Coolant off"
-     }
-    ],
-    [
-     {
-      "g": "NA1",
-      "e": "SEQA1",
-      "d": "Sequence number A1"
-     },
-     {
-      "g": "G81",
-      "e": "contour.z",
-      "d": "Start of longitudinal LAP contour (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "N70",
-      "e": "SEQ70",
-      "d": "Sequence number 70"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "G42",
-      "e": "comp.right",
-      "d": "Cutter compensation right"
-     },
-     {
-      "g": "X0.5",
-      "e": "X0.5",
-      "d": "X position 0.5"
-     }
-    ],
-    [
-     {
-      "g": "N80",
-      "e": "SEQ80",
-      "d": "Sequence number 80"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z0.",
-      "e": "Z0.0",
-      "d": "Z position 0.0"
-     },
-     {
-      "g": "F0.004",
-      "e": "F0.004",
-      "u": "ipr",
-      "d": "Feed rate 0.004 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N90",
-      "e": "SEQ90",
-      "d": "Sequence number 90"
-     },
-     {
-      "g": "X0.8",
-      "e": "X0.8",
-      "d": "X position 0.8"
-     },
-     {
-      "g": "Z-0.2",
-      "e": "Z-0.2",
-      "d": "Z position -0.2"
-     }
-    ],
-    [
-     {
-      "g": "N100",
-      "e": "SEQ100",
-      "d": "Sequence number 100"
-     },
-     {
-      "g": "Z-0.5",
-      "e": "Z-0.5",
-      "d": "Z position -0.5"
-     }
-    ],
-    [
-     {
-      "g": "N110",
-      "e": "SEQ110",
-      "d": "Sequence number 110"
-     },
-     {
-      "g": "G02",
-      "e": "arc.cw",
-      "d": "Clockwise arc"
-     },
-     {
-      "g": "X1.2",
-      "e": "X1.2",
-      "d": "X position 1.2"
-     },
-     {
-      "g": "Z-0.7",
-      "e": "Z-0.7",
-      "d": "Z position -0.7"
-     },
-     {
-      "g": "L0.2",
-      "e": "RAD0.2",
-      "d": "Arc radius"
-     }
-    ],
-    [
-     {
-      "g": "N120",
-      "e": "SEQ120",
-      "d": "Sequence number 120"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "X1.4",
-      "e": "X1.4",
-      "d": "X position 1.4"
-     }
-    ],
-    [
-     {
-      "g": "N130",
-      "e": "SEQ130",
-      "d": "Sequence number 130"
-     },
-     {
-      "g": "G40",
-      "e": "comp.off",
-      "d": "Cutter compensation off"
-     }
-    ],
-    [
-     {
-      "g": "N140",
-      "e": "SEQ140",
-      "d": "Sequence number 140"
-     },
-     {
-      "g": "G80",
-      "e": "contour.end",
-      "d": "End of LAP contour definition (Okuma)"
-     }
-    ],
-    [
-     {
-      "g": "N150",
-      "e": "SEQ150",
-      "d": "Sequence number 150"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X0.6",
-      "e": "X0.6",
-      "d": "X position 0.6"
-     },
-     {
-      "g": "Z0.05",
-      "e": "Z0.05",
-      "d": "Z position 0.05"
-     }
-    ],
-    [
-     {
-      "g": "N160",
-      "e": "SEQ160",
-      "d": "Sequence number 160"
-     },
-     {
-      "g": "G87",
-      "e": "lap.finish",
-      "d": "LAP finishing (Okuma)"
-     },
-     {
-      "g": "NA1",
-      "e": "SEQA1",
-      "d": "The line labeled NA1"
-     }
-    ],
-    [
-     {
-      "g": "N170",
-      "e": "SEQ170",
-      "d": "Sequence number 170"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X=DIA1",
-      "e": "X=DIA1",
-      "d": "X position =DIA1"
-     },
-     {
-      "g": "Z0.02",
-      "e": "Z0.02",
-      "d": "Z position 0.02"
-     }
-    ],
-    [
-     {
-      "g": "N180",
-      "e": "SEQ180",
-      "d": "Sequence number 180"
-     },
-     {
-      "g": "G74",
-      "e": "groove.x",
-      "d": "Grooving or drilling cycle on a face (Okuma)"
-     },
-     {
-      "g": "X0.9",
-      "e": "X0.9",
-      "d": "X position 0.9"
-     },
-     {
-      "g": "Z-0.08",
-      "e": "Z-0.08",
-      "d": "Z position -0.08"
-     },
-     {
-      "g": "D0.02",
-      "e": "PECK0.02",
-      "d": "Depth of each peck. (G74)"
-     },
-     {
-      "g": "I0.1",
-      "e": "SHIFTX0.1",
-      "d": "Shift along X between pecks, as a diameter. (G74)"
-     },
-     {
-      "g": "F0.002",
-      "e": "F0.002",
-      "u": "ipr",
-      "d": "Feed rate 0.002 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N190",
-      "e": "SEQ190",
-      "d": "Sequence number 190"
-     },
-     {
-      "g": "G01",
-      "e": "move.linear",
-      "d": "Straight move at feed rate"
-     },
-     {
-      "g": "Z-0.1",
-      "e": "Z-0.1",
-      "d": "Z position -0.1"
-     },
-     {
-      "g": "F0.001",
-      "e": "F0.001",
-      "u": "ipr",
-      "d": "Feed rate 0.001 inches per rev"
-     }
-    ],
-    [
-     {
-      "g": "N200",
-      "e": "SEQ200",
-      "d": "Sequence number 200"
-     },
-     {
-      "g": "G04",
-      "e": "dwell",
-      "d": "Pause for a set time"
-     },
-     {
-      "g": "F0.3",
-      "e": "SEC0.3",
-      "d": "Dwell for 0.3 seconds"
-     }
-    ],
-    [
-     {
-      "g": "N210",
-      "e": "SEQ210",
-      "d": "Sequence number 210"
-     },
-     {
-      "g": "G00",
-      "e": "move.rapid",
-      "d": "Rapid move"
-     },
-     {
-      "g": "X8.",
-      "e": "X8.0",
-      "d": "X position 8.0"
-     },
-     {
-      "g": "Z5.",
-      "e": "Z5.0",
-      "d": "Z position 5.0"
-     }
-    ],
-    [
-     {
-      "g": "N220",
-      "e": "SEQ220",
-      "d": "Sequence number 220"
-     },
-     {
-      "g": "VC2=VC2+1",
-      "e": "VC2=VC2+1",
-      "d": "Sets variable VC2 to VC2+1, worked out when the line runs"
-     }
-    ],
-    [
-     {
-      "g": "N230",
-      "e": "SEQ230",
-      "d": "Sequence number 230"
-     },
-     {
-      "g": "IF [VC2 GE VC1] NEND",
-      "e": "IF [VC2 GE VC1] NEND",
-      "d": "Macro IF statement: when the condition in [ ] is true, the rest of the line runs"
-     }
-    ],
-    [
-     {
-      "g": "N240",
-      "e": "SEQ240",
-      "d": "Sequence number 240"
-     },
-     {
-      "g": "G91",
-      "e": "units.incremental",
-      "d": "Incremental positions"
-     },
-     {
-      "g": "G50",
-      "e": "coords.set",
-      "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
-     },
-     {
-      "g": "Z0.7",
-      "e": "INCZ0.7",
-      "d": "Move 0.7 in Z from where the tool is"
-     }
-    ],
-    [
-     {
-      "g": "N250",
-      "e": "SEQ250",
-      "d": "Sequence number 250"
-     },
-     {
-      "g": "G90",
-      "e": "units.absolute",
-      "d": "Absolute positions"
-     }
-    ],
-    [
-     {
-      "g": "N260",
-      "e": "SEQ260",
-      "d": "Sequence number 260"
-     },
-     {
-      "g": "GOTO",
-      "e": "jump",
-      "d": "Jump to a sequence name (Okuma)"
-     },
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "The line labeled N10"
-     }
-    ],
-    [
-     {
-      "g": "NEND",
-      "e": "SEQEND",
-      "d": "Sequence number END"
-     },
-     {
-      "g": "M30",
-      "e": "program.endrewind",
-      "d": "End program and rewind"
-     }
-    ],
-    [
-     {
-      "g": "N270",
-      "e": "SEQ270",
-      "d": "Sequence number 270"
-     },
-     {
-      "g": "GOTO",
-      "e": "jump",
-      "d": "Jump to a sequence name (Okuma)"
-     },
-     {
-      "g": "N999",
-      "e": "SEQ999",
-      "d": "The line labeled N999"
-     }
-    ],
-    [
-     {
-      "g": "%",
-      "e": "%",
-      "d": "Program start or end mark (%), kept as written"
-     }
-    ]
-   ],
-   "problems": [
-    {
-     "li": 34,
-     "id": "missing-label",
-     "sev": "error",
-     "msg": "GOTO N999 points to N999, which isn't in this file."
-    }
-   ]
-  },
-  {
-   "machine": "haas_st10",
-   "style": "long",
-   "words": [
-    [
-     {
-      "g": "O0200",
-      "e": "PROG0200",
-      "d": "Program number 0200"
-     }
-    ],
-    [
-     {
-      "g": "(OKUMA LATHE: LAP, FACE GROOVES, A LOOP OVER SEVERAL PARTS)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "(GENERIC TEST PROGRAM, NOT A REAL PART)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "VC1=2",
-      "e": "VC1=2",
-      "d": "Sets variable VC1 to 2"
-     },
-     {
-      "g": "(PARTS TO MAKE)",
-      "e": "",
-      "d": "Comment, kept as written",
-      "cm": true
-     }
-    ],
-    [
-     {
-      "g": "VC2=0",
-      "e": "VC2=0",
-      "d": "Sets variable VC2 to 0"
-     }
-    ],
-    [
-     {
-      "g": "DIA1=1.25+0.05",
-      "e": "DIA1=1.25+0.05",
-      "d": "Sets variable DIA1 to 1.25+0.05, worked out when the line runs"
-     }
-    ],
-    [
-     {
-      "g": "N10",
-      "e": "SEQ10",
-      "d": "Sequence number 10"
-     },
-     {
-      "g": "T010101",
-      "e": "TOOL010101",
-      "d": "Tool number 010101"
-     }
-    ],
-    [
-     {
-      "g": "N20",
-      "e": "SEQ20",
-      "d": "Sequence number 20"
-     },
-     {
-      "g": "G50",
-      "e": "MAXRPM",
+      "e": "set.smax",
       "d": "Clamp spindle to a max RPM"
      },
      {
@@ -2203,7 +1563,7 @@
      },
      {
       "g": "G96",
-      "e": "MODESFM",
+      "e": "set.sfm",
       "d": "Constant surface speed"
      },
      {
@@ -2214,7 +1574,7 @@
      },
      {
       "g": "M03",
-      "e": "SPINFWD",
+      "e": "spindle.fwd",
       "d": "Spindle on, forward (CW)"
      }
     ],
@@ -2226,7 +1586,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2241,7 +1601,7 @@
      },
      {
       "g": "M08",
-      "e": "COOLON",
+      "e": "cool.on",
       "d": "Flood coolant on"
      }
     ],
@@ -2253,7 +1613,7 @@
      },
      {
       "g": "G85",
-      "e": "BORE",
+      "e": "cycle.bore",
       "d": "Boring cycle, feed out"
      },
      {
@@ -2291,7 +1651,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2306,7 +1666,7 @@
      },
      {
       "g": "M09",
-      "e": "COOLOFF",
+      "e": "cool.off",
       "d": "Coolant off"
      }
     ],
@@ -2318,7 +1678,7 @@
      },
      {
       "g": "G81",
-      "e": "DRILL",
+      "e": "cycle.drill",
       "d": "Drilling cycle"
      }
     ],
@@ -2330,12 +1690,12 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
       "g": "G42",
-      "e": "COMPRGHT",
+      "e": "ccomp.right",
       "d": "Cutter compensation right"
      },
      {
@@ -2352,7 +1712,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2404,7 +1764,7 @@
      },
      {
       "g": "G02",
-      "e": "ARCCW",
+      "e": "run.cw",
       "d": "Clockwise arc"
      },
      {
@@ -2432,7 +1792,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2449,7 +1809,7 @@
      },
      {
       "g": "G40",
-      "e": "COMPOFF",
+      "e": "ccomp.off",
       "d": "Cutter compensation off"
      }
     ],
@@ -2461,7 +1821,7 @@
      },
      {
       "g": "G80",
-      "e": "CYCOFF",
+      "e": "cycle.off",
       "d": "Cancel canned cycle"
      }
     ],
@@ -2473,7 +1833,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2513,7 +1873,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2535,7 +1895,7 @@
      },
      {
       "g": "G74",
-      "e": "FACEGRV",
+      "e": "cycle.facegroove",
       "d": "Face grooving or peck drilling cycle"
      },
      {
@@ -2573,7 +1933,7 @@
      },
      {
       "g": "G01",
-      "e": "LINEAR",
+      "e": "run.feed",
       "d": "Straight move at feed rate"
      },
      {
@@ -2596,7 +1956,7 @@
      },
      {
       "g": "G04",
-      "e": "DWELL",
+      "e": "run.pause",
       "d": "Pause for a set time"
      },
      {
@@ -2614,7 +1974,7 @@
      },
      {
       "g": "G00",
-      "e": "RAPID",
+      "e": "run.rapid",
       "d": "Rapid move"
      },
      {
@@ -2660,12 +2020,12 @@
      },
      {
       "g": "G91",
-      "e": "INCR",
+      "e": "set.incr",
       "d": "Incremental positions"
      },
      {
       "g": "G50",
-      "e": "SETCOORD",
+      "e": "set.coords",
       "d": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)"
      },
      {
@@ -2682,7 +2042,7 @@
      },
      {
       "g": "G90",
-      "e": "TURNCYC",
+      "e": "cycle.turn",
       "d": "OD/ID turning cycle"
      }
     ],
@@ -2712,8 +2072,8 @@
      },
      {
       "g": "M30",
-      "e": "ENDRESET",
-      "d": "End program and rewind"
+      "e": "prog.end",
+      "d": "End program and go back to the start ('rewind' from tape days); the usual program end"
      }
     ],
     [

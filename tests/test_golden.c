@@ -33,7 +33,7 @@ static gc_data *load_data(const char *root, const gc_json *index)
 static void check_run(const gc_data *data, const gc_json *machine, const gc_doc *doc, const gc_json *run, const char *file)
 {
     const char *mid = gc_json_get_str(run, "machine"), *style = gc_json_get_str(run, "style");
-    gc_analysis *a = gc_analyze(data, machine, doc, !strcmp(style, "short") ? GC_STYLE_SHORT : !strcmp(style, "words") ? GC_STYLE_WORDS : GC_STYLE_LONG);
+    gc_analysis *a = gc_analyze(data, machine, doc, !strcmp(style, "short") ? GC_STYLE_SHORT : GC_STYLE_WORDS);
     const gc_json *words = gc_json_get(run, "words");
     CHECK(a->nlines == (int)gc_json_len(words), "%s %s: %d lines, want %d", file, mid, a->nlines, (int)gc_json_len(words));
     for (int li = 0; li < a->nlines && li < (int)gc_json_len(words); li++) {

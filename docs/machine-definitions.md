@@ -44,7 +44,7 @@ The process bases for router, laser, plasma, waterjet and EDM are starting point
 
 The same rules the rules file uses today:
 
-- Objects merge key by key, so a machine file that sets `codes.M88.long` keeps the inherited `short` and `desc`.
+- Objects merge key by key, so a machine file that sets `codes.M88.words` keeps the inherited `short` and `desc`.
 - Arrays replace (a modal group listed in a file is the whole group).
 - `null` removes an inherited entry (`"G87": null` on Haas, which uses G77 for back boring).
 - The resolved machine is what the editor uses. The GUI editor shows which file each value came from.
@@ -111,14 +111,14 @@ One JSON file per layer. Keys that aren't needed are left out. A full example of
   },
 
   "addresses": {                     // what each letter means on this machine
-    "A": { "role": "axis", "rotary": true, "long": "A", "short": "A" }
+    "A": { "role": "axis", "rotary": true, "words": "A", "short": "A" }
   },
 
   "numbers": { "noDecimal": "leastIncrement", "increment": { "inch": 0.0001, "mm": 0.001 } },
 
   "codes": {                         // gloss words for code words (G, M and any other code letter)
-    "M51": { "long": "VISEOPEN", "short": "VOPN", "desc": "Open the hydraulic vise (cell 3 wiring)" },
-    "M52": { "long": "VISECLS",  "short": "VCLS", "desc": "Close the hydraulic vise" }
+    "M51": { "words": "vise.open", "short": "VOPN", "desc": "Open the hydraulic vise (cell 3 wiring)" },
+    "M52": { "words": "vise.close", "short": "VCLS", "desc": "Close the hydraulic vise" }
   },
 
   "modalGroups": { },
@@ -317,9 +317,9 @@ A code or cycle that depends on an option lists it in `needs`, the way lathe cyc
   "vr":          { "label": "VR five-axis head", "default": false }
 },
 "codes": {
-  "M41":  { "long": "GEARLOW",  "short": "GLOW", "desc": "Low gear",  "needs": ["gearbox"] },
-  "M42":  { "long": "GEARHIGH", "short": "GHI",  "desc": "High gear", "needs": ["gearbox"] },
-  "G143": { "long": "TLEN5AX",  "short": "TL5X", "desc": "Five-axis tool length offset", "needs": ["vr"] }
+  "M41":  { "words": "gear.low",  "short": "GLOW", "desc": "Low gear",  "needs": ["gearbox"] },
+  "M42":  { "words": "gear.high", "short": "GHI",  "desc": "High gear", "needs": ["gearbox"] },
+  "G143": { "words": "tlen.5axis", "short": "TL5X", "desc": "Five-axis tool length offset", "needs": ["vr"] }
 }
 ```
 
@@ -339,7 +339,7 @@ Manuals don't always agree, between editions or even between two pages of one ed
 GlossCode doesn't pick a side quietly. An entry with a contradiction lists each **reading**, where it comes from, and what decides between them:
 
 ```jsonc
-"M39": { "long": "TCROTATE", "short": "TCROT",
+"M39": { "words": "tool.rotate", "short": "TCROT",
   "readings": {
     "side-mount": { "desc": "Rotate the side-mount tool carousel",
                     "source": { "manual": "Haas Mill 96-8210", "revision": "N (2020)", "page": 417 } },
@@ -347,7 +347,7 @@ GlossCode doesn't pick a side quietly. An entry with a contradiction lists each 
                     "source": { "manual": "Haas Mill 96-8210", "revision": "V (2025)", "page": 444 } } },
   "decidedBy": "toolChanger" },       // an option in the profile settles it
 
-"G114": { "long": "WORK11", "short": "W11",
+"G114": { "words": "work.11", "short": "W11",
   "readings": {
     "p5": { "desc": "Work offset 11 (G154 P5)", "source": { "revision": "V (2025)", "page": 397 } },
     "p3": { "desc": "Work offset 11 (G154 P3)", "source": { "revision": "V (2025)", "page": 396 } } },
@@ -446,12 +446,12 @@ Two changes come out of this:
 Yes, it would help. Most people adding a machine are changing a handful of M-codes and a cycle or two, and a form is easier than getting JSON brackets right. It grows out of the existing **Machine profiles** window:
 
 - **General**: name, process, control, the layer it extends, travel and limits, options (live tooling, Y axis, rotary axes), end of block, private.
-- **Words**: a searchable table of every code and address letter with long word, short word, description and the layer it came from. Edited cells are bold; **Reset** goes back to the inherited value. An **Only changed here** filter shows the file's own entries.
+- **Words**: a searchable table of every code and address letter with full word, short word, description and the layer it came from. Edited cells are bold; **Reset** goes back to the inherited value. An **Only changed here** filter shows the file's own entries.
 - **Cycles**: the list by category; each opens the same layout as the Insert dialog, with required, choice and optional words, help text and example values, and a live preview of the F1 guide.
 - **Checks**: every rule with Off / Info / Warning / Error, the inherited setting next to it, and the `lineRules` builder.
 - **Try it**: the current program re-checked and re-translated with the unsaved changes, so the effect is visible before saving.
 
-The editor checks as you type: long words over 10 columns and short words over 8, two codes with the same gloss word (autocomplete needs them unique), malformed code keys, a cycle word listed as both required and optional, and `extends` that can't be found.
+The editor checks as you type: full words that aren't lower case in up to three parts, short words over 8 columns, two codes with the same gloss word (autocomplete needs them unique), malformed code keys, a cycle word listed as both required and optional, and `extends` that can't be found.
 
 Two limits keep it safe. It only writes to personal or shop files, so editing a built-in machine starts with **Make my own copy** (a new file that extends it). And it writes the JSON with one entry per line in a stable key order, so a shop that keeps its machine files in git gets small, readable diffs.
 

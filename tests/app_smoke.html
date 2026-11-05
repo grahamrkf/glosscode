@@ -13,12 +13,12 @@
     if (!N) throw new Error("GlossCodeNative is missing");
     const f = await N.startup();
     if (!f) throw new Error("no file on the command line");
-    const a = await N.core("analyze", { lines:f.doc.lines, machine:{ type:"mill", brand:"haas" }, style:"long" });
+    const a = await N.core("analyze", { lines:f.doc.lines, machine:{ type:"mill", brand:"haas" }, style:"words" });
     log(a.lines.length + " lines, " + a.problems.length + " problems");
     // Change the second block's words; every other block keeps its raw text.
     const lines = f.doc.lines.map((l, i) => i === 1 ? { tok:[...l.tok, "(SMOKE)"] } : l);
     const r = await N.save({ path:f.path + ".smoke.nc", name:f.name, latin1:f.latin1, doc:{ ...f.doc, lines } });
-    log("saved " + r.bytes + " bytes; English of line 3: " + a.lines[2].cells.map(c => c.e).join(" "));
+    log("saved " + r.bytes + " bytes; gloss of line 3: " + a.lines[2].cells.map(c => c.e).join(" "));
   } catch (e){ log("FAILED " + (e && e.message || e)); }
   await N.quit();
 })();

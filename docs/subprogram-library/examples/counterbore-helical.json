@@ -2,7 +2,7 @@
   "glosscode": "subprogram/1",
   "id": "acme.counterbore-helical",
   "name": "Counterbore, helical",
-  "word": { "long": "HELIXBORE", "short": "HXBOR" },
+  "word": { "words": "sub.helixbore", "short": "HXBOR" },
   "program": 9110,
   "category": "Pockets and bores",
   "tags": ["counterbore", "helix", "circular pocket", "bore"],

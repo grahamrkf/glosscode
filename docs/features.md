@@ -6,8 +6,8 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 
 **Editor**
 - [ ] Interleaved view: a gloss line (plain English) above every code line
-- [ ] Fixed-width columns (10 characters for long words, 8 for short) so words line up down the whole file
-- [ ] Long and short word styles
+- [ ] Fixed-width columns (at least 12 characters for full words, 8 for short) so words line up down the whole file
+- [ ] Full words (`run.feed`, `set.inch`, `cycle.peck`, `machine.tailstock.in`: one of a fixed set of groups, then the action, with a third part for less common codes; control-specific codes are underlined with dots) and short words (View › Gloss words)
 - [ ] Type code or type gloss (View › Edit in). Clicking a code word while editing gloss switches to editing code and selects it, and clicking a gloss word while editing code switches back
 - [ ] Autocomplete for gloss and code words
 - [ ] Keyboard editing by word: ← → move between words, ↑ ↓ between lines, Enter edits and Enter again finishes (the word stays selected), Delete removes the word, typing replaces it
@@ -36,7 +36,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 
 **Reading**
 - [ ] Inline expansion of subprogram calls, marked with purple N numbers; edits change the subprogram
-- [ ] Library calls read by name (`G65 P9101` reads MACRO SLOTMILL, `Z-0.15` reads DEP-0.15) and expand to show the lines they run, in green; the toolpath preview follows them
+- [ ] Library calls read by name (`G65 P9101` reads call.macro sub.slotmill, `Z-0.15` reads DEP-0.15) and expand to show the lines they run, in green; the toolpath preview follows them
 - [ ] View › Show: both lines, gloss only, or code only
 - [ ] View › Layout: words in program order, or columns by word type, most used first (motion and cycle codes, X Y Z, F, S, spindle M-codes…) with rare words at the end. The order is set in the machine's rules
 - [ ] In columns, several words in one cell stack, so that line gets taller instead of the column getting wider
