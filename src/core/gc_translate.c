@@ -845,6 +845,18 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     if (c->syntax == GC_SYN_FAGOR8060 && fagor_word(c, t, st, cell)) return;
     if (c->syntax == GC_SYN_FAGOR8055 && fagor55_word(c, t, cell)) return;
     if (c->syntax == GC_SYN_KLARTEXT && kl_word(c, t, st, cell)) return;
+    if (t[0] == ',' && (t[1] == 'C' || t[1] == 'R')) { /* ,C chamfer and ,R corner radius */
+        char key[3] = { ',', t[1], '\0' };
+        const gc_json *a = gc_json_get(gc_json_get(c->data->words, "address"), key);
+        if (a) {
+            gc_num f;
+            gc_fmt_num(c, 'X', t + 2, st->inch, &f);
+            snprintf(e, sizeof e, "%s%s", js_str(style_get(a, style_key(c))), f.v);
+            snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(a, "desc")), f.v);
+            cell_set(cell, e, NULL, d, 0);
+            return;
+        }
+    }
     if (!gc_is_alpha((unsigned char)t[0]) && t[0] != '#' && t[0] != '/') { /* text that isn't a word, kept as written */
         if (!strcmp(t, ";")) cell_set(cell, ";", NULL, "End of block (;)", 0);
         else if (!strcmp(t, "%")) cell_set(cell, "%", NULL, "Program start or end mark (%), kept as written", 0);

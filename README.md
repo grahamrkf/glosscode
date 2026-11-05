@@ -90,7 +90,8 @@ The English words come from a dictionary of consistent abbreviations ([`data/gco
 **Previews**
 - XY toolpath view that follows subprogram calls, colored by move type or by tool. Moves after the selected line can be greyed out, hidden, or shown normally.
 - Simulation playback that draws the tool moves one line at a time, with step, play and speed controls. It pauses at M00 (and M01 with optional stop on), can skip block delete (/) lines, and has an expanded view with a large toolpath.
-- A timeline in execution order that keeps the selected line centered. It shows Z by line (X radius on a lathe), the feed rate or the spindle speed. On a plasma table it shows the feed rate or Z, with a band where the torch is on and marks where the process or material changes.
+- A timeline in execution order that keeps the selected line centered. It shows Z by line (X radius on a lathe), the feed rate or the spindle speed. On a plasma table it shows the feed rate or Z, with a band where the torch is on and marks where the process or material changes. On a mill each kind of step gets a symbol (drilling, pecking, tapping, boring, ramps, helixes, dwells, stops, tool changes), and a red dot shows where the tool is.
+- Chamfers and corner radii written with ,C and ,R are drawn in the toolpath, with the lines out to the sharp corner shown grey and dashed.
 
 **Machines**
 - Mill, lathe and plasma modes, since some codes mean different things on each (G50, G76, G98, G99, and M07/M08 as cut on and off on a Hypertherm plasma control). Plasma checks the torch instead of the spindle: Hypertherm Phoenix/EDGE Connect (first draft), Centroid Acorn and Tormach plasma.
