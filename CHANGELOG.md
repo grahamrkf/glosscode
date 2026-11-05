@@ -4,6 +4,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+## [0.1.7] - 2026-11-05
+
 ### Machines
 - Machines are picked as machine type → control → machine. Every type and control has a Generic machine, so "Mill › Generic" or "Lathe › Okuma OSP-U10L / OSP-U100L › Generic" works without a profile. Only controls made for the chosen type are listed.
 - Your machine profiles are kept in settings.json. New starts from a machine type and control, Copy from another profile, and Add from library from a known model (Haas VF-2 and ST-10, Okuma M560-V and LB3000 EX II), with the numbers we aren't sure of left empty to fill in. Profiles can be deleted: programs that used one open with the Generic machine for its type and control.
