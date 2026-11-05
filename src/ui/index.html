@@ -5034,11 +5034,24 @@ function libWord(e, L, raw, f, st){
 }
 
 /* ---------- Working out the lines a call runs ----------
-   A small macro reader: #vars, arithmetic in [ ], ABS SQRT SIN COS TAN ATAN ROUND FIX FUP, EQ NE GT GE LT LE AND OR,
+   A small macro reader: #vars and #[expr], arithmetic in [ ], ABS SQRT SIN COS TAN ASIN ACOS ATAN[a]/[b] LN EXP ROUND FIX FUP
+   BIN BCD, EQ NE GT GE LT LE AND OR XOR (Fanuc 21i Custom Macro B, docs/manual-reviews/fanuc-custom-macro-b.md),
    #n=..., IF [..] THEN #n=..., IF [..] GOTO n, GOTO n, WHILE [..] DOn / ENDn, and #3000=n (alarm). Anything else
    is an error, and that subprogram can only be called, not written in. */
-const FN = { ABS:Math.abs, SQRT:Math.sqrt, SIN:d => Math.sin(d*Math.PI/180), COS:d => Math.cos(d*Math.PI/180), TAN:d => Math.tan(d*Math.PI/180),
-  ATAN:x => Math.atan(x)*180/Math.PI, ROUND:Math.round, FIX:Math.trunc, FUP:x => Math.sign(x)*Math.ceil(Math.abs(x)) };
+const DEG = 180/Math.PI;
+const FN = { ABS:Math.abs, SQRT:x => { if (x < 0) throw "SQRT of a negative number"; return Math.sqrt(x); },
+  SIN:d => Math.sin(d/DEG), COS:d => Math.cos(d/DEG), TAN:d => Math.tan(d/DEG),
+  ASIN:x => { if (Math.abs(x) > 1) throw "ASIN needs a value from -1 to 1"; return Math.asin(x)*DEG; },
+  ACOS:x => { if (Math.abs(x) > 1) throw "ACOS needs a value from -1 to 1"; return Math.acos(x)*DEG; },
+  ATAN:x => Math.atan(x)*DEG,
+  LN:x => { if (x <= 0) throw "LN needs a value above 0"; return Math.log(x); }, EXP:Math.exp,
+  // ROUND, FIX and FUP work on the size of the number: ROUND[-1.5] = -2, FUP[-1.2] = -2, FIX[-1.2] = -1
+  ROUND:x => Math.sign(x)*Math.round(Math.abs(x)), FIX:Math.trunc, FUP:x => Math.sign(x)*Math.ceil(Math.abs(x)),
+  BIN:x => { const d = String(Math.trunc(Math.abs(x)).toString(16)); if (/[a-f]/.test(d)) throw "BIN needs BCD digits 0 to 9"; return +d; },
+  BCD:x => { if (x < 0) throw "BCD of a negative number"; return parseInt(String(Math.trunc(x)), 16); } };
+// ATAN[a]/[b]: the angle of the point (b, a), 0 to 360 degrees (Fanuc, with parameter NAT off)
+const atan2 = (a, b) => { const d = Math.atan2(a, b)*DEG; return d < 0 ? d + 360 : d; };
+const bits = (op, a, b) => { const x = Math.trunc(a ?? 0), y = Math.trunc(b ?? 0); return op==="AND" ? x & y : op==="OR" ? x | y : x ^ y; };
 const near = (a, b) => Math.abs(a - b) < 1e-9;
 const CMP = { EQ:(a, b) => a===b || (a!=null && b!=null && near(a, b)), NE:(a, b) => !CMP.EQ(a, b),
   GT:(a, b) => (a ?? 0) > (b ?? 0) && !near(a ?? 0, b ?? 0), GE:(a, b) => (a ?? 0) > (b ?? 0) || near(a ?? 0, b ?? 0),
@@ -5052,16 +5065,25 @@ function evalExpr(src, V){
     if (t==="["){ const v = or(); if (next()!=="]") throw "a [ has no matching ]"; return v; }
     if (t==="-"){ const v = prim(); return v==null ? null : -v; }
     if (t==="+") return prim();
-    if (t && t[0]==="#"){ const n = +t.slice(1); return n===0 ? null : (V[n] ?? null); }
+    if (t && t[0]==="#" && t.length > 1){ const n = +t.slice(1); return n===0 ? null : (V[n] ?? null); }
+    if (t==="#"){   // #[expr]: the variable whose number the expression gives
+      if (next()!=="[") throw "# needs a number or [ ]"; const n = or(); if (next()!=="]") throw "a [ has no matching ]";
+      const k = Math.round(n ?? 0); return k===0 ? null : (V[k] ?? null);
+    }
     if (t && /^[\d.]/.test(t)) return parseFloat(t);
-    if (FN[t]){ if (next()!=="[") throw `${t} needs [ ]`; const v = or(); if (next()!=="]") throw "a [ has no matching ]"; return FN[t](v ?? 0); }
+    if (FN[t]){
+      if (next()!=="[") throw `${t} needs [ ]`; const v = or(); if (next()!=="]") throw "a [ has no matching ]";
+      if (t==="ATAN" && peek()==="/" && tk[i+1]==="["){ i += 2; const b = or(); if (next()!=="]") throw "a [ has no matching ]"; return atan2(v ?? 0, b ?? 0); }
+      return FN[t](v ?? 0);
+    }
     throw `can't read "${t ?? "the end of the line"}"`;
   };
   const mul = () => { let a = prim(); while (peek()==="*" || peek()==="/"){ const op = next(), b = prim() ?? 0; if (op==="/" && b===0) throw "division by zero"; a = op==="*" ? (a ?? 0)*b : (a ?? 0)/b; } return a; };
   const add = () => { let a = mul(); while (peek()==="+" || peek()==="-"){ const op = next(), b = mul() ?? 0; a = op==="+" ? (a ?? 0)+b : (a ?? 0)-b; } return a; };
   const cmp = () => { const a = add(); if (CMP[peek()]){ const op = next(); return CMP[op](a, add()) ? 1 : 0; } return a; };
-  const and = () => { let a = cmp(); while (peek()==="AND"){ next(); const b = cmp(); a = a && b ? 1 : 0; } return a; };
-  const or = () => { let a = and(); while (peek()==="OR"){ next(); const b = and(); a = a || b ? 1 : 0; } return a; };
+  // AND, OR and XOR work bit by bit, so [#1 GT 0] AND [#2 LT 5] (each 1 or 0) is true when both are
+  const and = () => { let a = cmp(); while (peek()==="AND"){ next(); a = bits("AND", a, cmp()); } return a; };
+  const or = () => { let a = and(); while (peek()==="OR" || peek()==="XOR"){ const op = next(); a = bits(op, a, and()); } return a; };
   const v = or(); if (i < tk.length) throw `can't read "${tk.slice(i).join("")}"`; return v;
 }
 // "[cond] rest" → ["cond", "rest"]

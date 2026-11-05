@@ -22,6 +22,7 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 ### Simulation
 - The toolpath fits the cutting moves, so a home return far from the part (`G00 X20. Z20.`) no longer shrinks the part to a dot. Rapids that go farther run off the edge.
 - Zoom and pan the toolpath: scroll to zoom about the pointer, drag to pan, Shift+drag (or ⬚ then drag) to zoom to a box, and double-click or Fit to fit again. +/− zoom from the middle.
+- Macro expressions follow the Fanuc Custom Macro B rules more closely. `ATAN[a]/[b]` gives the angle from 0 to 360 degrees (it used to divide the one-argument ATAN by b). `ROUND[-1.5]` is -2. `ASIN`, `ACOS`, `LN`, `EXP`, `BIN`, `BCD`, `XOR` and `#[expression]` variables are read. `AND` and `OR` work bit by bit, as on the control.
 
 ### Okuma
 - The graphic display statements `DEF WORK`, `PS LC,[..],[..]`, `END`, `CLEAR` and `DRAW` read as one word each, and nothing moves.

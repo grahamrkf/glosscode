@@ -140,8 +140,8 @@ The same three folders as machine definition files, each with a `library` folder
 
 To write the lines in, and to show and preview a call, GlossCode runs the body with the values, the way the control would. It understands a deliberately small part of the macro language:
 
-- `#n` variables, with `#0` as empty; numbers; `+ - * /` and `[ ]`; `ABS SQRT SIN COS TAN ATAN ROUND FIX FUP` (angles in degrees)
-- `EQ NE GT GE LT LE`, `AND`, `OR`
+- `#n` and `#[expression]` variables, with `#0` as empty; numbers; `+ - * /` and `[ ]`; `ABS SQRT SIN COS TAN ASIN ACOS LN EXP ROUND FIX FUP BIN BCD` (angles in degrees) and `ATAN[a]/[b]` (0 to 360 degrees). `ROUND`, `FIX` and `FUP` work on the size of the number, so `ROUND[-1.5]` is -2.
+- `EQ NE GT GE LT LE`, and `AND`, `OR`, `XOR` bit by bit, so `[#1 GT 0] AND [#2 LT 5]` works
 - `#n=…`, `IF [ … ] THEN #n=…`, `IF [ … ] GOTO n`, `GOTO n`, `WHILE [ … ] DOn` … `ENDn`
 - `#3000=n (MESSAGE)` stops with the alarm message, the way the control would
 - Words whose value uses a variable or brackets (`X[#24+#30]`, `I-#30`, `Z#31`) are worked out and written with a decimal point, rounded to 0.0001 in or 0.001 mm. A word whose variable is empty is left out, as on the control.
