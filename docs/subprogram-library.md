@@ -8,12 +8,12 @@ Some operations get reused across many programs, and only a few numbers change b
 
 ## Summary
 
-- **A library subprogram is one file.** It holds the O program the control runs (the body), a list of variables with English names, and a name, category and tags so it can be found.
+- **A library subprogram is one file.** It holds the O program the control runs (the body), a list of variables with gloss names, and a name, category and tags so it can be found.
 - **Variables are passed the standard way.** Each variable is a letter on a `G65` line, and the body reads it as a `#` variable (X is `#24`, Y is `#25`, and so on). That's Fanuc Custom Macro B, which Haas also uses, so the body is a normal macro program that runs on the control as written.
 - **There are two ways to insert one:**
   - **Call it**: one line, `G65 P9101 X0.5 Y0.5 I2.5 J0.5 Z-0.15 F15.`. The O program has to be loaded on the control.
   - **Write the lines in**: GlossCode works out the moves from the values and inserts plain G-code. This works on any control, including ones without the macro option, but changing a value later means inserting it again.
-- **Calls read in English.** On a call line, `P9101` reads `SLOTMILL` and each value reads by its variable's name (`DEP-0.15`, `FEED15.0`ipm). **▸ show O9101** lists the lines the call runs, in green, under the call. The toolpath preview and the Z timeline follow them.
+- **Calls read in the gloss.** On a call line, `P9101` reads `SLOTMILL` and each value reads by its variable's name (`DEP-0.15`, `FEED15.0`ipm). **▸ show O9101** lists the lines the call runs, in green, under the call. The toolpath preview and the Z timeline follow them.
 - **Finding and managing** happens in the same window: search, filter to this machine, and New, Edit, Make my own copy, Delete and Export. Insert › Save N1000 to the library… turns a subprogram that's already in the program into a library one.
 - **Storage follows the machine definition files.** Built-in, shop and personal folders, each with a `library` folder. Private or shared is decided by where the file lives, and `"private": true` makes Export ask first (see [machine-definitions.md](machine-definitions.md#where-files-live)).
 
@@ -34,10 +34,10 @@ The Insert menu has a **Subprogram library** group under the canned cycles:
 
 ### The library window
 
-- **Search** matches the name, English word, category, tags, description, author, O number (`9101` or `O9101`) and variable names.
+- **Search** matches the name, gloss word, category, tags, description, author, O number (`9101` or `O9101`) and variable names.
 - **For this machine / All.** The list normally shows only subprograms written for the selected machine. **All** shows the rest, greyed, with the machines they're for.
 - Each entry shows its folder (**Built-in**, **Shop** or **Mine**), **Private** if it's marked private, and how many times this file calls it.
-- The right side shows what it does, where its file is, a box for each variable (required ones are marked; a default shows in grey and is used if the box is left empty), the two ways to insert it, and a preview of the lines with their English.
+- The right side shows what it does, where its file is, a box for each variable (required ones are marked; a default shows in grey and is used if the box is left empty), the two ways to insert it, and a preview of the lines with their gloss.
 - A distance or feed typed without a decimal point gets one (`1` becomes `1.`), following the display rules.
 - **Call it** is turned off, with the reason shown, when the subprogram is for a different control or the machine has no macro option. **Write the lines in** is turned off only when it's for a different kind of machine (a lathe routine on a mill).
 
@@ -49,7 +49,7 @@ When the lines are written in, a comment line goes first with the values used, s
 
 ![A library call shown inline](images/library-call-expanded.png)
 
-- `G65` reads **MACRO**, and `P9101` reads the subprogram's English word (**SLOTMILL**). Each value reads by its variable's name. Hovering shows what each one is and which `#` variable it fills.
+- `G65` reads **MACRO**, and `P9101` reads the subprogram's gloss word (**SLOTMILL**). Each value reads by its variable's name. Hovering shows what each one is and which `#` variable it fills.
 - **▸ show O9101** lists the lines the call runs, worked out from the values on that line, with a green bar and **⤷** in the margin. They're read-only: change a value on the call line, or edit the subprogram in the library. **Program › Show all subprograms** opens these too.
 - The toolpath preview, simulation and Z timeline follow the call.
 - A `G65 P` whose program isn't in any library folder gets **O9999 isn't in the library**. That's fine if it's on the control; GlossCode just can't show what it does.
@@ -59,10 +59,10 @@ When the lines are written in, a comment line goes first with the values used, s
 
 ![Editing a library subprogram](images/library-editor.png)
 
-- **Name**, **English word** (long, 10 letters at most; short, 8 at most), **program number**, **category**, **tags**, which machines it **works on**, **units**, which folder it's **saved in**, and **private**.
-- **Variables**: letter (the `#` number is shown next to it), English name, kind (distance, feed, speed, count, angle, seconds), required, default, and what it is. **Add from body** adds a variable for each `#1`–`#26` the body reads that isn't one yet.
+- **Name**, **gloss word** (long, 10 letters at most; short, 8 at most), **program number**, **category**, **tags**, which machines it **works on**, **units**, which folder it's **saved in**, and **private**.
+- **Variables**: letter (the `#` number is shown next to it), gloss name, kind (distance, feed, speed, count, angle, seconds), required, default, and what it is. **Add from body** adds a variable for each `#1`–`#26` the body reads that isn't one yet.
 - **Body**: the O program exactly as it runs on the control.
-- Problems show as you type. A save is blocked by missing names or English words, a letter used twice, or no machine ticked. Warnings cover an O number another library subprogram already uses, a `#` the body reads that isn't a variable (so it's always empty), a variable the body never reads, a body that doesn't start with its O number or doesn't end with M99, and a body that can't be written in (it uses something the reader below doesn't support). A built-in subprogram opens read-only, and **Make my own copy** saves an editable copy in your library with the next free O number.
+- Problems show as you type. A save is blocked by missing names or gloss words, a letter used twice, or no machine ticked. Warnings cover an O number another library subprogram already uses, a `#` the body reads that isn't a variable (so it's always empty), a variable the body never reads, a body that doesn't start with its O number or doesn't end with M99, and a body that can't be written in (it uses something the reader below doesn't support). A built-in subprogram opens read-only, and **Make my own copy** saves an editable copy in your library with the next free O number.
 - **Export…** writes the library file (`slot-mill.json`) for other GlossCode users, or just the body (`O9101.nc`) to load on the control. For a private one it asks first and leaves out `notes` and `shop`, the same as machine files.
 
 ## The file
@@ -111,7 +111,7 @@ The letter is the word on the `G65` line, and the body reads the matching variab
 
 G, L, N, O and P can't be variables (P is the program number and L is the repeat count). The body can use `#30` to `#33` as scratch variables, since the call clears them.
 
-- **English names** are 1 to 5 letters or digits. Four or fewer always fit a column with the value after them (`DEP-0.15`, `STEP0.05`). The editor warns at five.
+- **Gloss names** are 1 to 5 letters or digits. Four or fewer always fit a column with the value after them (`DEP-0.15`, `STEP0.05`). The editor warns at five.
 - **Kind** decides how the value is shown and typed: distances and feeds always get a decimal point, a feed shows its unit (`FEED15.0`ipm), and a count must be a whole number.
 - **Defaults** can be one value or one per unit (`{ "inch": "0.1", "mm": "2.5" }`). GlossCode writes the default into the call line when the box is left empty, so every call says exactly what it passes, and the body doesn't have to handle empty variables. A body can still handle them (`IF [#8 EQ #0] THEN #8=#9/2` in the slot example) for calls typed by hand.
 - Avoid **T**, **S** and **H** as variable letters unless the value really is a tool, speed or offset. The checks read those letters on any line.

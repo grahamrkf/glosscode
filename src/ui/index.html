@@ -607,7 +607,7 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
             <span>Find</span><input id="findq" aria-label="Find text" placeholder="G43, COOL, X1.5…" autocomplete="off" spellcheck="false">
             <button class="btn" id="f-prev" title="Previous (Shift+Enter)">↑</button><button class="btn" id="f-next" title="Next (Enter)">↓</button>
             <span class="cnt" id="fcnt"></span>
-            <span class="hint">Matches G-code and English</span>
+            <span class="hint">Matches code and gloss</span>
             <button class="iconbtn" id="f-x" aria-label="Close find">✕</button>
           </div>
           <div class="colhead" id="colhead"></div>
@@ -644,7 +644,7 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
           </div>
         </div>
       </div>
-      <div class="status"><span id="st-pos">Ln 1</span><span id="st-mode">Editing English</span><span id="st-modal"></span><span id="st-warn" class="w"></span><span class="msg" id="st-msg"></span></div>
+      <div class="status"><span id="st-pos">Ln 1</span><span id="st-mode">Editing gloss</span><span id="st-modal"></span><span id="st-warn" class="w"></span><span class="msg" id="st-msg"></span></div>
 
       <div class="dim" id="pdlg" hidden>
         <div class="dlg pdlg" role="dialog" aria-label="Machine profiles">
@@ -754,7 +754,7 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
             <div class="sform">
               <div class="pgrid">
                 <label for="s-name">Name</label><input id="s-name">
-                <label>English word</label><span class="pair"><input id="s-long" placeholder="Long, 10 max" maxlength="10"><input id="s-short" placeholder="Short, 8 max" maxlength="8"></span>
+                <label>Gloss word</label><span class="pair"><input id="s-long" placeholder="Long, 10 max" maxlength="10"><input id="s-short" placeholder="Short, 8 max" maxlength="8"></span>
                 <label for="s-prog">Program</label><span class="unit"><small>O</small><input id="s-prog" inputmode="numeric"></span>
                 <label for="s-cat">Category</label><input id="s-cat" list="s-cats">
                 <label for="s-tags">Tags</label><input id="s-tags" placeholder="comma, separated">
@@ -771,7 +771,7 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
             </div>
             <div class="smain">
               <h5>Variables <span>passed on the G65 line</span><button class="btn" id="s-scan" title="Adds a variable for each #1–#26 the body reads">Add from body</button><button class="btn" id="s-add">+ Add</button></h5>
-              <table class="svars"><thead><tr><th style="width:52px">Letter</th><th style="width:44px">Var</th><th style="width:92px">English</th><th style="width:88px">Kind</th><th style="width:38px">Req.</th><th style="width:70px">Default</th><th>What it is</th><th style="width:22px"></th></tr></thead><tbody id="s-vars"></tbody></table>
+              <table class="svars"><thead><tr><th style="width:52px">Letter</th><th style="width:44px">Var</th><th style="width:92px">Gloss</th><th style="width:88px">Kind</th><th style="width:38px">Req.</th><th style="width:70px">Default</th><th>What it is</th><th style="width:22px"></th></tr></thead><tbody id="s-vars"></tbody></table>
               <h5>Body <span>the O program, as it runs on the control</span></h5>
               <textarea class="sbodytxt" id="s-body" spellcheck="false"></textarea>
               <div class="schecks" id="s-checks"></div>
@@ -854,7 +854,7 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
               <img src="../../assets/logo/glosscode.svg" alt="" onerror="this.hidden=true">
               <div><h2>GlossCode</h2><div class="aver">Version <b id="a-ver"></b> · <span id="a-plat"></span></div></div>
             </div>
-            <p class="adesc">A G-code editor that shows a line of plain English above every line of code, for Haas, Fanuc and Okuma mills and lathes.</p>
+            <p class="adesc">A G-code editor that shows a gloss line in plain English above every line of code, for Haas, Fanuc and Okuma mills and lathes.</p>
             <div class="alinks">
               <span>Website</span><a id="a-site" target="_blank" rel="noopener"></a>
               <span>Release notes</span><a id="a-rel" target="_blank" rel="noopener">All releases</a>
@@ -1771,7 +1771,7 @@ function fromEnglish(txt, st){
     }
   }
   if (/^[A-Z][-+]?[\d.]*$/.test(T)) return { g:T };
-  return { g:null, err:`"${T}" isn't a known word. Pick one from the list, or switch to G-code mode.` };
+  return { g:null, err:`"${T}" isn't a known word. Pick one from the list, or switch to editing code.` };
 }
 function suggestions(q, li){
   const Q = q.trim().toUpperCase(), items = [];
@@ -2410,7 +2410,7 @@ function render(){
 function status(){
   const st = lineState[curLine] || newState();
   document.getElementById("st-pos").textContent = `Ln ${curLine+1}`;
-  document.getElementById("st-mode").textContent = simIdx!=null ? "Simulating" : editMode==="en" ? "Editing English" : "Editing G-code";
+  document.getElementById("st-mode").textContent = simIdx!=null ? "Simulating" : editMode==="en" ? "Editing gloss" : "Editing code";
   document.getElementById("st-modal").textContent = [st.units==="inch"?"INCH":"METRIC", st.dist==="abs"?"ABS":"INCR", ...(DIALECT.process ? [st.torch && DIALECT.process.on.includes(st.torch) ? "CUTON" : "CUTOFF"] : [st.feed==="perMin"?"FEEDMIN":"FEEDREV", st.spin==="rpm"?"MODERPM":"MODESFM"])].join("  ");
   const cnt = sev => PROBLEMS.filter(p => p.sev===sev).length;
   const e = cnt("error"), w = cnt("warning"), i = cnt("info");
@@ -2795,7 +2795,7 @@ function startEdit(li, ref, key, opts = {}){
   if (!ln) return;
   const slot = slotsFor(li).find(s => s.ref===ref) || slotsFor(li).find(s => s.add && !s.pend);
   if (!slot) return;
-  if (slot.cm && editMode==="en"){ setMsg("Comments are edited in G-code mode.", true); return; }
+  if (slot.cm && editMode==="en"){ setMsg("Comments are edited on the code line.", true); return; }
   const cell = ln.querySelector(`${editMode==="en" ? ".r.en" : ".r.gc"} .cell[data-r="${slot.ref}"]`);
   if (!cell) return;
   scrollToLn(ln);
@@ -3014,7 +3014,7 @@ function toggleEditMode(){
   const to = editMode==="en" ? "gc" : "en";
   if (showMode!=="both") setShow(to); else setEditMode(to, true);
   if (was) startEdit(was.li, curRef, was.key); else ed.focus({preventScroll:true});
-  setMsg(`Caps Lock: editing ${to==="gc" ? "G-code" : "English"}. Press it again to switch back.`);
+  setMsg(`Caps Lock: editing ${to==="gc" ? "code" : "gloss"}. Press it again to switch back.`);
 }
 
 /* ---------- Selection ---------- */
@@ -3111,7 +3111,7 @@ function drawCycleHelp(){
   const what = L => help.words[L]?.[1] || (DIALECT.wordMeaning?.[L] ? DIALECT.wordMeaning[L][0].toUpperCase() + DIALECT.wordMeaning[L].slice(1) + "." : DICT.address[L]?.desc || "");
   const needChip = r => r.need==="req" ? (r.L==="F" && !def.leadF ? `<span class="need req" title="Unless an F is already active">Required*</span>` : `<span class="need req">Required</span>`)
     : r.need==="one" ? `<span class="need one" title="Use one of: ${esc(r.sets.map(s => s.join(" ")).join(" or "))}">One of ${esc(r.sets.map(s => s.join(" ")).join(" / "))}</span>` : `<span class="need opt">Optional</span>`;
-  const table = `<table class="cwords"><thead><tr><th>Word</th><th>English</th><th>Needed</th><th>What it does</th></tr></thead><tbody>${rows.map(r => {
+  const table = `<table class="cwords"><thead><tr><th>Word</th><th>Gloss</th><th>Needed</th><th>What it does</th></tr></thead><tbody>${rows.map(r => {
     const w = r.L + (help.words[r.L]?.[0] ?? EX_DEFAULT[r.L] ?? "1."), c = word(w, st);
     return `<tr><td class="w">${esc(r.L)}</td><td class="e">${esc(englishPrefix(r.L, st))}</td><td>${needChip(r)}</td><td>${esc(what(r.L))}</td></tr>`; }).join("")}</tbody></table>`;
   main.innerHTML = `<h4><code>${code}</code>${esc(def.name)}<small>${en ? esc(en.long) + " · " : ""}${esc(DIALECT.label)}</small></h4>`
@@ -4203,19 +4203,19 @@ const MENUS = {
   ],
   View: [
     { grp:"Edit in" },
-    R("English", () => editMode==="en", () => setEditMode("en")),
-    R("G-code", () => editMode==="gc", () => setEditMode("gc")),
-    R("Caps Lock switches between them", () => capsSwitch, () => { capsSwitch = !capsSwitch; setMsg(capsSwitch ? "Caps Lock now switches between editing G-code and English." : "Caps Lock no longer switches lines."); }),
+    R("Gloss", () => editMode==="en", () => setEditMode("en")),
+    R("Code", () => editMode==="gc", () => setEditMode("gc")),
+    R("Caps Lock switches between them", () => capsSwitch, () => { capsSwitch = !capsSwitch; setMsg(capsSwitch ? "Caps Lock now switches between editing code and gloss." : "Caps Lock no longer switches lines."); }),
     "-", { grp:"Show" },
-    R("English and G-code", () => showMode==="both", () => setShow("both")),
-    R("English only", () => showMode==="en", () => setShow("en")),
-    R("G-code only", () => showMode==="gc", () => setShow("gc")),
+    R("Gloss and code", () => showMode==="both", () => setShow("both")),
+    R("Gloss only", () => showMode==="en", () => setShow("en")),
+    R("Code only", () => showMode==="gc", () => setShow("gc")),
     "-", { grp:"Layout" },
     R("Words in program order", () => layout==="order", () => setLayout("order")),
     R("Columns by word type", () => layout==="cols", () => setLayout("cols")),
     R("Modal values in empty cells", () => showCarry, () => { showCarry = !showCarry; if (layout!=="cols") setLayout("cols"); else render(); setMsg(showCarry ? "Empty cells show modal values still in effect from earlier lines, in grey." : "Modal values hidden."); }),
     R("Run order numbers", () => runNums, () => { runNums = !runNums; render(); setMsg(runNums ? "Each line shows its run order number (grey, left): the block count as the program runs, counting subprogram lines on every call." : "Run order numbers are hidden."); }),
-    "-", { grp:"English words" },
+    "-", { grp:"Gloss words" },
     R("Long (SPINFWD)", () => style==="long", () => { style = "long"; render(); }),
     R("Short (SFWD)", () => style==="short", () => { style = "short"; render(); }),
     R("Full words (spindle.fwd)", () => style==="words", () => { style = "words"; render(); }),
@@ -4258,7 +4258,7 @@ const MENUS = {
   ],
   Help: [
     { label:"Canned cycle guide…", sc:"F1", fn:() => openCycleHelp(), doc:true },
-    { label:"Keyboard shortcuts", fn:() => setMsg("↑↓ line · ←→ word · Enter edit/done · Space new word · Shift+Enter break line · Shift+↑↓ select lines · Ctrl+C/X/V copy, cut, paste · Ctrl+D duplicate · Del delete word · Caps Lock G-code/English · F1 cycle guide · F5 play · Ctrl+→ step · Ctrl+Z undo · Ctrl+F find · F8 next problem") },
+    { label:"Keyboard shortcuts", fn:() => setMsg("↑↓ line · ←→ word · Enter edit/done · Space new word · Shift+Enter break line · Shift+↑↓ select lines · Ctrl+C/X/V copy, cut, paste · Ctrl+D duplicate · Del delete word · Caps Lock code/gloss · F1 cycle guide · F5 play · Ctrl+→ step · Ctrl+Z undo · Ctrl+F find · F8 next problem") },
     { label:"About the dictionary", fn:() => setMsg("Words come from gcode-words.json plus the selected machine's file.") }
   ]
 };
@@ -4336,7 +4336,7 @@ function setEditMode(m, quiet){
   if (editing && !quiet) commit();
   if (showMode!=="both" && m!==showMode){ setShow(m); return; }
   editMode = m; render();
-  if (!quiet) setMsg(m==="gc" ? "Editing G-code. English updates as you type." : "Editing English. G-code is written for you.");
+  if (!quiet) setMsg(m==="gc" ? "Editing code. The gloss updates as you type." : "Editing gloss. The code is written for you.");
 }
 // End of block: ";" goes after every line when the machine profile asks for it, or when the file already had them.
 // The machine needs ; at the end of every block, so GlossCode adds it where a line doesn't already end with one.
@@ -4350,7 +4350,7 @@ function save(){
   if (editing) commit();
   if (window.GlossCodeNative) return nativeSave(false);
   const n = serialize().length;
-  setMsg(`Saved ${fileName} (${n} bytes). Only the G-code is written, with CRLF line endings${eobOn() ? " and ; at the end of every line" : ""}.`);
+  setMsg(`Saved ${fileName} (${n} bytes). Only the code is written, with CRLF line endings${eobOn() ? " and ; at the end of every line" : ""}.`);
   window.markSaved?.();
 }
 
@@ -5431,12 +5431,12 @@ function problems(){
   if (!d.program) out.push(["e", "It needs a program number (the O number it has on the control)."]);
   const clash = LIB.find(e => e.program===d.program && e.id!==editId);
   if (d.program && clash) out.push(["w", `O${d.program} is also ${clash.name} (${SOURCES[clash.source].label}). A call would find whichever is on the control.`]);
-  if (!d.word.long) out.push(["e", "Give it a long English word (it's what P reads as on the call line)."]);
-  if (d.word.long.length > 10 || d.word.short.length > 8) out.push(["e", "English words are 10 letters (long) and 8 (short) at most."]);
+  if (!d.word.long) out.push(["e", "Give it a long gloss word (it's what P reads as on the call line)."]);
+  if (d.word.long.length > 10 || d.word.short.length > 8) out.push(["e", "Gloss words are 10 letters (long) and 8 (short) at most."]);
   if (!d.machines.length) out.push(["e", "Tick at least one kind of machine it works on."]);
   d.args.forEach(a => {
     if (used.has(a.letter)) out.push(["e", `${a.letter} is used for two variables.`]); used.add(a.letter);
-    if (!/^[A-Z][A-Z0-9]{0,4}$/.test(a.name || "")) out.push(["e", `${a.letter}'s English name should be 1–5 letters or digits, starting with a letter.`]);
+    if (!/^[A-Z][A-Z0-9]{0,4}$/.test(a.name || "")) out.push(["e", `${a.letter}'s gloss name should be 1–5 letters or digits, starting with a letter.`]);
     else if (a.name.length > 4) out.push(["i", `${a.name} plus its value may not fit a column. Four letters or fewer (DEP, STEP, FEED) always do.`]);
   });
   const body = d.body.join("\n"), refs = new Set([...body.matchAll(/#(\d+)/g)].map(m => +m[1]));
@@ -5485,7 +5485,7 @@ $("s-scan").onclick = () => {
   const refs = [...new Set([...draft.body.join("\n").matchAll(/#(\d+)/g)].map(m => +m[1]))].filter(n => VAR_ARG[n] && !draft.args.some(a => ARG_VAR[a.letter]===n)).sort((a, b) => a - b);
   refs.forEach(n => { const L = VAR_ARG[n]; draft.args.push({ letter:L, name:L==="F" ? "FEED" : "", kind:L==="F" ? "feed" : "distance", required:true, desc:"" }); });
   drawVars(); checkDraft();
-  $("s-msg").textContent = refs.length ? `Added ${refs.map(n => VAR_ARG[n]).join(", ")}. Give each an English name and say what it is.` : "Every # the body reads is already a variable.";
+  $("s-msg").textContent = refs.length ? `Added ${refs.map(n => VAR_ARG[n]).join(", ")}. Give each a gloss name and say what it is.` : "Every # the body reads is already a variable.";
 };
 sdlg.addEventListener("input", ev => { if (ev.target.closest("#s-vars")) return; delArmed = false; $("s-del").textContent = "Delete"; checkDraft(); });
 sdlg.addEventListener("change", ev => { if (ev.target.id==="s-units") drawVars(); if (!ev.target.closest("#s-vars")) checkDraft(); });
@@ -5791,7 +5791,7 @@ async function machineFor(path, name, suggested){
   const ext = extOf(name), d = SETTINGS.extDefaults[ext];
   if (d && MACHINES[d]) return { id:d, why:"ext", ext };
   const id = await pickMachine({ title:`Open ${name}`, ok:"Open", ext, sel:suggested,
-    text:`Which machine is ${name} for? The English words and checks follow its profile. GlossCode remembers your choice for this file.` });
+    text:`Which machine is ${name} for? The gloss words and checks follow its profile. GlossCode remembers your choice for this file.` });
   return id ? { id, why:"picked" } : null;
 }
 function openedMsg(m){
@@ -5805,7 +5805,7 @@ function openedMsg(m){
 async function newProgram(){
   if (editing && !commit()) return;
   const id = await pickMachine({ title:"New program", ok:"Create", sel:activeTab >= 0 ? machineId : undefined,
-    text:"Which machine is the new program for? The English words, checks and Insert menu follow its profile." });
+    text:"Which machine is the new program for? The gloss words, checks and Insert menu follow its profile." });
   if (!id) return;
   const taken = new Set(TABS.map(tabName));
   let n = 1; while (taken.has(`Untitled-${n}.nc`)) n++;
