@@ -66,6 +66,12 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Gloss numbers always show a decimal point; distance words without one show what the control reads (X1 → X0.0001)
 - [ ] F and S keep their letter with a small unit (ipm, ipr, mmpm, mmpr, rpm, sfm, smm)
 
+**Converting** (see [converting.md](converting.md))
+- [ ] Program › Convert to another control…: reads the program with its own control, lifts each code to its full gloss word, and writes the target control's code for the same meaning. Values become real numbers (X1 on a Haas is written X0.0001) and dwells are rewritten in the target's units
+- [ ] Review with a level per line: green (direct, toolpath matches), amber (worth a look, with the reason) and red (no match: leave out the code, write a local subprogram in, comment the line out, or keep it). Answers are remembered per pair of controls
+- [ ] The converted program is checked by the target's reading, checks and cycle word lists, and its simulation is compared move by move with the source
+- [ ] The middle format: one readable line per block with full gloss words and real values, which can be copied
+
 **Checks** (see [checks.md](checks.md))
 - [ ] Problems panel with severity filters, margin marks, click or F8 to jump to the line
 - [ ] Canned cycles missing required words, per control (Haas, Fanuc, Okuma)
