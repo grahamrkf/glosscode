@@ -4,6 +4,9 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Machines
+- Opening a file with no default machine suggests the controls it looks written for, at the top of the picker's control list under "Suggested for this file". Clues come from the extension (.MIN, .SSB and .SDF for Okuma, .H for Heidenhain, .MPF and .SPF for Siemens, .EIA for Mazak, .NGC for LinuxCNC) and the text (CALL and RTS for Okuma, BEGIN PGM for Klartext, %L or #CALL for Fagor 8060, (SUB n) for Fagor 8055, O-word subroutines for LinuxCNC, G187 or M97 for Haas). The best match is picked, preferring one of your own machines with a suggested control, and the reason is shown; you still confirm it. .nc and .tap suggest nothing, since too many controls use them. The clues are in `fileHints` in gcode-rules.json.
+
 ## [0.1.7] - 2026-11-05
 
 ### Machines
