@@ -265,7 +265,9 @@
           "G87": null, "G88": null,
           "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
         },
-        "foreign": { "M97": null, "M88": null, "M89": null }
+        "foreign": { "M97": null, "M88": null, "M89": null },
+        "engrave": { "code": "G47", "charWidth": 0.75, "charPitch": 1.0, "verified": false,
+                     "note": "G47 P0/P1 text engraving: J is the character height and X Y the start. The manual doesn't give the width or spacing of a character, so the simulation's boxes are charWidth x J, one every charPitch x J (an assumption until checked against an engraved part)." }
       },
       "lathe": {
         "modalGroups": { "work offset": ["G54", "G55", "G56", "G57", "G58", "G59", "G110", "G111", "G114", "G115", "G116", "G117", "G118", "G119", "G120", "G121", "G122", "G123", "G124", "G125", "G126", "G127", "G128", "G129", "G154"],
@@ -326,6 +328,7 @@
           "G87": { "name": "Bore, stop and jog out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
           "G88": { "name": "Bore, dwell and jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
         },
+        "engrave": null,
         "foreign": {
           "M88":  { "severity": "warning", "text": "M88 (through-spindle coolant) isn't in the 1995 VF manual. Check that this machine has it." },
           "M89":  { "severity": "warning", "text": "M89 (through-spindle coolant off) isn't in the 1995 VF manual. Check that this machine has it." },

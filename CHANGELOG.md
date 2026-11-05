@@ -4,6 +4,9 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Simulation
+- Haas G47 text engraving shows in the toolpath and the Z-by-line timeline. Each character is a grey box at its outer bounds (the letters aren't drawn), J tall, starting at X Y and turned by I; a space leaves a gap. The tool goes down to R, feeds to Z for each character and comes back up to R, so a G47 line no longer reads as a rapid to Z. The box width (0.75 × J) and spacing (one every J) are an assumption until checked against an engraved part; they are `engrave` in the Haas mill tables in gcode-rules.json. New sample program: examples/NAMEPLATE.nc.
+
 ## [0.1.8] - 2026-11-05
 
 ### Machines
