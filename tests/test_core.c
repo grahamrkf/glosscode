@@ -221,6 +221,18 @@ static void test_controls(const gc_data *data)
     gc_json_free(m1);
     gc_json_free(m2);
     gc_doc_free(doc);
+
+    /* On the OSP-E100L (and every Okuma lathe) G30 is a skip cycle, and M99 is tailstock thrust high */
+    const char *e1 = "{\"type\":\"lathe\",\"brand\":\"okumae100l\"}";
+    const char *p2 = "N10 G30\nN20 M99\n";
+    doc = gc_doc_parse(p2, strlen(p2));
+    m1 = gc_json_parse(e1, strlen(e1), err, sizeof err);
+    a = gc_analyze(data, m1, doc, GC_STYLE_LONG);
+    CHECK_STR(a->cells[0][1].e, "SKIPCYC", "G30 is the skip cycle on an Okuma lathe");
+    CHECK_STR(a->cells[1][1].e, "TSTHRHI", "M99 is tailstock thrust high on an OSP-E100L");
+    gc_analysis_free(a);
+    gc_json_free(m1);
+    gc_doc_free(doc);
 }
 
 static void test_api(const gc_data *data)

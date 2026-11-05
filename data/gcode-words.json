@@ -1188,6 +1188,7 @@
       "G22": { "long": "TRQSKIP", "short": "TQSK", "words": "torque.skip", "desc": "Torque skip (Okuma lathe)" },
       "G28": { "long": "TRQLIMOFF", "short": "TQLOFF", "words": "torque.limitoff", "desc": "Torque limit off (Okuma lathe)" },
       "G29": { "long": "TRQLIMON", "short": "TQLON", "words": "torque.limiton", "desc": "Torque limit on (Okuma lathe)" },
+      "G30": { "long": "SKIPCYC", "short": "SKPC", "words": "skip.cycle", "desc": "Skip cycle (Okuma lathe; not a return home, that's G20)" },
       "G83": { "long": "LAPBLANK", "short": "LBLK", "words": "lap.blank", "desc": "Start of LAP blank shape (Okuma)" },
       "G84": { "long": "LAPCOND", "short": "LCND", "words": "lap.conditions", "desc": "Change LAP bar turning conditions (Okuma)" },
       "G88": { "long": "LAPTHD", "short": "LTHD", "words": "lap.thread", "desc": "LAP continuous thread cutting (Okuma)" },
@@ -1263,6 +1264,14 @@
       "M110": { "long": "CJOINON", "short": "CJON", "words": "cjoin.on", "desc": "C-axis connect on (Okuma)" },
       "M146": { "long": "CUNCLAMP", "short": "CUNC", "words": "rotary.unclamp", "desc": "C-axis unclamp (Okuma)" },
       "M147": { "long": "CCLAMP", "short": "CCLP", "words": "rotary.clamp", "desc": "C-axis clamp (Okuma)" }
+    },
+    "okuma7000l.lathe": {
+      "M98": { "long": "TSTHRLO", "short": "TSLO", "words": "tailstock.thrustlow", "desc": "Tailstock thrust low (Okuma, OSP700L/7000L; subprograms use CALL)" },
+      "M99": { "long": "TSTHRHI", "short": "TSHI", "words": "tailstock.thrusthigh", "desc": "Tailstock thrust high (Okuma, OSP700L/7000L; subprograms end with RTS)" }
+    },
+    "okumae100l.lathe": {
+      "M98": { "long": "TSTHRLO", "short": "TSLO", "words": "tailstock.thrustlow", "desc": "Tailstock thrust low (Okuma, OSP-E100L; subprograms use CALL)" },
+      "M99": { "long": "TSTHRHI", "short": "TSHI", "words": "tailstock.thrusthigh", "desc": "Tailstock thrust high (Okuma, OSP-E100L; subprograms end with RTS)" }
     }
   }
 }
