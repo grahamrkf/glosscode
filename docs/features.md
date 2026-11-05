@@ -62,7 +62,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Mill Z timeline symbols: moves down on the left of a line's column and up on the right; drill, dwell, peck (G83 loops, G73 ticks), tap, bore (G85, G86, G76, G89), ramp, helix (a loop per circuit), G04, M00 (filled square), M01 (empty square), tool change, Z home, M05, program end, and hatched block delete lines; hover a symbol for its name
 - [ ] A red dot on the timeline where the tool is, following each move while the simulation runs
 - [ ] ,C chamfer and ,R corner radius on G01 moves: drawn in the toolpath, with the lines out to the sharp corner grey and dashed
-- [ ] Haas G47 engraving in the toolpath and timeline: a grey box for each character's outer bounds, turned by I
+- [ ] Haas G47 engraving in the toolpath and timeline: one grey rectangle per line of text (J tall, turned by I, open on the right since letter widths aren't known), with the tool as a line sweeping along it
 
 **Files and machines**
 - [ ] Machine selector (mill or lathe, with brand overrides): Haas, Fanuc and Okuma
