@@ -10,6 +10,12 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - Control-specific codes (ones whose full word no base code uses, such as Okuma's `tlen.x` or Haas's `machine.chuck.clamp`) have a dotted underline in the gloss row, and hovering one says so.
 - The long word style (SPINFWD) is gone. Full words are the default; short words (SFWD) stay. Address letters keep their prefix (SEQ10, TOOL1). Library subprograms have a full word (`sub.slotmill`) in place of a long one; library and machine files that still have a long word read it as the full word.
 
+### Converting
+- **Program › Convert to another control…** converts the open program to another control of the same machine type, so far for controls that write Fanuc-style blocks. Each code is matched by its full gloss word, not its number. Values without a decimal point are written as the number the source control reads, and dwells are rewritten in the target's units. Each line is green (direct), amber (worth a look, with the reason) or red (no match). For a red line you can leave out the code, write a local subprogram's lines in (Haas M97), comment the line out, or keep it, and the answer is remembered for that pair of controls. The result is checked by the target's own checks and by comparing the two toolpaths move by move. It opens in a new tab with a header saying it is converted and not proven. The review can also show and copy the middle format that every conversion goes through. See [docs/converting.md](docs/converting.md).
+
+### Simulation
+- A distance written with no decimal point (X1) now moves to the value the control reads, 0.0001 in on Haas and Fanuc-style controls, the same as the gloss row shows. Before, the toolpath used 1.
+
 ### Editor
 - The two lines are now called **code** and **gloss** instead of G-code and English, since the code line can be any control's language (Klartext too) and the gloss could later be in other languages. View › Edit in reads Gloss / Code, View › Show reads Gloss and code / Gloss only / Code only, the word style group is Gloss words, and the status bar says Editing gloss or Editing code.
 
