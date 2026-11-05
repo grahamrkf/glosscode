@@ -4,6 +4,9 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Editor
+- The two lines are now called **code** and **gloss** instead of G-code and English, since the code line can be any control's language (Klartext too) and the gloss could later be in other languages. View › Edit in reads Gloss / Code, View › Show reads Gloss and code / Gloss only / Code only, the word style group is Gloss words, and the status bar says Editing gloss or Editing code.
+
 ## [0.1.7] - 2026-11-05
 
 ### Machines

@@ -24,7 +24,7 @@ GlossCode targets Windows first. Everything is arranged so that a native Linux b
 
 - **Parser**: splits each line into words (`N40`, `M03`, `G97`, `S6000`) and keeps comments whole. Remembers each file's line endings, since G-code is often CRLF.
 - **Mode tracker**: walks the program in execution order, following subprogram calls, and records the modal state after every line: motion, units, G90/G91, plane, feed mode and rate, spindle, coolant, tool, offsets and compensation.
-- **Translator**: turns each word into its English word using the dictionary and the active modes. Values take a unit prefix (`RPM600` under G97, `SFM600` under G96, `IPM25` under G94 and G20).
+- **Translator**: turns each word into its gloss word using the dictionary and the active modes. Values take a unit prefix (`RPM600` under G97, `SFM600` under G96, `IPM25` under G94 and G20).
 - **Checks**: one pass in execution order that carries the machine state and reports problems such as a canned cycle missing a word, a feed move with no F or with the spindle off, a word repeated in a line, or a code that means something else on this control. Rule text and per-control tables come from `gcode-rules.json`; see [checks.md](checks.md).
 - **Dictionary loader**: reads `gcode-words.json` and merges machine definition overrides on top.
 
