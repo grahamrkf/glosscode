@@ -69,7 +69,8 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Cutter comp side: a grey band beside G41/G42 moves and G12/G13 pocket circles, on the side the tool's centre is on (View › Cutter comp side)
 - [ ] G73/G83 peck retracts shown with a grey band on the Z timeline, since the amounts are machine settings
 - [ ] Haas G107 cylindrical mapping drawn unrolled, in a rectangle one turn tall (open at the top when Q0 leaves the diameter to Setting 34)
-- [ ] Okuma lathe G71 threading (and Haas one-line G76) as a grey box with a sweeping line; G73 grooving and G77/G78 tapping drawn as cycles
+- [ ] Okuma lathe G71 threading (and Haas one-line G76) drawn pass by pass (M73/M74/M75 infeed patterns, M32/M33/M34 flank infeed); G73 grooving and G77/G78 tapping drawn as cycles
+- [ ] Variables panel: each variable's value at the line, start values for the simulation, read-before-set warnings, common values saved to the machine profile
 - [ ] Alarms: a code for an option the machine profile doesn't have (Okuma G152 programmable tailstock) stops the simulation with a red ✕ and an error
 
 **Files and machines**
