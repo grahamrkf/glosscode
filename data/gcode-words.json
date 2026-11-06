@@ -93,7 +93,7 @@
     "M99": { "words": "call.return", "short": "RET",   "desc": "Return from subprogram" }
   },
   "address": {
-    "N": { "words": "SEQ",  "short": "N",   "desc": "Sequence number" },
+    "N": { "words": "N",    "short": "N",   "desc": "Sequence number" },
     "O": { "words": "PROG", "short": "O",   "desc": "Program number" },
     "T": { "words": "TOOL", "short": "T",   "desc": "Tool number" },
     "H": { "words": "LOFS", "short": "H",   "desc": "Tool length offset number" },
