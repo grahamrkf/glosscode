@@ -42,7 +42,9 @@ const SYSTEM_FILES = { "LATHE_SYSTEM_B.nc": ["gen.lathe.fanuclb", "gen.lathe.maz
                        "FAGOR_8060_LATHE.nc": ["gen.lathe.fagor8060", "gen.lathe.fagor8055"],
                        "FAGOR_8060_LATHE_CHECKS.nc": ["gen.lathe.fagor8060"],
                        "HEIDENHAIN.H": ["gen.mill.heidenhain"],
-                       "HEIDENHAIN_CHECKS.H": ["gen.mill.heidenhain"] };
+                       "HEIDENHAIN_CHECKS.H": ["gen.mill.heidenhain"],
+                       "HAAS_PATTERNS.nc": ["haas_vf2", "gen.mill.fanuc"],
+                       "OKUMA_CYCLES.MIN": ["gen.lathe.okumau10l", "okuma_lb3000"] };
 let changed = 0;
 const write = (file, out) => {
   if (existsSync(file) && readFileSync(file, "utf8")===out) return;
