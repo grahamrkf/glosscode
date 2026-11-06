@@ -65,6 +65,12 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] A red dot on the timeline where the tool is, following each move while the simulation runs
 - [ ] ,C chamfer and ,R corner radius on G01 moves: drawn in the toolpath, with the lines out to the sharp corner grey and dashed
 - [ ] Haas G47 engraving in the toolpath and timeline: one grey rectangle per line of text (J tall, turned by I, open on the right since letter widths aren't known), with the tool as a line sweeping along it
+- [ ] Haas G70/G71/G72 bolt hole patterns drilled with the active cycle, G68 rotation and G101 mirror followed, and a small circle at every drilled hole
+- [ ] Cutter comp side: a grey band beside G41/G42 moves and G12/G13 pocket circles, on the side the tool's centre is on (View › Cutter comp side)
+- [ ] G73/G83 peck retracts shown with a grey band on the Z timeline, since the amounts are machine settings
+- [ ] Haas G107 cylindrical mapping drawn unrolled, in a rectangle one turn tall (open at the top when Q0 leaves the diameter to Setting 34)
+- [ ] Okuma lathe G71 threading (and Haas one-line G76) as a grey box with a sweeping line; G73 grooving and G77/G78 tapping drawn as cycles
+- [ ] Alarms: a code for an option the machine profile doesn't have (Okuma G152 programmable tailstock) stops the simulation with a red ✕ and an error
 
 **Files and machines**
 - [ ] Machine selector (mill or lathe, with brand overrides): Haas, Fanuc and Okuma
