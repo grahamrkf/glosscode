@@ -4587,7 +4587,9 @@ function drawViews(){
     ? tools.map(t => `<span><i style="background:${toolColor(t)}"></i>${t}</span>`).join("") + `<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`
     : (simRapids ? `<span><i style="background:${KCOL.rapid}"></i>Rapid</span>` : "") + `<span><i style="background:${KCOL.feed}"></i>Feed</span><span><i style="background:${KCOL.arc}"></i>Arc</span><span><i style="background:${KCOL.cyc}"></i>Cycle</span>${EXEC.boxes?.length ? `<span><i style="background:#b4bcc6"></i>Engraving</span>` : ""}${compBand && segs.some(s => s.comp) ? `<span><i style="background:rgba(138,147,158,.45);height:6px"></i>Cutter comp side</span>` : ""}<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`;
   drawSimPos(doneTo > 0 ? at : null, lathe);
-  document.getElementById("s-play").textContent = simTimer ? "⏸" : "▶";
+  // Only when it changes: WebKitGTK (Linux) drops a click whose text was replaced between the press and the release,
+  // and this runs on every step of the simulation, so ⏸ couldn't be clicked while playing.
+  const pb = document.getElementById("s-play"), pt = simTimer ? "⏸" : "▶"; if (pb.textContent!==pt) pb.textContent = pt;
   document.getElementById("s-play").classList.toggle("on", !!simTimer);
   drawTimeline(EXEC.steps, lathe);
 }
