@@ -4,6 +4,12 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Speed
+- Long programs (ten thousand lines and more) are much faster. Clicking a line, the arrow keys and the simulation moving to the next line only move the highlight instead of reading, checking and drawing the whole program again. Rows out of view aren't laid out, the Z timeline draws only the steps around the current one, and the toolpath is drawn as a few paths instead of one line per move. On a 10,000-line test program a click went from about 6 seconds to under 0.2, and the simulation from about 1 frame a second to 30 or more.
+- Arcs are drawn and simulated with as many straight moves as their size needs (10° each on a mill, a full circle still 36) instead of 36 for every arc, so a program of short arcs no longer simulates 36 times slower than straight lines.
+- The simulation speed menu has a Max speed.
+- A program with very many moves could stop drawing the toolpath with "Maximum call stack size exceeded". Fixed.
+
 ## [0.1.8] - 2026-11-05
 
 ### Machines
