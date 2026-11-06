@@ -89,7 +89,10 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .tab{padding:6px 14px;font-size:12.5px;color:#1b1b1b;background:#fff;border-right:1px solid #e5e5e5;box-shadow:inset 0 2px #0f6cbd}
 .colhead{display:flex;font:10.5px var(--w-mono);color:#9a9a9a;padding:4px 0 2px;border-bottom:1px solid #f0f0f0;flex:none;white-space:pre}
 .ed{flex:1;min-height:0;overflow:auto;position:relative;padding:4px 0 40px;font:13px var(--w-mono)}
-.ln{display:flex;flex-direction:column;padding:1px 0 4px}
+/* Rows out of view aren't laid out (a long program has thousands); the height (inside the padding) is what one row takes until it's drawn */
+.ln{display:flex;flex-direction:column;padding:1px 0 4px;content-visibility:auto;contain-intrinsic-height:auto 38px}
+.show-en .ln,.show-gc .ln{contain-intrinsic-height:auto 19px}
+.ln.lib,.ln:has(.r.tall){content-visibility:visible}   /* rows of other heights are few: always laid out */
 .r{display:flex;height:19px;align-items:center;white-space:pre}
 .gut{width:5ch;flex:none;text-align:right;padding-right:1.4ch;color:#a0a0a0;font-size:12px}
 .ed.runnums .gut,#colhead.runnums .gut{width:10ch}
@@ -662,7 +665,7 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
             <div class="h" id="v1h">Toolpath XY <span>top view</span></div>
             <div class="simbar">
               <button id="s-reset" title="Restart">⏮</button><button id="s-back" title="Step back one line (Ctrl+←)">|◀</button><button id="s-play" title="Play or pause (F5)">▶</button><button id="s-fwd" title="Step forward one line (Ctrl+→)">▶|</button>
-              <select id="s-speed" aria-label="Simulation speed"><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option><option value="16">16×</option><option value="32">32×</option><option value="64">64×</option></select>
+              <select id="s-speed" aria-label="Simulation speed"><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option><option value="16">16×</option><option value="32">32×</option><option value="64">64×</option><option value="1024" title="As fast as the screen can draw">Max</option></select>
               <button id="s-opt" class="tgl" aria-pressed="false" title="Optional stop: when on, the simulation also pauses at M01">M01</button><button id="s-bd" class="tgl" aria-pressed="false" title="Block delete: when on, lines that start with / are skipped">/</button><button id="s-rap" class="tgl" aria-pressed="true" title="Rapid moves: when off, the toolpath shows feed moves only, like the control's graphics screen">G00</button>
               <button id="s-big" class="big" aria-pressed="false" title="Expanded view (Ctrl+Shift+E)">⤢</button>
             </div>
@@ -1240,6 +1243,9 @@ const COLW = () => style === "short" ? 8 : 12;
 const sty = o => o?.[style] ?? o?.words ?? o?.long;
 const mtype = () => MACHINES[machineId].type;
 // Control characters (the Ctrl+Z end-of-file mark) show as ^Z
+// Smallest / largest of a list without spreading it into Math.min (a long program has more points than a call takes)
+const minOf = (a, f = v => v) => { let m = Infinity; for (let i = 0; i < a.length; i++){ const v = f(a[i], i); if (v < m) m = v; } return m; };
+const maxOf = (a, f = v => v) => { let m = -Infinity; for (let i = 0; i < a.length; i++){ const v = f(a[i], i); if (v > m) m = v; } return m; };
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;").replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, c => "^" + String.fromCharCode(c.charCodeAt(0) + 64));
 const pad2 = w => w[0] + (w.slice(1).length < 2 ? "0" + w.slice(1) : w.slice(1));
 const clean = v => v.endsWith(".") && v.length > 1 ? v.slice(0, -1) : v;
@@ -2464,7 +2470,7 @@ function render(){
   const W = COLW();
   const colhead = document.getElementById("colhead");
   if (layout==="order"){
-    const maxCols = Math.max(...doc.map((_, li) => slotsFor(li).filter(s => !s.cm).length));
+    const maxCols = maxOf(doc, (_, li) => slotsFor(li).filter(s => !s.cm).length);
     colhead.innerHTML = `<span class="gut"></span>` + Array.from({length:maxCols}, (_, i) => `<span class="ch" style="width:${W}ch"><span>${i+1}</span></span>`).join("");
   } else colhead.innerHTML = `<span class="gut"></span>` + USED.map(ci => `<span class="ch" style="width:${WIDTHS[ci]}ch" title="${esc(COLS[ci].about || "")}"><span>${COLS[ci].label}</span></span>`).join("");
   document.getElementById("edwrap").className = "edwrap layout-" + layout;
@@ -2512,6 +2518,37 @@ function render(){
   }).join("");
   drawViews(); drawModes(); status(); updateFindCount(fhits); drawProblems();
   drawMachineChip(); window.drawTabs?.();
+  drawnSig = drawSig();
+}
+/* Moving the cursor (a click, an arrow key, the simulation going to the next line) changes nothing but which row and
+   word are marked, so when the program and view are just as render() last drew them, only those marks move. A long
+   program would otherwise be read, checked, run and drawn again, all ten thousand rows, on every arrow key. */
+let drawnSig = null;
+const drawSig = () => [activeTab, TABS[activeTab]?.id, docVer, doc.length, machineId, style, layout, editMode, showMode, runNums,
+  [...expanded].join(), findQ, simBD, !!editing, JSON.stringify(pendingIns), simIdx!=null && simKey!=null].join("|");
+function renderCursor(){
+  if (activeTab < 0 || drawnSig!==drawSig() || !ed.firstElementChild) return render();
+  fixSel();
+  const simOn = simIdx!=null && simKey!=null, fh = findQ ? new Set(findHits()) : null;
+  ed.querySelectorAll(".cell.sel").forEach(c => c.classList.remove("sel"));
+  ed.querySelectorAll(".xpbar").forEach(b => b.remove());
+  for (const r of ed.children){
+    const key = r.dataset.key; if (!key) continue;   // a subprogram-library row
+    const li = +r.dataset.li, ins = key[0]==="x";
+    r.classList.toggle("cur", simOn ? key===simKey : li===curLine && key[0]==="m");
+    r.classList.toggle("lsel", !ins && key[0]==="m" && inSel(li));
+    r.classList.toggle("fcur", !!fh && fh.has(li) && li===curLine);
+    r.classList.toggle("simcur", simOn && key===simKey);
+  }
+  const row = ed.querySelector(`.ln[data-key="m${curLine}"]`);
+  if (row) row.querySelectorAll(`.cell[data-r="${CSS.escape(curRef)}"]`).forEach(c => c.classList.add("sel"));
+  if (simOn){   // the progress bar of the subprogram running, on the row that shows it
+    const sr = ed.querySelector(`.ln[data-key="${simKey}"]`), li = sr ? +sr.dataset.li : -1, ins = simKey[0]==="x";
+    const pr = callProgress(simK, ins ? 1 : 0);
+    if (sr && pr!=null && (ins || !expanded.has(li))) sr.querySelector(".r.gc").insertAdjacentHTML("beforeend",
+      `<span class="xpbar" title="Running the subprogram this line calls"><i style="width:${(pr*100).toFixed(1)}%"></i></span>`);
+  }
+  drawViews(); drawModes(); status(); if (fh) updateFindCount([...fh]); drawProblems();
 }
 function status(){
   const st = lineState[curLine] || newState();
@@ -3135,7 +3172,7 @@ function moveWord(d, to){
   const sl = slotsFor(curLine).filter(s => !s.pend);
   let i = sl.findIndex(s => s.ref===curRef); if (i < 0) i = 0;
   i = to==="home" ? 0 : to==="end" ? sl.length-1 : Math.max(0, Math.min(sl.length-1, i+d));
-  curRef = sl[i].ref; render(); showSelInfo();
+  curRef = sl[i].ref; renderCursor(); showSelInfo();
 }
 function moveLine(d){
   const sl = slotsFor(curLine);
@@ -3193,7 +3230,7 @@ function selectLine(li, keepSim, keepSel){
   if (editing && !commit()) return;
   if (!keepSel) selAnchor = null;
   if (simIdx!=null && !keepSim) stopSim(true);
-  curLine = Math.max(0, Math.min(li, doc.length-1)); render(); showInfo(curLine, null);
+  curLine = Math.max(0, Math.min(li, doc.length-1)); renderCursor(); showInfo(curLine, null);
   scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`));
   ed.focus({preventScroll:true});
 }
@@ -3439,6 +3476,9 @@ function cycleSketch(kind, labels, def){
 }
 
 /* ---------- Toolpath and simulation ---------- */
+// How many straight moves draw an arc of sweep sw (radians): a full circle gets "full" of them, a part of one its share
+// (at least 2). Every arc used to get the full count, so a program of short arcs had 36 moves to draw and simulate for each.
+const arcSteps = (sw, full) => Math.max(2, Math.min(full, Math.ceil(Math.abs(sw)/(2*Math.PI)*full - 1e-9)));
 function interpret(){
   if (SYNTAX==="klartext") return interpretKlartext();
   const lathe = mtype()==="lathe";
@@ -3715,7 +3755,8 @@ function interpret(){
       let sw = a1 - a0; if (mode===3){ if (sw <= 0) sw += 2*Math.PI; } else { if (sw >= 0) sw -= 2*Math.PI; }
       turns += Math.abs(sw)/(2*Math.PI);
       let q = {...p};
-      for (let s = 1; s <= 36; s++){ const a = a0 + sw*s/36; const nn = {x:cx+rr*Math.cos(a), y:cy+rr*Math.sin(a), z:p.z+(n.z-p.z)*s/36}; segs.push({a:q, b:nn, rapid:false, kind:"arc", li, tool:T}); q = nn; }
+      const ns = arcSteps(sw, 36);
+      for (let s = 1; s <= ns; s++){ const a = a0 + sw*s/ns; const nn = {x:cx+rr*Math.cos(a), y:cy+rr*Math.sin(a), z:p.z+(n.z-p.z)*s/ns}; segs.push({a:q, b:nn, rapid:false, kind:"arc", li, tool:T}); q = nn; }
     } else if (lathe && (mode===2 || mode===3)){ let q = p; for (const pt of arcPts(p, n, w, mode)){ segs.push({a:{...q}, b:pt, rapid:false, kind, li, tool:T}); q = pt; } }
     else {
       const sg = {a:{...p}, b:n, rapid: mode===0, kind, li, tool:T};
@@ -3961,7 +4002,7 @@ function interpret(){
     } else C = { u:A.u + (w.K || 0), v:A.v + (w.I || 0) };
     const rr = Math.hypot(A.u - C.u, A.v - C.v), a0 = Math.atan2(A.v - C.v, A.u - C.u), a1 = Math.atan2(B.v - C.v, B.u - C.u);
     let sw = a1 - a0; if (m===3){ if (sw <= 0) sw += 2*Math.PI; } else { if (sw >= 0) sw -= 2*Math.PI; }
-    const out = []; for (let s = 1; s < 24; s++){ const an = a0 + sw*s/24; out.push({ x:2*(C.v + rr*Math.sin(an)), y:0, z:C.u + rr*Math.cos(an), arc:true }); }
+    const ns = arcSteps(sw, 24), out = []; for (let s = 1; s < ns; s++){ const an = a0 + sw*s/ns; out.push({ x:2*(C.v + rr*Math.sin(an)), y:0, z:C.u + rr*Math.cos(an), arc:true }); }
     out.push({ ...b, arc:true }); return out;
   }
   // The points of a LAP contour (the lines from "NA1 G81" to G80), starting at the tool's position.
@@ -4188,7 +4229,8 @@ function interpretKlartext(){
     let sw = a1 - a0; if (ccw){ if (sw <= 1e-9) sw += 2*Math.PI; } else if (sw >= -1e-9) sw -= 2*Math.PI;
     if (!full && Math.abs(Math.abs(sw) - 2*Math.PI) < 1e-6 && Math.hypot(n.x - p.x, n.y - p.y) > 1e-6) sw = 0;
     let q = {...p};
-    for (let s = 1; s <= 36; s++){ const a = a0 + sw*s/36, b = { x:c.x + r*Math.cos(a), y:c.y + r*Math.sin(a), z:p.z + (n.z - p.z)*s/36 }; seg(q, b, "arc", li, T); q = b; }
+    const ns = arcSteps(sw, 36);
+    for (let s = 1; s <= ns; s++){ const a = a0 + sw*s/ns, b = { x:c.x + r*Math.cos(a), y:c.y + r*Math.sin(a), z:p.z + (n.z - p.z)*s/ns }; seg(q, b, "arc", li, T); q = b; }
     dir = { x: ccw ? -Math.sin(a0 + sw) : Math.sin(a0 + sw), y: ccw ? Math.cos(a0 + sw) : -Math.cos(a0 + sw) };
     p = { ...n };
   }
@@ -4273,7 +4315,9 @@ function tailCode(toks){
 }
 const KCOL = { rapid:"#e8a33d", feed:"#0f6cbd", arc:"#0e9384", cyc:"#c03d9a", engrave:"#8a939e" };
 const TCOL = ["#0f6cbd", "#c03d9a", "#0e9384", "#7a5bc0", "#b35c00", "#3b7d23"];
-function toolColor(t){ const tools = [...new Set(EXEC.segs.map(s => s.tool))]; return TCOL[Math.max(0, tools.indexOf(t)) % TCOL.length]; }
+function toolColor(t){   // the tool list is worked out once per run of the program, not once per move
+  if (EXEC.toolList?.segs!==EXEC.segs) EXEC.toolList = { segs:EXEC.segs, tools:[...new Set(EXEC.segs.map(s => s.tool))] };
+  return TCOL[Math.max(0, EXEC.toolList.tools.indexOf(t)) % TCOL.length]; }
 function stepIndexFor(li){
   const st = EXEC.steps; let k = st.findIndex(s => s.li===li);
   if (k < 0) k = st.findIndex(s => s.li > li);
@@ -4310,7 +4354,7 @@ function drawViews(){
   let x0, x1, y0, y1;
   if (win) ({ x0, x1, y0, y1 } = win);
   else {
-    x0 = Math.min(...pts.map(fx)); x1 = Math.max(...pts.map(fx)); y0 = Math.min(...pts.map(fy)); y1 = Math.max(...pts.map(fy));
+    x0 = minOf(pts, fx); x1 = maxOf(pts, fx); y0 = minOf(pts, fy); y1 = maxOf(pts, fy);
     if (x1-x0 < 1e-6){ x0 -= .5; x1 += .5; } if (y1-y0 < 1e-6){ y0 -= .5; y1 += .5; }
   }
   document.getElementById("vz-fit").classList.toggle("on", !!win);
@@ -4321,6 +4365,16 @@ function drawViews(){
   let g = "";
   if (lathe && 0 >= y0 && 0 <= y1) g += `<line x1="4" x2="${W-4}" y1="${Y(0)}" y2="${Y(0)}" stroke="#b9c2cf" stroke-dasharray="2 3" stroke-width=".8"/>`;
   const layers = [[], [], []], band = [];
+  // Moves one after another drawn the same way go into one <path>: a long program has tens of thousands of moves,
+  // and one <line> each made every redraw (each step of the simulation) slow.
+  const runs = [null, null, null];
+  const flush = n => { const r = runs[n]; if (r){ layers[n].push(`<path d="${r.d}" fill="none" stroke="${r.col}" stroke-width="${r.wdt}"${r.dash} stroke-linecap="round" stroke-linejoin="round"/>`); runs[n] = null; } };
+  const addLine = (n, x1, y1, x2, y2, col, wdt, dash) => {
+    let r = runs[n];
+    if (r && (r.col!==col || r.wdt!==wdt || r.dash!==dash || r.parts > 4000)){ flush(n); r = null; }
+    if (!r) r = runs[n] = { d:"", col, wdt, dash, end:"", parts:0 };
+    r.d += (r.end===x1 + " " + y1 ? "" : "M" + x1 + " " + y1) + "L" + x2 + " " + y2; r.end = x2 + " " + y2; r.parts++;
+  };
   segs.forEach((s, i) => {
     // Cutter comp: a grey band beside the move, on the side the tool's centre is on. Its width is fixed on screen,
     // since the cutter's radius is in the offset table, not the program.
@@ -4330,6 +4384,7 @@ function drawViews(){
         band.push(`<line x1="${(ax+nx).toFixed(1)}" y1="${(ay+ny).toFixed(1)}" x2="${(bx+nx).toFixed(1)}" y2="${(by+ny).toFixed(1)}" stroke="#8a939e" stroke-opacity="${i >= doneTo && future==="grey" ? .14 : .32}" stroke-width="6"/>`); }
     }
     if (Math.abs(fx(s.a)-fx(s.b)) < 1e-6 && Math.abs(fy(s.a)-fy(s.b)) < 1e-6){
+      if (s.kind==="cyc") flush(i < doneTo ? 1 : 0);
       if (s.kind==="cyc" && i < doneTo) layers[1].push(`<circle cx="${X(fx(s.b))}" cy="${Y(fy(s.b))}" r="2.6" fill="none" stroke="${colorBy==="tool" ? toolColor(s.tool) : KCOL.cyc}" stroke-width="1.4"/>`);
       else if (s.kind==="cyc" && future!=="hide") layers[0].push(`<circle cx="${X(fx(s.b))}" cy="${Y(fy(s.b))}" r="2.6" fill="none" stroke="${future==="grey" ? "#d3d8de" : KCOL.cyc}" stroke-width="1.2"/>`);
       return;
@@ -4342,10 +4397,12 @@ function drawViews(){
     let wdt = s.rapid ? 0.9 : 1.5, dash = s.rapid ? ' stroke-dasharray="3 3"' : "";
     if (state==="future" && future==="grey"){ col = "#d3d8de"; wdt = s.rapid ? .8 : 1.1; }
     if (state==="cur"){ col = "#d13438"; wdt = 2.4; }
-    layers[state==="future" ? 0 : state==="cur" ? 2 : 1].push(`<line x1="${X(fx(s.a))}" y1="${Y(fy(s.a))}" x2="${X(fx(s.b))}" y2="${Y(fy(s.b))}" stroke="${col}" stroke-width="${wdt}"${dash} stroke-linecap="round"/>`);
+    const ly = state==="future" ? 0 : state==="cur" ? 2 : 1;
+    addLine(ly, X(fx(s.a)), Y(fy(s.a)), X(fx(s.b)), Y(fy(s.b)), col, wdt, dash);
     // a hole drilled along the view (a lathe's drill or tap on center): a small circle at the bottom
-    if (s.hole) layers[state==="future" ? 0 : 1].push(`<circle cx="${X(fx(s.b))}" cy="${Y(fy(s.b))}" r="2.6" fill="#fff" stroke="${state==="future" && future==="grey" ? "#d3d8de" : colorBy==="tool" ? toolColor(s.tool) : KCOL.cyc}" stroke-width="1.3"/>`);
+    if (s.hole){ const hl = state==="future" ? 0 : 1; flush(hl); layers[hl].push(`<circle cx="${X(fx(s.b))}" cy="${Y(fy(s.b))}" r="2.6" fill="#fff" stroke="${state==="future" && future==="grey" ? "#d3d8de" : colorBy==="tool" ? toolColor(s.tool) : KCOL.cyc}" stroke-width="1.3"/>`); }
   });
+  flush(0); flush(1); flush(2);
   const wr = wrapR.map(r => {
     const [a, b, c, d] = [[r.xa, r.ya], [r.xb, r.ya], [r.xb, r.yb], [r.xa, r.yb]].map(([x, y]) => [X(x), Y(y)]);
     const lab = r.turn!=null ? `Unrolled (G107): Ø${fmt4(r.d)}, one turn ${fmt4(r.turn)}` : `Unrolled (G107): diameter unknown (Q0: ${DIALECT.cylMap?.setting || "a setting"})`;
@@ -4598,25 +4655,33 @@ function drawTimeline(steps, lathe){
   const CLIP = 0.3, pos = mode==="z" || mode==="x";
   const vals = steps.map(s => mode==="feed" ? s.f : mode==="speed" ? s.s : lathe ? s.v : Math.min(s.v, CLIP));
   const dipZ = mode==="z" && !lathe ? steps.flatMap(s => [...(s.dips || []).map(d => d.z), ...(s.engZ!=null ? [s.engZ] : [])]) : [];
-  const lo = pos ? Math.min(...vals, ...dipZ, 0) : 0, hi = pos ? Math.max(...vals, lathe ? 0.1 : 0.05) : Math.max(...vals, 1) * 1.1;
+  const lo = pos ? Math.min(minOf(vals), minOf(dipZ), 0) : 0, hi = pos ? Math.max(maxOf(vals), lathe ? 0.1 : 0.05) : Math.max(maxOf(vals), 1) * 1.1;
   const Y = v => top + (hi - v) / (hi - lo || 1) * (H - top - bot);
   const X = i => half + i*SLOT;
   // While simulating, the step being run; otherwise the first run of the selected line (its other runs are tinted too).
   const sim = simIdx!=null && simK!=null, idx = sim ? simK : stepIndexFor(curLine);
   const isCur = (s, i) => sim ? i===idx : s.li===curLine;
+  // Only the steps around the current one are drawn: the box shows about BW/SLOT of them, and a long program's
+  // thousands of others would only make the drawing slow (the box is redrawn whenever the line changes).
+  const span = Math.ceil(BW/SLOT) + 8, lo0 = Math.max(0, idx - span), hi0 = Math.min(steps.length, idx + span + 1);
+  const near = (s, i) => i >= lo0 && i < hi0;
   let g = `<defs><pattern id="tlbd" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#d8dde4" stroke-width="1.4"/></pattern></defs>`;
-  steps.forEach((s, i) => { if (isCur(s, i)) g += `<rect x="${X(i)}" y="0" width="${SLOT}" height="${H-bot+4}" fill="#fde7e8"/>`; });
+  steps.forEach((s, i) => { if (near(s, i) && isCur(s, i)) g += `<rect x="${X(i)}" y="0" width="${SLOT}" height="${H-bot+4}" fill="#fde7e8"/>`; });
   g += `<line x1="${half-8}" x2="${W-half+8}" y1="${Y(0)}" y2="${Y(0)}" stroke="#b9c2cf" stroke-dasharray="2 3" stroke-width=".8"/>`;
   if (P){   // the torch band along the top, and the lines that change the process or material
     g += `<rect x="${half-8}" y="3" width="${steps.length*SLOT+16}" height="6" rx="2" fill="#eef0f3"/>`;
     steps.forEach((s, i) => {
+      if (!near(s, i)) return;
       if (s.on) g += `<rect x="${X(i)}" y="3" width="${SLOT}" height="6" fill="#e8590c"/>`;
       if (s.mark) g += `<line x1="${X(i)+1}" x2="${X(i)+1}" y1="1" y2="${H-bot}" stroke="#7a5bc0" stroke-width="1" stroke-dasharray="1.5 2"/><text x="${X(i)+3}" y="${top+6}" font-size="6.5" fill="#7a5bc0" font-family="Consolas,monospace">${s.mark}</text>`;
     });
   }
-  let prev = null;
   const sym = mode==="z" && !lathe, ends = [];
+  const endOf = (s, i) => sym && s.dips?.length && s.dips.length <= 3 ? Math.min(s.dips[s.dips.length-1].back, CLIP) : vals[i];
+  let prev = lo0 > 0 ? endOf(steps[lo0-1], lo0-1) : null;
+  if (lo0 > 0) ends[lo0-1] = prev;
   steps.forEach((s, i) => {
+    if (!near(s, i)) return;
     const v = vals[i], col = s.kind ? KCOL[s.kind] : "#a9b1bc", dash = s.kind==="rapid" ? ' stroke-dasharray="3 2"' : "";
     const x0 = X(i), xm = x0 + SLOT/2, yv = Y(v), dips = s.dips || [];
     const mk = sym && !dips.length ? tlMark(s) : null, m = mk?.[0];
@@ -4663,7 +4728,7 @@ function drawTimeline(steps, lathe){
     const nw = doc[s.li]?.[isBlockDel(doc[s.li]) ? 1 : 0]; const lab = /^N\d+$/.test(nw||"") ? nw : "L" + (s.li+1);
     const cur = isCur(s, i);
     if (cur || i % 2 === 0) g += `<text x="${X(i)+SLOT/2}" y="${H-6}" font-size="${cur?8:6.5}" text-anchor="middle" fill="${cur?"#d13438":"#9a9a9a"}" font-weight="${cur?700:400}" font-family="Consolas,monospace">${lab}</text>`;
-    prev = sym && dips.length && dips.length <= 3 ? Math.min(dips[dips.length-1].back, CLIP) : v;
+    prev = endOf(s, i);
     ends[i] = prev;
   });
   g += tlDot(steps, idx, sim, X, Y, mode, lathe, CLIP, vals, ends);
@@ -4717,7 +4782,7 @@ function callProgress(k, depth = 0){
 function simFollow(k, force){
   const st = EXEC.steps[k]; simK = st ? k : null;
   const key = simRowKey(st);
-  if (key && (force || key!==simKey)){ simKey = key; curLine = rowLi(key); render(); scrollToLn(ed.querySelector(`.ln[data-key="${key}"]`)); return; }
+  if (key && (force || key!==simKey)){ simKey = key; curLine = rowLi(key); renderCursor(); scrollToLn(ed.querySelector(`.ln[data-key="${key}"]`)); return; }
   const bar = ed.querySelector(`.ln[data-key="${simKey}"] .xpbar i`), pr = callProgress(k, simKey[0]==="x" ? 1 : 0);
   if (bar && pr!=null) bar.style.width = (pr*100).toFixed(1) + "%";
   drawViews();

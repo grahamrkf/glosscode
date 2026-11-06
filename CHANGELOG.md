@@ -19,6 +19,12 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - Variables panel, under Active modes: every variable the program sets or reads (#1-#999, and Okuma V and named variables), its value at the line shown, and a start value box. The simulation starts with those values. A variable read before the program sets it, with no start value, is flagged there and in Problems. Common variables (#100-#999, Okuma VC) can be saved to the machine profile with one button, and every program on that machine then starts with them (shown in purple; ✕ removes one).
 - Alarms: a code for an option the machine doesn't have stops the simulation on that line with a red ✕, an "Alarm" in the position line and an error in Problems, and the lines after it are greyed. The first is Okuma G152 (programmable tailstock positioning): machine profiles have a new lathe option, Programmable tailstock, and without it G152 alarms. G152 W moves the tailstock, never the tool, so with the option nothing is drawn (it used to read as a Z move). New gloss word: G152 `machine.tailstock.move`.
 
+### Speed
+- Long programs (ten thousand lines and more) are much faster. Clicking a line, the arrow keys and the simulation moving to the next line only move the highlight instead of reading, checking and drawing the whole program again. Rows out of view aren't laid out, the Z timeline draws only the steps around the current one, and the toolpath is drawn as a few paths instead of one line per move. On a 10,000-line test program a click went from about 6 seconds to under 0.2, and the simulation from about 1 frame a second to 30 or more.
+- Arcs are drawn and simulated with as many straight moves as their size needs (10° each on a mill, a full circle still 36) instead of 36 for every arc, so a program of short arcs no longer simulates 36 times slower than straight lines.
+- The simulation speed menu has a Max speed.
+- A program with very many moves could stop drawing the toolpath with "Maximum call stack size exceeded". Fixed.
+
 ## [0.1.8] - 2026-11-05
 
 ### Machines
