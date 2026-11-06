@@ -265,7 +265,9 @@
           "G87": null, "G88": null,
           "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
         },
-        "foreign": { "M97": null, "M88": null, "M89": null }
+        "foreign": { "M97": null, "M88": null, "M89": null },
+        "engrave": { "code": "G47", "charWidth": 1.0, "charHeight": 1.25, "verified": false,
+                     "note": "G47 P0/P1 text engraving: J is the character height and X Y the start. Letter widths vary and aren't given, so the simulation draws each line of text as one rectangle charHeight x J tall and an estimated charWidth x J per character long, open on the right. A shop note in proven programs says J.120 text comes out .150 high and .120 wide per character (1.25 x J tall, 1.0 x J wide). A P1 serial number that carries on along the same baseline sets where the text before it ends." }
       },
       "lathe": {
         "modalGroups": { "work offset": ["G54", "G55", "G56", "G57", "G58", "G59", "G110", "G111", "G114", "G115", "G116", "G117", "G118", "G119", "G120", "G121", "G122", "G123", "G124", "G125", "G126", "G127", "G128", "G129", "G154"],
@@ -326,6 +328,7 @@
           "G87": { "name": "Bore, stop and jog out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
           "G88": { "name": "Bore, dwell and jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
         },
+        "engrave": null,
         "foreign": {
           "M88":  { "severity": "warning", "text": "M88 (through-spindle coolant) isn't in the 1995 VF manual. Check that this machine has it." },
           "M89":  { "severity": "warning", "text": "M89 (through-spindle coolant off) isn't in the 1995 VF manual. Check that this machine has it." },

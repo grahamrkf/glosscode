@@ -485,6 +485,10 @@
    "golden": "tests/golden/LATHE_CHECKS_nc.json"
   },
   {
+   "example": "examples/NAMEPLATE.nc",
+   "golden": "tests/golden/NAMEPLATE_nc.json"
+  },
+  {
    "example": "examples/OKUMA_PLATE.MIN",
    "golden": "tests/golden/OKUMA_PLATE_MIN.json"
   },
