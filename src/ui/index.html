@@ -5171,7 +5171,7 @@ function pauseSim(){ clearInterval(simTimer); simTimer = null; drawViews(); setM
 // After stepping by hand, stops before the tool count as passed and stops after it come up again.
 function resetStops(){ simStopAt = null; simStops = new Set(EXEC.steps.flatMap((s, k) => s.stop && s.s0 < simIdx ? [k] : [])); }
 function togglePlay(){ simTimer ? pauseSim() : playSim(); }
-function stopSim(quiet){ clearInterval(simTimer); simTimer = null; simStopAt = null; simK = simKey = null; if (simIdx!=null){ simIdx = null; if (!quiet) { render(); setMsg("Simulation closed"); } } }
+function stopSim(quiet){ clearInterval(simTimer); simTimer = null; simStopAt = null; simK = simKey = null; if (simIdx!=null){ simIdx = null; if (!quiet) { render(); setMsg("Simulation closed"); } else setMsg(""); } }   // quietly: no "Playing…" left behind
 function simStep(dir){
   if (editing && !commit()) return;
   if (simTimer) pauseSim();
@@ -5364,6 +5364,13 @@ menubar.addEventListener("mouseover", e => { const mi = e.target.closest(".mi");
 document.addEventListener("mousedown", e => { if (openMenu && !menubar.contains(e.target)) closeMenu(); });
 
 /* ---------- Keyboard ---------- */
+// A click on a blank part of a panel leaves the focus on the page itself, outside #app, so its keys (Space, F5, the
+// arrows) would go nowhere. They're passed on to the editor instead.
+document.addEventListener("keydown", e => {
+  if (e.target!==document.body || activeTab < 0) return;
+  const c = new KeyboardEvent("keydown", { key:e.key, code:e.code, ctrlKey:e.ctrlKey, shiftKey:e.shiftKey, altKey:e.altKey, metaKey:e.metaKey, repeat:e.repeat, bubbles:true, cancelable:true });
+  if (!ed.dispatchEvent(c)) e.preventDefault();
+});
 document.getElementById("app").addEventListener("keydown", e => {
   const k = e.key.toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
   if (e.key==="CapsLock"){ if (capsSwitch && ed.contains(e.target)) toggleEditMode(); return; }
