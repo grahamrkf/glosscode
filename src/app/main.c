@@ -414,6 +414,16 @@ static void bind_open_url(const char *id, const char *req, void *arg)
     reply(id, 1, "null");
 }
 
+/* gcOpenConfigDir(): shows the settings folder in the file manager. It takes no path, so the page
+   can't open anything else. */
+static void bind_open_config_dir(const char *id, const char *req, void *arg)
+{
+    (void)req;
+    (void)arg;
+    plat_open_folder(plat_get_dirs()->config);
+    reply(id, 1, "null");
+}
+
 /* gcSetTitle(title) */
 static void bind_set_title(const char *id, const char *req, void *arg)
 {
@@ -445,7 +455,8 @@ static char *bridge_script(const plat_dirs *dirs)
     gc_buf_json_str(&info, GC_VERSION);
     gc_buf_puts(&info, ",\"platform\":");
     gc_buf_json_str(&info, plat_name());
-    gc_buf_printf(&info, ",\"portable\":%s,\"configDir\":", dirs->portable ? "true" : "false");
+    gc_buf_printf(&info, ",\"portable\":%s,\"store\":%s,\"configDir\":", dirs->portable ? "true" : "false",
+                  dirs->store ? "true" : "false");
     gc_buf_json_str(&info, dirs->config);
     gc_buf_putc(&info, '}');
     gc_buf out;
@@ -530,6 +541,7 @@ int gc_main(int argc, char **argv)
     webview_bind(W, "gcSettings", bind_settings, NULL);
     webview_bind(W, "gcSaveSettings", bind_save_settings, NULL);
     webview_bind(W, "gcOpenUrl", bind_open_url, NULL);
+    webview_bind(W, "gcOpenConfigDir", bind_open_config_dir, NULL);
     webview_bind(W, "gcSetTitle", bind_set_title, NULL);
     webview_bind(W, "gcQuit", bind_quit, NULL);
     webview_set_html(W, html ? html : (const char *)gc_find_resource("ui/index.html")->data);

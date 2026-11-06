@@ -4,6 +4,14 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Installing and updates
+- Check for updates is gone from Help › About, and GlossCode now makes no network connections at all. Updates come from the system's own tools instead: Help › About says which one applies to the copy that's running.
+- winget: `winget install GlossCode.GlossCode` installs GlossCode for the current user, and `winget upgrade` updates it. The manifests are made for each published release (once the package is accepted in winget's catalogue).
+- Linux package repositories: add the GlossCode apt or dnf repository once (instructions at https://grahamrkf.github.io/glosscode/) and `apt upgrade` or `dnf upgrade` keeps GlossCode up to date. The packages and indexes are signed.
+- Microsoft Store package: the build now also makes an MSIX package for the Store. A Store copy keeps its settings in the package's own folder and is updated by the Store.
+- Help › Open settings folder opens the folder with settings.json, your machine profiles and your library. Help › About shows where it is.
+- New privacy policy (PRIVACY.md): GlossCode collects nothing.
+
 ## [0.1.9] - 2026-11-06
 
 ### Editor

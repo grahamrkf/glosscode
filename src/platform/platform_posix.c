@@ -208,19 +208,29 @@ const plat_dirs *plat_get_dirs(void)
     return &d;
 }
 
-void plat_open_url(const char *url)
+/* Runs xdg-open on a web address or folder, detached so it outlives us and doesn't become a zombie. */
+static void xdg_open(const char *what)
 {
-    if (strncmp(url, "https://", 8) != 0 && strncmp(url, "http://", 7) != 0) return;
     pid_t pid = fork();
     if (pid == 0) {
-        /* Detach so the browser outlives us and doesn't become a zombie. */
         if (fork() == 0) {
-            execlp("xdg-open", "xdg-open", url, (char *)NULL);
+            execlp("xdg-open", "xdg-open", what, (char *)NULL);
             _exit(127);
         }
         _exit(0);
     }
     if (pid > 0) waitpid(pid, NULL, 0);
+}
+
+void plat_open_url(const char *url)
+{
+    if (strncmp(url, "https://", 8) != 0 && strncmp(url, "http://", 7) != 0) return;
+    xdg_open(url);
+}
+
+void plat_open_folder(const char *path)
+{
+    xdg_open(path);
 }
 
 void plat_error_box(const char *title, const char *msg)

@@ -10,6 +10,7 @@
     version: info.version,
     platform: info.platform,
     portable: info.portable,
+    store: info.store,
     configDir: info.configDir,
     // Runs a core method (parse, serialize, analyze, tokenize) and resolves with its JSON result.
     core: function (method, params) { return call("gcCore", [method, params || {}]); },
@@ -27,6 +28,8 @@
     settings: function () { return call("gcSettings", []); },
     saveSettings: function (obj) { return call("gcSaveSettings", [obj]); },
     openUrl: function (url) { return call("gcOpenUrl", [String(url)]); },
+    // Opens the settings folder (configDir) in the file manager.
+    openConfigDir: function () { return call("gcOpenConfigDir", []); },
     setTitle: function (title) { return call("gcSetTitle", [String(title)]); },
     quit: function () { return call("gcQuit", []); }
   };

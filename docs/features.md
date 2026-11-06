@@ -94,7 +94,8 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Missing decimal point, arc geometry, cutter comp start, tool length offset after a tool change
 - [ ] Codes that mean something else on the selected control
 - [ ] System Open and Save dialogs
-- [ ] Help › About GlossCode: version, website, release notes, check for updates through GitHub Releases and download the installer or portable copy (see [releasing.md](releasing.md))
+- [x] Help › About GlossCode: version, website, release notes, how this copy gets updates, and the settings folder (see [releasing.md](releasing.md)). There's no built-in update check: the Microsoft Store, winget, apt and dnf update GlossCode
+- [x] Help › Open settings folder
 
 ## Later
 

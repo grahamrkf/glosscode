@@ -1,0 +1,121 @@
+# Runs when a release is published (or by hand): rebuilds the apt and dnf repositories from the
+# last five published releases and deploys them to GitHub Pages, and writes the winget manifests
+# for the newest release. See docs/releasing.md for the one-time setup:
+# - Settings › Pages › Source: GitHub Actions
+# - secret PACKAGES_GPG_PRIVATE_KEY (and PACKAGES_GPG_PASSPHRASE if the key has one)
+# - optional secret WINGET_TOKEN, to submit the winget manifests automatically
+name: Package repositories
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  repos:
+    name: apt and dnf repositories
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.get.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install the repository tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends apt-utils createrepo-c rpm
+      - name: Download the published releases
+        id: get
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Published, not drafts or pre-releases, newest first.
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=30" \
+            --jq '[.[] | select(.draft == false and .prerelease == false)] | .[0:5] | .[].tag_name' > tags.txt
+          cat tags.txt
+          test -s tags.txt || { echo "no published releases"; exit 1; }
+          mkdir -p pkgs
+          while read -r tag; do
+            d="rel/$tag"; mkdir -p "$d"
+            gh release download "$tag" -D "$d" -p '*.deb' -p '*.rpm' -p 'SHA256SUMS.txt'
+            (cd "$d" && sha256sum --check --ignore-missing SHA256SUMS.txt)
+            cp "$d"/*.deb "$d"/*.rpm pkgs/
+          done < tags.txt
+          newest=$(head -1 tags.txt)
+          echo "version=${newest#v}" >> "$GITHUB_OUTPUT"
+          cp "rel/$newest/SHA256SUMS.txt" newest-SHA256SUMS.txt
+      - name: Import the signing key
+        id: key
+        env:
+          KEY: ${{ secrets.PACKAGES_GPG_PRIVATE_KEY }}
+          PASS: ${{ secrets.PACKAGES_GPG_PASSPHRASE }}
+        run: |
+          if [ -z "$KEY" ]; then echo "The secret PACKAGES_GPG_PRIVATE_KEY isn't set (docs/releasing.md)"; exit 1; fi
+          if [ -n "$PASS" ]; then
+            printf '%s' "$KEY" | gpg --batch --pinentry-mode loopback --passphrase "$PASS" --import
+          else
+            printf '%s' "$KEY" | gpg --batch --import
+          fi
+          echo "id=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr/ { print $10; exit }')" >> "$GITHUB_OUTPUT"
+      - name: Build the repositories
+        env:
+          GPG_KEY_ID: ${{ steps.key.outputs.id }}
+          GPG_PASSPHRASE: ${{ secrets.PACKAGES_GPG_PASSPHRASE }}
+          REPO_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: scripts/make-package-repos.sh pkgs site
+      - name: Check the signatures
+        run: |
+          gpg --verify site/apt/dists/stable/InRelease
+          gpg --verify site/rpm/repodata/repomd.xml.asc site/rpm/repodata/repomd.xml
+          sudo rpm --import site/glosscode.asc
+          rpm -K site/rpm/x86_64/*.rpm
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+      - name: winget manifests
+        run: scripts/make-winget-manifest.sh "${{ steps.get.outputs.version }}" newest-SHA256SUMS.txt winget
+      - uses: actions/upload-artifact@v6
+        with:
+          name: winget-manifests
+          path: winget
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: repos
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  winget:
+    name: Submit to winget
+    needs: repos
+    runs-on: windows-2022
+    env:
+      WINGET_TOKEN: ${{ secrets.WINGET_TOKEN }}
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: winget-manifests
+          path: winget
+      - name: Submit (only when WINGET_TOKEN is set)
+        shell: pwsh
+        run: |
+          if (-not $env:WINGET_TOKEN) { Write-Host "WINGET_TOKEN isn't set; submit the manifests from the winget-manifests artifact by hand (docs/releasing.md)."; exit 0 }
+          Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+          $dir = Get-ChildItem -Directory -Recurse winget\manifests | Where-Object { Test-Path (Join-Path $_.FullName "GlossCode.GlossCode.yaml") } | Select-Object -First 1
+          .\wingetcreate.exe submit --token $env:WINGET_TOKEN $dir.FullName
+          if ($LASTEXITCODE -ne 0) { throw "wingetcreate failed ($LASTEXITCODE)" }

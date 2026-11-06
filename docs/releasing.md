@@ -1,12 +1,12 @@
 # Releasing
 
-How GlossCode versions are numbered, what each release contains, and how the app finds updates.
+How GlossCode versions are numbered, what each release contains, and how users get updates.
 
 ## Version number
 
 The version lives in one place: the [`VERSION`](../VERSION) file at the repository root, in `MAJOR.MINOR.PATCH` form (`0.1.0`). A pre-release adds a suffix (`0.2.0-beta.1`).
 
-- The build compiles it into the program, where Help › About shows it and the update check compares against it.
+- The build compiles it into the program, where Help › About shows it.
 - `node scripts/sync-mockup-data.mjs` copies it into the mockup's About window.
 - Each release is a Git tag named `v` plus the version (`v0.1.0`), and a GitHub Release made from that tag.
 
@@ -14,7 +14,7 @@ While the version starts with `0.`, file formats (machine definitions, library f
 
 ## Release files
 
-Every release has the same files, so the update check can pick the right one by its name.
+Every release has the same files, so scripts and package managers can find the right one by its name.
 
 | File | What it is |
 |---|---|
@@ -28,20 +28,61 @@ Every release has the same files, so the update check can pick the right one by 
 
 The release notes are the release's description on GitHub, and the About window shows them.
 
-## Checking for updates
+## Getting updates
 
-Help › About GlossCode has a **Check for updates** button, and a setting (on by default) to check once at startup.
+GlossCode doesn't check for updates itself and makes no network connections. Updates come from the system's own tools, and Help › About GlossCode says which one applies to the copy that's running:
 
-![About window with an update available](images/about-update.png)
+| Installed from | How it updates |
+|---|---|
+| Microsoft Store | The Store updates it ([microsoft-store.md](microsoft-store.md)). |
+| winget (`winget install GlossCode.GlossCode`) | `winget upgrade GlossCode.GlossCode`, or `winget upgrade --all`. |
+| The package repository (apt or dnf) | The system's updates: `sudo apt upgrade`, `sudo dnf upgrade`. |
+| The installer, .deb or .rpm from the Releases page | Run or install the new file from the Releases page; it updates the copy in place. |
+| A portable archive | Download the new archive and replace the program; the GlossCode-data folder stays. |
 
-1. GlossCode requests `https://api.github.com/repos/grahamrkf/glosscode/releases/latest`. This returns the newest published release that isn't a draft or pre-release. No account or token is needed, and nothing is sent except the request itself.
-2. It compares the release's tag with its own version. If the release is newer, it shows the version, the release notes and a download button.
-3. An installed copy offers the installer; a portable copy offers the portable archive. **Other downloads** opens the release page.
-4. The download goes to the user's Downloads folder. GlossCode checks it against `SHA256SUMS.txt` from the same release and refuses a file that doesn't match. On Windows it then offers to close and run the installer. On Linux it opens the folder, since installing a package needs the system's package tool.
+There was a **Check for updates** button in Help › About up to 0.1.9. It was removed because a Store copy must not update itself, and the package managers already cover the installed copies.
 
-If GitHub can't be reached, or limits requests (60 an hour per network address without a token), the window says so and nothing else happens. The startup check stays silent unless there is an update.
+### Package repositories (apt and dnf)
 
-The platform file gets one more function for this: download a URL to a file (WinHTTP on Windows, libcurl on Linux). The request to the Releases API can go through the webview, since it is plain HTTPS.
+`.github/workflows/packages.yml` runs whenever a release is published. It downloads the .deb and .rpm files of the last five published releases (not drafts or pre-releases), checks them against each release's `SHA256SUMS.txt`, signs them into an apt repository and a dnf repository with `scripts/make-package-repos.sh`, and deploys both to GitHub Pages:
+
+```
+https://grahamrkf.github.io/glosscode/                 setup instructions
+https://grahamrkf.github.io/glosscode/glosscode.gpg     signing key (binary; glosscode.asc is the text form)
+https://grahamrkf.github.io/glosscode/apt               apt: suite stable, component main, amd64
+https://grahamrkf.github.io/glosscode/rpm               dnf and zypper: x86_64
+```
+
+A user adds it once:
+
+```sh
+# Debian, Ubuntu, Linux Mint
+sudo curl -fsSLo /usr/share/keyrings/glosscode.gpg https://grahamrkf.github.io/glosscode/glosscode.gpg
+sudo curl -fsSLo /etc/apt/sources.list.d/glosscode.sources https://grahamrkf.github.io/glosscode/apt/glosscode.sources
+sudo apt update && sudo apt install glosscode
+
+# Fedora
+sudo curl -fsSLo /etc/yum.repos.d/glosscode.repo https://grahamrkf.github.io/glosscode/rpm/glosscode.repo
+sudo dnf install glosscode
+```
+
+One-time setup, by the repository owner:
+
+1. Make a signing key with no expiry, used only for the package repositories, and keep a backup of it somewhere safe. If it's lost, every user has to add a new key.
+   ```sh
+   gpg --quick-gen-key "GlossCode packages <your noreply address>" rsa4096 sign never
+   gpg --armor --export-secret-keys "GlossCode packages" > glosscode-packages-private.asc
+   ```
+2. Add the private key as the repository secret `PACKAGES_GPG_PRIVATE_KEY` (Settings › Secrets and variables › Actions), and its passphrase, if it has one, as `PACKAGES_GPG_PASSPHRASE`. Then delete the exported file.
+3. Settings › Pages › Build and deployment › Source: **GitHub Actions**.
+4. Run the workflow once by hand (Actions › Package repositories › Run workflow) to publish the current release.
+
+### winget
+
+The same workflow writes the winget manifests for the newest release (`scripts/make-winget-manifest.sh`, package `GlossCode.GlossCode`) and uploads them as the `winget-manifests` artifact. winget installs with the release's `setup.exe` from GitHub, silently and for the current user.
+
+- **First submission** (by hand, so the package name is checked once): install [wingetcreate](https://github.com/microsoft/winget-create), download the artifact, and run `wingetcreate submit <folder with the three .yaml files>`. It opens a pull request on `microsoft/winget-pkgs`, which winget's moderators review.
+- **Later releases**: add a classic GitHub token with the `public_repo` scope as the secret `WINGET_TOKEN`, and the workflow submits each new version itself. Without it, submit by hand as above.
 
 ## What a first release needs
 
@@ -68,7 +109,7 @@ The UI, data, icons, the packaging plan, the core and the program exist. Before 
 
 ### Code signing
 
-Unsigned Windows programs still run, but SmartScreen shows "Windows protected your PC" until the file builds a download reputation, and the user has to click **More info › Run anyway**. Signing removes most of that. The options are a code signing certificate from a certificate authority, or a cloud signing service such as Azure Trusted Signing; both cost a yearly fee and need identity verification. A first release can ship unsigned with a note in the release description explaining the warning, and add signing later without changing anything else.
+Unsigned Windows programs still run, but SmartScreen shows "Windows protected your PC" until the file builds a download reputation, and the user has to click **More info › Run anyway**. Copies from the Microsoft Store don't show it, since the Store signs its package, and winget installs don't either. Signing the installer removes most of it for direct downloads too. The options are a code signing certificate from a certificate authority, or a cloud signing service such as Azure Trusted Signing; both cost a yearly fee and need identity verification. A first release can ship unsigned with a note in the release description explaining the warning, and add signing later without changing anything else.
 
 Linux packages are not usually signed for direct downloads; `SHA256SUMS.txt` covers integrity.
 
@@ -77,6 +118,7 @@ Linux packages are not usually signed for direct downloads; `SHA256SUMS.txt` cov
 1. Update `VERSION` and add the version's section to `CHANGELOG.md` (`## [0.2.0] - <date>`), run `node scripts/sync-mockup-data.mjs`, and merge.
 2. Tag the merge commit: `git tag v0.2.0 && git push origin v0.2.0`.
 3. The release workflow (`.github/workflows/release.yml`) checks that the tag matches `VERSION`, builds and packages everything, writes `SHA256SUMS.txt`, and creates a **draft** release with the files attached and the changelog section as its notes (`scripts/release-notes.sh`). A version with a suffix (`0.2.0-beta.1`) is marked as a pre-release.
-4. Install and run each file on a clean Windows and Linux computer, then publish the draft. Publishing is what makes the update check see it.
+4. Install and run each file on a clean Windows and Linux computer, then publish the draft. Publishing starts `packages.yml`, which updates the apt and dnf repositories and the winget manifests.
+5. Microsoft Store: download the `store-windows` artifact from the release run (Actions › Release › the run for the tag) and upload its .msix as a new submission in Partner Center ([microsoft-store.md](microsoft-store.md)).
 
 If the workflow fails, fix it on `main`, delete the tag (`git push origin :v0.2.0`, and any draft it made), and tag again.
