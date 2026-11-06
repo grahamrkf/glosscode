@@ -1095,7 +1095,8 @@ static void check_line(checker *ck, int li)
         emit(ck, li, "comp-start-on-arc", &vs, NULL);
     }
     const word_t *zW = get(&ln, 'Z');
-    if (!lathe && isRapid && zW && !st->inc && p1[2].set && p1[2].v < 0 && st->tloOn) {
+    /* a code with words of its own (a Haas G12 circular pocket's Z is its depth) isn't a rapid move */
+    if (!lathe && isRapid && !cwk && zW && !st->inc && p1[2].set && p1[2].v < 0 && st->tloOn) {
         gc_num f;
         gc_fmt_num(c, 'Z', zW->v, st->inch, &f);
         V0();

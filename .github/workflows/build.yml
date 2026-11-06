@@ -56,9 +56,23 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Install GTK and WebKitGTK
+        # The package download has hung on GitHub's runners. Time out each try, retry up to
+        # three times, and skip the slow man-db index rebuild.
+        timeout-minutes: 15
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ninja-build libgtk-3-dev libwebkit2gtk-4.1-dev xvfb desktop-file-utils
+          echo 'set man-db/auto-update false' | sudo debconf-communicate >/dev/null || true
+          sudo rm -f /var/lib/man-db/auto-update
+          APT="-o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30"
+          for try in 1 2 3; do
+            if timeout 240 sudo apt-get $APT update &&
+               timeout 360 sudo apt-get $APT install -y --no-install-recommends ninja-build libgtk-3-dev libwebkit2gtk-4.1-dev xvfb desktop-file-utils; then
+              exit 0
+            fi
+            echo "apt try $try failed or timed out; retrying"
+            sleep 10
+            sudo dpkg --configure -a || true
+          done
+          exit 1
       - name: Install nFPM (builds the .deb and .rpm)
         run: |
           go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.48.0

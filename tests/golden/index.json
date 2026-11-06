@@ -188,6 +188,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Fanuc lathe, G code system B"
@@ -208,6 +209,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Mazak EIA/ISO lathe, G code system B"
@@ -228,6 +230,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Mitsubishi M800/M80 lathe, G code list 3, 5 or 7"
@@ -248,6 +251,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Fanuc-style (0i, 30i and compatibles)"
@@ -268,6 +272,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Fanuc lathe, G code system C"
@@ -288,6 +293,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Mazak EIA/ISO lathe, G code system C"
@@ -308,6 +314,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Mitsubishi M700/M70, M2/M0 format"
@@ -328,6 +335,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Mitsubishi M800/M80 (and M700/M70)"
@@ -348,6 +356,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Fagor 8060 / 8065"
@@ -368,6 +377,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Fanuc-style (0i, 30i and compatibles)"
@@ -388,6 +398,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Fagor 8055 / 8055i"
@@ -408,6 +419,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Fagor 8055 / 8055i"
@@ -428,6 +440,7 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Fagor 8060 / 8065"
@@ -448,9 +461,31 @@
    "macro": true,
    "liveTooling": true,
    "yAxis": true,
+   "progTailstock": true,
    "generic": true,
    "notes": "",
    "control": "Heidenhain TNC 640 (Klartext)"
+  },
+  "gen.lathe.okumau10l": {
+   "name": "Generic Okuma OSP-U10L / OSP-U100L lathe",
+   "type": "lathe",
+   "brand": "okumau10l",
+   "travel": [
+    null,
+    null,
+    null
+   ],
+   "rpm": null,
+   "feed": null,
+   "tools": null,
+   "eob": false,
+   "macro": true,
+   "liveTooling": true,
+   "yAxis": true,
+   "progTailstock": true,
+   "generic": true,
+   "notes": "",
+   "control": "Okuma OSP-U10L / OSP-U100L"
   }
  },
  "library": [
@@ -483,6 +518,10 @@
   {
    "example": "examples/LATHE_CHECKS.nc",
    "golden": "tests/golden/LATHE_CHECKS_nc.json"
+  },
+  {
+   "example": "examples/NAMEPLATE.nc",
+   "golden": "tests/golden/NAMEPLATE_nc.json"
   },
   {
    "example": "examples/OKUMA_PLATE.MIN",
@@ -541,6 +580,10 @@
    "golden": "tests/golden/FAGOR_8060_LATHE_CHECKS_nc.json"
   },
   {
+   "example": "tests/cases/HAAS_PATTERNS.nc",
+   "golden": "tests/golden/HAAS_PATTERNS_nc.json"
+  },
+  {
    "example": "tests/cases/HEIDENHAIN.H",
    "golden": "tests/golden/HEIDENHAIN_H.json"
   },
@@ -579,6 +622,10 @@
   {
    "example": "tests/cases/OKUMA_CALLS.MIN",
    "golden": "tests/golden/OKUMA_CALLS_MIN.json"
+  },
+  {
+   "example": "tests/cases/OKUMA_CYCLES.MIN",
+   "golden": "tests/golden/OKUMA_CYCLES_MIN.json"
   },
   {
    "example": "tests/cases/OKUMA_GRAPHIC.MIN",

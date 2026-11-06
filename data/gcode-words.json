@@ -986,6 +986,11 @@
       "G70": { "words": "pattern.boltcircle", "short": "PATBCIR", "desc": "Bolt hole circle" },
       "G71": { "words": "pattern.boltarc", "short": "PATBARC", "desc": "Bolt hole arc" },
       "G72": { "words": "pattern.boltline", "short": "PATBLIN", "desc": "Bolt holes along a line at an angle" },
+      "G68": { "words": "set.rotate.on", "short": "ROTON", "desc": "Coordinate rotation on (A B center, R angle)" },
+      "G69": { "words": "set.rotate.off", "short": "ROTOFF", "desc": "Coordinate rotation off" },
+      "G100": { "words": "set.mirror.off", "short": "MIROFF", "desc": "Mirror image off" },
+      "G101": { "words": "set.mirror.on", "short": "MIRON", "desc": "Mirror image on for the axes named" },
+      "G107": { "words": "set.cylmap", "short": "CYLMAP", "desc": "Cylindrical mapping (Y wraps round the A axis); alone, off" },
       "G187": { "words": "set.smooth", "short": "SMTH", "desc": "Set smoothness level" },
       "M10": { "words": "axis.4.brakeon", "short": "AX4BON", "desc": "4th-axis brake on" },
       "M11": { "words": "axis.4.brakeoff", "short": "AX4BOFF", "desc": "4th-axis brake off" },
@@ -1172,6 +1177,7 @@
       "M98": { "words": "cool.oilmist", "short": "COIL", "desc": "Horizontal-spindle oil-mist coolant mode (Okuma)" }
     },
     "okuma.lathe": {
+      "G152": { "words": "machine.tailstock.move", "short": "MTSMOVE", "desc": "Programmable tailstock positioning (option)" },
       "G90": { "words": "set.abs", "short": "ABS",  "desc": "Absolute positions" },
       "G91": { "words": "set.incr", "short": "INCR",  "desc": "Incremental positions" },
       "G94": { "words": "set.fpm", "short": "FPM",  "desc": "Feed per minute" },
