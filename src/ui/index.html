@@ -113,6 +113,7 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .ln.ins + .ln:not(.ins){border-top:1px dashed #cdb8f5}
 .xp{font:11px var(--w-ui);margin-left:1ch;border:1px solid #cdb8f5;background:#f7f3fe;color:#6a2fd6;border-radius:10px;padding:0 8px;height:17px;line-height:15px;cursor:pointer;white-space:nowrap}
 .xp:hover{background:#ece2fd}
+.xp.fold{border-color:#c9d3df;background:#f4f6f9;color:#4a5566}.xp.fold:hover{background:#e7ecf2}.xp.fold.warn{border-color:#f7c27a;background:#fff4e5;color:#8a4b00}
 .xp.bad{border-color:#f7c27a;background:#fff4e5;color:#8a4b00;cursor:default}
 .chk{display:inline-flex;align-items:center;gap:5px;color:#1b1b1b;font-size:13px;cursor:pointer}
 .chk input{accent-color:#0f6cbd;margin:0}
@@ -1482,7 +1483,7 @@ function loadLines(src, expand){
   expanded = new Set();
   if (expand) doc.forEach((t, i) => { if (t[0]===expand) expanded.add(i); });
   undoStack = []; redoStack = []; docVer = ++VER_SEQ;
-  curLine = 0; curRef = "0"; pendingIns = null;
+  curLine = 0; curRef = "0"; pendingIns = null; foldAutoPending = true;
 }
 // Opens one of the mockup's sample programs (in the app there are none: they're a separate download).
 function load(name){ openSample(name); }
@@ -2100,7 +2101,7 @@ function sortWords(scope){
 // docVer names the program's current state, so a tab knows whether it differs from what was last saved.
 function snap(){ return JSON.stringify({ doc, ex:[...expanded], cur:curLine, v:docVer }); }
 function pushUndo(){ undoStack.push(snap()); if (undoStack.length > 300) undoStack.shift(); redoStack = []; docVer = ++VER_SEQ; }
-function restore(s){ selAnchor = null; const o = JSON.parse(s); doc = o.doc; expanded = new Set(o.ex); curLine = Math.min(o.cur, doc.length-1); docVer = o.v; }
+function restore(s){ selAnchor = null; const o = JSON.parse(s); doc = o.doc; expanded = new Set(o.ex); curLine = Math.min(o.cur, doc.length-1); docVer = o.v; foldAutoPending = true; }
 function undo(){
   if (editing && !commit()) return;
   if (!undoStack.length){ setMsg("Nothing to undo"); return; }
@@ -2476,20 +2477,28 @@ function render(){
   document.getElementById("edwrap").className = "edwrap layout-" + layout;
   ed.className = "ed mode-" + editMode + " show-" + showMode + (runNums ? " runnums" : "");
   colhead.classList.toggle("runnums", runNums);
-  const rows = [];
-  doc.forEach((_, li) => {
-    rows.push({ li, key:"m"+li });
+  const rows = [], FD = foldScan();
+  if (foldAutoPending) foldOnOpen();
+  { const h = foldHiding(curLine); if (h >= 0 && !(simIdx!=null && simKey!=null)) setFold(h, null, false); }   // the line the cursor is on is never folded away
+  for (let li = 0; li < doc.length; li++){
+    const fh = FD.end[li] >= 0;
+    rows.push({ li, key:"m"+li, fold:fh ? [li, null] : null });
+    if (fh && foldClosed(li)){ li = FD.end[li]; continue; }
     const tgt = callTarget(doc[li]), rg = tgt!=null && expanded.has(li) ? subRange(tgt) : null;
-    if (rg) for (let j = rg[0]; j <= rg[1]; j++) rows.push({ li:j, key:`x${li}-${j}`, ins:true, from:doc[li][0] });
+    if (rg) for (let j = rg[0]; j <= rg[1]; j++){
+      const xf = FD.end[j] >= 0 && j < rg[1];
+      rows.push({ li:j, key:`x${li}-${j}`, ins:true, from:doc[li][0], fold:xf ? [j, li] : null });
+      if (xf && foldClosed(j, doc[li])) j = Math.min(FD.end[j], rg[1]);
+    }
     if (tgt==null && expanded.has(li)) window.libRows?.(li).forEach((r, j) => rows.push({ li, key:`l${li}-${j}`, lib:r }));
-  });
+  }
   const fhits = findHits();
   // Run order: the number of the block each row is, counting every line the program runs, subprogram lines once per
   // call (the line count some controls show). Lines only reached through a call are numbered on the call's inserted rows.
   const runNo = {};
   if (runNums) EXEC.steps.forEach((st, k) => { const c = st.calls || [], rk = !c.length ? "m" + st.li : c.length===1 ? `x${c[0]}-${st.li}` : null; if (rk && runNo[rk]==null) runNo[rk] = k + 1; });
   const simOn = simIdx!=null && simKey!=null, pr = simOn ? callProgress(simK, simKey[0]==="x" ? 1 : 0) : null;
-  ed.innerHTML = rows.map(({li, key, ins, from, lib}) => {
+  ed.innerHTML = rows.map(({li, key, ins, from, lib, fold}) => {
     if (lib) return window.libRowHTML(lib, li);
     const slots = slotsFor(li);
     const hit = s => findQ && (s.g.toUpperCase().includes(findQ) || s.e.toUpperCase().includes(findQ));
@@ -2509,7 +2518,7 @@ function render(){
     const eob = eobOn() && doc[li].length && doc[li][doc[li].length-1]!==";" && !(doc[li].length===1 && doc[li][0]==="%") ? [`<span class="cell eob" title="End of block. ${esc(MACHINES[machineId].name)} needs ; at the end of every line, so GlossCode writes it for you.">EOB</span>`, `<span class="cell eob" title="End of block">;</span>`] : ["", ""];
     const tgt = ins ? null : callTarget(doc[li]);
     const bar = simOn && key===simKey && pr!=null && (ins || !expanded.has(li)) ? `<span class="xpbar" title="Running the subprogram this line calls"><i style="width:${(pr*100).toFixed(1)}%"></i></span>` : "";
-    const xp = ins ? bar : tgt==null && !ins && window.libButton ? window.libButton(li) : tgt!=null ? (subRange(tgt) ? `<button class="xp" data-x="${li}">${expanded.has(li) ? "▾ hide" : "▸ show"} ${tgt}</button>${bar}` : `<span class="xp bad">${tgt} not found</span>`) : "";
+    const xp = fold ? foldButton(fold[0], fold[1]==null ? null : doc[fold[1]], fold[1]) + (ins ? bar : "") : ins ? bar : tgt==null && !ins && window.libButton ? window.libButton(li) : tgt!=null ? (subRange(tgt) ? `<button class="xp" data-x="${li}">${expanded.has(li) ? "▾ hide" : "▸ show"} ${tgt}</button>${bar}` : `<span class="xp bad">${tgt} not found</span>`) : "";
     const kind = lineKind(li);
     const lp = ins ? null : PBYLINE[li], worst = lp ? lp.reduce((a, p) => SEV_RANK[p.sev] > SEV_RANK[a] ? p.sev : a, "info") : null;
     const pmark = lp ? `<span class="pm ${worst}" title="${esc(lp.map(p => p.msg).join("\n"))}">${SEV_ICON[worst]}</span>` : "";
@@ -2525,9 +2534,9 @@ function render(){
    program would otherwise be read, checked, run and drawn again, all ten thousand rows, on every arrow key. */
 let drawnSig = null;
 const drawSig = () => [activeTab, TABS[activeTab]?.id, docVer, doc.length, machineId, style, layout, editMode, showMode, runNums,
-  [...expanded].join(), findQ, simBD, !!editing, JSON.stringify(pendingIns), simIdx!=null && simKey!=null].join("|");
+  [...expanded].join(), FOLDV, findQ, simBD, !!editing, JSON.stringify(pendingIns), simIdx!=null && simKey!=null].join("|");
 function renderCursor(){
-  if (activeTab < 0 || drawnSig!==drawSig() || !ed.firstElementChild) return render();
+  if (activeTab < 0 || drawnSig!==drawSig() || !ed.firstElementChild || foldAutoPending || (foldHiding(curLine) >= 0 && !(simIdx!=null && simKey!=null))) return render();
   fixSel();
   const simOn = simIdx!=null && simKey!=null, fh = findQ ? new Set(findHits()) : null;
   ed.querySelectorAll(".cell.sel").forEach(c => c.classList.remove("sel"));
@@ -2686,6 +2695,9 @@ ed.addEventListener("mouseover", e => {
 ed.addEventListener("mouseleave", () => { if (!editing) showInfo(curLine, null); });
 ed.addEventListener("mousedown", e => {
   if (e.button===2 && e.target.tagName!=="INPUT") return;   // right-click opens the line menu (below)
+  const fb = e.target.closest(".xp[data-fold]");
+  if (fb){ e.preventDefault(); if (editing) commit(); const h = +fb.dataset.fold, cl = fb.dataset.ctx==="" ? null : doc[+fb.dataset.ctx];
+    setFold(h, cl, !foldClosed(h, cl)); if (cl==null && foldClosed(h) && FOLD.owner[curLine]===h) curLine = h; render(); return; }
   const x = e.target.closest(".xp[data-x]");
   if (x){ e.preventDefault(); if (editing) commit(); const li = +x.dataset.x; expanded.has(li) ? expanded.delete(li) : expanded.add(li); render(); return; }
   const c = e.target.closest(".cell");
@@ -3177,7 +3189,9 @@ function moveWord(d, to){
 function moveLine(d){
   const sl = slotsFor(curLine);
   const i = Math.max(0, sl.findIndex(s => s.ref===curRef));
-  const li = Math.max(0, Math.min(doc.length-1, curLine+d)); if (li===curLine) return;
+  let li = Math.max(0, Math.min(doc.length-1, curLine+d)); if (li===curLine) return;
+  const fh = foldHiding(li); if (fh >= 0) li = d > 0 ? Math.min(doc.length-1, FOLD.end[fh] + 1) : fh;   // a folded run counts as one line
+  if (li===curLine) return;
   const sl2 = slotsFor(li).filter(s => !s.pend);
   curRef = layout==="cols" && sl2.some(s => s.ref===curRef) ? curRef : sl2[Math.min(i, sl2.length-1)].ref;
   selectLine(li); showSelInfo();
@@ -3226,6 +3240,126 @@ function scrollToLn(el){
   if (t < ed.scrollTop + 8) ed.scrollTop = t - 8;
   else if (b > ed.scrollTop + ed.clientHeight - 8) ed.scrollTop = b - ed.clientHeight + 8;
 }
+/* ---------- Folding long runs of moves ----------
+   A CAM program is mostly plain moves: thousands of lines cutting the same contour at one depth after another. Those
+   runs fold away under the line that starts them, the way a subprogram call folds its lines away. A fold starts at
+   the first line that moves down (Z on a mill, X on a lathe) after a line that didn't, so one fold is one layer: the
+   ramp in, the cut, the ramp out and the move back. Anything that isn't a plain G01/G02/G03 move ends a fold and
+   stays visible: a rapid (G00, or a G01 at a feed many times the cutting feed, which some programs use to reposition),
+   an M code, a tool change, a comment, a block-delete line, a label that's called or jumped to, a canned cycle.
+   Neighbouring folds smaller than FOLD_MIN lines are merged; a run that's still smaller doesn't fold.
+   Opening a file folds every fold in a section (the lines between comments, tool changes and labels) when that
+   section's folded lines wouldn't fit in the window. After that the folds are the user's: each ▸ opens and closes
+   its own, and each place a subprogram is shown keeps its own. Lines are never changed, only shown or not. */
+const FOLD_MIN = 10;
+let foldFast = 10, foldAuto = true, foldAutoPending = false, FOLDV = 0, FOLD = null;
+// The open/closed state of each fold, by its first line's word list (so it follows the line when lines above are
+// added or removed). by: Map from where it's shown (null for the program, a call line's words for a subprogram
+// shown under that call) to closed or not; auto: closed by the rule on opening the file.
+const FSTATE = new WeakMap();
+const fst = toks => { let f = FSTATE.get(toks); if (!f) FSTATE.set(toks, f = { auto:false, by:new Map() }); return f; };
+function foldScan(){
+  const key = [docVer, doc.length, machineId, foldFast, SYNTAX].join("|");
+  if (FOLD && FOLD.key===key && FOLD.doc===doc) return FOLD;
+  const n = doc.length, end = new Int32Array(n).fill(-1), owner = new Int32Array(n).fill(-1), depth = new Float64Array(n);
+  FOLD = { key, doc, end, owner, depth, refs:new Set() };
+  if (SYNTAX==="klartext") return FOLD;
+  const lathe = mtype()==="lathe", AX = lathe ? "X" : "Z";
+  // labels the program calls or jumps to: a fold never hides one
+  const refs = new Set();
+  FOLD.refs = refs;
+  doc.forEach(t => { if (t.some(w => isCode(w, "M97") || isCode(w, "M98") || isCode(w, "M99") || isCode(w, "G65") || /^GOTO/.test(w)))
+    t.forEach(w => { const m = /^(?:P|GOTO ?N?)(\d+)$/.exec(w); if (m) refs.add(parseInt(m[1])); }); });
+  const num = w => { const v = w.slice(1); if (!/^[-+]?(\d+\.?\d*|\.\d+)$/.test(v)) return NaN; const x = parseFloat(v); return v.includes(".") || x===0 ? x : NaN; };
+  let mode = null, abs = true, pos = null, F = null, cutF = null;
+  const move = new Uint8Array(n), down = new Uint8Array(n);
+  for (let li = 0; li < n; li++){
+    const t = doc[li]; let ok = t.length > 0 && !isBlockDel(t), m = mode, val = null, f = null, xy = false;
+    for (const w of t){
+      if (w===";") continue;
+      const L = w[0];
+      if (L==="N" && /^N\d+$/.test(w)){ if (refs.has(parseInt(w.slice(1)))) ok = false; continue; }
+      if (L==="G"){
+        if (isCode(w, "G00")) m = 0; else if (isCode(w, "G01")) m = 1; else if (isCode(w, "G02")) m = 2; else if (isCode(w, "G03")) m = 3;
+        else { if (isCode(w, "G90")) abs = true; else if (isCode(w, "G91")) abs = false; ok = false; }
+        continue;
+      }
+      if ("XYZIJKRF".includes(L) && w.length > 1){
+        const v = num(w); if (isNaN(v)){ ok = false; continue; }
+        if (L===AX) val = v; if (L==="F") f = v; if (L==="X" || L==="Y") xy = true;
+        continue;
+      }
+      ok = false;   // M, T, S, comments, P, L, macro words, anything else
+    }
+    // Lines are read in file order, not run order: a subprogram's lines come after the main program's M30, so at a
+    // label that's called, an M99 or an M30 the position is forgotten and G90 assumed (a "G28 G91 Z0." before M30
+    // would otherwise make the subprogram's moves incremental).
+    if (t.some(w => isCode(w, "M30") || isCode(w, "M99") || isCode(w, "M02") || /^N\d+$/.test(w) && refs.has(parseInt(w.slice(1))))){ abs = true; pos = null; mode = null; F = cutF = null; move[li] = down[li] = 0; continue; }
+    mode = m; if (f!=null) F = f;
+    const prev = pos;
+    if (val!=null) pos = abs ? val : (pos ?? 0) + val;
+    depth[li] = pos ?? 0;
+    if (m==null || m===0) ok = false;
+    else if (m===1 && xy && F!=null && cutF!=null && foldFast > 0 && F >= foldFast*cutF) ok = false;   // a "rapid" at a fast feed
+    else if (F!=null) cutF = F;
+    move[li] = ok ? 1 : 0;
+    down[li] = ok && val!=null && (prev==null || pos < prev - 1e-9) ? 1 : 0;   // the first depth after a label counts as going down
+  }
+  // runs of plain moves, cut into folds where a descent starts
+  for (let a = 0; a < n; ){
+    if (!move[a]){ a++; continue; }
+    let b = a; while (b + 1 < n && move[b + 1]) b++;
+    const starts = []; for (let i = a; i <= b; i++) if (down[i] && !(i > a && down[i - 1])) starts.push(i);
+    let fs = starts.map((st, k) => [st, k + 1 < starts.length ? starts[k + 1] - 1 : b]);
+    for (let k = 0; k < fs.length && fs.length > 1; ){   // merge the small ones into a neighbour
+      if (fs[k][1] - fs[k][0] + 1 >= FOLD_MIN){ k++; continue; }
+      if (k + 1 < fs.length){ fs[k] = [fs[k][0], fs[k + 1][1]]; fs.splice(k + 1, 1); }
+      else { fs[k - 1] = [fs[k - 1][0], fs[k][1]]; fs.splice(k, 1); k--; }
+    }
+    for (const [x, y] of fs) if (y - x + 1 >= FOLD_MIN){ end[x] = y; for (let i = x + 1; i <= y; i++) owner[i] = x; }
+    a = b + 1;
+  }
+  return FOLD;
+}
+const foldClosed = (h, ctx = null) => { const f = FSTATE.get(doc[h]); if (!f) return false; return f.by.has(ctx) ? f.by.get(ctx) : f.auto; };
+// The fold hiding line li where it's shown (ctx), or -1.
+function foldHiding(li, ctx = null){ const F = foldScan(), h = F.owner[li]; return h >= 0 && foldClosed(h, ctx) ? h : -1; }
+function setFold(h, ctx, closed){ fst(doc[h]).by.set(ctx, closed); FOLDV++; }
+function foldAll(closed){
+  const F = foldScan();
+  F.end.forEach((e, h) => { if (e >= 0){ const f = fst(doc[h]); f.auto = closed; f.by.clear(); } });
+  if (closed && F.owner[curLine] >= 0) curLine = F.owner[curLine];
+  FOLDV++; render();
+  scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`));
+}
+// On opening a file: in each section whose folded lines wouldn't fit in the window, fold them all, except a fold with
+// a problem in it or the line the cursor is on.
+function foldOnOpen(){
+  foldAutoPending = false;
+  if (!foldAuto) return;
+  const F = foldScan(), rows = Math.max(10, Math.floor((ed.clientHeight || 600) / (showMode==="both" ? 43 : 21)));
+  if (doc.length <= rows) return;
+  const brk = t => !t.length || t.every(w => /^N\d+$/.test(w) || w[0]==="(" || w===";") || t.some(w => isCode(w, "M06") || isCode(w, "M99") || isCode(w, "M30") || /^N\d+$/.test(w) && F.refs.has(parseInt(w.slice(1))));
+  let sec = [], hid = 0;
+  const flush = () => { if (hid > rows) for (const h of sec){ let bad = false; for (let i = h; i <= F.end[h]; i++) if (PBYLINE[i]?.some(p => p.sev!=="info")){ bad = true; break; }
+    if (!bad && !(curLine > h && curLine <= F.end[h])) fst(doc[h]).auto = true; } sec = []; hid = 0; };
+  for (let li = 0; li < doc.length; li++){
+    if (F.end[li] >= 0){ sec.push(li); hid += F.end[li] - li; li = F.end[li]; continue; }
+    if (F.owner[li] < 0 && brk(doc[li])) flush();
+  }
+  flush(); FOLDV++;
+}
+function foldButton(h, ctx, ctxLi){
+  const F = foldScan(), e = F.end[h], closed = foldClosed(h, ctx), lathe = mtype()==="lathe";
+  let lo = Infinity; for (let i = h; i <= e; i++) lo = Math.min(lo, F.depth[i]);
+  let prob = false; if (closed) for (let i = h + 1; i <= e && !prob; i++) prob = !!PBYLINE[i]?.some(p => p.sev!=="info");
+  const at = isFinite(lo) ? ` · ${lathe ? "X" : "Z"}${(Math.round(lo*1000)/1000).toFixed(3)}` : "";
+  return `<button class="xp fold${prob ? " warn" : ""}" data-fold="${h}" data-ctx="${ctxLi ?? ""}" title="${closed ? `${e - h} more moves to line ${e + 1}, down to ${at.slice(3)}. Click to show them.` : "Click to fold these moves away."}${prob ? " There's a problem in them." : ""}">${closed ? "▸" : "▾"} ${e - h} lines${at}${prob ? " ⚠" : ""}</button>`;
+}
+const saveFoldPrefs = () => window.saveFoldPrefs?.({ fast:foldFast, auto:foldAuto });
+window.loadFoldPrefs = p => { if ([0, 3, 5, 10].includes(p.fast)) foldFast = p.fast; if (typeof p.auto==="boolean") foldAuto = p.auto; };
+function setFoldFast(x){ foldFast = x; saveFoldPrefs(); render();
+  setMsg(x ? `A G01 at ${x}× the cutting feed or more counts as a rapid: it ends a fold and stays visible.` : "Only G00 counts as a rapid for folding."); }
 function selectLine(li, keepSim, keepSel){
   if (editing && !commit()) return;
   if (!keepSel) selAnchor = null;
@@ -4766,9 +4900,10 @@ function stepAtSeg(idx){
 function simRowKey(st){
   const c = st?.calls || [];
   if (!st) return null;
-  if (!c.length) return "m" + st.li;
+  if (!c.length){ const h = foldHiding(st.li); return "m" + (h >= 0 ? h : st.li); }
   if (!expanded.has(c[0])) return "m" + c[0];
-  return "x" + c[0] + "-" + (c.length > 1 ? c[1] : st.li);
+  const j = c.length > 1 ? c[1] : st.li, h = foldHiding(j, doc[c[0]]);
+  return "x" + c[0] + "-" + (h >= 0 ? h : j);
 }
 const rowLi = key => key[0]==="m" ? +key.slice(1) : +key.split("-")[1];
 // How far through its call (0 to 1) step k is, for the progress bar on a collapsed call.
@@ -4946,6 +5081,14 @@ const MENUS = {
     R("Grey them out", () => future==="grey", () => { future = "grey"; drawViews(); }),
     R("Hide them", () => future==="hide", () => { future = "hide"; drawViews(); }),
     R("Show normally", () => future==="show", () => { future = "show"; drawViews(); }),
+    "-", { grp:"Fold long runs of moves" },
+    { label:"Fold all", fn:() => foldAll(true) },
+    { label:"Unfold all", fn:() => foldAll(false) },
+    R("Fold long sections when a file opens", () => foldAuto, () => { foldAuto = !foldAuto; saveFoldPrefs(); setMsg(foldAuto ? "Opening a file folds the moves in sections too long for the window." : "Opening a file shows every line."); }),
+    R("G01 at 10× the cutting feed is a rapid", () => foldFast===10, () => setFoldFast(10)),
+    R("G01 at 5× the cutting feed is a rapid", () => foldFast===5, () => setFoldFast(5)),
+    R("G01 at 3× the cutting feed is a rapid", () => foldFast===3, () => setFoldFast(3)),
+    R("Only G00 is a rapid", () => foldFast===0, () => setFoldFast(0)),
     "-",
     R("Cutter comp side (G41/G42)", () => compBand, () => { compBand = !compBand; drawViews(); setMsg(compBand ? "Moves with cutter comp show a grey band on the side the tool's centre is on." : "Cutter comp bands hidden."); }),
     "-",
@@ -6329,6 +6472,7 @@ async function loadSettings(){
     Object.assign(SETTINGS, o);   // keeps anything a newer version wrote
     if (o.timeline && typeof o.timeline==="object") window.loadTimelineModes?.(o.timeline);
     if (o.editing && typeof o.editing==="object") window.loadEditPrefs?.(o.editing);
+    if (o.folding && typeof o.folding==="object") window.loadFoldPrefs?.(o.folding);
     window.loadMachines?.(o.machines, o.recentMachines);
     SETTINGS.recent = Array.isArray(o.recent) ? o.recent.filter(r => r && typeof r.path==="string" && typeof r.name==="string").slice(0, MAX_RECENT) : [];
     SETTINGS.extDefaults = o.extDefaults && typeof o.extDefaults==="object" && !Array.isArray(o.extDefaults) ? { ...o.extDefaults } : {};
@@ -6781,6 +6925,7 @@ $("app").addEventListener("keydown", e => {
 window.drawTabs = drawTabs;
 window.saveTimelineModes = m => { SETTINGS.timeline = m; saveSettings(); };
 window.saveEditPrefs = p => { SETTINGS.editing = p; saveSettings(); };
+window.saveFoldPrefs = p => { SETTINGS.folding = p; saveSettings(); };
 window.drawHome = drawHome;
 window.openSample = openSample;
 window.openProgram = openProgram;
