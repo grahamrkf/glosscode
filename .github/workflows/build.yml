@@ -182,7 +182,8 @@ jobs:
           name: store-windows
           path: store
       - name: Sign with a test certificate, install and remove
-        shell: pwsh
+        # Windows PowerShell: the Appx module doesn't load in PowerShell 7.
+        shell: powershell
         run: |
           $msix = Get-ChildItem store\*.msix | Select-Object -First 1
           # The certificate's subject must equal the manifest's Publisher.
