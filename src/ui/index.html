@@ -2497,7 +2497,7 @@ function render(){
   // call (the line count some controls show). Lines only reached through a call are numbered on the call's inserted rows.
   const runNo = {};
   if (runNums) EXEC.steps.forEach((st, k) => { const c = st.calls || [], rk = !c.length ? "m" + st.li : c.length===1 ? `x${c[0]}-${st.li}` : null; if (rk && runNo[rk]==null) runNo[rk] = k + 1; });
-  const simOn = simIdx!=null && simKey!=null, pr = simOn ? callProgress(simK, simKey[0]==="x" ? 1 : 0) : null;
+  const simOn = simIdx!=null && simKey!=null, pr = simOn ? rowProgress(simK, simKey) : null;
   ed.innerHTML = rows.map(({li, key, ins, from, lib, fold}) => {
     if (lib) return window.libRowHTML(lib, li);
     const slots = slotsFor(li);
@@ -2517,8 +2517,8 @@ function render(){
     const gc = slots.map(s => `<span class="${cls(s)}" data-k="${key}" data-l="${li}" data-r="${s.ref}" style="${wd(s)}" title="${esc(s.hint || s.hints ? hintTitle(s) : s.carry ? carryTitle(s) : s.g)}">${s.hint ? or(s) + esc(s.g) : s.hints ? esc(s.hg) : many(s) ? stk(many(s), false) : s.carry ? esc(s.carry.g) : s.add ? "" : esc(s.g)}</span>`).join("");
     const eob = eobOn() && doc[li].length && doc[li][doc[li].length-1]!==";" && !(doc[li].length===1 && doc[li][0]==="%") ? [`<span class="cell eob" title="End of block. ${esc(MACHINES[machineId].name)} needs ; at the end of every line, so GlossCode writes it for you.">EOB</span>`, `<span class="cell eob" title="End of block">;</span>`] : ["", ""];
     const tgt = ins ? null : callTarget(doc[li]);
-    const bar = simOn && key===simKey && pr!=null && (ins || !expanded.has(li)) ? `<span class="xpbar" title="Running the subprogram this line calls"><i style="width:${(pr*100).toFixed(1)}%"></i></span>` : "";
-    const xp = fold ? foldButton(fold[0], fold[1]==null ? null : doc[fold[1]], fold[1]) + (ins ? bar : "") : ins ? bar : tgt==null && !ins && window.libButton ? window.libButton(li) : tgt!=null ? (subRange(tgt) ? `<button class="xp" data-x="${li}">${expanded.has(li) ? "▾ hide" : "▸ show"} ${tgt}</button>${bar}` : `<span class="xp bad">${tgt} not found</span>`) : "";
+    const bar = simOn && key===simKey && pr!=null && (ins || !expanded.has(li)) ? `<span class="xpbar" title="${barTitle(key)}"><i style="width:${(pr*100).toFixed(1)}%"></i></span>` : "";
+    const xp = fold ? foldButton(fold[0], fold[1]==null ? null : doc[fold[1]], fold[1]) + bar : ins ? bar : tgt==null && !ins && window.libButton ? window.libButton(li) : tgt!=null ? (subRange(tgt) ? `<button class="xp" data-x="${li}">${expanded.has(li) ? "▾ hide" : "▸ show"} ${tgt}</button>${bar}` : `<span class="xp bad">${tgt} not found</span>`) : "";
     const kind = lineKind(li);
     const lp = ins ? null : PBYLINE[li], worst = lp ? lp.reduce((a, p) => SEV_RANK[p.sev] > SEV_RANK[a] ? p.sev : a, "info") : null;
     const pmark = lp ? `<span class="pm ${worst}" title="${esc(lp.map(p => p.msg).join("\n"))}">${SEV_ICON[worst]}</span>` : "";
@@ -2553,9 +2553,9 @@ function renderCursor(){
   if (row) row.querySelectorAll(`.cell[data-r="${CSS.escape(curRef)}"]`).forEach(c => c.classList.add("sel"));
   if (simOn){   // the progress bar of the subprogram running, on the row that shows it
     const sr = ed.querySelector(`.ln[data-key="${simKey}"]`), li = sr ? +sr.dataset.li : -1, ins = simKey[0]==="x";
-    const pr = callProgress(simK, ins ? 1 : 0);
+    const pr = rowProgress(simK, simKey);
     if (sr && pr!=null && (ins || !expanded.has(li))) sr.querySelector(".r.gc").insertAdjacentHTML("beforeend",
-      `<span class="xpbar" title="Running the subprogram this line calls"><i style="width:${(pr*100).toFixed(1)}%"></i></span>`);
+      `<span class="xpbar" title="${barTitle(simKey)}"><i style="width:${(pr*100).toFixed(1)}%"></i></span>`);
   }
   drawViews(); drawModes(); status(); if (fh) updateFindCount([...fh]); drawProblems();
 }
@@ -4915,12 +4915,25 @@ function callProgress(k, depth = 0){
   let a = k, b = k; while (a > 0 && deep(a-1)) a--; while (b < st.length-1 && deep(b+1)) b++;
   return (k - a + 1) / (b - a + 1);
 }
+const barTitle = key => callProgress(simK, key[0]==="x" ? 1 : 0)==null && foldScan().end[rowLi(key)] >= 0 ? "Running the folded moves" : "Running the subprogram this line calls";
+// How far through what row "key" stands for step k is: a collapsed call (above), or a closed fold of moves, where it's
+// the share of the run of steps on the fold's lines (in the same call) that are done.
+function rowProgress(k, key){
+  const ins = key[0]==="x", pc = callProgress(k, ins ? 1 : 0); if (pc!=null) return pc;
+  const st = EXEC.steps, s = st[k]; if (!s) return null;
+  const h = rowLi(key), ctx = ins ? doc[+key.slice(1).split("-")[0]] : null, F = foldScan(), e = F.end[h];
+  if (e < 0 || !foldClosed(h, ctx)) return null;
+  const depth = (s.calls || []).length, same = j => st[j] && st[j].li >= h && st[j].li <= e && (st[j].calls || []).length===depth;
+  if (!same(k)) return null;
+  let a = k, b = k; while (a > 0 && same(a-1)) a--; while (b < st.length-1 && same(b+1)) b++;
+  return (k - a + 1) / (b - a + 1);
+}
 // Moves the editor to the row for step k, scrolling only when the row changes; the bar on a collapsed call just grows.
 function simFollow(k, force){
   const st = EXEC.steps[k]; simK = st ? k : null;
   const key = simRowKey(st);
   if (key && (force || key!==simKey)){ simKey = key; curLine = rowLi(key); renderCursor(); scrollToLn(ed.querySelector(`.ln[data-key="${key}"]`)); return; }
-  const bar = ed.querySelector(`.ln[data-key="${simKey}"] .xpbar i`), pr = callProgress(k, simKey[0]==="x" ? 1 : 0);
+  const bar = ed.querySelector(`.ln[data-key="${simKey}"] .xpbar i`), pr = rowProgress(k, simKey);
   if (bar && pr!=null) bar.style.width = (pr*100).toFixed(1) + "%";
   drawViews();
 }
