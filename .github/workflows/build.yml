@@ -60,7 +60,7 @@ jobs:
         # three times, and skip the slow man-db index rebuild.
         timeout-minutes: 15
         run: |
-          echo 'set man-db/auto-update false' | sudo debconf-communicate >/dev/null
+          echo 'set man-db/auto-update false' | sudo debconf-communicate >/dev/null || true
           sudo rm -f /var/lib/man-db/auto-update
           APT="-o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30"
           for try in 1 2 3; do
