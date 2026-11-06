@@ -5168,6 +5168,9 @@ document.getElementById("app").addEventListener("keydown", e => {
   if (ctrl && k==="o"){ e.preventDefault(); openDlg(); return; }
   if (ctrl && k==="s"){ e.preventDefault(); e.shiftKey ? saveAs() : save(); return; }
   if (editing || e.target===findq) return;
+  // While the simulation is open, Space plays and pauses it (as the status bar says), wherever the focus is except a
+  // button, list or box, which Space works itself (on the ▶ button that's the same thing).
+  if (e.key===" " && !ctrl && !e.altKey && simIdx!=null && !e.target.closest?.("button, select, input, textarea")){ e.preventDefault(); togglePlay(); return; }
   if (ctrl && k==="z" && !e.shiftKey){ e.preventDefault(); undo(); return; }
   if (ctrl && (k==="y" || (k==="z" && e.shiftKey))){ e.preventDefault(); redo(); return; }
   if (ctrl && e.shiftKey && k==="k"){ e.preventDefault(); deleteLine(); return; }
