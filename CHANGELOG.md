@@ -4,6 +4,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-11-06
+
 ### Editor
 - Long runs of moves fold away, the way a subprogram call's lines do. A fold starts at the first line that moves down (Z on a mill, X on a lathe) after one that didn't, so a CAM program's layers fold one per layer: ramp in, cut, ramp out and the move back, under a ▸ button with the number of lines and the depth. Rapids, M codes, tool changes, comments, block-delete lines, called labels and canned cycles always stay visible. A G01 at 10× the cutting feed or more counts as a rapid (some programs reposition with G01 F500); View › Fold long runs of moves sets 10×, 5×, 3× or G00 only. Runs under 10 lines don't fold.
 - Opening a file folds the moves in each section (between comments, tool changes and labels) whose folded lines wouldn't fit in the window, except folds with a problem in them. After that each fold opens and closes on its own, including each place a subprogram is shown. View › Fold all / Unfold all, and the setting to fold on opening, are in the same group. Going to a line inside a fold (click, Find, Problems, the toolpath) opens it; the arrow keys step over a closed fold; the simulation marks the fold's first line. Folding only changes what's shown: line numbers, copying and saving use every line.
