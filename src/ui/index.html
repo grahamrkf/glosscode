@@ -1768,12 +1768,82 @@ function macroWord(t){
 const refN = (toks, i) => toks[i][0]==="N" && i > (/^\/\d?$/.test(toks[0] || "") ? 1 : 0);
 // Modes are tracked in the order the machine runs the lines, so a subprogram
 // is read with the modes active at its call. Lines never run fall back to file order.
-function translateAll(){
+/* ---------- Reading again only what an edit changed ----------
+   translateAll and checkProgram walk the program in run order, carrying the machine state (modes, units, plane, feed,
+   speed, tool, offsets, comp, position, cycle words) from line to line. Each run keeps every visit's state after the
+   line. After an edit the walk starts again, and a visit is taken from the last run when its line is unchanged and the
+   visit before it was too, or was read again and ended in the same state as last time. So the lines from an edit on
+   are read again until the state matches the last run, and from there on until the next edited line nothing is read.
+   Each call of a subprogram is its own visit, matched separately, and an edit to a label, a call or a jump just walks
+   a different way: a visit is only reused when it follows the same visit it followed last time. Anything that changes
+   how every line reads (another machine, the word style, the dictionary, which labels exist) starts afresh.
+   memoCheck(true) in the developer console also reads and draws everything the slow way after each change and reports
+   any line where the two differ (a test mode, for finding a state this misses). */
+let MEMO_CHECK = false;
+window.memoCheck = on => { MEMO_CHECK = on!==false; TRUN = CRUN = null; return MEMO_CHECK; };
+function memoCompare(){
+  const v = view, ls = lineState, pr = PROBLEMS, bad = [];
+  translateAll(true); const pf = checkProgram(true);
+  const j = x => JSON.stringify(x, (k, v) => v && typeof v==='object' && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) : v);   // key order aside
+  for (let li = 0; li < doc.length && bad.length < 5; li++){
+    if (j(v[li])!==j(view[li])) bad.push(`line ${li+1}: gloss`);
+    else if (j(ls[li])!==j(lineState[li])) bad.push(`line ${li+1}: modes ` + Object.keys({ ...ls[li], ...lineState[li] }).filter(k => j(ls[li]?.[k])!==j(lineState[li]?.[k])).map(k => `${k} ${j(ls[li]?.[k])} (should be ${j(lineState[li]?.[k])})`).join(", "));
+  }
+  if (j(pr)!==j(pf)) bad.push(`problems differ: ${pr.length} vs ${pf.length}`);
+  PROBLEMS = pf;
+  if (bad.length){ TRUN = CRUN = null; console.warn("Re-reading only the changed lines gave different results:\n" + bad.join("\n")); setMsg("memoCheck: re-reading only the changed lines gave different results (see the console).", true); }
+  return bad;
+}
+// A copy of a state two levels deep (pos, cyc, ever and the like are objects of plain values).
+function snapSt(st){ const o = {}; for (const k in st){ const v = st[k]; o[k] = v && typeof v==="object" ? (Array.isArray(v) ? v.slice() : { ...v }) : v; } return o; }
+function sameVal(x, y, d){
+  if (x===y) return true;
+  if (!d || !x || !y || typeof x!=="object" || typeof y!=="object" || Array.isArray(x)!==Array.isArray(y)) return false;
+  if (Array.isArray(x)) return x.length===y.length && x.every((v, i) => sameVal(v, y[i], d - 1));
+  for (const k in x) if (!sameVal(x[k], y[k], d - 1)) return false;
+  for (const k in y) if (!(k in x)) return false;
+  return true;
+}
+const sameSt = (a, b) => sameVal(a, b, 3);
+// What every line's reading depends on besides its own words and the state it starts in.
+function runSig(extra){
+  return { s:[machineId, style, SYNTAX, mtype(), showCarry, extra || ""].join("|"), ids:[DIALECT, DICT.codes, DICT.address, DICT.machineOverrides, RULES.rules, MACHINES[machineId], COLS] };
+}
+const sameSig = (a, b) => !!a && !!b && a.s===b.s && a.ids.every((x, i) => x===b.ids[i]);
+const lineKey = toks => toks.join("\u0001");
+// The lines before and after the edited block are the last run's lines, moved by the number of lines added or removed;
+// the edited block's lines have no old line.
+function lineMap(oldKeys, keys){
+  const m = oldKeys.length, n = keys.length; let p = 0, s = 0;
+  while (p < m && p < n && oldKeys[p]===keys[p]) p++;
+  while (s < m - p && s < n - p && oldKeys[m-1-s]===keys[n-1-s]) s++;
+  return { toOld: li => li < p ? li : li >= n - s ? li - n + m : -1, toNew: o => o < p ? o : o >= m - s ? o + n - m : -1, shift: n - m };
+}
+// Each line's visits in a run, by line: the index of the line's first, second… visit in the run's list.
+function visitsByLine(seqLi){ const by = []; seqLi.forEach((li, k) => (by[li] ||= []).push(k)); return by; }
+let MEMO_STATS = { read:0, reused:0 };
+let TRUN = null, CRUN = null;
+function translateAll(full){
   view = []; lineState = [];
-  const seen = new Array(doc.length).fill(false);
-  const visit = (li, st) => { applyModes(doc[li], st); if (!seen[li]){ seen[li] = true; lineState[li] = {...st, lib:null}; view[li] = doc[li].map((t, i) => word(t, st, refN(doc[li], i) ? "ref" : undefined)); } };
+  const seen = new Array(doc.length).fill(false), keys = doc.map(lineKey), sig = runSig();
+  const P = !full && sameSig(TRUN?.sig, sig) ? TRUN : null, map = P && lineMap(P.keys, keys);
+  const seq = [], seqLi = [], occ = new Array(doc.length).fill(0), p2 = new Map();
+  let prevK = P ? -1 : null;   // the last run's visit that this run's last visit matched; null while lines are being read again
+  const read = (li, st) => { const pre = {...st}; applyModes(doc[li], st); MEMO_STATS.read++; return { pre, post:{...st} }; };
+  const first = (li, st, rec) => {
+    if (seen[li]) return; seen[li] = true;
+    if (!rec.view){ rec.ls = {...st, lib:null}; rec.view = doc[li].map((t, i) => word(t, st, refN(doc[li], i) ? "ref" : undefined)); }
+    lineState[li] = rec.ls; view[li] = rec.view;
+  };
+  const visit = (li, st) => {
+    const c = occ[li]++, oli = map ? map.toOld(li) : -1, ok = oli >= 0 ? P.byLine[oli]?.[c] : undefined;
+    let rec;
+    if (prevK!=null && ok===prevK + 1){ rec = P.seq[ok]; Object.assign(st, rec.post); prevK = ok; MEMO_STATS.reused++; }
+    else { rec = read(li, st); prevK = ok!==undefined && sameSt(rec.post, P.seq[ok].post) ? ok : null; }
+    seq.push(rec); seqLi.push(li); first(li, st, rec);
+  };
   const st = newState(), L = labels(), stack = []; let i = 0, guard = 0;
-  while (i < doc.length && guard++ < 5000){
+  while (i < doc.length && guard++ < 5000 + 20 * doc.length){
     const toks = doc[i]; visit(i, st);
     if (isEnd(toks)) break;
     if (isReturn(toks) && stack.length){ i = stack.pop(); continue; }
@@ -1781,8 +1851,16 @@ function translateAll(){
     if (tgt!=null && L[tgt]!==undefined && stack.length < 8){ stack.push(i+1); i = L[tgt]; continue; }
     i++;
   }
+  // Lines the walk never reaches are read in file order, each from the line above it.
   const st2 = newState();
-  doc.forEach((_, li) => { if (seen[li]) Object.assign(st2, lineState[li]); else visit(li, st2); });
+  doc.forEach((_, li) => {
+    if (seen[li]){ Object.assign(st2, lineState[li]); return; }
+    const oli = map ? map.toOld(li) : -1, o = oli >= 0 ? P.p2.get(oli) : null;
+    let rec;
+    if (o && sameSt(o.pre, st2)){ rec = o; Object.assign(st2, o.post); MEMO_STATS.reused++; } else rec = read(li, st2);
+    p2.set(li, rec); first(li, st2, rec);
+  });
+  if (!full) TRUN = { sig, keys, seq, byLine:visitsByLine(seqLi), p2 };
 }
 function lineKind(li){
   const st = lineState[li], toks = doc[li] || [];
@@ -2049,24 +2127,44 @@ function slotsFor(li){
       carry: idx.length || hs.length ? null : carryFor(li, ci) };
   });
 }
+// What a line asks of the columns: whether it's laid out in columns, which columns it uses, and how wide each column
+// needs to be for it. It depends only on the line's words and state, so it's kept with the line's gloss (view[li], which
+// translateAll reuses while the line and its state are unchanged) and worked out again only when that changes.
+let COLINFO = { sig:null, m:new WeakMap() };
+// Several words in one cell stack one above the other, so a column is as wide as its widest single word.
+const fitWords = ws => Math.max(0, ...ws.map(x => Math.max(x.g.length + 1, Math.ceil(x.e.length + (x.u || "").length * 0.6 + 1))));
+function colInfo(li){
+  const v = view[li], own = pendingIns && pendingIns.li===li;
+  let r = own ? null : COLINFO.m.get(v);
+  if (r && r.ls===lineState[li]) return r;
+  const toks = doc[li], grid = !inProgramOrder(li), w = new Map(), used = new Set();
+  if (grid){
+    toks.forEach(t => used.add(colOf(t)));
+    hintItems(li).forEach(h => used.add(colOf(h.L+"1")));
+    const by = new Map(); toks.forEach((t, i) => { const ci = colOf(t); if (!by.has(ci)) by.set(ci, []); by.get(ci).push(i); });
+    for (const [ci, idx] of by) w.set(ci, COLS[ci]?.id==="NOTE" ? idx.map(i => toks[i]).join(" ").length + 1 : fitWords(idx.map(i => ({ g:toks[i], e:v[i].e, u:v[i].u }))));
+  }
+  r = { ls:lineState[li], grid, used, w, carry:new Map() };
+  if (!own && v) COLINFO.m.set(v, r);
+  return r;
+}
 function computeColumns(){
+  const sig = [COLW(), showCarry].join("|");
+  if (COLINFO.sig!==sig || COLINFO.cols!==COLS) COLINFO = { sig, cols:COLS, m:new WeakMap() };
   // Only lines laid out in columns decide which columns show and how wide they are.
-  const used = new Set(), grid = doc.map((_, li) => !inProgramOrder(li));
-  doc.forEach((t, li) => { if (grid[li]) t.forEach(w => used.add(colOf(w))); });
-  doc.forEach((_, li) => { if (grid[li]) hintItems(li).forEach(h => used.add(colOf(h.L+"1"))); });
+  const info = doc.map((_, li) => colInfo(li)), used = new Set();
+  info.forEach(r => { if (r.grid) r.used.forEach(ci => used.add(ci)); });
   if (!used.size) used.add(0);
   USED = COLS.map((_, i) => i).filter(i => used.has(i));
   WIDTHS = {};
-  // Several words in one cell stack one above the other, so a column is as wide as its widest single word.
-  const fit = ws => Math.max(0, ...ws.map(x => Math.max(x.g.length + 1, Math.ceil(x.e.length + (x.u || "").length * 0.6 + 1))));
   for (const ci of USED){
     let w = COLW();
-    doc.forEach((toks, li) => {
-      if (!grid[li]) return;
-      const idx = toks.map((_, i) => i).filter(i => colOf(toks[i])===ci);
-      if (!idx.length){ const c = carryFor(li, ci); if (c) w = Math.max(w, fit(c.words)); return; }
-      if (COLS[ci].id==="NOTE"){ w = Math.max(w, idx.map(i => toks[i]).join(" ").length + 1); return; }
-      w = Math.max(w, fit(idx.map(i => ({ g:toks[i], e:view[li][i].e, u:view[li][i].u }))));
+    info.forEach((r, li) => {
+      if (!r.grid) return;
+      if (r.w.has(ci)){ w = Math.max(w, r.w.get(ci)); return; }
+      let cw = r.carry.get(ci);
+      if (cw===undefined){ const c = carryFor(li, ci); r.carry.set(ci, cw = c ? fitWords(c.words) : 0); }
+      w = Math.max(w, cw);
     });
     WIDTHS[ci] = COLS[ci].id==="NOTE" ? w : Math.min(w, 26);
   }
@@ -2138,7 +2236,7 @@ const SEV_RANK = { error:3, warning:2, info:1 };
 const SEV_ICON = { error:"✕", warning:"⚠", info:"i" };
 const fmt4 = n => (Math.round(n*10000)/10000).toString();
 
-function checkProgram(){
+function checkProgram(full){
   const D = DIALECT, lathe = mtype()==="lathe", out = [], L = labels();
   const emitTo = { list:out };
   const emit = (li, id, vars, sev) => {
@@ -2159,10 +2257,48 @@ function checkProgram(){
     dist:"abs", feed: lathe ? "perRev" : "perMin", units:"inch", plane: lathe ? "G18" : "G17", comp:"G40", D:null, T:null, pendingT:null,
     needTlo:false, tcLine:"", tloOn:false, clamp:false, mcall:false, perMinSeen:false, pos:{ X:null, Y:null, Z:null } };
   const seen = new Set();
-  const visit = li => { emitTo.list = seen.has(li) ? null : out; seen.add(li); checkLine(li); };
+  // Reusing the last run's visits (see translateAll). Only which labels exist matters to a line's checks. A problem names
+  // its line by number when it has no N label, and so does the tool change the state remembers ("line 40"), so after
+  // lines are added or removed those numbers are moved too, and a problem that names a line is found again.
+  const keys = doc.map(lineKey), sig = runSig(Object.keys(L).sort().join());
+  const R0 = !full && SYNTAX!=="klartext" && sameSig(CRUN?.sig, sig) ? CRUN : null, map = R0 && lineMap(R0.keys, keys);
+  const seq = [], seqLi = [], occ = new Array(doc.length).fill(0), p2 = new Map();
+  let prevK = R0 ? -1 : null;
+  const moved = s => {   // a state from the last run, with its line numbers moved
+    if (!map.shift || !s) return s;
+    const m = /^line (\d+)$/.exec(s.tcLine || ""); if (!m) return s;
+    const n = map.toNew(+m[1] - 1); return n < 0 ? null : { ...s, tcLine:"line " + (n + 1) };
+  };
+  const probsFor = (o, li) => !o.probs ? null : !map.shift ? o.probs : o.probs.some(p => /\bline \d/.test(p.msg)) ? null : o.probs.map(p => ({ ...p, li }));
+  const take = (o, li, first, pre) => {   // the last run's visit o, if it still holds here
+    const post = moved(o.post), pr = first ? probsFor(o, li) : null;
+    if (!post || (first && !pr) || (pre && !(pre = moved(pre)))) return null;
+    Object.assign(st, post); st.pos = { ...post.pos }; st.cycleWords = { ...post.cycleWords };   // the two a line changes in place
+    if (pr) out.push(...pr); MEMO_STATS.reused++;
+    return map.shift ? { pre, post, probs:pr } : o;
+  };
+  const read = (li, first) => {
+    const pre = snapSt(st), n0 = out.length;
+    emitTo.list = first ? out : null; checkLine(li); MEMO_STATS.read++;
+    return { pre, post:snapSt(st), probs:first ? out.slice(n0) : null };
+  };
+  const visit = li => {
+    const first = !seen.has(li); seen.add(li);
+    const c = occ[li]++, oli = map ? map.toOld(li) : -1, ok = oli >= 0 ? R0.byLine[oli]?.[c] : undefined;
+    let rec = prevK!=null && ok===prevK + 1 ? take(R0.seq[ok], li, first) : null;
+    if (rec) prevK = ok;
+    else { rec = read(li, first); const op = ok!==undefined ? moved(R0.seq[ok].post) : null; prevK = op && sameSt(rec.post, op) ? ok : null; }
+    seq.push(rec); seqLi.push(li);
+  };
+  const visit2 = li => {   // a line the walk never reaches, in file order
+    seen.add(li);
+    const oli = map ? map.toOld(li) : -1, o = oli >= 0 ? R0.p2.get(oli) : null, pre = o && moved(o.pre);
+    const rec = (pre && sameSt(pre, st) && take(o, li, true, o.pre)) || read(li, true);
+    p2.set(li, rec);
+  };
   // Walk in execution order, following local subprogram calls, then check lines never reached.
   { const stack = []; let i = 0, guard = 0;
-    while (i < doc.length && guard++ < 5000){
+    while (i < doc.length && guard++ < 5000 + 20 * doc.length){
       const toks = doc[i]; visit(i);
       if (isEnd(toks)) break;
       if (isReturn(toks) && stack.length){ i = stack.pop(); continue; }
@@ -2170,9 +2306,10 @@ function checkProgram(){
       if (tgt!=null && L[tgt]!==undefined && stack.length < 8){ stack.push(i+1); i = L[tgt]; continue; }
       i++;
     }
-    doc.forEach((_, li) => { if (!seen.has(li)) visit(li); });
+    doc.forEach((_, li) => { if (!seen.has(li)) visit2(li); });
   }
   emitTo.list = out;
+  if (!full && SYNTAX!=="klartext") CRUN = { sig, keys, seq, byLine:visitsByLine(seqLi), p2 };
   if (!doc.some(isEnd)) emit(0, "no-program-end", { ends:(D.programEnds || ["M30"]).join(" or ") });
   view.forEach((cells, li) => cells.forEach(c => { if (c.unk && !(/^[GM]\d/.test(c.g) && D.foreign?.[pad2(c.g)])) emit(li, "unknown-word", { word:c.g }); }));
   return out.sort((a, b) => a.li - b.li || SEV_RANK[b.sev] - SEV_RANK[a.sev]);
@@ -2440,6 +2577,7 @@ function render(){
   if (activeTab < 0){ window.drawTabs?.(); return; }   // the home page has no program to draw
   translateAll();
   PROBLEMS = checkProgram(); PBYLINE = {};
+  if (MEMO_CHECK) memoCompare();
   EXEC = interpret();
   // Variables read before the program sets them, with no start value: worth a look (Variables panel, under Active modes)
   for (const [key, u] of Object.entries(EXEC.vars || {})) if (u.early!=null && !u.seed)
@@ -2488,8 +2626,8 @@ function render(){
   // call (the line count some controls show). Lines only reached through a call are numbered on the call's inserted rows.
   const runNo = {};
   if (runNums) EXEC.steps.forEach((st, k) => { const c = st.calls || [], rk = !c.length ? "m" + st.li : c.length===1 ? `x${c[0]}-${st.li}` : null; if (rk && runNo[rk]==null) runNo[rk] = k + 1; });
-  const simOn = simIdx!=null && simKey!=null, pr = simOn ? callProgress(simK, simKey[0]==="x" ? 1 : 0) : null;
-  ed.innerHTML = rows.map(({li, key, ins, from, lib, fold}) => {
+  const simOn = simIdx!=null && simKey!=null, pr = simOn ? rowProgress(simK, simKey) : null;
+  patchRows(rows.map(r => r.key), rows.map(({li, key, ins, from, lib, fold}) => {
     if (lib) return window.libRowHTML(lib, li);
     const slots = slotsFor(li);
     const hit = s => findQ && (s.g.toUpperCase().includes(findQ) || s.e.toUpperCase().includes(findQ));
@@ -2508,17 +2646,73 @@ function render(){
     const gc = slots.map(s => `<span class="${cls(s)}" data-k="${key}" data-l="${li}" data-r="${s.ref}" style="${wd(s)}" title="${esc(s.hint || s.hints ? hintTitle(s) : s.carry ? carryTitle(s) : s.g)}">${s.hint ? or(s) + esc(s.g) : s.hints ? esc(s.hg) : many(s) ? stk(many(s), false) : s.carry ? esc(s.carry.g) : s.add ? "" : esc(s.g)}</span>`).join("");
     const eob = eobOn() && doc[li].length && doc[li][doc[li].length-1]!==";" && !(doc[li].length===1 && doc[li][0]==="%") ? [`<span class="cell eob" title="End of block. ${esc(MACHINES[machineId].name)} needs ; at the end of every line, so GlossCode writes it for you.">EOB</span>`, `<span class="cell eob" title="End of block">;</span>`] : ["", ""];
     const tgt = ins ? null : callTarget(doc[li]);
-    const bar = simOn && key===simKey && pr!=null && (ins || !expanded.has(li)) ? `<span class="xpbar" title="Running the subprogram this line calls"><i style="width:${(pr*100).toFixed(1)}%"></i></span>` : "";
-    const xp = fold ? foldButton(fold[0], fold[1]==null ? null : doc[fold[1]], fold[1]) + (ins ? bar : "") : ins ? bar : tgt==null && !ins && window.libButton ? window.libButton(li) : tgt!=null ? (subRange(tgt) ? `<button class="xp" data-x="${li}">${expanded.has(li) ? "▾ hide" : "▸ show"} ${tgt}</button>${bar}` : `<span class="xp bad">${tgt} not found</span>`) : "";
+    const bar = simOn && key===simKey && pr!=null && (ins || !expanded.has(li)) ? `<span class="xpbar" title="${barTitle(key)}"><i style="width:${(pr*100).toFixed(1)}%"></i></span>` : "";
+    const xp = fold ? foldButton(fold[0], fold[1]==null ? null : doc[fold[1]], fold[1]) + bar : ins ? bar : tgt==null && !ins && window.libButton ? window.libButton(li) : tgt!=null ? (subRange(tgt) ? `<button class="xp" data-x="${li}">${expanded.has(li) ? "▾ hide" : "▸ show"} ${tgt}</button>${bar}` : `<span class="xp bad">${tgt} not found</span>`) : "";
     const kind = lineKind(li);
     const lp = ins ? null : PBYLINE[li], worst = lp ? lp.reduce((a, p) => SEV_RANK[p.sev] > SEV_RANK[a] ? p.sev : a, "info") : null;
     const pmark = lp ? `<span class="pm ${worst}" title="${esc(lp.map(p => p.msg).join("\n"))}">${SEV_ICON[worst]}</span>` : "";
     const c = `ln${worst?" p-"+worst:""}${(simOn ? key===simKey : li===curLine && !ins)?" cur":""}${!ins && inSel(li)?" lsel":""}${ins?" ins":""}${kind?" k-"+kind:""}${fhits.includes(li) && li===curLine?" fcur":""}${simOn && key===simKey?" simcur":""}${simBD && isBlockDel(doc[li])?" bdskip":""}${ran && !ins && li > EXEC.alarm.li && !ran.has(li)?" unreach":""}`;
     return `<div class="${c}" data-key="${key}" data-li="${li}"${ins?` title="Inserted from the subprogram called on ${from}. Edits here change the subprogram itself."`:""}><div class="r en${tall}"><span class="gut">${pmark}</span>${en}${eob[0]}</div><div class="r gc${tall}"><span class="gut">${runNums ? `<span class="rn" title="Run order: block ${runNo[key] ?? "–"} of the program as it runs">${runNo[key] ?? ""}</span>` : ""}${ins?"↳":li+1}</span>${gc}${eob[1]}${xp}</div></div>`;
-  }).join("");
+  }));
   drawViews(); drawModes(); status(); updateFindCount(fhits); drawProblems();
   drawMachineChip(); window.drawTabs?.();
   drawnSig = drawSig();
+}
+/* Drawing the rows: each row's HTML is kept, and a row whose HTML is the same as last time is left as it is, so an edit
+   to one word redraws a few rows instead of ten thousand. When lines are added or removed, the rows below keep their
+   elements too: only their line numbers (in the gutter and the data-* attributes) are moved. A row the page changed
+   itself since it was drawn (the cursor, a word being edited, the simulation's bar) is marked with touchRow and drawn
+   again. If more than a few hundred rows changed, all rows are drawn again at once, which is quicker then. */
+let ROWS = null;
+let TOUCHED = new WeakSet();
+const touchRow = el => { const r = el?.closest?.(".ln"); if (r) TOUCHED.add(r); };
+// A row's key with its line numbers changed by f (m12, x40-130 for a subprogram line shown under its call, l12-3 for a library row)
+const keyMap = (k, f) => { const m = /^([mxl])(\d+)(?:-(\d+))?$/.exec(k); if (!m) return null; const a = f(+m[2]); if (a < 0) return null;
+  if (m[1]==="l") return `l${a}-${m[3]}`; if (m[1]==="m") return "m" + a; const b = f(+m[3]); return b < 0 ? null : `x${a}-${b}`; };
+// Last time's HTML for a row, as it reads with its lines moved by f
+function movedHTML(h, f){
+  return h.replace(/data-(li|l|x)="(\d+)"/g, (_, a, n) => `data-${a}="${f(+n)}"`)
+    .replace(/data-(key|k)="([mxl][\d-]+)"/g, (_, a, k) => `data-${a}="${keyMap(k, f)}"`)
+    .replace(/(<div class="r gc[^"]*"><span class="gut">(?:<span class="rn"[^>]*>[^<]*<\/span>)?)(\d+)<\/span>/, (_, pre, n) => `${pre}${f(+n - 1) + 1}</span>`);
+}
+function moveRow(el, f){   // the same change, made to the row's element
+  el.dataset.key = keyMap(el.dataset.key, f); el.dataset.li = f(+el.dataset.li);
+  for (const c of el.querySelectorAll("[data-l],[data-k],[data-x]")){
+    const d = c.dataset;
+    if (d.l!=null) d.l = f(+d.l); if (d.k!=null) d.k = keyMap(d.k, f); if (d.x!=null) d.x = f(+d.x);
+  }
+  const g = el.children[1]?.firstElementChild, t = g?.lastChild;   // the code row's gutter
+  if (t?.nodeType===3 && /^\d+$/.test(t.data)) t.data = String(f(+t.data - 1) + 1);
+}
+function patchRows(keys, html){
+  const P = ROWS, kids = [...ed.children], dk = TRUN?.keys?.length===doc.length ? TRUN.keys : doc.map(lineKey);
+  ROWS = { keys, html, docKeys:dk };
+  const full = () => { ed.innerHTML = html.join(""); TOUCHED = new WeakSet(); };
+  if (!P || kids.length!==P.keys.length) return full();
+  const map = lineMap(P.docKeys, dk), same = !map.shift && P.keys.length===keys.length && keys.every((k, i) => k===P.keys[i]);
+  const oldAt = same ? null : new Map(P.keys.map((k, j) => [k, j]));
+  const use = new Array(keys.length).fill(-1), moved = []; let last = -1, redraw = 0;
+  for (let i = 0; i < keys.length; i++){
+    const j = same ? i : oldAt.get(keyMap(keys[i], map.toOld) ?? "");
+    if (j!=null && j > last && !TOUCHED.has(kids[j])){
+      const mv = P.keys[j]!==keys[i];
+      if ((mv ? movedHTML(P.html[j], map.toNew) : P.html[j])===html[i]){ use[i] = j; last = j; if (mv) moved.push(j); continue; }
+    }
+    if (++redraw > 300) return full();
+  }
+  const kept = new Set(use);
+  kids.forEach((el, j) => { if (!kept.has(j)) el.remove(); });
+  moved.forEach(j => moveRow(kids[j], map.toNew));
+  if (redraw){
+    const t = document.createElement("template"); t.innerHTML = keys.map((_, i) => use[i] < 0 ? html[i] : "").join("");
+    // from the bottom up, each new row goes just above the row below it
+    const fresh = [...t.content.children]; let f = fresh.length, below = null;
+    for (let i = keys.length - 1; i >= 0; i--) below = use[i] >= 0 ? kids[use[i]] : ed.insertBefore(fresh[--f], below);
+  }
+  if (MEMO_CHECK){
+    const t = document.createElement("template"); t.innerHTML = html.join("");
+    if (t.innerHTML!==ed.innerHTML){ console.warn("Redrawing only the changed rows left rows that differ from a full redraw."); setMsg("memoCheck: redrawing only the changed rows left different rows (see the console).", true); full(); }
+  }
 }
 /* Moving the cursor (a click, an arrow key, the simulation going to the next line) changes nothing but which row and
    word are marked, so when the program and view are just as render() last drew them, only those marks move. A long
@@ -2530,23 +2724,24 @@ function renderCursor(){
   if (activeTab < 0 || drawnSig!==drawSig() || !ed.firstElementChild || foldAutoPending || (foldHiding(curLine) >= 0 && !(simIdx!=null && simKey!=null))) return render();
   fixSel();
   const simOn = simIdx!=null && simKey!=null, fh = findQ ? new Set(findHits()) : null;
-  ed.querySelectorAll(".cell.sel").forEach(c => c.classList.remove("sel"));
-  ed.querySelectorAll(".xpbar").forEach(b => b.remove());
+  ed.querySelectorAll(".cell.sel").forEach(c => { touchRow(c); c.classList.remove("sel"); });
+  ed.querySelectorAll(".xpbar").forEach(b => { touchRow(b); b.remove(); });
   for (const r of ed.children){
     const key = r.dataset.key; if (!key) continue;   // a subprogram-library row
-    const li = +r.dataset.li, ins = key[0]==="x";
+    const li = +r.dataset.li, ins = key[0]==="x", was = r.className;
     r.classList.toggle("cur", simOn ? key===simKey : li===curLine && key[0]==="m");
     r.classList.toggle("lsel", !ins && key[0]==="m" && inSel(li));
     r.classList.toggle("fcur", !!fh && fh.has(li) && li===curLine);
     r.classList.toggle("simcur", simOn && key===simKey);
+    if (r.className!==was) TOUCHED.add(r);
   }
   const row = ed.querySelector(`.ln[data-key="m${curLine}"]`);
-  if (row) row.querySelectorAll(`.cell[data-r="${CSS.escape(curRef)}"]`).forEach(c => c.classList.add("sel"));
+  if (row){ TOUCHED.add(row); row.querySelectorAll(`.cell[data-r="${CSS.escape(curRef)}"]`).forEach(c => c.classList.add("sel")); }
   if (simOn){   // the progress bar of the subprogram running, on the row that shows it
     const sr = ed.querySelector(`.ln[data-key="${simKey}"]`), li = sr ? +sr.dataset.li : -1, ins = simKey[0]==="x";
-    const pr = callProgress(simK, ins ? 1 : 0);
-    if (sr && pr!=null && (ins || !expanded.has(li))) sr.querySelector(".r.gc").insertAdjacentHTML("beforeend",
-      `<span class="xpbar" title="Running the subprogram this line calls"><i style="width:${(pr*100).toFixed(1)}%"></i></span>`);
+    const pr = rowProgress(simK, simKey);
+    if (sr && pr!=null && (ins || !expanded.has(li))) TOUCHED.add(sr), sr.querySelector(".r.gc").insertAdjacentHTML("beforeend",
+      `<span class="xpbar" title="${barTitle(simKey)}"><i style="width:${(pr*100).toFixed(1)}%"></i></span>`);
   }
   drawViews(); drawModes(); status(); if (fh) updateFindCount([...fh]); drawProblems();
 }
@@ -2675,9 +2870,9 @@ document.getElementById("vars").addEventListener("click", e => {
 
 ed.addEventListener("mouseover", e => {
   if (editing) return;
-  const c = e.target.closest(".cell"); ed.querySelectorAll(".hot").forEach(x => x.classList.remove("hot"));
+  const c = e.target.closest(".cell"); ed.querySelectorAll(".hot").forEach(x => { touchRow(x); x.classList.remove("hot"); });
   if (!c || c.classList.contains("add") || c.classList.contains("eob")) return;
-  ed.querySelectorAll(`.cell[data-k="${c.dataset.k}"][data-r="${c.dataset.r}"]`).forEach(x => x.classList.add("hot"));
+  ed.querySelectorAll(`.cell[data-k="${c.dataset.k}"][data-r="${c.dataset.r}"]`).forEach(x => { touchRow(x); x.classList.add("hot"); });
   const s = slotsFor(+c.dataset.l).find(s => s.ref===c.dataset.r);
   if (s?.hint || s?.hints) showHintInfo(s.hint || s.hints[0]);
   else if (s?.carry) document.getElementById("info").innerHTML = `<span><span class="k">${esc(s.carry.g)}</span> &nbsp;→&nbsp; <span class="k">${esc(s.carry.e)}${s.carry.u ? `<small class="u">${esc(s.carry.u)}</small>` : ""}</span></span><span>${esc(s.carry.d)}</span><span style="color:#777">Modal value: not written on this line, still in effect from an earlier one. Click to write a new value here.</span>`;
@@ -2994,9 +3189,10 @@ function startEdit(li, ref, key, opts = {}){
   key = key || "m"+li;
   const prevRef = curRef;
   curLine = li; if (ref!=="i") curRef = ref; render();
-  ed.querySelectorAll(".cell.sel").forEach(x => x.classList.remove("sel"));
+  ed.querySelectorAll(".cell.sel").forEach(x => { touchRow(x); x.classList.remove("sel"); });
   const ln = ed.querySelector(`.ln[data-key="${key}"]`) || ed.querySelector(`.ln[data-key="m${li}"]`);
   if (!ln) return;
+  TOUCHED.add(ln);
   const slot = slotsFor(li).find(s => s.ref===ref) || slotsFor(li).find(s => s.add && !s.pend);
   if (!slot) return;
   if (slot.cm && editMode==="en"){ setMsg("Comments are edited on the code line.", true); return; }
@@ -4578,7 +4774,9 @@ function drawViews(){
     ? tools.map(t => `<span><i style="background:${toolColor(t)}"></i>${t}</span>`).join("") + `<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`
     : (simRapids ? `<span><i style="background:${KCOL.rapid}"></i>Rapid</span>` : "") + `<span><i style="background:${KCOL.feed}"></i>Feed</span><span><i style="background:${KCOL.arc}"></i>Arc</span><span><i style="background:${KCOL.cyc}"></i>Cycle</span>${EXEC.boxes?.length ? `<span><i style="background:#b4bcc6"></i>Engraving</span>` : ""}${compBand && segs.some(s => s.comp) ? `<span><i style="background:rgba(138,147,158,.45);height:6px"></i>Cutter comp side</span>` : ""}<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`;
   drawSimPos(doneTo > 0 ? at : null, lathe);
-  document.getElementById("s-play").textContent = simTimer ? "⏸" : "▶";
+  // Only when it changes: WebKitGTK (Linux) drops a click whose text was replaced between the press and the release,
+  // and this runs on every step of the simulation, so ⏸ couldn't be clicked while playing.
+  const pb = document.getElementById("s-play"), pt = simTimer ? "⏸" : "▶"; if (pb.textContent!==pt) pb.textContent = pt;
   document.getElementById("s-play").classList.toggle("on", !!simTimer);
   drawTimeline(EXEC.steps, lathe);
 }
@@ -4904,13 +5102,26 @@ function callProgress(k, depth = 0){
   let a = k, b = k; while (a > 0 && deep(a-1)) a--; while (b < st.length-1 && deep(b+1)) b++;
   return (k - a + 1) / (b - a + 1);
 }
+const barTitle = key => callProgress(simK, key[0]==="x" ? 1 : 0)==null && foldScan().end[rowLi(key)] >= 0 ? "Running the folded moves" : "Running the subprogram this line calls";
+// How far through what row "key" stands for step k is: a collapsed call (above), or a closed fold of moves, where it's
+// the share of the run of steps on the fold's lines (in the same call) that are done.
+function rowProgress(k, key){
+  const ins = key[0]==="x", pc = callProgress(k, ins ? 1 : 0); if (pc!=null) return pc;
+  const st = EXEC.steps, s = st[k]; if (!s) return null;
+  const h = rowLi(key), ctx = ins ? doc[+key.slice(1).split("-")[0]] : null, F = foldScan(), e = F.end[h];
+  if (e < 0 || !foldClosed(h, ctx)) return null;
+  const depth = (s.calls || []).length, same = j => st[j] && st[j].li >= h && st[j].li <= e && (st[j].calls || []).length===depth;
+  if (!same(k)) return null;
+  let a = k, b = k; while (a > 0 && same(a-1)) a--; while (b < st.length-1 && same(b+1)) b++;
+  return (k - a + 1) / (b - a + 1);
+}
 // Moves the editor to the row for step k, scrolling only when the row changes; the bar on a collapsed call just grows.
 function simFollow(k, force){
   const st = EXEC.steps[k]; simK = st ? k : null;
   const key = simRowKey(st);
   if (key && (force || key!==simKey)){ simKey = key; curLine = rowLi(key); renderCursor(); scrollToLn(ed.querySelector(`.ln[data-key="${key}"]`)); return; }
-  const bar = ed.querySelector(`.ln[data-key="${simKey}"] .xpbar i`), pr = callProgress(k, simKey[0]==="x" ? 1 : 0);
-  if (bar && pr!=null) bar.style.width = (pr*100).toFixed(1) + "%";
+  const bar = ed.querySelector(`.ln[data-key="${simKey}"] .xpbar i`), pr = rowProgress(k, simKey);
+  if (bar && pr!=null){ touchRow(bar); bar.style.width = (pr*100).toFixed(1) + "%"; }
   drawViews();
 }
 // The next M00 (or M01 with optional stop on) the tool reaches between move from and move to, not yet paused at.
@@ -4951,7 +5162,7 @@ function pauseSim(){ clearInterval(simTimer); simTimer = null; drawViews(); setM
 // After stepping by hand, stops before the tool count as passed and stops after it come up again.
 function resetStops(){ simStopAt = null; simStops = new Set(EXEC.steps.flatMap((s, k) => s.stop && s.s0 < simIdx ? [k] : [])); }
 function togglePlay(){ simTimer ? pauseSim() : playSim(); }
-function stopSim(quiet){ clearInterval(simTimer); simTimer = null; simStopAt = null; simK = simKey = null; if (simIdx!=null){ simIdx = null; if (!quiet) { render(); setMsg("Simulation closed"); } } }
+function stopSim(quiet){ clearInterval(simTimer); simTimer = null; simStopAt = null; simK = simKey = null; if (simIdx!=null){ simIdx = null; if (!quiet) { render(); setMsg("Simulation closed"); } else setMsg(""); } }   // quietly: no "Playing…" left behind
 function simStep(dir){
   if (editing && !commit()) return;
   if (simTimer) pauseSim();
@@ -5144,6 +5355,13 @@ menubar.addEventListener("mouseover", e => { const mi = e.target.closest(".mi");
 document.addEventListener("mousedown", e => { if (openMenu && !menubar.contains(e.target)) closeMenu(); });
 
 /* ---------- Keyboard ---------- */
+// A click on a blank part of a panel leaves the focus on the page itself, outside #app, so its keys (Space, F5, the
+// arrows) would go nowhere. They're passed on to the editor instead.
+document.addEventListener("keydown", e => {
+  if (e.target!==document.body || activeTab < 0) return;
+  const c = new KeyboardEvent("keydown", { key:e.key, code:e.code, ctrlKey:e.ctrlKey, shiftKey:e.shiftKey, altKey:e.altKey, metaKey:e.metaKey, repeat:e.repeat, bubbles:true, cancelable:true });
+  if (!ed.dispatchEvent(c)) e.preventDefault();
+});
 document.getElementById("app").addEventListener("keydown", e => {
   const k = e.key.toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
   if (e.key==="CapsLock"){ if (capsSwitch && ed.contains(e.target)) toggleEditMode(); return; }
@@ -5159,6 +5377,9 @@ document.getElementById("app").addEventListener("keydown", e => {
   if (ctrl && k==="o"){ e.preventDefault(); openDlg(); return; }
   if (ctrl && k==="s"){ e.preventDefault(); e.shiftKey ? saveAs() : save(); return; }
   if (editing || e.target===findq) return;
+  // While the simulation is open, Space plays and pauses it (as the status bar says), wherever the focus is except a
+  // button, list or box, which Space works itself (on the ▶ button that's the same thing).
+  if (e.key===" " && !ctrl && !e.altKey && simIdx!=null && !e.target.closest?.("button, select, input, textarea")){ e.preventDefault(); togglePlay(); return; }
   if (ctrl && k==="z" && !e.shiftKey){ e.preventDefault(); undo(); return; }
   if (ctrl && (k==="y" || (k==="z" && e.shiftKey))){ e.preventDefault(); redo(); return; }
   if (ctrl && e.shiftKey && k==="k"){ e.preventDefault(); deleteLine(); return; }
@@ -6963,7 +7184,7 @@ let CV = null;   // the conversion being reviewed
 function withProgram(mid, toks, fn){
   const save = { machineId, doc, view, lineState, EXEC, expanded, fileEob };
   try {
-    machineId = mid; setDialect(); doc = toks; expanded = new Set(); translateAll(); EXEC = interpret();
+    machineId = mid; setDialect(); doc = toks; expanded = new Set(); translateAll(true); EXEC = interpret();
     return fn();
   } finally {
     ({ machineId, doc, view, lineState, EXEC, expanded, fileEob } = save);
@@ -7152,7 +7373,7 @@ function convert(tgt){
   withProgram(tgt, outDoc, () => {
     view.forEach((cells, k) => { const r = res[rowOf(k)]; if (!r || r.level==="red") return;
       cells.forEach(c => { if (c.unk){ r.level = "red"; r.red ||= { key:"unknown-target:" + c.g, what:`The target doesn't read ${c.g}.` }; r.why.unshift(`The target doesn't read ${c.g}.`); r.choice ||= "keep"; } }); });
-    const probs = checkProgram().filter(p => p.sev!=="info");
+    const probs = checkProgram(true).filter(p => p.sev!=="info");
     for (const p of probs){
       const k = p.li, si = rowOf(k), r = si==null ? null : res[si]; if (!r || r.level==="red") continue;
       if (srcProbs.has(si + ":" + p.id)) continue;   // the source has the same problem on this line
