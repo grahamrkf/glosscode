@@ -4,6 +4,21 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Editor
+- Space pauses and resumes the simulation while it's open. It used to start a new word and close the simulation.
+- A closed fold's line shows a progress bar while the simulation runs through the folded moves, like a hidden subprogram call's.
+
+### Simulation
+- The ⏸ button pauses the simulation on Linux. Its text was rewritten on every step, which made WebKitGTK drop the click.
+- Space, F5 and the other keys still work after clicking a blank part of a panel; they used to do nothing until you clicked the editor. Clicking a row while the simulation plays no longer leaves "Playing…" in the status bar.
+
+### Linux
+- Fixed a missing declaration of realpath in the Linux build: GCC 14 refused to compile it, and older compilers built a program that could crash opening a file named on the command line.
+
+### Speed
+- Editing a long program is faster. After an edit, the gloss and the checks are worked out again only from the edited line down to the first line whose machine state (modes, units, plane, feed, speed, tool, offsets, comp, position) is the same as before, and the rest is reused. A subprogram called more than once is matched per call, each with the state it was called with. Only the rows whose content changed are drawn again; adding or removing a line moves the rows below instead of drawing them again. On a 10,000-line test program, changing a word went from about 2.3 seconds to 0.5, and adding a line from about 2.3 to 1. The simulation is still run in full after each edit.
+- The checks and the modes follow a long program in run order all the way through. They used to stop following calls after 5,000 lines and read the rest in file order, so a long subprogram's later lines could show the wrong modes.
+
 ## [0.1.9] - 2026-11-06
 
 ### Editor
