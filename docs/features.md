@@ -8,7 +8,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Interleaved view: a gloss line (plain English) above every code line
 - [ ] Fixed-width columns (at least 12 characters for full words, 8 for short) so words line up down the whole file
 - [ ] Full words (`run.feed`, `set.inch`, `cycle.peck`, `machine.tailstock.in`: one of a fixed set of groups, then the action, with a third part for less common codes; control-specific codes are underlined with dots) and short words (View › Gloss words)
-- [ ] Type code or type gloss (View › Edit in). Clicking a code word while editing gloss switches to editing code and selects it, and clicking a gloss word while editing code switches back
+- [ ] Type code or type gloss (View › Edit in; the older layouts only)
 - [ ] Autocomplete for gloss and code words
 - [ ] Keyboard editing by word: ← → move between words, ↑ ↓ between lines, Enter edits and Enter again finishes (the word stays selected), Delete removes the word, typing replaces it
 - [ ] While editing, Space starts a new word to the right; in code, typing a letter after a number does too (`G01X` becomes `G01` and `X`)
@@ -16,8 +16,8 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Paste (Ctrl+V or Edit › Paste) splits the text the way opening a file does. One line goes into the current line with each word in its own cell (`G01X1.Y2.` becomes three words). Several lines, or a whole program, go in as their own lines below the current one, or replace it when it's blank
 - [ ] Select whole lines by dragging the mouse across them, Shift+↑↓ or Shift+click (Ctrl+A selects all). Right-click, or Ctrl+C / Ctrl+X, copies or cuts them as code text, the same as Save writes it, with no gloss. Ctrl+D duplicates them below; Ctrl+V pastes over them; Delete removes them
 - [ ] View › Edit in picks the line typing goes to: code (the default) or gloss
-- [ ] Caps Lock switches between editing the code line and the gloss line (View › Caps Lock switches between them, off by default)
-- [ ] Clicking a word on the other line switches to editing that line (View › Clicking switches between editing code and editing gloss, off by default)
+- [ ] Code with gloss above (the default layout): each line as plain text with its N number in its own column and the gloss above in small grey italics, not selectable; N numbers and comments aren't repeated in the gloss. Click to place the caret; Enter breaks the line, Backspace/Delete at the ends join lines, Esc undoes the line's changes
+- [ ] Problem lines tinted yellow (warning), orange (error) or red (machine alarm) with the word at fault underlined; one dismissable banner for controls whose rules are a first draft
 - [ ] Hint text after codes for the words they still need (`G02` shows `R## or I## J##`, `G83` shows `Z## R## Q##`). Clicking R## types the R and hides I and J; clicking I## hides R but keeps J
 - [ ] Mode-clash warnings in the status bar
 - [ ] Auto N numbering on new lines (step 10, midpoint when there's no room)

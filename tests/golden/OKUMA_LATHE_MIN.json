@@ -192,7 +192,7 @@
     [
      {
       "g": "O0200",
-      "e": "PROG0200",
+      "e": "prog:0200",
       "d": "Program number 0200"
      }
     ],
@@ -247,7 +247,7 @@
      },
      {
       "g": "T010101",
-      "e": "TOOL010101",
+      "e": "tool:010101",
       "d": "Tool number 010101"
      }
     ],
@@ -264,8 +264,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -287,8 +286,7 @@
      },
      {
       "g": "S600",
-      "e": "S600",
-      "u": "sfm",
+      "e": "speed:600",
       "d": "Surface speed 600 surface feet per minute"
      },
      {
@@ -310,12 +308,12 @@
      },
      {
       "g": "X1.4",
-      "e": "X1.4",
+      "e": "movx:1.4",
       "d": "X position 1.4"
      },
      {
       "g": "Z0.05",
-      "e": "Z0.05",
+      "e": "movz:0.05",
       "d": "Z position 0.05"
      },
      {
@@ -342,23 +340,22 @@
      },
      {
       "g": "D0.1",
-      "e": "DOFS0.1",
+      "e": "doffset:0.1",
       "d": "Tool diameter offset number 0.1"
      },
      {
       "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
+      "e": "feed:0.01",
       "d": "Feed rate 0.01 inches per rev"
      },
      {
       "g": "U0.02",
-      "e": "INCX0.02",
+      "e": "incx:0.02",
       "d": "Incremental X (lathe) 0.02"
      },
      {
       "g": "W0.005",
-      "e": "INCZ0.005",
+      "e": "incz:0.005",
       "d": "Incremental Z (lathe) 0.005"
      }
     ],
@@ -375,12 +372,12 @@
      },
      {
       "g": "X8.",
-      "e": "X8.0",
+      "e": "movx:8.0",
       "d": "X position 8.0"
      },
      {
       "g": "Z5.",
-      "e": "Z5.0",
+      "e": "movz:5.0",
       "d": "Z position 5.0"
      },
      {
@@ -419,7 +416,7 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      }
     ],
@@ -436,13 +433,12 @@
      },
      {
       "g": "Z0.",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      },
      {
       "g": "F0.004",
-      "e": "F0.004",
-      "u": "ipr",
+      "e": "feed:0.004",
       "d": "Feed rate 0.004 inches per rev"
      }
     ],
@@ -454,12 +450,12 @@
      },
      {
       "g": "X0.8",
-      "e": "X0.8",
+      "e": "movx:0.8",
       "d": "X position 0.8"
      },
      {
       "g": "Z-0.2",
-      "e": "Z-0.2",
+      "e": "movz:-0.2",
       "d": "Z position -0.2"
      }
     ],
@@ -471,7 +467,7 @@
      },
      {
       "g": "Z-0.5",
-      "e": "Z-0.5",
+      "e": "movz:-0.5",
       "d": "Z position -0.5"
      }
     ],
@@ -488,17 +484,17 @@
      },
      {
       "g": "X1.2",
-      "e": "X1.2",
+      "e": "movx:1.2",
       "d": "X position 1.2"
      },
      {
       "g": "Z-0.7",
-      "e": "Z-0.7",
+      "e": "movz:-0.7",
       "d": "Z position -0.7"
      },
      {
       "g": "L0.2",
-      "e": "RAD0.2",
+      "e": "radius:0.2",
       "d": "Arc radius"
      }
     ],
@@ -515,7 +511,7 @@
      },
      {
       "g": "X1.4",
-      "e": "X1.4",
+      "e": "movx:1.4",
       "d": "X position 1.4"
      }
     ],
@@ -556,12 +552,12 @@
      },
      {
       "g": "X0.6",
-      "e": "X0.6",
+      "e": "movx:0.6",
       "d": "X position 0.6"
      },
      {
       "g": "Z0.05",
-      "e": "Z0.05",
+      "e": "movz:0.05",
       "d": "Z position 0.05"
      }
     ],
@@ -595,12 +591,12 @@
      },
      {
       "g": "X=DIA1",
-      "e": "X=DIA1",
+      "e": "movx:=DIA1",
       "d": "X position =DIA1"
      },
      {
       "g": "Z0.02",
-      "e": "Z0.02",
+      "e": "movz:0.02",
       "d": "Z position 0.02"
      }
     ],
@@ -617,28 +613,27 @@
      },
      {
       "g": "X0.9",
-      "e": "X0.9",
+      "e": "movx:0.9",
       "d": "X position 0.9"
      },
      {
       "g": "Z-0.08",
-      "e": "Z-0.08",
+      "e": "movz:-0.08",
       "d": "Z position -0.08"
      },
      {
       "g": "D0.02",
-      "e": "PECK0.02",
+      "e": "peck:0.02",
       "d": "Depth of each peck. (G74)"
      },
      {
       "g": "I0.1",
-      "e": "SHIFTX0.1",
+      "e": "shiftx:0.1",
       "d": "Shift along X between pecks, as a diameter. (G74)"
      },
      {
       "g": "F0.002",
-      "e": "F0.002",
-      "u": "ipr",
+      "e": "feed:0.002",
       "d": "Feed rate 0.002 inches per rev"
      }
     ],
@@ -655,13 +650,12 @@
      },
      {
       "g": "Z-0.1",
-      "e": "Z-0.1",
+      "e": "movz:-0.1",
       "d": "Z position -0.1"
      },
      {
       "g": "F0.001",
-      "e": "F0.001",
-      "u": "ipr",
+      "e": "feed:0.001",
       "d": "Feed rate 0.001 inches per rev"
      }
     ],
@@ -678,7 +672,7 @@
      },
      {
       "g": "F0.3",
-      "e": "SEC0.3",
+      "e": "dwell:0.3",
       "d": "Dwell for 0.3 seconds"
      }
     ],
@@ -695,12 +689,12 @@
      },
      {
       "g": "X8.",
-      "e": "X8.0",
+      "e": "movx:8.0",
       "d": "X position 8.0"
      },
      {
       "g": "Z5.",
-      "e": "Z5.0",
+      "e": "movz:5.0",
       "d": "Z position 5.0"
      }
     ],
@@ -746,7 +740,7 @@
      },
      {
       "g": "Z0.7",
-      "e": "INCZ0.7",
+      "e": "incz:0.7",
       "d": "Move 0.7 in Z from where the tool is"
      }
     ],
@@ -1472,7 +1466,7 @@
     [
      {
       "g": "O0200",
-      "e": "PROG0200",
+      "e": "prog:0200",
       "d": "Program number 0200"
      }
     ],
@@ -1527,7 +1521,7 @@
      },
      {
       "g": "T010101",
-      "e": "TOOL010101",
+      "e": "tool:010101",
       "d": "Tool number 010101"
      }
     ],
@@ -1544,8 +1538,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -1568,8 +1561,7 @@
      },
      {
       "g": "S600",
-      "e": "S600",
-      "u": "sfm",
+      "e": "speed:600",
       "d": "Surface speed 600 surface feet per minute"
      },
      {
@@ -1591,12 +1583,12 @@
      },
      {
       "g": "X1.4",
-      "e": "X1.4",
+      "e": "movx:1.4",
       "d": "X position 1.4"
      },
      {
       "g": "Z0.05",
-      "e": "Z0.05",
+      "e": "movz:0.05",
       "d": "Z position 0.05"
      },
      {
@@ -1623,23 +1615,22 @@
      },
      {
       "g": "D0.1",
-      "e": "DOFS0.1",
+      "e": "doffset:0.1",
       "d": "Tool diameter offset number 0.1"
      },
      {
       "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
+      "e": "feed:0.01",
       "d": "Feed rate 0.01 inches per rev"
      },
      {
       "g": "U0.02",
-      "e": "INCX0.02",
+      "e": "incx:0.02",
       "d": "Incremental X (lathe) 0.02"
      },
      {
       "g": "W0.005",
-      "e": "INCZ0.005",
+      "e": "incz:0.005",
       "d": "Incremental Z (lathe) 0.005"
      }
     ],
@@ -1656,12 +1647,12 @@
      },
      {
       "g": "X8.",
-      "e": "X8.0",
+      "e": "movx:8.0",
       "d": "X position 8.0"
      },
      {
       "g": "Z5.",
-      "e": "Z5.0",
+      "e": "movz:5.0",
       "d": "Z position 5.0"
      },
      {
@@ -1700,7 +1691,7 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      }
     ],
@@ -1717,13 +1708,12 @@
      },
      {
       "g": "Z0.",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      },
      {
       "g": "F0.004",
-      "e": "F0.004",
-      "u": "ipr",
+      "e": "feed:0.004",
       "d": "Feed rate 0.004 inches per rev"
      }
     ],
@@ -1735,12 +1725,12 @@
      },
      {
       "g": "X0.8",
-      "e": "X0.8",
+      "e": "movx:0.8",
       "d": "X position 0.8"
      },
      {
       "g": "Z-0.2",
-      "e": "Z-0.2",
+      "e": "movz:-0.2",
       "d": "Z position -0.2"
      }
     ],
@@ -1752,7 +1742,7 @@
      },
      {
       "g": "Z-0.5",
-      "e": "Z-0.5",
+      "e": "movz:-0.5",
       "d": "Z position -0.5"
      }
     ],
@@ -1769,12 +1759,12 @@
      },
      {
       "g": "X1.2",
-      "e": "X1.2",
+      "e": "movx:1.2",
       "d": "X position 1.2"
      },
      {
       "g": "Z-0.7",
-      "e": "Z-0.7",
+      "e": "movz:-0.7",
       "d": "Z position -0.7"
      },
      {
@@ -1797,7 +1787,7 @@
      },
      {
       "g": "X1.4",
-      "e": "X1.4",
+      "e": "movx:1.4",
       "d": "X position 1.4"
      }
     ],
@@ -1838,12 +1828,12 @@
      },
      {
       "g": "X0.6",
-      "e": "X0.6",
+      "e": "movx:0.6",
       "d": "X position 0.6"
      },
      {
       "g": "Z0.05",
-      "e": "Z0.05",
+      "e": "movz:0.05",
       "d": "Z position 0.05"
      }
     ],
@@ -1878,12 +1868,12 @@
      },
      {
       "g": "X=DIA1",
-      "e": "X=DIA1",
+      "e": "movx:=DIA1",
       "d": "X position =DIA1"
      },
      {
       "g": "Z0.02",
-      "e": "Z0.02",
+      "e": "movz:0.02",
       "d": "Z position 0.02"
      }
     ],
@@ -1900,28 +1890,27 @@
      },
      {
       "g": "X0.9",
-      "e": "X0.9",
+      "e": "movx:0.9",
       "d": "X position 0.9"
      },
      {
       "g": "Z-0.08",
-      "e": "Z-0.08",
+      "e": "movz:-0.08",
       "d": "Z position -0.08"
      },
      {
       "g": "D0.02",
-      "e": "CLEAR0.02",
+      "e": "clear:0.02",
       "d": "Clearance when stepping back out. (G74)"
      },
      {
       "g": "I0.1",
-      "e": "STEPX0.1",
+      "e": "stepx:0.1",
       "d": "Step in X between pecking passes, as a radius. (G74)"
      },
      {
       "g": "F0.002",
-      "e": "F0.002",
-      "u": "ipr",
+      "e": "feed:0.002",
       "d": "Feed rate 0.002 inches per rev"
      }
     ],
@@ -1938,13 +1927,12 @@
      },
      {
       "g": "Z-0.1",
-      "e": "Z-0.1",
+      "e": "movz:-0.1",
       "d": "Z position -0.1"
      },
      {
       "g": "F0.001",
-      "e": "F0.001",
-      "u": "ipr",
+      "e": "feed:0.001",
       "d": "Feed rate 0.001 inches per rev"
      }
     ],
@@ -1961,8 +1949,7 @@
      },
      {
       "g": "F0.3",
-      "e": "F0.3",
-      "u": "ipr",
+      "e": "feed:0.3",
       "d": "Feed rate 0.3 inches per rev"
      }
     ],
@@ -1979,12 +1966,12 @@
      },
      {
       "g": "X8.",
-      "e": "X8.0",
+      "e": "movx:8.0",
       "d": "X position 8.0"
      },
      {
       "g": "Z5.",
-      "e": "Z5.0",
+      "e": "movz:5.0",
       "d": "Z position 5.0"
      }
     ],
@@ -2030,7 +2017,7 @@
      },
      {
       "g": "Z0.7",
-      "e": "Z0.7",
+      "e": "movz:0.7",
       "d": "Z position 0.7"
      }
     ],

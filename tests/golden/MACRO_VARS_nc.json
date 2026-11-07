@@ -358,7 +358,7 @@
     [
      {
       "g": "O01234",
-      "e": "PROG01234",
+      "e": "prog:01234",
       "d": "Program number 01234"
      },
      {
@@ -384,7 +384,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -416,18 +416,17 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      },
      {
@@ -449,12 +448,12 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
@@ -471,7 +470,7 @@
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -493,33 +492,32 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "Z-0.3",
-      "e": "Z-0.3",
+      "e": "movz:-0.3",
       "d": "Z position -0.3"
      },
      {
       "g": "R0.05",
-      "e": "RPLN0.05",
+      "e": "rplane:0.05",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "L0",
-      "e": "REPT0",
+      "e": "rept:0",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      },
      {
       "g": "F12.",
-      "e": "F12.0",
-      "u": "ipm",
+      "e": "feed:12.0",
       "d": "Feed rate 12.0 inches per minute"
      }
     ],
@@ -536,7 +534,7 @@
      },
      {
       "g": "P1000",
-      "e": "LBL1000",
+      "e": "label:1000",
       "d": "Jump to the line labeled N1000 and run it until M99"
      }
     ],
@@ -558,7 +556,7 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
@@ -585,7 +583,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -609,7 +607,7 @@
      },
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
@@ -636,18 +634,17 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "S6000",
-      "e": "S6000",
-      "u": "rpm",
+      "e": "speed:6000",
       "d": "Spindle speed 6000 RPM"
      },
      {
@@ -669,12 +666,12 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
       "g": "H02",
-      "e": "LOFS02",
+      "e": "toffset:02",
       "d": "Tool length offset number 02"
      }
     ],
@@ -731,7 +728,7 @@
      },
      {
       "g": "P2000",
-      "e": "LBL2000",
+      "e": "label:2000",
       "d": "Jump to the line labeled N2000 and run it until M99"
      }
     ],
@@ -755,7 +752,7 @@
      },
      {
       "g": "P2000",
-      "e": "LBL2000",
+      "e": "label:2000",
       "d": "Jump to the line labeled N2000 and run it until M99"
      }
     ],
@@ -782,7 +779,7 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
@@ -809,7 +806,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -884,12 +881,12 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -901,12 +898,12 @@
      },
      {
       "g": "X-1.5",
-      "e": "X-1.5",
+      "e": "movx:-1.5",
       "d": "X position -1.5"
      },
      {
       "g": "Y0.25",
-      "e": "Y0.25",
+      "e": "movy:0.25",
       "d": "Y position 0.25"
      }
     ],
@@ -918,12 +915,12 @@
      },
      {
       "g": "X-1.5",
-      "e": "X-1.5",
+      "e": "movx:-1.5",
       "d": "X position -1.5"
      },
      {
       "g": "Y-0.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -951,12 +948,12 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y-1.5",
-      "e": "Y-1.5",
+      "e": "movy:-1.5",
       "d": "Y position -1.5"
      }
     ],
@@ -968,12 +965,12 @@
      },
      {
       "g": "X0.25",
-      "e": "X0.25",
+      "e": "movx:0.25",
       "d": "X position 0.25"
      },
      {
       "g": "Y-1.5",
-      "e": "Y-1.5",
+      "e": "movy:-1.5",
       "d": "Y position -1.5"
      }
     ],
@@ -985,12 +982,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y-0.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -1002,12 +999,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y0.25",
-      "e": "Y0.25",
+      "e": "movy:0.25",
       "d": "Y position 0.25"
      }
     ],
@@ -1019,12 +1016,12 @@
      },
      {
       "g": "X0.25",
-      "e": "X0.25",
+      "e": "movx:0.25",
       "d": "X position 0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -1080,7 +1077,7 @@
      },
      {
       "g": "P3000",
-      "e": "LBL3000",
+      "e": "label:3000",
       "d": "Jump to the line labeled N3000 and run it until M99"
      }
     ],
@@ -1117,17 +1114,17 @@
      },
      {
       "g": "X-#101",
-      "e": "X-#101",
+      "e": "movx:-#101",
       "d": "X position -#101"
      },
      {
       "g": "Y#102",
-      "e": "Y#102",
+      "e": "movy:#102",
       "d": "Y position #102"
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -1144,13 +1141,12 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      },
      {
       "g": "F#111",
-      "e": "F#111",
-      "u": "ipm",
+      "e": "feed:#111",
       "d": "Feed rate #111 inches per minute"
      }
     ],
@@ -1167,28 +1163,27 @@
      },
      {
       "g": "X-#102",
-      "e": "X-#102",
+      "e": "movx:-#102",
       "d": "X position -#102"
      },
      {
       "g": "Y#101",
-      "e": "Y#101",
+      "e": "movy:#101",
       "d": "Y position #101"
      },
      {
       "g": "I#101",
-      "e": "ARCI#101",
+      "e": "arci:#101",
       "d": "Arc center offset in X #101"
      },
      {
       "g": "J-#102",
-      "e": "ARCJ-#102",
+      "e": "arcj:-#102",
       "d": "Arc center offset in Y -#102"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -1205,13 +1200,12 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      },
      {
       "g": "F[#111*3]",
-      "e": "F[#111*3]",
-      "u": "ipm",
+      "e": "feed:[#111*3]",
       "d": "Feed rate [#111*3] inches per minute"
      }
     ],
@@ -1228,12 +1222,12 @@
      },
      {
       "g": "X-#102",
-      "e": "X-#102",
+      "e": "movx:-#102",
       "d": "X position -#102"
      },
      {
       "g": "Y-#101",
-      "e": "Y-#101",
+      "e": "movy:-#101",
       "d": "Y position -#101"
      }
     ],
@@ -1250,13 +1244,12 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      },
      {
       "g": "F#111",
-      "e": "F#111",
-      "u": "ipm",
+      "e": "feed:#111",
       "d": "Feed rate #111 inches per minute"
      }
     ],
@@ -1273,28 +1266,27 @@
      },
      {
       "g": "X-#101",
-      "e": "X-#101",
+      "e": "movx:-#101",
       "d": "X position -#101"
      },
      {
       "g": "Y-#102",
-      "e": "Y-#102",
+      "e": "movy:-#102",
       "d": "Y position -#102"
      },
      {
       "g": "I#102",
-      "e": "ARCI#102",
+      "e": "arci:#102",
       "d": "Arc center offset in X #102"
      },
      {
       "g": "J#101",
-      "e": "ARCJ#101",
+      "e": "arcj:#101",
       "d": "Arc center offset in Y #101"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -1311,7 +1303,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -1328,12 +1320,12 @@
      },
      {
       "g": "X#101",
-      "e": "X#101",
+      "e": "movx:#101",
       "d": "X position #101"
      },
      {
       "g": "Y-#102",
-      "e": "Y-#102",
+      "e": "movy:-#102",
       "d": "Y position -#102"
      }
     ],
@@ -1350,7 +1342,7 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      }
     ],
@@ -1367,28 +1359,27 @@
      },
      {
       "g": "X#102",
-      "e": "X#102",
+      "e": "movx:#102",
       "d": "X position #102"
      },
      {
       "g": "Y-#101",
-      "e": "Y-#101",
+      "e": "movy:-#101",
       "d": "Y position -#101"
      },
      {
       "g": "I-#101",
-      "e": "ARCI-#101",
+      "e": "arci:-#101",
       "d": "Arc center offset in X -#101"
      },
      {
       "g": "J#102",
-      "e": "ARCJ#102",
+      "e": "arcj:#102",
       "d": "Arc center offset in Y #102"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -1405,7 +1396,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -1422,12 +1413,12 @@
      },
      {
       "g": "X#102",
-      "e": "X#102",
+      "e": "movx:#102",
       "d": "X position #102"
      },
      {
       "g": "Y#101",
-      "e": "Y#101",
+      "e": "movy:#101",
       "d": "Y position #101"
      }
     ],
@@ -1444,7 +1435,7 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      }
     ],
@@ -1461,28 +1452,27 @@
      },
      {
       "g": "X#101",
-      "e": "X#101",
+      "e": "movx:#101",
       "d": "X position #101"
      },
      {
       "g": "Y#102",
-      "e": "Y#102",
+      "e": "movy:#102",
       "d": "Y position #102"
      },
      {
       "g": "I-#102",
-      "e": "ARCI-#102",
+      "e": "arci:-#102",
       "d": "Arc center offset in X -#102"
      },
      {
       "g": "J-#101",
-      "e": "ARCJ-#101",
+      "e": "arcj:-#101",
       "d": "Arc center offset in Y -#101"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -1499,7 +1489,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -2720,7 +2710,7 @@
     [
      {
       "g": "O01234",
-      "e": "PROG01234",
+      "e": "prog:01234",
       "d": "Program number 01234"
      },
      {
@@ -2746,7 +2736,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -2778,18 +2768,17 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      },
      {
@@ -2811,12 +2800,12 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
@@ -2833,7 +2822,7 @@
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -2855,33 +2844,32 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "Z-0.3",
-      "e": "Z-0.3",
+      "e": "movz:-0.3",
       "d": "Z position -0.3"
      },
      {
       "g": "R0.05",
-      "e": "RPLN0.05",
+      "e": "rplane:0.05",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "L0",
-      "e": "REPT0",
+      "e": "rept:0",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      },
      {
       "g": "F12.",
-      "e": "F12.0",
-      "u": "ipm",
+      "e": "feed:12.0",
       "d": "Feed rate 12.0 inches per minute"
      }
     ],
@@ -2899,7 +2887,7 @@
      },
      {
       "g": "P1000",
-      "e": "LBL1000",
+      "e": "label:1000",
       "d": "Jump to the line labeled N1000 and run it until M99"
      }
     ],
@@ -2921,7 +2909,7 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
@@ -2948,7 +2936,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -2972,7 +2960,7 @@
      },
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
@@ -2999,18 +2987,17 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "S6000",
-      "e": "S6000",
-      "u": "rpm",
+      "e": "speed:6000",
       "d": "Spindle speed 6000 RPM"
      },
      {
@@ -3032,12 +3019,12 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
       "g": "H02",
-      "e": "LOFS02",
+      "e": "toffset:02",
       "d": "Tool length offset number 02"
      }
     ],
@@ -3095,7 +3082,7 @@
      },
      {
       "g": "P2000",
-      "e": "LBL2000",
+      "e": "label:2000",
       "d": "Jump to the line labeled N2000 and run it until M99"
      }
     ],
@@ -3120,7 +3107,7 @@
      },
      {
       "g": "P2000",
-      "e": "LBL2000",
+      "e": "label:2000",
       "d": "Jump to the line labeled N2000 and run it until M99"
      }
     ],
@@ -3147,7 +3134,7 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
@@ -3174,7 +3161,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -3249,12 +3236,12 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -3266,12 +3253,12 @@
      },
      {
       "g": "X-1.5",
-      "e": "X-1.5",
+      "e": "movx:-1.5",
       "d": "X position -1.5"
      },
      {
       "g": "Y0.25",
-      "e": "Y0.25",
+      "e": "movy:0.25",
       "d": "Y position 0.25"
      }
     ],
@@ -3283,12 +3270,12 @@
      },
      {
       "g": "X-1.5",
-      "e": "X-1.5",
+      "e": "movx:-1.5",
       "d": "X position -1.5"
      },
      {
       "g": "Y-0.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -3316,12 +3303,12 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y-1.5",
-      "e": "Y-1.5",
+      "e": "movy:-1.5",
       "d": "Y position -1.5"
      }
     ],
@@ -3333,12 +3320,12 @@
      },
      {
       "g": "X0.25",
-      "e": "X0.25",
+      "e": "movx:0.25",
       "d": "X position 0.25"
      },
      {
       "g": "Y-1.5",
-      "e": "Y-1.5",
+      "e": "movy:-1.5",
       "d": "Y position -1.5"
      }
     ],
@@ -3350,12 +3337,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y-0.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -3367,12 +3354,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y0.25",
-      "e": "Y0.25",
+      "e": "movy:0.25",
       "d": "Y position 0.25"
      }
     ],
@@ -3384,12 +3371,12 @@
      },
      {
       "g": "X0.25",
-      "e": "X0.25",
+      "e": "movx:0.25",
       "d": "X position 0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -3446,7 +3433,7 @@
      },
      {
       "g": "P3000",
-      "e": "LBL3000",
+      "e": "label:3000",
       "d": "Jump to the line labeled N3000 and run it until M99"
      }
     ],
@@ -3483,17 +3470,17 @@
      },
      {
       "g": "X-#101",
-      "e": "X-#101",
+      "e": "movx:-#101",
       "d": "X position -#101"
      },
      {
       "g": "Y#102",
-      "e": "Y#102",
+      "e": "movy:#102",
       "d": "Y position #102"
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -3510,13 +3497,12 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      },
      {
       "g": "F#111",
-      "e": "F#111",
-      "u": "ipm",
+      "e": "feed:#111",
       "d": "Feed rate #111 inches per minute"
      }
     ],
@@ -3533,28 +3519,27 @@
      },
      {
       "g": "X-#102",
-      "e": "X-#102",
+      "e": "movx:-#102",
       "d": "X position -#102"
      },
      {
       "g": "Y#101",
-      "e": "Y#101",
+      "e": "movy:#101",
       "d": "Y position #101"
      },
      {
       "g": "I#101",
-      "e": "ARCI#101",
+      "e": "arci:#101",
       "d": "Arc center offset in X #101"
      },
      {
       "g": "J-#102",
-      "e": "ARCJ-#102",
+      "e": "arcj:-#102",
       "d": "Arc center offset in Y -#102"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -3571,13 +3556,12 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      },
      {
       "g": "F[#111*3]",
-      "e": "F[#111*3]",
-      "u": "ipm",
+      "e": "feed:[#111*3]",
       "d": "Feed rate [#111*3] inches per minute"
      }
     ],
@@ -3594,12 +3578,12 @@
      },
      {
       "g": "X-#102",
-      "e": "X-#102",
+      "e": "movx:-#102",
       "d": "X position -#102"
      },
      {
       "g": "Y-#101",
-      "e": "Y-#101",
+      "e": "movy:-#101",
       "d": "Y position -#101"
      }
     ],
@@ -3616,13 +3600,12 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      },
      {
       "g": "F#111",
-      "e": "F#111",
-      "u": "ipm",
+      "e": "feed:#111",
       "d": "Feed rate #111 inches per minute"
      }
     ],
@@ -3639,28 +3622,27 @@
      },
      {
       "g": "X-#101",
-      "e": "X-#101",
+      "e": "movx:-#101",
       "d": "X position -#101"
      },
      {
       "g": "Y-#102",
-      "e": "Y-#102",
+      "e": "movy:-#102",
       "d": "Y position -#102"
      },
      {
       "g": "I#102",
-      "e": "ARCI#102",
+      "e": "arci:#102",
       "d": "Arc center offset in X #102"
      },
      {
       "g": "J#101",
-      "e": "ARCJ#101",
+      "e": "arcj:#101",
       "d": "Arc center offset in Y #101"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -3677,7 +3659,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -3694,12 +3676,12 @@
      },
      {
       "g": "X#101",
-      "e": "X#101",
+      "e": "movx:#101",
       "d": "X position #101"
      },
      {
       "g": "Y-#102",
-      "e": "Y-#102",
+      "e": "movy:-#102",
       "d": "Y position -#102"
      }
     ],
@@ -3716,7 +3698,7 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      }
     ],
@@ -3733,28 +3715,27 @@
      },
      {
       "g": "X#102",
-      "e": "X#102",
+      "e": "movx:#102",
       "d": "X position #102"
      },
      {
       "g": "Y-#101",
-      "e": "Y-#101",
+      "e": "movy:-#101",
       "d": "Y position -#101"
      },
      {
       "g": "I-#101",
-      "e": "ARCI-#101",
+      "e": "arci:-#101",
       "d": "Arc center offset in X -#101"
      },
      {
       "g": "J#102",
-      "e": "ARCJ#102",
+      "e": "arcj:#102",
       "d": "Arc center offset in Y #102"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -3771,7 +3752,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -3788,12 +3769,12 @@
      },
      {
       "g": "X#102",
-      "e": "X#102",
+      "e": "movx:#102",
       "d": "X position #102"
      },
      {
       "g": "Y#101",
-      "e": "Y#101",
+      "e": "movy:#101",
       "d": "Y position #101"
      }
     ],
@@ -3810,7 +3791,7 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      }
     ],
@@ -3827,28 +3808,27 @@
      },
      {
       "g": "X#101",
-      "e": "X#101",
+      "e": "movx:#101",
       "d": "X position #101"
      },
      {
       "g": "Y#102",
-      "e": "Y#102",
+      "e": "movy:#102",
       "d": "Y position #102"
      },
      {
       "g": "I-#102",
-      "e": "ARCI-#102",
+      "e": "arci:-#102",
       "d": "Arc center offset in X -#102"
      },
      {
       "g": "J-#101",
-      "e": "ARCJ-#101",
+      "e": "arcj:-#101",
       "d": "Arc center offset in Y -#101"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -3865,7 +3845,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -3936,7 +3916,7 @@
     [
      {
       "g": "O01234",
-      "e": "PROG01234",
+      "e": "prog:01234",
       "d": "Program number 01234"
      },
      {
@@ -3962,7 +3942,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -3994,18 +3974,17 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      },
      {
@@ -4027,12 +4006,12 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
@@ -4049,7 +4028,7 @@
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -4071,33 +4050,32 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "Z-0.3",
-      "e": "Z-0.3",
+      "e": "movz:-0.3",
       "d": "Z position -0.3"
      },
      {
       "g": "R0.05",
-      "e": "RPLN0.05",
+      "e": "rplane:0.05",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "L0",
-      "e": "REPT0",
+      "e": "rept:0",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      },
      {
       "g": "F12.",
-      "e": "F12.0",
-      "u": "ipm",
+      "e": "feed:12.0",
       "d": "Feed rate 12.0 inches per minute"
      }
     ],
@@ -4115,7 +4093,7 @@
      },
      {
       "g": "P1000",
-      "e": "LBL1000",
+      "e": "label:1000",
       "d": "Jump to the line labeled N1000 and run it until M99"
      }
     ],
@@ -4137,7 +4115,7 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
@@ -4164,7 +4142,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -4188,7 +4166,7 @@
      },
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
@@ -4215,18 +4193,17 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "S6000",
-      "e": "S6000",
-      "u": "rpm",
+      "e": "speed:6000",
       "d": "Spindle speed 6000 RPM"
      },
      {
@@ -4248,12 +4225,12 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
       "g": "H02",
-      "e": "LOFS02",
+      "e": "toffset:02",
       "d": "Tool length offset number 02"
      }
     ],
@@ -4311,7 +4288,7 @@
      },
      {
       "g": "P2000",
-      "e": "LBL2000",
+      "e": "label:2000",
       "d": "Jump to the line labeled N2000 and run it until M99"
      }
     ],
@@ -4336,7 +4313,7 @@
      },
      {
       "g": "P2000",
-      "e": "LBL2000",
+      "e": "label:2000",
       "d": "Jump to the line labeled N2000 and run it until M99"
      }
     ],
@@ -4363,7 +4340,7 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
@@ -4390,7 +4367,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -4465,12 +4442,12 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -4482,12 +4459,12 @@
      },
      {
       "g": "X-1.5",
-      "e": "X-1.5",
+      "e": "movx:-1.5",
       "d": "X position -1.5"
      },
      {
       "g": "Y0.25",
-      "e": "Y0.25",
+      "e": "movy:0.25",
       "d": "Y position 0.25"
      }
     ],
@@ -4499,12 +4476,12 @@
      },
      {
       "g": "X-1.5",
-      "e": "X-1.5",
+      "e": "movx:-1.5",
       "d": "X position -1.5"
      },
      {
       "g": "Y-0.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -4532,12 +4509,12 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y-1.5",
-      "e": "Y-1.5",
+      "e": "movy:-1.5",
       "d": "Y position -1.5"
      }
     ],
@@ -4549,12 +4526,12 @@
      },
      {
       "g": "X0.25",
-      "e": "X0.25",
+      "e": "movx:0.25",
       "d": "X position 0.25"
      },
      {
       "g": "Y-1.5",
-      "e": "Y-1.5",
+      "e": "movy:-1.5",
       "d": "Y position -1.5"
      }
     ],
@@ -4566,12 +4543,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y-0.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -4583,12 +4560,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y0.25",
-      "e": "Y0.25",
+      "e": "movy:0.25",
       "d": "Y position 0.25"
      }
     ],
@@ -4600,12 +4577,12 @@
      },
      {
       "g": "X0.25",
-      "e": "X0.25",
+      "e": "movx:0.25",
       "d": "X position 0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -4662,7 +4639,7 @@
      },
      {
       "g": "P3000",
-      "e": "LBL3000",
+      "e": "label:3000",
       "d": "Jump to the line labeled N3000 and run it until M99"
      }
     ],
@@ -4699,17 +4676,17 @@
      },
      {
       "g": "X-#101",
-      "e": "X-#101",
+      "e": "movx:-#101",
       "d": "X position -#101"
      },
      {
       "g": "Y#102",
-      "e": "Y#102",
+      "e": "movy:#102",
       "d": "Y position #102"
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -4726,13 +4703,12 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      },
      {
       "g": "F#111",
-      "e": "F#111",
-      "u": "ipm",
+      "e": "feed:#111",
       "d": "Feed rate #111 inches per minute"
      }
     ],
@@ -4749,28 +4725,27 @@
      },
      {
       "g": "X-#102",
-      "e": "X-#102",
+      "e": "movx:-#102",
       "d": "X position -#102"
      },
      {
       "g": "Y#101",
-      "e": "Y#101",
+      "e": "movy:#101",
       "d": "Y position #101"
      },
      {
       "g": "I#101",
-      "e": "ARCI#101",
+      "e": "arci:#101",
       "d": "Arc center offset in X #101"
      },
      {
       "g": "J-#102",
-      "e": "ARCJ-#102",
+      "e": "arcj:-#102",
       "d": "Arc center offset in Y -#102"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -4787,13 +4762,12 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      },
      {
       "g": "F[#111*3]",
-      "e": "F[#111*3]",
-      "u": "ipm",
+      "e": "feed:[#111*3]",
       "d": "Feed rate [#111*3] inches per minute"
      }
     ],
@@ -4810,12 +4784,12 @@
      },
      {
       "g": "X-#102",
-      "e": "X-#102",
+      "e": "movx:-#102",
       "d": "X position -#102"
      },
      {
       "g": "Y-#101",
-      "e": "Y-#101",
+      "e": "movy:-#101",
       "d": "Y position -#101"
      }
     ],
@@ -4832,13 +4806,12 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      },
      {
       "g": "F#111",
-      "e": "F#111",
-      "u": "ipm",
+      "e": "feed:#111",
       "d": "Feed rate #111 inches per minute"
      }
     ],
@@ -4855,28 +4828,27 @@
      },
      {
       "g": "X-#101",
-      "e": "X-#101",
+      "e": "movx:-#101",
       "d": "X position -#101"
      },
      {
       "g": "Y-#102",
-      "e": "Y-#102",
+      "e": "movy:-#102",
       "d": "Y position -#102"
      },
      {
       "g": "I#102",
-      "e": "ARCI#102",
+      "e": "arci:#102",
       "d": "Arc center offset in X #102"
      },
      {
       "g": "J#101",
-      "e": "ARCJ#101",
+      "e": "arcj:#101",
       "d": "Arc center offset in Y #101"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -4893,7 +4865,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -4910,12 +4882,12 @@
      },
      {
       "g": "X#101",
-      "e": "X#101",
+      "e": "movx:#101",
       "d": "X position #101"
      },
      {
       "g": "Y-#102",
-      "e": "Y-#102",
+      "e": "movy:-#102",
       "d": "Y position -#102"
      }
     ],
@@ -4932,7 +4904,7 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      }
     ],
@@ -4949,28 +4921,27 @@
      },
      {
       "g": "X#102",
-      "e": "X#102",
+      "e": "movx:#102",
       "d": "X position #102"
      },
      {
       "g": "Y-#101",
-      "e": "Y-#101",
+      "e": "movy:-#101",
       "d": "Y position -#101"
      },
      {
       "g": "I-#101",
-      "e": "ARCI-#101",
+      "e": "arci:-#101",
       "d": "Arc center offset in X -#101"
      },
      {
       "g": "J#102",
-      "e": "ARCJ#102",
+      "e": "arcj:#102",
       "d": "Arc center offset in Y #102"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -4987,7 +4958,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -5004,12 +4975,12 @@
      },
      {
       "g": "X#102",
-      "e": "X#102",
+      "e": "movx:#102",
       "d": "X position #102"
      },
      {
       "g": "Y#101",
-      "e": "Y#101",
+      "e": "movy:#101",
       "d": "Y position #101"
      }
     ],
@@ -5026,7 +4997,7 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      }
     ],
@@ -5043,28 +5014,27 @@
      },
      {
       "g": "X#101",
-      "e": "X#101",
+      "e": "movx:#101",
       "d": "X position #101"
      },
      {
       "g": "Y#102",
-      "e": "Y#102",
+      "e": "movy:#102",
       "d": "Y position #102"
      },
      {
       "g": "I-#102",
-      "e": "ARCI-#102",
+      "e": "arci:-#102",
       "d": "Arc center offset in X -#102"
      },
      {
       "g": "J-#101",
-      "e": "ARCJ-#101",
+      "e": "arcj:-#101",
       "d": "Arc center offset in Y -#101"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -5081,7 +5051,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -5152,7 +5122,7 @@
     [
      {
       "g": "O01234",
-      "e": "PROG01234",
+      "e": "prog:01234",
       "d": "Program number 01234"
      },
      {
@@ -5178,7 +5148,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -5210,18 +5180,17 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      },
      {
@@ -5243,12 +5212,12 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
@@ -5265,7 +5234,7 @@
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -5287,33 +5256,32 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "Z-0.3",
-      "e": "Z-0.3",
+      "e": "movz:-0.3",
       "d": "Z position -0.3"
      },
      {
       "g": "R0.05",
-      "e": "RPLN0.05",
+      "e": "rplane:0.05",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "L0",
-      "e": "REPT0",
+      "e": "rept:0",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      },
      {
       "g": "F12.",
-      "e": "F12.0",
-      "u": "ipm",
+      "e": "feed:12.0",
       "d": "Feed rate 12.0 inches per minute"
      }
     ],
@@ -5331,7 +5299,7 @@
      },
      {
       "g": "P1000",
-      "e": "LBL1000",
+      "e": "label:1000",
       "d": "Jump to the line labeled N1000 and run it until M99"
      }
     ],
@@ -5353,7 +5321,7 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
@@ -5380,7 +5348,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -5404,7 +5372,7 @@
      },
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
@@ -5431,18 +5399,17 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "S6000",
-      "e": "S6000",
-      "u": "rpm",
+      "e": "speed:6000",
       "d": "Spindle speed 6000 RPM"
      },
      {
@@ -5464,12 +5431,12 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
       "g": "H02",
-      "e": "LOFS02",
+      "e": "toffset:02",
       "d": "Tool length offset number 02"
      }
     ],
@@ -5527,7 +5494,7 @@
      },
      {
       "g": "P2000",
-      "e": "LBL2000",
+      "e": "label:2000",
       "d": "Jump to the line labeled N2000 and run it until M99"
      }
     ],
@@ -5552,7 +5519,7 @@
      },
      {
       "g": "P2000",
-      "e": "LBL2000",
+      "e": "label:2000",
       "d": "Jump to the line labeled N2000 and run it until M99"
      }
     ],
@@ -5579,7 +5546,7 @@
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      },
      {
@@ -5606,7 +5573,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -5681,12 +5648,12 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -5698,12 +5665,12 @@
      },
      {
       "g": "X-1.5",
-      "e": "X-1.5",
+      "e": "movx:-1.5",
       "d": "X position -1.5"
      },
      {
       "g": "Y0.25",
-      "e": "Y0.25",
+      "e": "movy:0.25",
       "d": "Y position 0.25"
      }
     ],
@@ -5715,12 +5682,12 @@
      },
      {
       "g": "X-1.5",
-      "e": "X-1.5",
+      "e": "movx:-1.5",
       "d": "X position -1.5"
      },
      {
       "g": "Y-0.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -5748,12 +5715,12 @@
      },
      {
       "g": "X-0.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y-1.5",
-      "e": "Y-1.5",
+      "e": "movy:-1.5",
       "d": "Y position -1.5"
      }
     ],
@@ -5765,12 +5732,12 @@
      },
      {
       "g": "X0.25",
-      "e": "X0.25",
+      "e": "movx:0.25",
       "d": "X position 0.25"
      },
      {
       "g": "Y-1.5",
-      "e": "Y-1.5",
+      "e": "movy:-1.5",
       "d": "Y position -1.5"
      }
     ],
@@ -5782,12 +5749,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y-0.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -5799,12 +5766,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y0.25",
-      "e": "Y0.25",
+      "e": "movy:0.25",
       "d": "Y position 0.25"
      }
     ],
@@ -5816,12 +5783,12 @@
      },
      {
       "g": "X0.25",
-      "e": "X0.25",
+      "e": "movx:0.25",
       "d": "X position 0.25"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -5878,7 +5845,7 @@
      },
      {
       "g": "P3000",
-      "e": "LBL3000",
+      "e": "label:3000",
       "d": "Jump to the line labeled N3000 and run it until M99"
      }
     ],
@@ -5915,17 +5882,17 @@
      },
      {
       "g": "X-#101",
-      "e": "X-#101",
+      "e": "movx:-#101",
       "d": "X position -#101"
      },
      {
       "g": "Y#102",
-      "e": "Y#102",
+      "e": "movy:#102",
       "d": "Y position #102"
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -5942,13 +5909,12 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      },
      {
       "g": "F#111",
-      "e": "F#111",
-      "u": "ipm",
+      "e": "feed:#111",
       "d": "Feed rate #111 inches per minute"
      }
     ],
@@ -5965,28 +5931,27 @@
      },
      {
       "g": "X-#102",
-      "e": "X-#102",
+      "e": "movx:-#102",
       "d": "X position -#102"
      },
      {
       "g": "Y#101",
-      "e": "Y#101",
+      "e": "movy:#101",
       "d": "Y position #101"
      },
      {
       "g": "I#101",
-      "e": "ARCI#101",
+      "e": "arci:#101",
       "d": "Arc center offset in X #101"
      },
      {
       "g": "J-#102",
-      "e": "ARCJ-#102",
+      "e": "arcj:-#102",
       "d": "Arc center offset in Y -#102"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -6003,13 +5968,12 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      },
      {
       "g": "F[#111*3]",
-      "e": "F[#111*3]",
-      "u": "ipm",
+      "e": "feed:[#111*3]",
       "d": "Feed rate [#111*3] inches per minute"
      }
     ],
@@ -6026,12 +5990,12 @@
      },
      {
       "g": "X-#102",
-      "e": "X-#102",
+      "e": "movx:-#102",
       "d": "X position -#102"
      },
      {
       "g": "Y-#101",
-      "e": "Y-#101",
+      "e": "movy:-#101",
       "d": "Y position -#101"
      }
     ],
@@ -6048,13 +6012,12 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      },
      {
       "g": "F#111",
-      "e": "F#111",
-      "u": "ipm",
+      "e": "feed:#111",
       "d": "Feed rate #111 inches per minute"
      }
     ],
@@ -6071,28 +6034,27 @@
      },
      {
       "g": "X-#101",
-      "e": "X-#101",
+      "e": "movx:-#101",
       "d": "X position -#101"
      },
      {
       "g": "Y-#102",
-      "e": "Y-#102",
+      "e": "movy:-#102",
       "d": "Y position -#102"
      },
      {
       "g": "I#102",
-      "e": "ARCI#102",
+      "e": "arci:#102",
       "d": "Arc center offset in X #102"
      },
      {
       "g": "J#101",
-      "e": "ARCJ#101",
+      "e": "arcj:#101",
       "d": "Arc center offset in Y #101"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -6109,7 +6071,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -6126,12 +6088,12 @@
      },
      {
       "g": "X#101",
-      "e": "X#101",
+      "e": "movx:#101",
       "d": "X position #101"
      },
      {
       "g": "Y-#102",
-      "e": "Y-#102",
+      "e": "movy:-#102",
       "d": "Y position -#102"
      }
     ],
@@ -6148,7 +6110,7 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      }
     ],
@@ -6165,28 +6127,27 @@
      },
      {
       "g": "X#102",
-      "e": "X#102",
+      "e": "movx:#102",
       "d": "X position #102"
      },
      {
       "g": "Y-#101",
-      "e": "Y-#101",
+      "e": "movy:-#101",
       "d": "Y position -#101"
      },
      {
       "g": "I-#101",
-      "e": "ARCI-#101",
+      "e": "arci:-#101",
       "d": "Arc center offset in X -#101"
      },
      {
       "g": "J#102",
-      "e": "ARCJ#102",
+      "e": "arcj:#102",
       "d": "Arc center offset in Y #102"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -6203,7 +6164,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],
@@ -6220,12 +6181,12 @@
      },
      {
       "g": "X#102",
-      "e": "X#102",
+      "e": "movx:#102",
       "d": "X position #102"
      },
      {
       "g": "Y#101",
-      "e": "Y#101",
+      "e": "movy:#101",
       "d": "Y position #101"
      }
     ],
@@ -6242,7 +6203,7 @@
      },
      {
       "g": "Z#110",
-      "e": "Z#110",
+      "e": "movz:#110",
       "d": "Z position #110"
      }
     ],
@@ -6259,28 +6220,27 @@
      },
      {
       "g": "X#101",
-      "e": "X#101",
+      "e": "movx:#101",
       "d": "X position #101"
      },
      {
       "g": "Y#102",
-      "e": "Y#102",
+      "e": "movy:#102",
       "d": "Y position #102"
      },
      {
       "g": "I-#102",
-      "e": "ARCI-#102",
+      "e": "arci:-#102",
       "d": "Arc center offset in X -#102"
      },
      {
       "g": "J-#101",
-      "e": "ARCJ-#101",
+      "e": "arcj:-#101",
       "d": "Arc center offset in Y -#101"
      },
      {
       "g": "F#112",
-      "e": "F#112",
-      "u": "ipm",
+      "e": "feed:#112",
       "d": "Feed rate #112 inches per minute"
      }
     ],
@@ -6297,7 +6257,7 @@
      },
      {
       "g": "Z#113",
-      "e": "Z#113",
+      "e": "movz:#113",
       "d": "Z position #113"
      }
     ],

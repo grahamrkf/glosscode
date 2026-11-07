@@ -117,7 +117,7 @@
     [
      {
       "g": "O2001",
-      "e": "PROG2001",
+      "e": "prog:2001",
       "d": "Program number 2001"
      }
     ],
@@ -240,7 +240,7 @@
      },
      {
       "g": "Z-V1",
-      "e": "INCZ-V1",
+      "e": "incz:-V1",
       "d": "Move -V1 in Z from where the tool is"
      }
     ],
@@ -269,8 +269,7 @@
      },
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
@@ -292,8 +291,7 @@
      },
      {
       "g": "S600",
-      "e": "S600",
-      "u": "sfm",
+      "e": "speed:600",
       "d": "Surface speed 600 surface feet per minute"
      },
      {
@@ -315,17 +313,17 @@
      },
      {
       "g": "X=V2+0.010",
-      "e": "X=V2+0.010",
+      "e": "movx:=V2+0.010",
       "d": "X position =V2+0.010"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      },
      {
       "g": "T010101",
-      "e": "TOOL010101",
+      "e": "tool:010101",
       "d": "Tool number 010101"
      }
     ],
@@ -342,13 +340,12 @@
      },
      {
       "g": "Z0.002",
-      "e": "Z0.002",
+      "e": "movz:0.002",
       "d": "Z position 0.002"
      },
      {
       "g": "F=V9",
-      "e": "F=V9",
-      "u": "ipr",
+      "e": "feed:=V9",
       "d": "Feed rate =V9 inches per rev"
      }
     ],
@@ -365,12 +362,12 @@
      },
      {
       "g": "X=[[V3-V2]/2]+V2",
-      "e": "X=[[V3-V2]/2]+V2",
+      "e": "movx:=[[V3-V2]/2]+V2",
       "d": "X position =[[V3-V2]/2]+V2"
      },
      {
       "g": "L0.005",
-      "e": "set.round.size0.005",
+      "e": "set.round.size:0.005",
       "d": "Radius of the automatic rounding 0.005"
      }
     ],
@@ -382,12 +379,12 @@
      },
      {
       "g": "X=V3",
-      "e": "X=V3",
+      "e": "movx:=V3",
       "d": "X position =V3"
      },
      {
       "g": "Z-0.100",
-      "e": "Z-0.100",
+      "e": "movz:-0.100",
       "d": "Z position -0.100"
      }
     ],
@@ -404,7 +401,7 @@
      },
      {
       "g": "Z1.0",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -433,12 +430,12 @@
      },
      {
       "g": "X10.",
-      "e": "X10.0",
+      "e": "movx:10.0",
       "d": "X position 10.0"
      },
      {
       "g": "Z10.",
-      "e": "Z10.0",
+      "e": "movz:10.0",
       "d": "Z position 10.0"
      }
     ],
@@ -839,7 +836,7 @@
     [
      {
       "g": "O2001",
-      "e": "PROG2001",
+      "e": "prog:2001",
       "d": "Program number 2001"
      }
     ],
@@ -967,7 +964,7 @@
      },
      {
       "g": "Z-V1",
-      "e": "Z-V1",
+      "e": "movz:-V1",
       "d": "Z position -V1"
      }
     ],
@@ -996,8 +993,7 @@
      },
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
@@ -1020,8 +1016,7 @@
      },
      {
       "g": "S600",
-      "e": "S600",
-      "u": "sfm",
+      "e": "speed:600",
       "d": "Surface speed 600 surface feet per minute"
      },
      {
@@ -1043,17 +1038,17 @@
      },
      {
       "g": "X=V2+0.010",
-      "e": "X=V2+0.010",
+      "e": "movx:=V2+0.010",
       "d": "X position =V2+0.010"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      },
      {
       "g": "T010101",
-      "e": "TOOL010101",
+      "e": "tool:010101",
       "d": "Tool number 010101"
      }
     ],
@@ -1070,13 +1065,12 @@
      },
      {
       "g": "Z0.002",
-      "e": "Z0.002",
+      "e": "movz:0.002",
       "d": "Z position 0.002"
      },
      {
       "g": "F=V9",
-      "e": "F=V9",
-      "u": "ipr",
+      "e": "feed:=V9",
       "d": "Feed rate =V9 inches per rev"
      }
     ],
@@ -1093,7 +1087,7 @@
      },
      {
       "g": "X=[[V3-V2]/2]+V2",
-      "e": "X=[[V3-V2]/2]+V2",
+      "e": "movx:=[[V3-V2]/2]+V2",
       "d": "X position =[[V3-V2]/2]+V2"
      },
      {
@@ -1111,12 +1105,12 @@
      },
      {
       "g": "X=V3",
-      "e": "X=V3",
+      "e": "movx:=V3",
       "d": "X position =V3"
      },
      {
       "g": "Z-0.100",
-      "e": "Z-0.100",
+      "e": "movz:-0.100",
       "d": "Z position -0.100"
      }
     ],
@@ -1133,7 +1127,7 @@
      },
      {
       "g": "Z1.0",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -1162,12 +1156,12 @@
      },
      {
       "g": "X10.",
-      "e": "X10.0",
+      "e": "movx:10.0",
       "d": "X position 10.0"
      },
      {
       "g": "Z10.",
-      "e": "Z10.0",
+      "e": "movz:10.0",
       "d": "Z position 10.0"
      }
     ],

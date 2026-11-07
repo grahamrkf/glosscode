@@ -5,6 +5,14 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 ## [Unreleased]
 
 ### Editor
+- New default layout, **Code with gloss above** (View › Layout). Each line is plain text: its N number in a column of its own, the code beside it, and the gloss above in small grey italics that can't be selected or edited. The gloss leaves out the N number and comments, and a comment-only line has no gloss line. Click a line to put the caret there and type as in any text editor: Enter breaks the line at the caret (the new line gets the next N number), Backspace at the start joins it to the line above, Delete at the end joins the line below, ↑↓ move the caret between lines, Esc undoes the changes to the line, and dragging along a line selects its text. The gloss follows as you type. The two older layouts (words in program order, columns by word type) are still in View › Layout, and the layout is remembered in settings.json.
+- In the new layout all code is black. A line with a problem is tinted: yellow for a warning, orange for an error, red for a machine alarm, and the word the problem is about is underlined in that colour. The marker in the gutter stays, and the move-type bar beside it.
+- A control whose rules are a first draft (not yet checked against its programming manual) shows one banner above the program, which can be dismissed and stays dismissed for that control. The note at the top of the Problems panel is gone, and Convert no longer marks every line of a draft control's program amber; it says once to check every line.
+- Right-click Cut, Copy and Paste work in the program. The page couldn't reach the clipboard from a menu (only from Ctrl+C and Ctrl+V), so they now use the system clipboard through the program.
+- Removed the Caps Lock and click options for switching between editing code and gloss.
+
+### Gloss words
+- Full words with a value are the name, a colon and the value: `speed:2100`, `feed:16.0`, `movx:-0.4215`, `incz:0.5`, `tool:1`, `toffset:1`, `rplane:0.1`, `rept:0`, `label:1500` (Haas M97 P), `dwell:0.5`. Units are no longer written after full words (the info panel still gives them). Renamed address words: X Y Z `movx movy movz`, H `toffset` (was LOFS), D `doffset`, R `radius` / `rplane`, P `dwell` / `prog` / `label`, L `rept`, Okuma G15 H `woffset`; canned-cycle words are lower case (`peck:0.05`). N numbers read as written (N10). Short words are unchanged. Typing gloss accepts both forms (`speed:2100` or `RPM2100`).
 - Space pauses and resumes the simulation while it's open. It used to start a new word and close the simulation.
 - A closed fold's line shows a progress bar while the simulation runs through the folded moves, like a hidden subprogram call's.
 

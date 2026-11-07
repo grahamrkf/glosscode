@@ -186,12 +186,12 @@
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      },
      {
@@ -203,8 +203,7 @@
     [
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
@@ -226,17 +225,17 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Y0",
-      "e": "Y0",
+      "e": "movy:0",
       "d": "Y position 0"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -265,23 +264,22 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
      },
      {
       "g": "I-15",
-      "e": "DEPTH-15",
+      "e": "depth:-15",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
      },
      {
       "g": "K50",
-      "e": "DWELL50",
+      "e": "dwell:50",
       "d": "Dwell at the bottom, in hundredths of a second (K50 is half a second). (G81)"
      },
      {
       "g": "F200",
-      "e": "F200.0",
-      "u": "mmpm",
+      "e": "feed:200.0",
       "d": "Feed rate 200.0 mm per minute"
      }
     ],
@@ -321,18 +319,17 @@
      },
      {
       "g": "XP2",
-      "e": "XP2",
+      "e": "movx:P2",
       "d": "X position P2"
      },
      {
       "g": "Y5",
-      "e": "Y5",
+      "e": "movy:5",
       "d": "Y position 5"
      },
      {
       "g": "F300",
-      "e": "F300.0",
-      "u": "mmpm",
+      "e": "feed:300.0",
       "d": "Feed rate 300.0 mm per minute"
      }
     ],
@@ -349,7 +346,7 @@
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -361,22 +358,22 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G84)"
      },
      {
       "g": "I-12",
-      "e": "DEPTH-12",
+      "e": "depth:-12",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G84)"
      },
      {
       "g": "R1",
-      "e": "RIGID1",
+      "e": "rigid:1",
       "d": "R0 normal tapping, R1 rigid with orientation, R2 rigid without. (G84)"
      },
      {
       "g": "J2",
-      "e": "OUTFEED2",
+      "e": "outfeed:2",
       "d": "Rigid tapping: the way out runs J times the tapping feed. (G84)"
      }
     ],
@@ -388,12 +385,12 @@
      },
      {
       "g": "X20",
-      "e": "INCX20",
+      "e": "incx:20",
       "d": "Move 20 in X from where the tool is"
      },
      {
       "g": "N3",
-      "e": "REPEAT3",
+      "e": "rept:3",
       "d": "Run this line 3 times"
      }
     ],
@@ -417,7 +414,7 @@
      },
      {
       "g": "K150",
-      "e": "DWELL150",
+      "e": "dwell:150",
       "d": "Dwell for 150 hundredths of a second"
      }
     ],
@@ -436,7 +433,7 @@
      },
      {
       "g": "N2",
-      "e": "REPEAT2",
+      "e": "rept:2",
       "d": "Run this line 2 times"
      }
     ],
@@ -448,8 +445,7 @@
      },
      {
       "g": "F500",
-      "e": "F500.0",
-      "u": "mmpm",
+      "e": "feed:500.0",
       "d": "Feed rate 500.0 mm per minute"
      }
     ],
@@ -461,7 +457,7 @@
      },
      {
       "g": "P100",
-      "e": "PROG100",
+      "e": "prog:100",
       "d": "Program number 100"
      }
     ],
@@ -474,7 +470,7 @@
      },
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      }
     ],
@@ -508,48 +504,48 @@
      },
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
     [
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Y10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
     [
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Y30",
-      "e": "Y30",
+      "e": "movy:30",
       "d": "Y position 30"
      }
     ],
     [
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y30",
-      "e": "Y30",
+      "e": "movy:30",
       "d": "Y position 30"
      }
     ],
@@ -1064,12 +1060,12 @@
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      },
      {
@@ -1081,8 +1077,7 @@
     [
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
@@ -1104,17 +1099,17 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Y0",
-      "e": "Y0",
+      "e": "movy:0",
       "d": "Y position 0"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -1144,23 +1139,22 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
      },
      {
       "g": "I-15",
-      "e": "DEPTH-15",
+      "e": "depth:-15",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
      },
      {
       "g": "K50",
-      "e": "DWELL50",
+      "e": "dwell:50",
       "d": "Dwell at the bottom, in seconds. (G81)"
      },
      {
       "g": "F200",
-      "e": "F200.0",
-      "u": "mmpm",
+      "e": "feed:200.0",
       "d": "Feed rate 200.0 mm per minute"
      }
     ],
@@ -1203,18 +1197,17 @@
      },
      {
       "g": "XP2",
-      "e": "XP2",
+      "e": "movx:P2",
       "d": "X position P2"
      },
      {
       "g": "Y5",
-      "e": "Y5",
+      "e": "movy:5",
       "d": "Y position 5"
      },
      {
       "g": "F300",
-      "e": "F300.0",
-      "u": "mmpm",
+      "e": "feed:300.0",
       "d": "Feed rate 300.0 mm per minute"
      }
     ],
@@ -1231,7 +1224,7 @@
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -1243,22 +1236,22 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G84)"
      },
      {
       "g": "I-12",
-      "e": "DEPTH-12",
+      "e": "depth:-12",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G84)"
      },
      {
       "g": "R1",
-      "e": "RIGID1",
+      "e": "rigid:1",
       "d": "R0 normal tapping, R1 rigid tapping. (G84)"
      },
      {
       "g": "J2",
-      "e": "OUTFEED2",
+      "e": "outfeed:2",
       "d": "Rigid tapping: the way out runs J times the tapping feed. (G84)"
      }
     ],
@@ -1270,7 +1263,7 @@
      },
      {
       "g": "X20",
-      "e": "INCX20",
+      "e": "incx:20",
       "d": "Move 20 in X from where the tool is"
      },
      {
@@ -1299,7 +1292,7 @@
      },
      {
       "g": "K150",
-      "e": "SEC150",
+      "e": "dwell:150",
       "d": "Dwell for 150 seconds"
      }
     ],
@@ -1332,8 +1325,7 @@
      },
      {
       "g": "F500",
-      "e": "F500.0",
-      "u": "mmpm",
+      "e": "feed:500.0",
       "d": "Feed rate 500.0 mm per minute"
      }
     ],
@@ -1345,7 +1337,7 @@
      },
      {
       "g": "P100",
-      "e": "PROG100",
+      "e": "prog:100",
       "d": "Program number 100"
      }
     ],
@@ -1357,7 +1349,7 @@
      },
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      }
     ],
@@ -1392,48 +1384,48 @@
      },
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
     [
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Y10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
     [
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Y30",
-      "e": "Y30",
+      "e": "movy:30",
       "d": "Y position 30"
      }
     ],
     [
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y30",
-      "e": "Y30",
+      "e": "movy:30",
       "d": "Y position 30"
      }
     ],

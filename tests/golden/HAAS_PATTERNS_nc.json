@@ -258,7 +258,7 @@
     [
      {
       "g": "O1010",
-      "e": "PROG1010",
+      "e": "prog:1010",
       "d": "Program number 1010"
      },
      {
@@ -313,7 +313,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -346,18 +346,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -379,12 +378,12 @@
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -411,33 +410,32 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      },
      {
       "g": "Z-0.1",
-      "e": "Z-0.1",
+      "e": "movz:-0.1",
       "d": "Z position -0.1"
      },
      {
       "g": "R0.1",
-      "e": "RPLN0.1",
+      "e": "rplane:0.1",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "F10.",
-      "e": "F10.0",
-      "u": "ipm",
+      "e": "feed:10.0",
       "d": "Feed rate 10.0 inches per minute"
      },
      {
       "g": "L0",
-      "e": "REPT0",
+      "e": "rept:0",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      }
     ],
@@ -454,17 +452,17 @@
      },
      {
       "g": "I0.75",
-      "e": "RAD0.75",
+      "e": "rad:0.75",
       "d": "Bolt circle radius (minus: the holes go clockwise) (G70)"
      },
      {
       "g": "J15.",
-      "e": "STARTANG15.0",
+      "e": "startang:15.0",
       "d": "Angle of the first hole, from 3 o'clock (G70)"
      },
      {
       "g": "L6",
-      "e": "HOLES6",
+      "e": "holes:6",
       "d": "Number of holes, evenly spaced (G70)"
      }
     ],
@@ -481,22 +479,22 @@
      },
      {
       "g": "I1.25",
-      "e": "RAD1.25",
+      "e": "rad:1.25",
       "d": "Arc radius (G71)"
      },
      {
       "g": "J0.",
-      "e": "STARTANG0.0",
+      "e": "startang:0.0",
       "d": "Angle of the first hole, from 3 o'clock (G71)"
      },
      {
       "g": "K30.",
-      "e": "STEPANG30.0",
+      "e": "stepang:30.0",
       "d": "Angle between holes (minus: clockwise) (G71)"
      },
      {
       "g": "L4",
-      "e": "HOLES4",
+      "e": "holes:4",
       "d": "Number of holes (G71)"
      }
     ],
@@ -513,17 +511,17 @@
      },
      {
       "g": "I0.4",
-      "e": "SPACING0.4",
+      "e": "spacing:0.4",
       "d": "Distance between holes (G72)"
      },
      {
       "g": "J90.",
-      "e": "ANGLE90.0",
+      "e": "angle:90.0",
       "d": "Angle of the line of holes, from 3 o'clock (G72)"
      },
      {
       "g": "L3",
-      "e": "HOLES3",
+      "e": "holes:3",
       "d": "Number of holes (G72)"
      }
     ],
@@ -557,33 +555,32 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z-0.6",
-      "e": "Z-0.6",
+      "e": "movz:-0.6",
       "d": "Z position -0.6"
      },
      {
       "g": "R0.1",
-      "e": "RPLN0.1",
+      "e": "rplane:0.1",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "Q0.15",
-      "e": "PECK0.15",
+      "e": "peck:0.15",
       "d": "Peck depth 0.15"
      },
      {
       "g": "F8.",
-      "e": "F8.0",
-      "u": "ipm",
+      "e": "feed:8.0",
       "d": "Feed rate 8.0 inches per minute"
      }
     ],
@@ -600,17 +597,17 @@
      },
      {
       "g": "X4.5",
-      "e": "X4.5",
+      "e": "movx:4.5",
       "d": "X position 4.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Q0.1",
-      "e": "PECK0.1",
+      "e": "peck:0.1",
       "d": "Peck depth 0.1"
      }
     ],
@@ -639,17 +636,17 @@
      },
      {
       "g": "A2.",
-      "e": "CTRX2.0",
+      "e": "ctrx:2.0",
       "d": "Center of rotation, X (G68)"
      },
      {
       "g": "B2.",
-      "e": "CTRY2.0",
+      "e": "ctry:2.0",
       "d": "Center of rotation, Y (G68)"
      },
      {
       "g": "R45.",
-      "e": "ANGLE45.0",
+      "e": "angle:45.0",
       "d": "Rotation angle, degrees (G68)"
      }
     ],
@@ -666,12 +663,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      }
     ],
@@ -688,13 +685,12 @@
      },
      {
       "g": "Z-0.05",
-      "e": "Z-0.05",
+      "e": "movz:-0.05",
       "d": "Z position -0.05"
      },
      {
       "g": "F20.",
-      "e": "F20.0",
-      "u": "ipm",
+      "e": "feed:20.0",
       "d": "Feed rate 20.0 inches per minute"
      }
     ],
@@ -711,7 +707,7 @@
      },
      {
       "g": "X3.5",
-      "e": "X3.5",
+      "e": "movx:3.5",
       "d": "X position 3.5"
      }
     ],
@@ -728,7 +724,7 @@
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -757,7 +753,7 @@
      },
      {
       "g": "X0.",
-      "e": "MIRX0.0",
+      "e": "mirx:0.0",
       "d": "Mirror X about work zero (G101)"
      }
     ],
@@ -774,12 +770,12 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      }
     ],
@@ -796,7 +792,7 @@
      },
      {
       "g": "Z-0.05",
-      "e": "Z-0.05",
+      "e": "movz:-0.05",
       "d": "Z position -0.05"
      }
     ],
@@ -813,17 +809,17 @@
      },
      {
       "g": "D01",
-      "e": "DOFS01",
+      "e": "doffset:01",
       "d": "Tool diameter offset number 01"
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      }
     ],
@@ -840,17 +836,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y3.5",
-      "e": "Y3.5",
+      "e": "movy:3.5",
       "d": "Y position 3.5"
      },
      {
       "g": "R0.5",
-      "e": "RAD0.5",
+      "e": "radius:0.5",
       "d": "Arc radius"
      }
     ],
@@ -872,7 +868,7 @@
      },
      {
       "g": "X2.5",
-      "e": "X2.5",
+      "e": "movx:2.5",
       "d": "X position 2.5"
      }
     ],
@@ -889,7 +885,7 @@
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -906,7 +902,7 @@
      },
      {
       "g": "X0.",
-      "e": "MIRX0.0",
+      "e": "mirx:0.0",
       "d": "X mirror off (G100)"
      }
     ],
@@ -923,12 +919,12 @@
      },
      {
       "g": "X5.",
-      "e": "X5.0",
+      "e": "movx:5.0",
       "d": "X position 5.0"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      }
     ],
@@ -945,33 +941,32 @@
      },
      {
       "g": "I0.1",
-      "e": "RAD10.1",
+      "e": "rad1:0.1",
       "d": "Radius of the first circle (G12)"
      },
      {
       "g": "K0.375",
-      "e": "RADFIN0.375",
+      "e": "radfin:0.375",
       "d": "Finished radius (G12)"
      },
      {
       "g": "Q0.1",
-      "e": "STEP0.1",
+      "e": "step:0.1",
       "d": "Step out each circle (G12)"
      },
      {
       "g": "Z-0.2",
-      "e": "Z-0.2",
+      "e": "movz:-0.2",
       "d": "Z position -0.2"
      },
      {
       "g": "D01",
-      "e": "DOFS01",
+      "e": "dofs:01",
       "d": "Cutter comp offset (G12)"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      }
     ],
@@ -988,23 +983,22 @@
      },
      {
       "g": "I0.375",
-      "e": "RAD10.375",
+      "e": "rad1:0.375",
       "d": "Radius of the first circle (G13)"
      },
      {
       "g": "D00",
-      "e": "DOFS00",
+      "e": "dofs:00",
       "d": "Cutter comp offset (G13)"
      },
      {
       "g": "Z-0.25",
-      "e": "Z-0.25",
+      "e": "movz:-0.25",
       "d": "Z position -0.25"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      }
     ],
@@ -1021,7 +1015,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -1038,17 +1032,17 @@
      },
      {
       "g": "A0.",
-      "e": "AXIS0.0",
+      "e": "axis:0.0",
       "d": "The rotary axis (A0) (G107)"
      },
      {
       "g": "Y0.",
-      "e": "WRAP0.0",
+      "e": "wrap:0.0",
       "d": "The linear axis wrapped round it (G107)"
      },
      {
       "g": "Q0.",
-      "e": "DIA0.0",
+      "e": "dia:0.0",
       "d": "Cylinder diameter (Q0: Setting 34) (G107)"
      }
     ],
@@ -1065,17 +1059,17 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "Z-0.02",
-      "e": "Z-0.02",
+      "e": "movz:-0.02",
       "d": "Z position -0.02"
      }
     ],
@@ -1092,7 +1086,7 @@
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      }
     ],
@@ -1109,7 +1103,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -2064,7 +2058,7 @@
     [
      {
       "g": "O1010",
-      "e": "PROG1010",
+      "e": "prog:1010",
       "d": "Program number 1010"
      },
      {
@@ -2119,7 +2113,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -2152,18 +2146,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -2185,12 +2178,12 @@
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2217,33 +2210,32 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      },
      {
       "g": "Z-0.1",
-      "e": "Z-0.1",
+      "e": "movz:-0.1",
       "d": "Z position -0.1"
      },
      {
       "g": "R0.1",
-      "e": "RPLN0.1",
+      "e": "rplane:0.1",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "F10.",
-      "e": "F10.0",
-      "u": "ipm",
+      "e": "feed:10.0",
       "d": "Feed rate 10.0 inches per minute"
      },
      {
       "g": "L0",
-      "e": "REPT0",
+      "e": "rept:0",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      }
     ],
@@ -2261,17 +2253,17 @@
      },
      {
       "g": "I0.75",
-      "e": "ARCI0.75",
+      "e": "arci:0.75",
       "d": "Arc center offset in X 0.75"
      },
      {
       "g": "J15.",
-      "e": "ARCJ15.0",
+      "e": "arcj:15.0",
       "d": "Arc center offset in Y 15.0"
      },
      {
       "g": "L6",
-      "e": "REPT6",
+      "e": "rept:6",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      }
     ],
@@ -2289,22 +2281,22 @@
      },
      {
       "g": "I1.25",
-      "e": "ARCI1.25",
+      "e": "arci:1.25",
       "d": "Arc center offset in X 1.25"
      },
      {
       "g": "J0.",
-      "e": "ARCJ0.0",
+      "e": "arcj:0.0",
       "d": "Arc center offset in Y 0.0"
      },
      {
       "g": "K30.",
-      "e": "REPT30.0",
+      "e": "rept:30.0",
       "d": "How many times to run the hole. Under G91, each repeat steps over by X and Y. (G81)"
      },
      {
       "g": "L4",
-      "e": "REPT4",
+      "e": "rept:4",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      }
     ],
@@ -2322,17 +2314,17 @@
      },
      {
       "g": "I0.4",
-      "e": "ARCI0.4",
+      "e": "arci:0.4",
       "d": "Arc center offset in X 0.4"
      },
      {
       "g": "J90.",
-      "e": "ARCJ90.0",
+      "e": "arcj:90.0",
       "d": "Arc center offset in Y 90.0"
      },
      {
       "g": "L3",
-      "e": "REPT3",
+      "e": "rept:3",
       "d": "How many times to run the hole. L0 sets up the cycle without drilling here. (G81)"
      }
     ],
@@ -2366,33 +2358,32 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z-0.6",
-      "e": "Z-0.6",
+      "e": "movz:-0.6",
       "d": "Z position -0.6"
      },
      {
       "g": "R0.1",
-      "e": "RPLN0.1",
+      "e": "rplane:0.1",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "Q0.15",
-      "e": "PECK0.15",
+      "e": "peck:0.15",
       "d": "Peck depth 0.15"
      },
      {
       "g": "F8.",
-      "e": "F8.0",
-      "u": "ipm",
+      "e": "feed:8.0",
       "d": "Feed rate 8.0 inches per minute"
      }
     ],
@@ -2409,17 +2400,17 @@
      },
      {
       "g": "X4.5",
-      "e": "X4.5",
+      "e": "movx:4.5",
       "d": "X position 4.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Q0.1",
-      "e": "PECK0.1",
+      "e": "peck:0.1",
       "d": "Peck depth 0.1"
      }
     ],
@@ -2460,7 +2451,7 @@
      },
      {
       "g": "R45.",
-      "e": "RAD45.0",
+      "e": "radius:45.0",
       "d": "Arc radius"
      }
     ],
@@ -2477,12 +2468,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      }
     ],
@@ -2499,13 +2490,12 @@
      },
      {
       "g": "Z-0.05",
-      "e": "Z-0.05",
+      "e": "movz:-0.05",
       "d": "Z position -0.05"
      },
      {
       "g": "F20.",
-      "e": "F20.0",
-      "u": "ipm",
+      "e": "feed:20.0",
       "d": "Feed rate 20.0 inches per minute"
      }
     ],
@@ -2522,7 +2512,7 @@
      },
      {
       "g": "X3.5",
-      "e": "X3.5",
+      "e": "movx:3.5",
       "d": "X position 3.5"
      }
     ],
@@ -2539,7 +2529,7 @@
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -2569,7 +2559,7 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      }
     ],
@@ -2586,12 +2576,12 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      }
     ],
@@ -2608,7 +2598,7 @@
      },
      {
       "g": "Z-0.05",
-      "e": "Z-0.05",
+      "e": "movz:-0.05",
       "d": "Z position -0.05"
      }
     ],
@@ -2625,17 +2615,17 @@
      },
      {
       "g": "D01",
-      "e": "DOFS01",
+      "e": "doffset:01",
       "d": "Tool diameter offset number 01"
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      }
     ],
@@ -2652,17 +2642,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y3.5",
-      "e": "Y3.5",
+      "e": "movy:3.5",
       "d": "Y position 3.5"
      },
      {
       "g": "R0.5",
-      "e": "RAD0.5",
+      "e": "radius:0.5",
       "d": "Arc radius"
      }
     ],
@@ -2684,7 +2674,7 @@
      },
      {
       "g": "X2.5",
-      "e": "X2.5",
+      "e": "movx:2.5",
       "d": "X position 2.5"
      }
     ],
@@ -2701,7 +2691,7 @@
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -2719,7 +2709,7 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      }
     ],
@@ -2736,12 +2726,12 @@
      },
      {
       "g": "X5.",
-      "e": "X5.0",
+      "e": "movx:5.0",
       "d": "X position 5.0"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      }
     ],
@@ -2759,33 +2749,32 @@
      },
      {
       "g": "I0.1",
-      "e": "ARCI0.1",
+      "e": "arci:0.1",
       "d": "Arc center offset in X 0.1"
      },
      {
       "g": "K0.375",
-      "e": "ARCK0.375",
+      "e": "arck:0.375",
       "d": "Arc center offset in Z 0.375"
      },
      {
       "g": "Q0.1",
-      "e": "PECK0.1",
+      "e": "peck:0.1",
       "d": "Peck depth 0.1"
      },
      {
       "g": "Z-0.2",
-      "e": "Z-0.2",
+      "e": "movz:-0.2",
       "d": "Z position -0.2"
      },
      {
       "g": "D01",
-      "e": "DOFS01",
+      "e": "doffset:01",
       "d": "Tool diameter offset number 01"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      }
     ],
@@ -2803,23 +2792,22 @@
      },
      {
       "g": "I0.375",
-      "e": "ARCI0.375",
+      "e": "arci:0.375",
       "d": "Arc center offset in X 0.375"
      },
      {
       "g": "D00",
-      "e": "DOFS00",
+      "e": "doffset:00",
       "d": "Tool diameter offset number 00"
      },
      {
       "g": "Z-0.25",
-      "e": "Z-0.25",
+      "e": "movz:-0.25",
       "d": "Z position -0.25"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      }
     ],
@@ -2836,7 +2824,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -2860,12 +2848,12 @@
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "Q0.",
-      "e": "PECK0.0",
+      "e": "peck:0.0",
       "d": "Peck depth 0.0"
      }
     ],
@@ -2882,17 +2870,17 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "Z-0.02",
-      "e": "Z-0.02",
+      "e": "movz:-0.02",
       "d": "Z position -0.02"
      }
     ],
@@ -2909,7 +2897,7 @@
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      }
     ],
@@ -2926,7 +2914,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],

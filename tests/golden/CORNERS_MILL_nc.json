@@ -98,7 +98,7 @@
     [
      {
       "g": "O1020",
-      "e": "PROG1020",
+      "e": "prog:1020",
       "d": "Program number 1020"
      },
      {
@@ -153,7 +153,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -180,18 +180,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      },
      {
@@ -213,12 +212,12 @@
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -235,13 +234,12 @@
      },
      {
       "g": "Z-0.1",
-      "e": "Z-0.1",
+      "e": "movz:-0.1",
       "d": "Z position -0.1"
      },
      {
       "g": "F20.",
-      "e": "F20.0",
-      "u": "ipm",
+      "e": "feed:20.0",
       "d": "Feed rate 20.0 inches per minute"
      }
     ],
@@ -253,12 +251,12 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": ",C0.1",
-      "e": "CHAMFER0.1",
+      "e": "chamfer:0.1",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.1"
      }
     ],
@@ -270,12 +268,12 @@
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": ",R0.25",
-      "e": "ROUND0.25",
+      "e": "round:0.25",
       "d": "Rounds the corner at the end of this move with this radius 0.25"
      }
     ],
@@ -287,12 +285,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": ",C.05",
-      "e": "CHAMFER0.05",
+      "e": "chamfer:0.05",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.05"
      }
     ],
@@ -304,12 +302,12 @@
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": ",R1",
-      "e": "ROUND0.0001",
+      "e": "round:0.0001",
       "d": "Rounds the corner at the end of this move with this radius 0.0001"
      }
     ],
@@ -321,7 +319,7 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
@@ -332,7 +330,7 @@
      },
      {
       "g": "R0.1",
-      "e": "RAD0.1",
+      "e": "radius:0.1",
       "d": "Arc radius"
      }
     ],
@@ -349,7 +347,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -694,7 +692,7 @@
     [
      {
       "g": "O1020",
-      "e": "PROG1020",
+      "e": "prog:1020",
       "d": "Program number 1020"
      },
      {
@@ -749,7 +747,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -776,18 +774,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      },
      {
@@ -809,12 +806,12 @@
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -831,13 +828,12 @@
      },
      {
       "g": "Z-0.1",
-      "e": "Z-0.1",
+      "e": "movz:-0.1",
       "d": "Z position -0.1"
      },
      {
       "g": "F20.",
-      "e": "F20.0",
-      "u": "ipm",
+      "e": "feed:20.0",
       "d": "Feed rate 20.0 inches per minute"
      }
     ],
@@ -849,12 +845,12 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": ",C0.1",
-      "e": "CHAMFER0.1",
+      "e": "chamfer:0.1",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.1"
      }
     ],
@@ -866,12 +862,12 @@
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": ",R0.25",
-      "e": "ROUND0.25",
+      "e": "round:0.25",
       "d": "Rounds the corner at the end of this move with this radius 0.25"
      }
     ],
@@ -883,12 +879,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": ",C.05",
-      "e": "CHAMFER0.05",
+      "e": "chamfer:0.05",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.05"
      }
     ],
@@ -900,12 +896,12 @@
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": ",R1",
-      "e": "ROUND0.0001",
+      "e": "round:0.0001",
       "d": "Rounds the corner at the end of this move with this radius 0.0001"
      }
     ],
@@ -917,7 +913,7 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
@@ -928,7 +924,7 @@
      },
      {
       "g": "R0.1",
-      "e": "RAD0.1",
+      "e": "radius:0.1",
       "d": "Arc radius"
      }
     ],
@@ -945,7 +941,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -992,7 +988,7 @@
     [
      {
       "g": "O1020",
-      "e": "PROG1020",
+      "e": "prog:1020",
       "d": "Program number 1020"
      },
      {
@@ -1047,7 +1043,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -1074,18 +1070,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      },
      {
@@ -1107,12 +1102,12 @@
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -1129,13 +1124,12 @@
      },
      {
       "g": "Z-0.1",
-      "e": "Z-0.1",
+      "e": "movz:-0.1",
       "d": "Z position -0.1"
      },
      {
       "g": "F20.",
-      "e": "F20.0",
-      "u": "ipm",
+      "e": "feed:20.0",
       "d": "Feed rate 20.0 inches per minute"
      }
     ],
@@ -1147,12 +1141,12 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": ",C0.1",
-      "e": "CHAMFER0.1",
+      "e": "chamfer:0.1",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.1"
      }
     ],
@@ -1164,12 +1158,12 @@
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": ",R0.25",
-      "e": "ROUND0.25",
+      "e": "round:0.25",
       "d": "Rounds the corner at the end of this move with this radius 0.25"
      }
     ],
@@ -1181,12 +1175,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": ",C.05",
-      "e": "CHAMFER0.05",
+      "e": "chamfer:0.05",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.05"
      }
     ],
@@ -1198,12 +1192,12 @@
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": ",R1",
-      "e": "ROUND0.0001",
+      "e": "round:0.0001",
       "d": "Rounds the corner at the end of this move with this radius 0.0001"
      }
     ],
@@ -1215,7 +1209,7 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
@@ -1226,7 +1220,7 @@
      },
      {
       "g": "R0.1",
-      "e": "RAD0.1",
+      "e": "radius:0.1",
       "d": "Arc radius"
      }
     ],
@@ -1243,7 +1237,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -1290,7 +1284,7 @@
     [
      {
       "g": "O1020",
-      "e": "PROG1020",
+      "e": "prog:1020",
       "d": "Program number 1020"
      },
      {
@@ -1345,7 +1339,7 @@
      },
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
@@ -1372,18 +1366,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      },
      {
@@ -1405,12 +1398,12 @@
      },
      {
       "g": "H01",
-      "e": "LOFS01",
+      "e": "toffset:01",
       "d": "Tool length offset number 01"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -1427,13 +1420,12 @@
      },
      {
       "g": "Z-0.1",
-      "e": "Z-0.1",
+      "e": "movz:-0.1",
       "d": "Z position -0.1"
      },
      {
       "g": "F20.",
-      "e": "F20.0",
-      "u": "ipm",
+      "e": "feed:20.0",
       "d": "Feed rate 20.0 inches per minute"
      }
     ],
@@ -1445,12 +1437,12 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": ",C0.1",
-      "e": "CHAMFER0.1",
+      "e": "chamfer:0.1",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.1"
      }
     ],
@@ -1462,12 +1454,12 @@
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": ",R0.25",
-      "e": "ROUND0.25",
+      "e": "round:0.25",
       "d": "Rounds the corner at the end of this move with this radius 0.25"
      }
     ],
@@ -1479,12 +1471,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": ",C.05",
-      "e": "CHAMFER0.05",
+      "e": "chamfer:0.05",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.05"
      }
     ],
@@ -1496,12 +1488,12 @@
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": ",R1",
-      "e": "ROUND1",
+      "e": "round:1",
       "d": "Rounds the corner at the end of this move with this radius 1"
      }
     ],
@@ -1513,7 +1505,7 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
@@ -1524,7 +1516,7 @@
      },
      {
       "g": "R0.1",
-      "e": "RAD0.1",
+      "e": "radius:0.1",
       "d": "Arc radius"
      }
     ],
@@ -1541,7 +1533,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],

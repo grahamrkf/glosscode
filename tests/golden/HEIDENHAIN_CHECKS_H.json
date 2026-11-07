@@ -83,8 +83,7 @@
      },
      {
       "g": "S1000",
-      "e": "S1000",
-      "u": "rpm",
+      "e": "speed:1000",
       "d": "Spindle speed 1000 RPM"
      }
     ],
@@ -101,12 +100,12 @@
      },
      {
       "g": "X+0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Y+0",
-      "e": "Y0",
+      "e": "movy:0",
       "d": "Y position 0"
      },
      {
@@ -116,7 +115,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      }
     ],
@@ -133,12 +132,12 @@
      },
      {
       "g": "X+10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y+5",
-      "e": "Y5",
+      "e": "movy:5",
       "d": "Y position 5"
      }
     ],
@@ -179,7 +178,7 @@
      },
      {
       "g": "X+20",
-      "e": "X20",
+      "e": "movx:20",
       "d": "X position 20"
      },
      {
@@ -206,13 +205,12 @@
      },
      {
       "g": "X+5",
-      "e": "X5",
+      "e": "movx:5",
       "d": "X position 5"
      },
      {
       "g": "F100",
-      "e": "F100.0",
-      "u": "mmpm",
+      "e": "feed:100.0",
       "d": "Feed rate 100.0 mm per minute"
      },
      {

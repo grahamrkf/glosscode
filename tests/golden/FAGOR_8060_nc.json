@@ -152,48 +152,48 @@
     [
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
     [
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Y10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
     [
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Y30",
-      "e": "Y30",
+      "e": "movy:30",
       "d": "Y position 30"
      }
     ],
     [
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y30",
-      "e": "Y30",
+      "e": "movy:30",
       "d": "Y position 30"
      }
     ],
@@ -243,12 +243,12 @@
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      },
      {
@@ -260,8 +260,7 @@
     [
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
@@ -283,17 +282,17 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Y0",
-      "e": "Y0",
+      "e": "movy:0",
       "d": "Y position 0"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -317,23 +316,22 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
      },
      {
       "g": "I-15",
-      "e": "DEPTH-15",
+      "e": "depth:-15",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
      },
      {
       "g": "K0.5",
-      "e": "DWELL0.5",
+      "e": "dwell:0.5",
       "d": "Dwell at the bottom, in seconds. (G81)"
      },
      {
       "g": "F200",
-      "e": "F200.0",
-      "u": "mmpm",
+      "e": "feed:200.0",
       "d": "Feed rate 200.0 mm per minute"
      }
     ],
@@ -373,25 +371,24 @@
      },
      {
       "g": "XP1",
-      "e": "XP1",
+      "e": "movx:P1",
       "d": "X position P1"
      },
      {
       "g": "Y5",
-      "e": "Y5",
+      "e": "movy:5",
       "d": "Y position 5"
      },
      {
       "g": "F300",
-      "e": "F300.0",
-      "u": "mmpm",
+      "e": "feed:300.0",
       "d": "Feed rate 300.0 mm per minute"
      }
     ],
     [
      {
       "g": "[DONE]",
-      "e": "LABEL[DONE]",
+      "e": "label:[DONE]",
       "d": "Label DONE, a place other lines can jump to"
      },
      {
@@ -401,7 +398,7 @@
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -413,39 +410,39 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G84)"
      },
      {
       "g": "I-12",
-      "e": "DEPTH-12",
+      "e": "depth:-12",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G84)"
      },
      {
       "g": "R1",
-      "e": "RIGID1",
+      "e": "rigid:1",
       "d": "R0 normal tapping, R1 rigid tapping. (G84)"
      },
      {
       "g": "J2",
-      "e": "OUTFEED2",
+      "e": "outfeed:2",
       "d": "Rigid tapping: the way out runs J times the tapping feed. (G84)"
      }
     ],
     [
      {
       "g": "X20",
-      "e": "X20",
+      "e": "movx:20",
       "d": "X position 20"
      },
      {
       "g": "Y20",
-      "e": "Y20",
+      "e": "movy:20",
       "d": "Y position 20"
      },
      {
       "g": "NR3",
-      "e": "REPEAT3",
+      "e": "rept:3",
       "d": "Run this line 3 times"
      }
     ],
@@ -464,7 +461,7 @@
      },
      {
       "g": "K1.5",
-      "e": "SEC1.5",
+      "e": "dwell:1.5",
       "d": "Dwell for 1.5 seconds"
      }
     ],
@@ -483,7 +480,7 @@
      },
      {
       "g": "Z10",
-      "e": "Z10",
+      "e": "movz:10",
       "d": "Z position 10"
      }
     ],
@@ -495,7 +492,7 @@
      },
      {
       "g": "P100",
-      "e": "PROG100",
+      "e": "prog:100",
       "d": "Program number 100"
      }
     ],
@@ -958,13 +955,13 @@
     [
      {
       "g": "X10",
-      "e": "X0.0010",
+      "e": "movx:0.0010",
       "d": "No decimal point, so this reads as 0.0010 in. Write X10. for 10 in.",
       "imp": true
      },
      {
       "g": "Y10",
-      "e": "Y0.0010",
+      "e": "movy:0.0010",
       "d": "No decimal point, so this reads as 0.0010 in. Write Y10. for 10 in.",
       "imp": true
      }
@@ -972,13 +969,13 @@
     [
      {
       "g": "X40",
-      "e": "X0.0040",
+      "e": "movx:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write X40. for 40 in.",
       "imp": true
      },
      {
       "g": "Y10",
-      "e": "Y0.0010",
+      "e": "movy:0.0010",
       "d": "No decimal point, so this reads as 0.0010 in. Write Y10. for 10 in.",
       "imp": true
      }
@@ -986,13 +983,13 @@
     [
      {
       "g": "X40",
-      "e": "X0.0040",
+      "e": "movx:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write X40. for 40 in.",
       "imp": true
      },
      {
       "g": "Y30",
-      "e": "Y0.0030",
+      "e": "movy:0.0030",
       "d": "No decimal point, so this reads as 0.0030 in. Write Y30. for 30 in.",
       "imp": true
      }
@@ -1000,13 +997,13 @@
     [
      {
       "g": "X10",
-      "e": "X0.0010",
+      "e": "movx:0.0010",
       "d": "No decimal point, so this reads as 0.0010 in. Write X10. for 10 in.",
       "imp": true
      },
      {
       "g": "Y30",
-      "e": "Y0.0030",
+      "e": "movy:0.0030",
       "d": "No decimal point, so this reads as 0.0030 in. Write Y30. for 30 in.",
       "imp": true
      }
@@ -1059,12 +1056,12 @@
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      },
      {
@@ -1076,8 +1073,7 @@
     [
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
@@ -1099,17 +1095,17 @@
      },
      {
       "g": "X0",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "Z50",
-      "e": "Z0.0050",
+      "e": "movz:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write Z50. for 50 in.",
       "imp": true
      }
@@ -1134,25 +1130,24 @@
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
      {
       "g": "I-15",
-      "e": "ARCI-0.0015",
+      "e": "arci:-0.0015",
       "d": "No decimal point, so this reads as -0.0015 in. Write I-15. for -15 in.",
       "imp": true
      },
      {
       "g": "K0.5",
-      "e": "REPT0.5",
+      "e": "rept:0.5",
       "d": "How many times to run the hole. Under G91, each repeat steps over by X and Y. (G81)"
      },
      {
       "g": "F200",
-      "e": "F200.0",
-      "u": "ipm",
+      "e": "feed:200.0",
       "d": "Feed rate 200.0 inches per minute"
      }
     ],
@@ -1195,19 +1190,18 @@
      },
      {
       "g": "XP1",
-      "e": "XP1",
+      "e": "movx:P1",
       "d": "X position P1"
      },
      {
       "g": "Y5",
-      "e": "Y0.0005",
+      "e": "movy:0.0005",
       "d": "No decimal point, so this reads as 0.0005 in. Write Y5. for 5 in.",
       "imp": true
      },
      {
       "g": "F300",
-      "e": "F300.0",
-      "u": "ipm",
+      "e": "feed:300.0",
       "d": "Feed rate 300.0 inches per minute"
      }
     ],
@@ -1225,7 +1219,7 @@
      },
      {
       "g": "Z50",
-      "e": "Z0.0050",
+      "e": "movz:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write Z50. for 50 in.",
       "imp": true
      }
@@ -1238,25 +1232,25 @@
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
      {
       "g": "I-12",
-      "e": "ARCI-0.0012",
+      "e": "arci:-0.0012",
       "d": "No decimal point, so this reads as -0.0012 in. Write I-12. for -12 in.",
       "imp": true
      },
      {
       "g": "R1",
-      "e": "RPLN0.0001",
+      "e": "rplane:0.0001",
       "d": "No decimal point, so this reads as 0.0001 in. Write R1. for 1 in.",
       "imp": true
      },
      {
       "g": "J2",
-      "e": "ARCJ0.0002",
+      "e": "arcj:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write J2. for 2 in.",
       "imp": true
      }
@@ -1264,13 +1258,13 @@
     [
      {
       "g": "X20",
-      "e": "X0.0020",
+      "e": "movx:0.0020",
       "d": "No decimal point, so this reads as 0.0020 in. Write X20. for 20 in.",
       "imp": true
      },
      {
       "g": "Y20",
-      "e": "Y0.0020",
+      "e": "movy:0.0020",
       "d": "No decimal point, so this reads as 0.0020 in. Write Y20. for 20 in.",
       "imp": true
      },
@@ -1295,7 +1289,7 @@
      },
      {
       "g": "K1.5",
-      "e": "ARCK1.5",
+      "e": "arck:1.5",
       "d": "Arc center offset in Z 1.5"
      }
     ],
@@ -1315,7 +1309,7 @@
      },
      {
       "g": "Z10",
-      "e": "Z0.0010",
+      "e": "movz:0.0010",
       "d": "No decimal point, so this reads as 0.0010 in. Write Z10. for 10 in.",
       "imp": true
      }
@@ -1328,7 +1322,7 @@
      },
      {
       "g": "P100",
-      "e": "PROG100",
+      "e": "prog:100",
       "d": "Program number 100"
      }
     ],

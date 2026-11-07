@@ -132,7 +132,7 @@
     [
      {
       "g": "O0200",
-      "e": "PROG0200",
+      "e": "prog:0200",
       "d": "Program number 0200"
      },
      {
@@ -177,7 +177,7 @@
      },
      {
       "g": "T0303",
-      "e": "TOOL0303",
+      "e": "tool:0303",
       "d": "Tool number 0303"
      }
     ],
@@ -194,8 +194,7 @@
      },
      {
       "g": "S180",
-      "e": "S180",
-      "u": "smm",
+      "e": "speed:180",
       "d": "Surface speed 180 surface meters per minute"
      },
      {
@@ -217,8 +216,7 @@
      },
      {
       "g": "S2500",
-      "e": "S2500",
-      "u": "smm",
+      "e": "speed:2500",
       "d": "Surface speed 2500 surface meters per minute"
      }
     ],
@@ -235,12 +233,12 @@
      },
      {
       "g": "X50.",
-      "e": "X50.0",
+      "e": "movx:50.0",
       "d": "X position 50.0"
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      }
     ],
@@ -257,13 +255,12 @@
      },
      {
       "g": "Z-20.",
-      "e": "Z-20.0",
+      "e": "movz:-20.0",
       "d": "Z position -20.0"
      },
      {
       "g": "F0.2",
-      "e": "F0.2",
-      "u": "mmpr",
+      "e": "feed:0.2",
       "d": "Feed rate 0.2 mm per rev"
      }
     ],
@@ -275,12 +272,12 @@
      },
      {
       "g": "U-4.",
-      "e": "INCX-4.0",
+      "e": "incx:-4.0",
       "d": "Incremental X (lathe) -4.0"
      },
      {
       "g": "W-1.",
-      "e": "INCZ-1.0",
+      "e": "incz:-1.0",
       "d": "Incremental Z (lathe) -1.0"
      }
     ],
@@ -302,13 +299,12 @@
      },
      {
       "g": "X40.",
-      "e": "X40.0",
+      "e": "movx:40.0",
       "d": "X position 40.0"
      },
      {
       "g": "F150.",
-      "e": "F150.0",
-      "u": "mmpm",
+      "e": "feed:150.0",
       "d": "Feed rate 150.0 mm per minute"
      }
     ],
@@ -320,13 +316,12 @@
      },
      {
       "g": "X38.",
-      "e": "X38.0",
+      "e": "movx:38.0",
       "d": "X position 38.0"
      },
      {
       "g": "F2.",
-      "e": "F2.0",
-      "u": "mmpm",
+      "e": "feed:2.0",
       "d": "Feed rate 2.0 mm per minute"
      }
     ],
@@ -343,12 +338,12 @@
      },
      {
       "g": "U1.",
-      "e": "ALLOWX1.0",
+      "e": "allowx:1.0",
       "d": "Finish stock left on X for G70, as a diameter. (G71)"
      },
      {
       "g": "R0.5",
-      "e": "TYPE0.5",
+      "e": "type:0.5",
       "d": "R1 turns on Type II roughing for pockets in the profile. (G71)"
      }
     ],
@@ -365,28 +360,27 @@
      },
      {
       "g": "P120",
-      "e": "FROM120",
+      "e": "from:120",
       "d": "First line of the contour, N120"
      },
      {
       "g": "Q140",
-      "e": "TO140",
+      "e": "to:140",
       "d": "Last line of the contour, N140"
      },
      {
       "g": "U0.4",
-      "e": "ALLOWX0.4",
+      "e": "allowx:0.4",
       "d": "Finish stock left on X for G70, as a diameter. (G71)"
      },
      {
       "g": "W0.1",
-      "e": "ALLOWZ0.1",
+      "e": "allowz:0.1",
       "d": "Finish stock left on Z for G70. (G71)"
      },
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpm",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 mm per minute"
      }
     ],
@@ -403,7 +397,7 @@
      },
      {
       "g": "X20.",
-      "e": "X20.0",
+      "e": "movx:20.0",
       "d": "X position 20.0"
      }
     ],
@@ -420,7 +414,7 @@
      },
      {
       "g": "Z-10.",
-      "e": "Z-10.0",
+      "e": "movz:-10.0",
       "d": "Z position -10.0"
      }
     ],
@@ -432,7 +426,7 @@
      },
      {
       "g": "X40.",
-      "e": "X40.0",
+      "e": "movx:40.0",
       "d": "X position 40.0"
      }
     ],
@@ -449,12 +443,12 @@
      },
      {
       "g": "P120",
-      "e": "FROM120",
+      "e": "from:120",
       "d": "First line of the contour, N120"
      },
      {
       "g": "Q999",
-      "e": "TO999",
+      "e": "to:999",
       "d": "Last line of the contour, N999"
      }
     ],
@@ -471,33 +465,32 @@
      },
      {
       "g": "X30.",
-      "e": "X30.0",
+      "e": "movx:30.0",
       "d": "X position 30.0"
      },
      {
       "g": "Z-15.",
-      "e": "Z-15.0",
+      "e": "movz:-15.0",
       "d": "Z position -15.0"
      },
      {
       "g": "K1.2",
-      "e": "THDHT1.2",
+      "e": "thdht:1.2",
       "d": "Thread height, as a radius. (G76)"
      },
      {
       "g": "D0.3",
-      "e": "DEPTH0.3",
+      "e": "depth:0.3",
       "d": "Depth of the first pass. Later passes get shallower to keep the chip load even. (G76)"
      },
      {
       "g": "F1.5",
-      "e": "F1.5",
-      "u": "mmpm",
+      "e": "feed:1.5",
       "d": "Feed rate 1.5 mm per minute"
      },
      {
       "g": "A60",
-      "e": "ANGLE60",
+      "e": "angle:60",
       "d": "Tool tip angle, 0 to 120 degrees, no decimal point. The tool feeds in along the flank at half this angle. (G76)"
      }
     ],
@@ -514,13 +507,12 @@
      },
      {
       "g": "Z-5.",
-      "e": "Z-5.0",
+      "e": "movz:-5.0",
       "d": "Z position -5.0"
      },
      {
       "g": "F1.",
-      "e": "F1.0",
-      "u": "mmpm",
+      "e": "feed:1.0",
       "d": "Feed rate 1.0 mm per minute"
      }
     ],
@@ -537,7 +529,7 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      }
     ],
@@ -554,12 +546,12 @@
      },
      {
       "g": "U0.",
-      "e": "INCX0.0",
+      "e": "incx:0.0",
       "d": "Incremental X (lathe) 0.0"
      },
      {
       "g": "W0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Incremental Z (lathe) 0.0"
      }
     ],
@@ -1148,7 +1140,7 @@
     [
      {
       "g": "O0200",
-      "e": "PROG0200",
+      "e": "prog:0200",
       "d": "Program number 0200"
      },
      {
@@ -1193,7 +1185,7 @@
      },
      {
       "g": "T0303",
-      "e": "TOOL0303",
+      "e": "tool:0303",
       "d": "Tool number 0303"
      }
     ],
@@ -1210,8 +1202,7 @@
      },
      {
       "g": "S180",
-      "e": "S180",
-      "u": "sfm",
+      "e": "speed:180",
       "d": "Surface speed 180 surface feet per minute"
      },
      {
@@ -1233,8 +1224,7 @@
      },
      {
       "g": "S2500",
-      "e": "S2500",
-      "u": "sfm",
+      "e": "speed:2500",
       "d": "Surface speed 2500 surface feet per minute"
      }
     ],
@@ -1251,12 +1241,12 @@
      },
      {
       "g": "X50.",
-      "e": "X50.0",
+      "e": "movx:50.0",
       "d": "X position 50.0"
      },
      {
       "g": "Z2.",
-      "e": "Z2.0",
+      "e": "movz:2.0",
       "d": "Z position 2.0"
      }
     ],
@@ -1273,13 +1263,12 @@
      },
      {
       "g": "Z-20.",
-      "e": "Z-20.0",
+      "e": "movz:-20.0",
       "d": "Z position -20.0"
      },
      {
       "g": "F0.2",
-      "e": "F0.2",
-      "u": "ipr",
+      "e": "feed:0.2",
       "d": "Feed rate 0.2 inches per rev"
      }
     ],
@@ -1291,12 +1280,12 @@
      },
      {
       "g": "U-4.",
-      "e": "INCX-4.0",
+      "e": "incx:-4.0",
       "d": "Incremental X (lathe) -4.0"
      },
      {
       "g": "W-1.",
-      "e": "INCZ-1.0",
+      "e": "incz:-1.0",
       "d": "Incremental Z (lathe) -1.0"
      }
     ],
@@ -1318,13 +1307,12 @@
      },
      {
       "g": "X40.",
-      "e": "X40.0",
+      "e": "movx:40.0",
       "d": "X position 40.0"
      },
      {
       "g": "F150.",
-      "e": "F150.0",
-      "u": "ipr",
+      "e": "feed:150.0",
       "d": "Feed rate 150.0 inches per rev"
      }
     ],
@@ -1336,13 +1324,12 @@
      },
      {
       "g": "X38.",
-      "e": "X38.0",
+      "e": "movx:38.0",
       "d": "X position 38.0"
      },
      {
       "g": "F2.",
-      "e": "F2.0",
-      "u": "ipr",
+      "e": "feed:2.0",
       "d": "Feed rate 2.0 inches per rev"
      }
     ],
@@ -1359,12 +1346,12 @@
      },
      {
       "g": "U1.",
-      "e": "ALLOW1.0",
+      "e": "allow:1.0",
       "d": "Finishing allowance, as a diameter. No finishing pass without it. (G71)"
      },
      {
       "g": "R0.5",
-      "e": "RETRACT0.5",
+      "e": "retract:0.5",
       "d": "Retract after each pass (first line). (G71)"
      }
     ],
@@ -1381,28 +1368,27 @@
      },
      {
       "g": "P120",
-      "e": "SEC120",
+      "e": "dwell:120",
       "d": "Dwell for 120 seconds"
      },
      {
       "g": "Q140",
-      "e": "STARTS140",
+      "e": "starts:140",
       "d": "Number of starts for a multi-start thread. (G71)"
      },
      {
       "g": "U0.4",
-      "e": "ALLOW0.4",
+      "e": "allow:0.4",
       "d": "Finishing allowance, as a diameter. No finishing pass without it. (G71)"
      },
      {
       "g": "W0.1",
-      "e": "ALLOWZ0.1",
+      "e": "allowz:0.1",
       "d": "Finish stock left on Z for G70. (G71)"
      },
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "ipr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 inches per rev"
      }
     ],
@@ -1419,7 +1405,7 @@
      },
      {
       "g": "X20.",
-      "e": "X20.0",
+      "e": "movx:20.0",
       "d": "X position 20.0"
      }
     ],
@@ -1436,7 +1422,7 @@
      },
      {
       "g": "Z-10.",
-      "e": "Z-10.0",
+      "e": "movz:-10.0",
       "d": "Z position -10.0"
      }
     ],
@@ -1448,7 +1434,7 @@
      },
      {
       "g": "X40.",
-      "e": "X40.0",
+      "e": "movx:40.0",
       "d": "X position 40.0"
      }
     ],
@@ -1465,12 +1451,12 @@
      },
      {
       "g": "P120",
-      "e": "SEC120",
+      "e": "dwell:120",
       "d": "Dwell for 120 seconds"
      },
      {
       "g": "Q999",
-      "e": "PECK999",
+      "e": "peck:999",
       "d": "Peck depth 999"
      }
     ],
@@ -1487,28 +1473,27 @@
      },
      {
       "g": "X30.",
-      "e": "X30.0",
+      "e": "movx:30.0",
       "d": "X position 30.0"
      },
      {
       "g": "Z-15.",
-      "e": "Z-15.0",
+      "e": "movz:-15.0",
       "d": "Z position -15.0"
      },
      {
       "g": "K1.2",
-      "e": "ARCK1.2",
+      "e": "arck:1.2",
       "d": "Arc center offset in Z 1.2"
      },
      {
       "g": "D0.3",
-      "e": "DOFS0.3",
+      "e": "doffset:0.3",
       "d": "Tool diameter offset number 0.3"
      },
      {
       "g": "F1.5",
-      "e": "F1.5",
-      "u": "ipr",
+      "e": "feed:1.5",
       "d": "Feed rate 1.5 inches per rev"
      },
      {
@@ -1531,13 +1516,12 @@
      },
      {
       "g": "Z-5.",
-      "e": "Z-5.0",
+      "e": "movz:-5.0",
       "d": "Z position -5.0"
      },
      {
       "g": "F1.",
-      "e": "F1.0",
-      "u": "ipr",
+      "e": "feed:1.0",
       "d": "Feed rate 1.0 inches per rev"
      }
     ],
@@ -1554,7 +1538,7 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      }
     ],
@@ -1571,12 +1555,12 @@
      },
      {
       "g": "U0.",
-      "e": "INCX0.0",
+      "e": "incx:0.0",
       "d": "Incremental X (lathe) 0.0"
      },
      {
       "g": "W0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Incremental Z (lathe) 0.0"
      }
     ],
