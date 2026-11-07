@@ -4,6 +4,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-07
+
 ### Editor
 - New default layout, **Code with gloss above** (View › Layout). Each line is plain text: its N number in a column of its own, the code beside it, and the gloss above in small grey italics that can't be selected or edited. The gloss leaves out the N number and comments, and a comment-only line has no gloss line. Click a line to put the caret there and type as in any text editor: Enter breaks the line at the caret (the new line gets the next N number), Backspace at the start joins it to the line above, Delete at the end joins the line below, ↑↓ move the caret between lines, Esc undoes the changes to the line, and dragging along a line selects its text. The gloss follows as you type. The two older layouts (words in program order, columns by word type) are still in View › Layout, and the layout is remembered in settings.json.
 - In the new layout all code is black. A line with a problem is tinted: yellow for a warning, orange for an error, red for a machine alarm, and the word the problem is about is underlined in that colour. The marker in the gutter stays, and the move-type bar beside it.
