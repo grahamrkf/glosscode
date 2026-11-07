@@ -264,20 +264,19 @@
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "smm",
+      "e": "speed:3000",
       "d": "Surface speed 3000 surface meters per minute"
      }
     ],
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      },
      {
@@ -289,8 +288,7 @@
     [
      {
       "g": "S180",
-      "e": "S180",
-      "u": "smm",
+      "e": "speed:180",
       "d": "Surface speed 180 surface meters per minute"
      },
      {
@@ -312,20 +310,19 @@
      },
      {
       "g": "X60",
-      "e": "X60",
+      "e": "movx:60",
       "d": "X position 60"
      },
      {
       "g": "Z5",
-      "e": "Z5",
+      "e": "movz:5",
       "d": "Z position 5"
      }
     ],
     [
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 mm per rev"
      }
     ],
@@ -337,47 +334,47 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "Q40",
-      "e": "ENDX40",
+      "e": "endx:40",
       "d": "End point in X. (G81)"
      },
      {
       "g": "R-30",
-      "e": "ENDZ-30",
+      "e": "endz:-30",
       "d": "End point in Z. (G81)"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass (radius). (G81)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance the tool pulls back. (G81)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G81)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. (G81)"
      },
      {
       "g": "H0.1",
-      "e": "FINFEED0.1",
+      "e": "finfeed:0.1",
       "d": "Finish pass feed. None or 0: no finish pass. (G81)"
      }
     ],
@@ -389,27 +386,27 @@
      },
      {
       "g": "X52",
-      "e": "X52",
+      "e": "movx:52",
       "d": "X position 52"
      },
      {
       "g": "Z0",
-      "e": "Z0",
+      "e": "movz:0",
       "d": "Z position 0"
      },
      {
       "g": "Q0",
-      "e": "ENDX0",
+      "e": "endx:0",
       "d": "End point in X. (G82)"
      },
      {
       "g": "R-2",
-      "e": "ENDZ-2",
+      "e": "endz:-2",
       "d": "End point in Z. (G82)"
      },
      {
       "g": "C1",
-      "e": "PASS1",
+      "e": "pass:1",
       "d": "Depth of each pass (radius). (G82)"
      }
     ],
@@ -421,52 +418,52 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass (radius). (G68)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance the tool pulls back. (G68)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G68)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. (G68)"
      },
      {
       "g": "F0.2",
-      "e": "LASTFEED0.2",
+      "e": "lastfeed:0.2",
       "d": "Feed for the last roughing pass. None or 0: no last pass. (G68)"
      },
      {
       "g": "H0.1",
-      "e": "FINFEED0.1",
+      "e": "finfeed:0.1",
       "d": "Finish pass feed. None or 0: no finish pass. (G68)"
      },
      {
       "g": "S100",
-      "e": "PROFFROM100",
+      "e": "proffrom:100",
       "d": "Label of the first line of the profile. (G68)"
      },
      {
       "g": "E140",
-      "e": "PROFTO140",
+      "e": "profto:140",
       "d": "Label of the last line of the profile. (G68)"
      }
     ],
@@ -478,37 +475,37 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "I5",
-      "e": "STOCK5",
+      "e": "stock:5",
       "d": "Stock to remove (radius). (G66)"
      },
      {
       "g": "C1",
-      "e": "PASS1",
+      "e": "pass:1",
       "d": "Depth of each pass. (G66)"
      },
      {
       "g": "A0",
-      "e": "MAINAX0",
+      "e": "mainax:0",
       "d": "Main direction: A0 along Z, A1 along X. (G66)"
      },
      {
       "g": "S100",
-      "e": "PROFFROM100",
+      "e": "proffrom:100",
       "d": "Label of the first line of the profile. (G66)"
      },
      {
       "g": "E140",
-      "e": "PROFTO140",
+      "e": "profto:140",
       "d": "Label of the last line of the profile. (G66)"
      }
     ],
@@ -520,24 +517,24 @@
      },
      {
       "g": "X100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
     [
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
       "g": "D2",
-      "e": "DOFS2",
+      "e": "doffset:2",
       "d": "Tool diameter offset number 2"
      },
      {
@@ -554,8 +551,7 @@
      },
      {
       "g": "S800",
-      "e": "S800",
-      "u": "rpm",
+      "e": "speed:800",
       "d": "Spindle speed 800 RPM"
      },
      {
@@ -572,32 +568,32 @@
      },
      {
       "g": "X45",
-      "e": "X45",
+      "e": "movx:45",
       "d": "X position 45"
      },
      {
       "g": "Z-20",
-      "e": "Z-20",
+      "e": "movz:-20",
       "d": "Z position -20"
      },
      {
       "g": "Q36",
-      "e": "ENDX36",
+      "e": "endx:36",
       "d": "End point in X. (G88)"
      },
      {
       "g": "R-26",
-      "e": "ENDZ-26",
+      "e": "endz:-26",
       "d": "End point in Z. (G88)"
      },
      {
       "g": "C3",
-      "e": "PASS3",
+      "e": "pass:3",
       "d": "Step between plunges. None: the tool's width. (G88)"
      },
      {
       "g": "K50",
-      "e": "DWELL50",
+      "e": "dwell:50",
       "d": "Dwell at the bottom, in hundredths of a second. (G88)"
      }
     ],
@@ -609,42 +605,42 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "Q40",
-      "e": "ENDX40",
+      "e": "endx:40",
       "d": "End point in X. (G86)"
      },
      {
       "g": "R-18",
-      "e": "ENDZ-18",
+      "e": "endz:-18",
       "d": "End point in Z. (G86)"
      },
      {
       "g": "I0.92",
-      "e": "DEPTH0.92",
+      "e": "depth:0.92",
       "d": "Thread depth (radius; + outside, - inside). (G86)"
      },
      {
       "g": "B0.2",
-      "e": "PASS0.2",
+      "e": "pass:0.2",
       "d": "Pass depth: + passes get smaller, - equal passes. (G86)"
      },
      {
       "g": "C1.5",
-      "e": "PITCH1.5",
+      "e": "pitch:1.5",
       "d": "Thread pitch: + along the taper, - along the axis. (G86)"
      },
      {
       "g": "A30",
-      "e": "INFANG30",
+      "e": "infang:30",
       "d": "Infeed angle: 0 radial, negative zig-zag. (G86)"
      }
     ],
@@ -656,17 +652,17 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-15",
-      "e": "Z-15",
+      "e": "movz:-15",
       "d": "Z position -15"
      },
      {
       "g": "L1.5",
-      "e": "PITCH1.5",
+      "e": "pitch:1.5",
       "d": "Thread pitch (G33)"
      }
     ],
@@ -678,19 +674,19 @@
      },
      {
       "g": "K150",
-      "e": "DWELL150",
+      "e": "dwell:150",
       "d": "Dwell for 150 hundredths of a second"
      }
     ],
     [
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
       "g": "D3",
-      "e": "DOFS3",
+      "e": "doffset:3",
       "d": "Tool diameter offset number 3"
      },
      {
@@ -702,8 +698,7 @@
     [
      {
       "g": "S1200",
-      "e": "S1200",
-      "u": "rpm",
+      "e": "speed:1200",
       "d": "Spindle speed 1200 RPM"
      },
      {
@@ -720,32 +715,32 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "I25",
-      "e": "DEPTH25",
+      "e": "depth:25",
       "d": "Depth, positive going in. (G83)"
      },
      {
       "g": "B5",
-      "e": "PECK5",
+      "e": "peck:5",
       "d": "Peck depth. B0 taps. (G83)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance the tool pulls back. (G83)"
      },
      {
       "g": "K20",
-      "e": "DWELL20",
+      "e": "dwell:20",
       "d": "Dwell at the bottom, in hundredths of a second. (G83)"
      }
     ],
@@ -757,42 +752,42 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z1",
-      "e": "Z1",
+      "e": "movz:1",
       "d": "Z position 1"
      },
      {
       "g": "I5",
-      "e": "DEPTH5",
+      "e": "depth:5",
       "d": "Depth, positive going in. (G60)"
      },
      {
       "g": "B2",
-      "e": "PECK2",
+      "e": "peck:2",
       "d": "Peck depth. B0 taps. (G60)"
      },
      {
       "g": "Q0",
-      "e": "STARTANG0",
+      "e": "startang:0",
       "d": "Spindle angle of the first point. (G60)"
      },
      {
       "g": "A90",
-      "e": "ANGSTEP90",
+      "e": "angstep:90",
       "d": "Angle between points (+ counterclockwise). (G60)"
      },
      {
       "g": "J4",
-      "e": "COUNT4",
+      "e": "count:4",
       "d": "Number of points, counting the first. (G60)"
      },
      {
       "g": "S1500",
-      "e": "LIVERPM1500",
+      "e": "liverpm:1500",
       "d": "Live tool speed in rpm; the sign gives the direction. (G60)"
      }
     ],
@@ -804,17 +799,17 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "Q40",
-      "e": "ENDX40",
+      "e": "endx:40",
       "d": "End point in X. (G81)"
      }
     ],
@@ -833,27 +828,27 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass (radius). (G68)"
      },
      {
       "g": "S700",
-      "e": "PROFFROM700",
+      "e": "proffrom:700",
       "d": "Label of the first line of the profile. (G68)"
      },
      {
       "g": "E710",
-      "e": "PROFTO710",
+      "e": "profto:710",
       "d": "Label of the last line of the profile. (G68)"
      }
     ],
@@ -865,12 +860,12 @@
      },
      {
       "g": "X100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -894,24 +889,24 @@
      },
      {
       "g": "X20",
-      "e": "X20",
+      "e": "movx:20",
       "d": "X position 20"
      },
      {
       "g": "Z0",
-      "e": "Z0",
+      "e": "movz:0",
       "d": "Z position 0"
      }
     ],
     [
      {
       "g": "X30",
-      "e": "X30",
+      "e": "movx:30",
       "d": "X position 30"
      },
      {
       "g": "Z-10",
-      "e": "Z-10",
+      "e": "movz:-10",
       "d": "Z position -10"
      }
     ],
@@ -923,22 +918,22 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-15",
-      "e": "Z-15",
+      "e": "movz:-15",
       "d": "Z position -15"
      },
      {
       "g": "I0",
-      "e": "ARCI0",
+      "e": "arci:0",
       "d": "Arc center offset in X 0"
      },
      {
       "g": "K-5",
-      "e": "ARCK-5",
+      "e": "arck:-5",
       "d": "Arc center offset in Z -5"
      }
     ],
@@ -955,7 +950,7 @@
      },
      {
       "g": "Z-30",
-      "e": "Z-30",
+      "e": "movz:-30",
       "d": "Z position -30"
      }
     ]
@@ -1853,20 +1848,19 @@
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "sfm",
+      "e": "speed:3000",
       "d": "Surface speed 3000 surface feet per minute"
      }
     ],
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DEPTH1",
+      "e": "depth:1",
       "d": "Depth of each pass, 1"
      },
      {
@@ -1878,8 +1872,7 @@
     [
      {
       "g": "S180",
-      "e": "S180",
-      "u": "sfm",
+      "e": "speed:180",
       "d": "Surface speed 180 surface feet per minute"
      },
      {
@@ -1901,13 +1894,13 @@
      },
      {
       "g": "X60",
-      "e": "X0.0060",
+      "e": "movx:0.0060",
       "d": "No decimal point, so this reads as 0.0060 in. Write X60. for 60 in.",
       "imp": true
      },
      {
       "g": "Z5",
-      "e": "Z0.0005",
+      "e": "movz:0.0005",
       "d": "No decimal point, so this reads as 0.0005 in. Write Z5. for 5 in.",
       "imp": true
      }
@@ -1915,8 +1908,7 @@
     [
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "ipr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 inches per rev"
      }
     ],
@@ -1928,25 +1920,25 @@
      },
      {
       "g": "X50",
-      "e": "X0.0050",
+      "e": "movx:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write X50. for 50 in.",
       "imp": true
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
      {
       "g": "Q40",
-      "e": "PECK0.0040",
+      "e": "peck:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write Q40. for 40 in.",
       "imp": true
      },
      {
       "g": "R-30",
-      "e": "RAD-0.0030",
+      "e": "radius:-0.0030",
       "d": "No decimal point, so this reads as -0.0030 in. Write R-30. for -30 in.",
       "imp": true
      },
@@ -1958,7 +1950,7 @@
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      },
      {
@@ -1975,7 +1967,7 @@
      },
      {
       "g": "H0.1",
-      "e": "LOFS0.1",
+      "e": "toffset:0.1",
       "d": "Tool length offset number 0.1"
      }
     ],
@@ -1987,23 +1979,23 @@
      },
      {
       "g": "X52",
-      "e": "X0.0052",
+      "e": "movx:0.0052",
       "d": "No decimal point, so this reads as 0.0052 in. Write X52. for 52 in.",
       "imp": true
      },
      {
       "g": "Z0",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      },
      {
       "g": "Q0",
-      "e": "PECK0.0",
+      "e": "peck:0.0",
       "d": "Peck depth 0.0"
      },
      {
       "g": "R-2",
-      "e": "RAD-0.0002",
+      "e": "radius:-0.0002",
       "d": "No decimal point, so this reads as -0.0002 in. Write R-2. for -2 in.",
       "imp": true
      },
@@ -2022,13 +2014,13 @@
      },
      {
       "g": "X50",
-      "e": "X0.0050",
+      "e": "movx:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write X50. for 50 in.",
       "imp": true
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
@@ -2040,7 +2032,7 @@
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      },
      {
@@ -2057,19 +2049,17 @@
      },
      {
       "g": "F0.2",
-      "e": "F0.2",
-      "u": "ipr",
+      "e": "feed:0.2",
       "d": "Feed rate 0.2 inches per rev"
      },
      {
       "g": "H0.1",
-      "e": "LOFS0.1",
+      "e": "toffset:0.1",
       "d": "Tool length offset number 0.1"
      },
      {
       "g": "S100",
-      "e": "S100",
-      "u": "sfm",
+      "e": "speed:100",
       "d": "Surface speed 100 surface feet per minute"
      },
      {
@@ -2088,19 +2078,19 @@
      },
      {
       "g": "X50",
-      "e": "X0.0050",
+      "e": "movx:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write X50. for 50 in.",
       "imp": true
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
      {
       "g": "I5",
-      "e": "ARCI0.0005",
+      "e": "arci:0.0005",
       "d": "No decimal point, so this reads as 0.0005 in. Write I5. for 5 in.",
       "imp": true
      },
@@ -2118,8 +2108,7 @@
      },
      {
       "g": "S100",
-      "e": "S100",
-      "u": "sfm",
+      "e": "speed:100",
       "d": "Surface speed 100 surface feet per minute"
      },
      {
@@ -2137,13 +2126,13 @@
      },
      {
       "g": "X100",
-      "e": "X0.0100",
+      "e": "movx:0.0100",
       "d": "No decimal point, so this reads as 0.0100 in. Write X100. for 100 in.",
       "imp": true
      },
      {
       "g": "Z50",
-      "e": "Z0.0050",
+      "e": "movz:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write Z50. for 50 in.",
       "imp": true
      }
@@ -2151,12 +2140,12 @@
     [
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
       "g": "D2",
-      "e": "DOFS2",
+      "e": "doffset:2",
       "d": "Tool diameter offset number 2"
      },
      {
@@ -2173,8 +2162,7 @@
      },
      {
       "g": "S800",
-      "e": "S800",
-      "u": "rpm",
+      "e": "speed:800",
       "d": "Spindle speed 800 RPM"
      },
      {
@@ -2192,25 +2180,25 @@
      },
      {
       "g": "X45",
-      "e": "X0.0045",
+      "e": "movx:0.0045",
       "d": "No decimal point, so this reads as 0.0045 in. Write X45. for 45 in.",
       "imp": true
      },
      {
       "g": "Z-20",
-      "e": "Z-0.0020",
+      "e": "movz:-0.0020",
       "d": "No decimal point, so this reads as -0.0020 in. Write Z-20. for -20 in.",
       "imp": true
      },
      {
       "g": "Q36",
-      "e": "PECK0.0036",
+      "e": "peck:0.0036",
       "d": "No decimal point, so this reads as 0.0036 in. Write Q36. for 36 in.",
       "imp": true
      },
      {
       "g": "R-26",
-      "e": "RAD-0.0026",
+      "e": "radius:-0.0026",
       "d": "No decimal point, so this reads as -0.0026 in. Write R-26. for -26 in.",
       "imp": true
      },
@@ -2222,7 +2210,7 @@
      },
      {
       "g": "K50",
-      "e": "ARCK0.0050",
+      "e": "arck:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write K50. for 50 in.",
       "imp": true
      }
@@ -2235,31 +2223,31 @@
      },
      {
       "g": "X40",
-      "e": "X0.0040",
+      "e": "movx:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write X40. for 40 in.",
       "imp": true
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
      {
       "g": "Q40",
-      "e": "PECK0.0040",
+      "e": "peck:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write Q40. for 40 in.",
       "imp": true
      },
      {
       "g": "R-18",
-      "e": "RAD-0.0018",
+      "e": "radius:-0.0018",
       "d": "No decimal point, so this reads as -0.0018 in. Write R-18. for -18 in.",
       "imp": true
      },
      {
       "g": "I0.92",
-      "e": "ARCI0.92",
+      "e": "arci:0.92",
       "d": "Arc center offset in X 0.92"
      },
      {
@@ -2290,13 +2278,13 @@
      },
      {
       "g": "X40",
-      "e": "X0.0040",
+      "e": "movx:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write X40. for 40 in.",
       "imp": true
      },
      {
       "g": "Z-15",
-      "e": "Z-0.0015",
+      "e": "movz:-0.0015",
       "d": "No decimal point, so this reads as -0.0015 in. Write Z-15. for -15 in.",
       "imp": true
      },
@@ -2315,7 +2303,7 @@
      },
      {
       "g": "K150",
-      "e": "ARCK0.0150",
+      "e": "arck:0.0150",
       "d": "No decimal point, so this reads as 0.0150 in. Write K150. for 150 in.",
       "imp": true
      }
@@ -2323,12 +2311,12 @@
     [
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
       "g": "D3",
-      "e": "DOFS3",
+      "e": "doffset:3",
       "d": "Tool diameter offset number 3"
      },
      {
@@ -2340,8 +2328,7 @@
     [
      {
       "g": "S1200",
-      "e": "S1200",
-      "u": "rpm",
+      "e": "speed:1200",
       "d": "Spindle speed 1200 RPM"
      },
      {
@@ -2358,18 +2345,18 @@
      },
      {
       "g": "X0",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
      {
       "g": "I25",
-      "e": "ARCI0.0025",
+      "e": "arci:0.0025",
       "d": "No decimal point, so this reads as 0.0025 in. Write I25. for 25 in.",
       "imp": true
      },
@@ -2381,12 +2368,12 @@
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      },
      {
       "g": "K20",
-      "e": "ARCK0.0020",
+      "e": "arck:0.0020",
       "d": "No decimal point, so this reads as 0.0020 in. Write K20. for 20 in.",
       "imp": true
      }
@@ -2400,19 +2387,19 @@
      },
      {
       "g": "X40",
-      "e": "X0.0040",
+      "e": "movx:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write X40. for 40 in.",
       "imp": true
      },
      {
       "g": "Z1",
-      "e": "Z0.0001",
+      "e": "movz:0.0001",
       "d": "No decimal point, so this reads as 0.0001 in. Write Z1. for 1 in.",
       "imp": true
      },
      {
       "g": "I5",
-      "e": "ARCI0.0005",
+      "e": "arci:0.0005",
       "d": "No decimal point, so this reads as 0.0005 in. Write I5. for 5 in.",
       "imp": true
      },
@@ -2424,7 +2411,7 @@
      },
      {
       "g": "Q0",
-      "e": "PECK0.0",
+      "e": "peck:0.0",
       "d": "Peck depth 0.0"
      },
      {
@@ -2435,14 +2422,13 @@
      },
      {
       "g": "J4",
-      "e": "ARCJ0.0004",
+      "e": "arcj:0.0004",
       "d": "No decimal point, so this reads as 0.0004 in. Write J4. for 4 in.",
       "imp": true
      },
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      }
     ],
@@ -2454,19 +2440,19 @@
      },
      {
       "g": "X50",
-      "e": "X0.0050",
+      "e": "movx:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write X50. for 50 in.",
       "imp": true
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
      {
       "g": "Q40",
-      "e": "PECK0.0040",
+      "e": "peck:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write Q40. for 40 in.",
       "imp": true
      }
@@ -2486,13 +2472,13 @@
      },
      {
       "g": "X50",
-      "e": "X0.0050",
+      "e": "movx:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write X50. for 50 in.",
       "imp": true
      },
      {
       "g": "Z2",
-      "e": "Z0.0002",
+      "e": "movz:0.0002",
       "d": "No decimal point, so this reads as 0.0002 in. Write Z2. for 2 in.",
       "imp": true
      },
@@ -2504,8 +2490,7 @@
      },
      {
       "g": "S700",
-      "e": "S700",
-      "u": "rpm",
+      "e": "speed:700",
       "d": "Spindle speed 700 RPM"
      },
      {
@@ -2523,13 +2508,13 @@
      },
      {
       "g": "X100",
-      "e": "X0.0100",
+      "e": "movx:0.0100",
       "d": "No decimal point, so this reads as 0.0100 in. Write X100. for 100 in.",
       "imp": true
      },
      {
       "g": "Z50",
-      "e": "Z0.0050",
+      "e": "movz:0.0050",
       "d": "No decimal point, so this reads as 0.0050 in. Write Z50. for 50 in.",
       "imp": true
      }
@@ -2554,26 +2539,26 @@
      },
      {
       "g": "X20",
-      "e": "X0.0020",
+      "e": "movx:0.0020",
       "d": "No decimal point, so this reads as 0.0020 in. Write X20. for 20 in.",
       "imp": true
      },
      {
       "g": "Z0",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      }
     ],
     [
      {
       "g": "X30",
-      "e": "X0.0030",
+      "e": "movx:0.0030",
       "d": "No decimal point, so this reads as 0.0030 in. Write X30. for 30 in.",
       "imp": true
      },
      {
       "g": "Z-10",
-      "e": "Z-0.0010",
+      "e": "movz:-0.0010",
       "d": "No decimal point, so this reads as -0.0010 in. Write Z-10. for -10 in.",
       "imp": true
      }
@@ -2586,24 +2571,24 @@
      },
      {
       "g": "X40",
-      "e": "X0.0040",
+      "e": "movx:0.0040",
       "d": "No decimal point, so this reads as 0.0040 in. Write X40. for 40 in.",
       "imp": true
      },
      {
       "g": "Z-15",
-      "e": "Z-0.0015",
+      "e": "movz:-0.0015",
       "d": "No decimal point, so this reads as -0.0015 in. Write Z-15. for -15 in.",
       "imp": true
      },
      {
       "g": "I0",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "K-5",
-      "e": "ARCK-0.0005",
+      "e": "arck:-0.0005",
       "d": "No decimal point, so this reads as -0.0005 in. Write K-5. for -5 in.",
       "imp": true
      }
@@ -2621,7 +2606,7 @@
      },
      {
       "g": "Z-30",
-      "e": "Z-0.0030",
+      "e": "movz:-0.0030",
       "d": "No decimal point, so this reads as -0.0030 in. Write Z-30. for -30 in.",
       "imp": true
      }

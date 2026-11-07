@@ -103,7 +103,7 @@
     [
      {
       "g": "O2020",
-      "e": "PROG2020",
+      "e": "prog:2020",
       "d": "Program number 2020"
      }
     ],
@@ -123,8 +123,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      }
     ],
@@ -144,23 +143,22 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z0.2",
-      "e": "Z0.2",
+      "e": "movz:0.2",
       "d": "Z position 0.2"
      },
      {
       "g": "T0101",
-      "e": "TOOL0101",
+      "e": "tool:0101",
       "d": "Tool number 0101"
      },
      {
       "g": "S800",
-      "e": "S800",
-      "u": "rpm",
+      "e": "speed:800",
       "d": "Spindle speed 800 RPM"
      },
      {
@@ -177,33 +175,32 @@
      },
      {
       "g": "X0.9",
-      "e": "X0.9",
+      "e": "movx:0.9",
       "d": "X position 0.9"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "B60",
-      "e": "INFEED60",
+      "e": "infeed:60",
       "d": "Infeed angle, usually the insert's point angle (0 if left out). (G71)"
      },
      {
       "g": "D0.02",
-      "e": "CUT10.02",
+      "e": "cut1:0.02",
       "d": "Depth of the first pass, as a diameter. (G71)"
      },
      {
       "g": "H0.0811",
-      "e": "THDHT0.0811",
+      "e": "thdht:0.0811",
       "d": "Thread height, as a diameter. (G71)"
      },
      {
       "g": "F0.0769",
-      "e": "F0.0769",
-      "u": "ipr",
+      "e": "feed:0.0769",
       "d": "Feed rate 0.0769 inches per rev"
      },
      {
@@ -220,12 +217,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -237,28 +234,27 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "K0.25",
-      "e": "SHIFTZ0.25",
+      "e": "shiftz:0.25",
       "d": "Shift along Z between plunges. (G73)"
      },
      {
       "g": "D0.05",
-      "e": "PLUNGE0.05",
+      "e": "plunge:0.05",
       "d": "Depth of each plunge. (G73)"
      },
      {
       "g": "F0.004",
-      "e": "F0.004",
-      "u": "ipr",
+      "e": "feed:0.004",
       "d": "Feed rate 0.004 inches per rev"
      }
     ],
@@ -270,17 +266,17 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z0.5",
-      "e": "Z0.5",
+      "e": "movz:0.5",
       "d": "Z position 0.5"
      },
      {
       "g": "T0202",
-      "e": "TOOL0202",
+      "e": "tool:0202",
       "d": "Tool number 0202"
      }
     ],
@@ -292,23 +288,22 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z-0.75",
-      "e": "Z-0.75",
+      "e": "movz:-0.75",
       "d": "Z position -0.75"
      },
      {
       "g": "K0.3",
-      "e": "APPRZ0.3",
+      "e": "apprz:0.3",
       "d": "Z where the rapid approach stops and tapping starts. (G77)"
      },
      {
       "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
+      "e": "feed:0.0625",
       "d": "Feed rate 0.0625 inches per rev"
      }
     ],
@@ -320,12 +315,12 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z0.5",
-      "e": "Z0.5",
+      "e": "movz:0.5",
       "d": "Z position 0.5"
      }
     ],
@@ -337,23 +332,22 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "D0.1",
-      "e": "PECK0.1",
+      "e": "peck:0.1",
       "d": "Depth of each peck. (G74)"
      },
      {
       "g": "F0.004",
-      "e": "F0.004",
-      "u": "ipr",
+      "e": "feed:0.004",
       "d": "Feed rate 0.004 inches per rev"
      }
     ],
@@ -377,7 +371,7 @@
      },
      {
       "g": "W-2.",
-      "e": "INCZ-2.0",
+      "e": "incz:-2.0",
       "d": "Incremental Z (lathe) -2.0"
      }
     ],
@@ -389,7 +383,7 @@
      },
      {
       "g": "W-2.",
-      "e": "INCZ-2.0",
+      "e": "incz:-2.0",
       "d": "Incremental Z (lathe) -2.0"
      }
     ],
@@ -409,12 +403,12 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -805,7 +799,7 @@
     [
      {
       "g": "O2020",
-      "e": "PROG2020",
+      "e": "prog:2020",
       "d": "Program number 2020"
      }
     ],
@@ -825,8 +819,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      }
     ],
@@ -846,23 +839,22 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z0.2",
-      "e": "Z0.2",
+      "e": "movz:0.2",
       "d": "Z position 0.2"
      },
      {
       "g": "T0101",
-      "e": "TOOL0101",
+      "e": "tool:0101",
       "d": "Tool number 0101"
      },
      {
       "g": "S800",
-      "e": "S800",
-      "u": "rpm",
+      "e": "speed:800",
       "d": "Spindle speed 800 RPM"
      },
      {
@@ -879,33 +871,32 @@
      },
      {
       "g": "X0.9",
-      "e": "X0.9",
+      "e": "movx:0.9",
       "d": "X position 0.9"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "B60",
-      "e": "INFEED60",
+      "e": "infeed:60",
       "d": "Infeed angle, usually the insert's point angle (0 if left out). (G71)"
      },
      {
       "g": "D0.02",
-      "e": "CUT10.02",
+      "e": "cut1:0.02",
       "d": "Depth of the first pass, as a diameter. (G71)"
      },
      {
       "g": "H0.0811",
-      "e": "THDHT0.0811",
+      "e": "thdht:0.0811",
       "d": "Thread height, as a diameter. (G71)"
      },
      {
       "g": "F0.0769",
-      "e": "F0.0769",
-      "u": "ipr",
+      "e": "feed:0.0769",
       "d": "Feed rate 0.0769 inches per rev"
      },
      {
@@ -922,12 +913,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -939,28 +930,27 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "K0.25",
-      "e": "SHIFTZ0.25",
+      "e": "shiftz:0.25",
       "d": "Shift along Z between plunges. (G73)"
      },
      {
       "g": "D0.05",
-      "e": "PLUNGE0.05",
+      "e": "plunge:0.05",
       "d": "Depth of each plunge. (G73)"
      },
      {
       "g": "F0.004",
-      "e": "F0.004",
-      "u": "ipr",
+      "e": "feed:0.004",
       "d": "Feed rate 0.004 inches per rev"
      }
     ],
@@ -972,17 +962,17 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z0.5",
-      "e": "Z0.5",
+      "e": "movz:0.5",
       "d": "Z position 0.5"
      },
      {
       "g": "T0202",
-      "e": "TOOL0202",
+      "e": "tool:0202",
       "d": "Tool number 0202"
      }
     ],
@@ -994,23 +984,22 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z-0.75",
-      "e": "Z-0.75",
+      "e": "movz:-0.75",
       "d": "Z position -0.75"
      },
      {
       "g": "K0.3",
-      "e": "APPRZ0.3",
+      "e": "apprz:0.3",
       "d": "Z where the rapid approach stops and tapping starts. (G77)"
      },
      {
       "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
+      "e": "feed:0.0625",
       "d": "Feed rate 0.0625 inches per rev"
      }
     ],
@@ -1022,12 +1011,12 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z0.5",
-      "e": "Z0.5",
+      "e": "movz:0.5",
       "d": "Z position 0.5"
      }
     ],
@@ -1039,23 +1028,22 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "D0.1",
-      "e": "PECK0.1",
+      "e": "peck:0.1",
       "d": "Depth of each peck. (G74)"
      },
      {
       "g": "F0.004",
-      "e": "F0.004",
-      "u": "ipr",
+      "e": "feed:0.004",
       "d": "Feed rate 0.004 inches per rev"
      }
     ],
@@ -1079,7 +1067,7 @@
      },
      {
       "g": "W-2.",
-      "e": "INCZ-2.0",
+      "e": "incz:-2.0",
       "d": "Incremental Z (lathe) -2.0"
      }
     ],
@@ -1091,7 +1079,7 @@
      },
      {
       "g": "W-2.",
-      "e": "INCZ-2.0",
+      "e": "incz:-2.0",
       "d": "Incremental Z (lathe) -2.0"
      }
     ],
@@ -1111,12 +1099,12 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],

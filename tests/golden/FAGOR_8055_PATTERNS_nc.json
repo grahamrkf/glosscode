@@ -259,12 +259,12 @@
     [
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
       "g": "D2",
-      "e": "DOFS2",
+      "e": "doffset:2",
       "d": "Tool diameter offset number 2"
      },
      {
@@ -276,8 +276,7 @@
     [
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -299,17 +298,17 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Y0",
-      "e": "Y0",
+      "e": "movy:0",
       "d": "Y position 0"
      },
      {
       "g": "Z20",
-      "e": "Z20",
+      "e": "movz:20",
       "d": "Z position 20"
      }
     ],
@@ -326,18 +325,17 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
      },
      {
       "g": "I-10",
-      "e": "DEPTH-10",
+      "e": "depth:-10",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
      },
      {
       "g": "F150",
-      "e": "F150.0",
-      "u": "mmpm",
+      "e": "feed:150.0",
       "d": "Feed rate 150.0 mm per minute"
      }
     ],
@@ -349,22 +347,22 @@
      },
      {
       "g": "A0",
-      "e": "ANGLE0",
+      "e": "angle:0",
       "d": "Angle of the pattern line from the X axis (G60)"
      },
      {
       "g": "X40",
-      "e": "LENGTH40",
+      "e": "length:40",
       "d": "Length of the pattern (G60)"
      },
      {
       "g": "I10",
-      "e": "STEP10",
+      "e": "step:10",
       "d": "Distance between points (G60)"
      },
      {
       "g": "P2",
-      "e": "SKIP2",
+      "e": "skip:2",
       "d": "Points to skip: P5 skips point 5, P10.013 points 10 to 13 (G60)"
      }
     ],
@@ -376,12 +374,12 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Y50",
-      "e": "Y50",
+      "e": "movy:50",
       "d": "Y position 50"
      }
     ],
@@ -393,12 +391,12 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
      },
      {
       "g": "I-10",
-      "e": "DEPTH-10",
+      "e": "depth:-10",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
      }
     ],
@@ -410,27 +408,27 @@
      },
      {
       "g": "X30",
-      "e": "LENGTHX30",
+      "e": "lengthx:30",
       "d": "Length of the pattern along its first side (G62)"
      },
      {
       "g": "I15",
-      "e": "STEPX15",
+      "e": "stepx:15",
       "d": "Distance between points along the first side (G62)"
      },
      {
       "g": "Y20",
-      "e": "LENGTHY20",
+      "e": "lengthy:20",
       "d": "Length of the pattern along its second side (G62)"
      },
      {
       "g": "D3",
-      "e": "COUNTY3",
+      "e": "county:3",
       "d": "Points along the second side, counting the first (G62)"
      },
      {
       "g": "P4.005",
-      "e": "SKIP4.005",
+      "e": "skip:4.005",
       "d": "Points to skip: P5 skips point 5, P10.013 points 10 to 13 (G62)"
      }
     ],
@@ -442,12 +440,12 @@
      },
      {
       "g": "X100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Y50",
-      "e": "Y50",
+      "e": "movy:50",
       "d": "Y position 50"
      }
     ],
@@ -459,12 +457,12 @@
      },
      {
       "g": "Z2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane: where the feed starts. G99 comes back up to it between holes, G98 to where the tool was. (G81)"
      },
      {
       "g": "I-8",
-      "e": "DEPTH-8",
+      "e": "depth:-8",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
      }
     ],
@@ -476,28 +474,27 @@
      },
      {
       "g": "X20",
-      "e": "CENTERX20",
+      "e": "centerx:20",
       "d": "Distance in X from the first point to the center (G63)"
      },
      {
       "g": "Y0",
-      "e": "CENTERY0",
+      "e": "centery:0",
       "d": "Distance in Y from the first point to the center (G63)"
      },
      {
       "g": "K6",
-      "e": "COUNT6",
+      "e": "count:6",
       "d": "Number of points on the circle, counting the first (G63)"
      },
      {
       "g": "C3",
-      "e": "MOVE3",
+      "e": "move:3",
       "d": "How the tool moves between points: C0 rapid, C1 straight line, C2 clockwise arc, C3 counterclockwise arc (G63)"
      },
      {
       "g": "F400",
-      "e": "F400.0",
-      "u": "mmpm",
+      "e": "feed:400.0",
       "d": "Feed rate 400.0 mm per minute"
      }
     ],
@@ -509,33 +506,32 @@
      },
      {
       "g": "X20",
-      "e": "CENTERX20",
+      "e": "centerx:20",
       "d": "Distance in X from the first point to the center (G64)"
      },
      {
       "g": "Y0",
-      "e": "CENTERY0",
+      "e": "centery:0",
       "d": "Distance in Y from the first point to the center (G64)"
      },
      {
       "g": "B90",
-      "e": "ARC90",
+      "e": "arc:90",
       "d": "Angle the pattern covers (+ counterclockwise) (G64)"
      },
      {
       "g": "I30",
-      "e": "ANGSTEP30",
+      "e": "angstep:30",
       "d": "Angle between points (G64)"
      },
      {
       "g": "C1",
-      "e": "MOVE1",
+      "e": "move:1",
       "d": "How the tool moves between points: C0 rapid, C1 straight line, C2 clockwise arc, C3 counterclockwise arc (G64)"
      },
      {
       "g": "F400",
-      "e": "F400.0",
-      "u": "mmpm",
+      "e": "feed:400.0",
       "d": "Feed rate 400.0 mm per minute"
      }
     ],
@@ -547,22 +543,22 @@
      },
      {
       "g": "X20",
-      "e": "CENTERX20",
+      "e": "centerx:20",
       "d": "Distance in X from the first point to the center (G65)"
      },
      {
       "g": "Y0",
-      "e": "CENTERY0",
+      "e": "centery:0",
       "d": "Distance in Y from the first point to the center (G65)"
      },
      {
       "g": "A45",
-      "e": "BISECT45",
+      "e": "bisect:45",
       "d": "Angle of the line that bisects the chord (G65)"
      },
      {
       "g": "C0",
-      "e": "MOVE0",
+      "e": "move:0",
       "d": "How the tool moves between points: C0 rapid, C1 straight line, C2 clockwise arc, C3 counterclockwise arc (G65)"
      }
     ],
@@ -574,7 +570,7 @@
      },
      {
       "g": "I-12",
-      "e": "DEPTH-12",
+      "e": "depth:-12",
       "d": "Depth of the hole (absolute in G90; from the reference plane in G91). (G81)"
      }
     ],
@@ -586,27 +582,27 @@
      },
      {
       "g": "X20",
-      "e": "LENGTHX20",
+      "e": "lengthx:20",
       "d": "Length of the pattern along its first side (G61)"
      },
      {
       "g": "K3",
-      "e": "COUNTX3",
+      "e": "countx:3",
       "d": "Points along the first side, counting the first (G61)"
      },
      {
       "g": "Y10",
-      "e": "LENGTHY10",
+      "e": "lengthy:10",
       "d": "Length of the pattern along its second side (G61)"
      },
      {
       "g": "J10",
-      "e": "STEPY10",
+      "e": "stepy:10",
       "d": "Distance between points along the second side (G61)"
      },
      {
       "g": "A30",
-      "e": "ANGLE30",
+      "e": "angle:30",
       "d": "Angle of the first side from the X axis (G61)"
      }
     ],
@@ -625,12 +621,12 @@
      },
      {
       "g": "X40",
-      "e": "LENGTH40",
+      "e": "length:40",
       "d": "Length of the pattern (G60)"
      },
      {
       "g": "K5",
-      "e": "COUNT5",
+      "e": "count:5",
       "d": "Number of points, counting the first (G60)"
      }
     ],
@@ -642,12 +638,12 @@
      },
      {
       "g": "X10",
-      "e": "LENGTHX10",
+      "e": "lengthx:10",
       "d": "Length of the pattern along its first side (G61)"
      },
      {
       "g": "I5",
-      "e": "STEPX5",
+      "e": "stepx:5",
       "d": "Distance between points along the first side (G61)"
      }
     ],
@@ -659,32 +655,32 @@
      },
      {
       "g": "R100",
-      "e": "ROUGHFROM100",
+      "e": "roughfrom:100",
       "d": "Label of the first line of the roughing operation (G66)"
      },
      {
       "g": "I100",
-      "e": "ROUGHTO100",
+      "e": "roughto:100",
       "d": "Label of the last line of the roughing operation (G66)"
      },
      {
       "g": "F200",
-      "e": "FINFROM200",
+      "e": "finfrom:200",
       "d": "Label of the first line of the finishing operation (G66)"
      },
      {
       "g": "K200",
-      "e": "FINTO200",
+      "e": "finto:200",
       "d": "Label of the last line of the finishing operation (G66)"
      },
      {
       "g": "S300",
-      "e": "PROFFROM300",
+      "e": "proffrom:300",
       "d": "Label of the first line of the pocket profile (G66)"
      },
      {
       "g": "E340",
-      "e": "PROFTO340",
+      "e": "profto:340",
       "d": "Label of the last line of the pocket profile (G66)"
      }
     ],
@@ -708,44 +704,42 @@
      },
      {
       "g": "B4",
-      "e": "DEPTHSTEP4",
+      "e": "depthstep:4",
       "d": "Depth of each pass (G67)"
      },
      {
       "g": "C3",
-      "e": "STEPOVER3",
+      "e": "stepover:3",
       "d": "Step over between passes (G67)"
      },
      {
       "g": "I-12",
-      "e": "DEPTH-12",
+      "e": "depth:-12",
       "d": "Depth of the pocket (absolute) (G67)"
      },
      {
       "g": "R2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane (absolute) (G67)"
      },
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
       "g": "D3",
-      "e": "DOFS3",
+      "e": "doffset:3",
       "d": "Tool diameter offset number 3"
      },
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
       "g": "F300",
-      "e": "F300.0",
-      "u": "mmpm",
+      "e": "feed:300.0",
       "d": "Feed rate 300.0 mm per minute"
      }
     ],
@@ -762,44 +756,42 @@
      },
      {
       "g": "B0",
-      "e": "DEPTHSTEP0",
+      "e": "depthstep:0",
       "d": "Depth of each finishing pass (G68)"
      },
      {
       "g": "L0.5",
-      "e": "STOCK0.5",
+      "e": "stock:0.5",
       "d": "Side stock to leave (G68)"
      },
      {
       "g": "I-12",
-      "e": "DEPTH-12",
+      "e": "depth:-12",
       "d": "Depth of the pocket (absolute) (G68)"
      },
      {
       "g": "R2",
-      "e": "REFZ2",
+      "e": "refz:2",
       "d": "Reference plane (absolute) (G68)"
      },
      {
       "g": "T4",
-      "e": "TOOL4",
+      "e": "tool:4",
       "d": "Tool number 4"
      },
      {
       "g": "D4",
-      "e": "DOFS4",
+      "e": "doffset:4",
       "d": "Tool diameter offset number 4"
      },
      {
       "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
+      "e": "speed:2500",
       "d": "Spindle speed 2500 RPM"
      },
      {
       "g": "F200",
-      "e": "F200.0",
-      "u": "mmpm",
+      "e": "feed:200.0",
       "d": "Feed rate 200.0 mm per minute"
      }
     ],
@@ -821,17 +813,17 @@
      },
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      },
      {
       "g": "Z0",
-      "e": "Z0",
+      "e": "movz:0",
       "d": "Z position 0"
      }
     ],
@@ -843,28 +835,28 @@
      },
      {
       "g": "X60",
-      "e": "X60",
+      "e": "movx:60",
       "d": "X position 60"
      }
     ],
     [
      {
       "g": "Y40",
-      "e": "Y40",
+      "e": "movy:40",
       "d": "Y position 40"
      }
     ],
     [
      {
       "g": "X10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      }
     ],
     [
      {
       "g": "Y10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
@@ -881,12 +873,12 @@
      },
      {
       "g": "X25",
-      "e": "X25",
+      "e": "movx:25",
       "d": "X position 25"
      },
      {
       "g": "Y20",
-      "e": "Y20",
+      "e": "movy:20",
       "d": "Y position 20"
      }
     ],
@@ -898,21 +890,21 @@
      },
      {
       "g": "X35",
-      "e": "X35",
+      "e": "movx:35",
       "d": "X position 35"
      }
     ],
     [
      {
       "g": "Y30",
-      "e": "Y30",
+      "e": "movy:30",
       "d": "Y position 30"
      }
     ],
     [
      {
       "g": "X25",
-      "e": "X25",
+      "e": "movx:25",
       "d": "X position 25"
      }
     ],
@@ -924,7 +916,7 @@
      },
      {
       "g": "Y20",
-      "e": "Y20",
+      "e": "movy:20",
       "d": "Y position 20"
      }
     ],
@@ -936,12 +928,12 @@
      },
      {
       "g": "S500",
-      "e": "PROFFROM500",
+      "e": "proffrom:500",
       "d": "Label of the first line of the pocket profile (G66)"
      },
      {
       "g": "E510",
-      "e": "PROFTO510",
+      "e": "profto:510",
       "d": "Label of the last line of the pocket profile (G66)"
      }
     ],

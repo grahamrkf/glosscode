@@ -115,7 +115,7 @@
     [
      {
       "g": "O2002",
-      "e": "PROG2002",
+      "e": "prog:2002",
       "d": "Program number 2002"
      },
      {
@@ -155,7 +155,7 @@
      },
      {
       "g": "T0202",
-      "e": "TOOL0202",
+      "e": "tool:0202",
       "d": "Tool number 0202"
      },
      {
@@ -178,8 +178,7 @@
      },
      {
       "g": "S500",
-      "e": "S500",
-      "u": "sfm",
+      "e": "speed:500",
       "d": "Surface speed 500 surface feet per minute"
      },
      {
@@ -201,12 +200,12 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      },
      {
@@ -228,28 +227,27 @@
      },
      {
       "g": "P60",
-      "e": "FROM60",
+      "e": "from:60",
       "d": "First line of the contour, N60"
      },
      {
       "g": "Q90",
-      "e": "TO90",
+      "e": "to:90",
       "d": "Last line of the contour, N90"
      },
      {
       "g": "U0.02",
-      "e": "ALLOWX0.02",
+      "e": "allowx:0.02",
       "d": "Finish stock left on X for G70, as a diameter. (G71)"
      },
      {
       "g": "W0.005",
-      "e": "ALLOWZ0.005",
+      "e": "allowz:0.005",
       "d": "Finish stock left on Z for G70. (G71)"
      },
      {
       "g": "F0.012",
-      "e": "F0.012",
-      "u": "ipr",
+      "e": "feed:0.012",
       "d": "Feed rate 0.012 inches per rev"
      }
     ],
@@ -266,7 +264,7 @@
      },
      {
       "g": "X1.0",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      }
     ],
@@ -283,13 +281,12 @@
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "F10.",
-      "e": "F10.0",
-      "u": "ipr",
+      "e": "feed:10.0",
       "d": "Feed rate 10.0 inches per rev"
      }
     ],
@@ -301,12 +298,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Z-1.5",
-      "e": "Z-1.5",
+      "e": "movz:-1.5",
       "d": "Z position -1.5"
      }
     ],
@@ -318,7 +315,7 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      }
     ],
@@ -335,12 +332,12 @@
      },
      {
       "g": "P60",
-      "e": "FROM60",
+      "e": "from:60",
       "d": "First line of the contour, N60"
      },
      {
       "g": "Q95",
-      "e": "TO95",
+      "e": "to:95",
       "d": "Last line of the contour, N95"
      }
     ],
@@ -357,12 +354,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -384,23 +381,22 @@
      },
      {
       "g": "X0.9",
-      "e": "X0.9",
+      "e": "movx:0.9",
       "d": "X position 0.9"
      },
      {
       "g": "Z-0.8",
-      "e": "Z-0.8",
+      "e": "movz:-0.8",
       "d": "Z position -0.8"
      },
      {
       "g": "K0.06",
-      "e": "THDHT0.06",
+      "e": "thdht:0.06",
       "d": "Thread height, as a radius. (G76)"
      },
      {
       "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
+      "e": "feed:0.0625",
       "d": "Feed rate 0.0625 inches per rev"
      }
     ],
@@ -417,8 +413,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "sfm",
+      "e": "speed:2000",
       "d": "Surface speed 2000 surface feet per minute"
      }
     ],
@@ -887,7 +882,7 @@
     [
      {
       "g": "O2002",
-      "e": "PROG2002",
+      "e": "prog:2002",
       "d": "Program number 2002"
      },
      {
@@ -927,7 +922,7 @@
      },
      {
       "g": "T0202",
-      "e": "TOOL0202",
+      "e": "tool:0202",
       "d": "Tool number 0202"
      },
      {
@@ -950,8 +945,7 @@
      },
      {
       "g": "S500",
-      "e": "S500",
-      "u": "sfm",
+      "e": "speed:500",
       "d": "Surface speed 500 surface feet per minute"
      },
      {
@@ -973,12 +967,12 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      },
      {
@@ -1000,28 +994,27 @@
      },
      {
       "g": "P60",
-      "e": "SEC60",
+      "e": "dwell:60",
       "d": "Dwell for 60 seconds"
      },
      {
       "g": "Q90",
-      "e": "STARTS90",
+      "e": "starts:90",
       "d": "Number of starts for a multi-start thread. (G71)"
      },
      {
       "g": "U0.02",
-      "e": "ALLOW0.02",
+      "e": "allow:0.02",
       "d": "Finishing allowance, as a diameter. No finishing pass without it. (G71)"
      },
      {
       "g": "W0.005",
-      "e": "ALLOWZ0.005",
+      "e": "allowz:0.005",
       "d": "Finish stock left on Z for G70. (G71)"
      },
      {
       "g": "F0.012",
-      "e": "F0.012",
-      "u": "ipr",
+      "e": "feed:0.012",
       "d": "Feed rate 0.012 inches per rev"
      }
     ],
@@ -1038,7 +1031,7 @@
      },
      {
       "g": "X1.0",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      }
     ],
@@ -1055,13 +1048,12 @@
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "F10.",
-      "e": "F10.0",
-      "u": "ipr",
+      "e": "feed:10.0",
       "d": "Feed rate 10.0 inches per rev"
      }
     ],
@@ -1073,12 +1065,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "Z-1.5",
-      "e": "Z-1.5",
+      "e": "movz:-1.5",
       "d": "Z position -1.5"
      }
     ],
@@ -1090,7 +1082,7 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      }
     ],
@@ -1107,12 +1099,12 @@
      },
      {
       "g": "P60",
-      "e": "SEC60",
+      "e": "dwell:60",
       "d": "Dwell for 60 seconds"
      },
      {
       "g": "Q95",
-      "e": "PECK95",
+      "e": "peck:95",
       "d": "Peck depth 95"
      }
     ],
@@ -1129,12 +1121,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -1156,23 +1148,22 @@
      },
      {
       "g": "X0.9",
-      "e": "X0.9",
+      "e": "movx:0.9",
       "d": "X position 0.9"
      },
      {
       "g": "Z-0.8",
-      "e": "Z-0.8",
+      "e": "movz:-0.8",
       "d": "Z position -0.8"
      },
      {
       "g": "K0.06",
-      "e": "ARCK0.06",
+      "e": "arck:0.06",
       "d": "Arc center offset in Z 0.06"
      },
      {
       "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
+      "e": "feed:0.0625",
       "d": "Feed rate 0.0625 inches per rev"
      }
     ],
@@ -1189,8 +1180,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "sfm",
+      "e": "speed:2000",
       "d": "Surface speed 2000 surface feet per minute"
      }
     ],

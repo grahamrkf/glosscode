@@ -160,7 +160,7 @@
     [
      {
       "g": "O0042",
-      "e": "PROG0042",
+      "e": "prog:0042",
       "d": "Program number 0042"
      },
      {
@@ -225,7 +225,7 @@
      },
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
@@ -263,12 +263,12 @@
      },
      {
       "g": "X-0.3",
-      "e": "X-0.3",
+      "e": "movx:-0.3",
       "d": "X position -0.3"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
@@ -285,8 +285,7 @@
      },
      {
       "g": "S2400",
-      "e": "S2400",
-      "u": "rpm",
+      "e": "speed:2400",
       "d": "Spindle speed 2400 RPM"
      },
      {
@@ -313,12 +312,12 @@
      },
      {
       "g": "H03",
-      "e": "LOFS03",
+      "e": "toffset:03",
       "d": "Tool length offset number 03"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -345,13 +344,12 @@
      },
      {
       "g": "Z-0.25",
-      "e": "Z-0.25",
+      "e": "movz:-0.25",
       "d": "Z position -0.25"
      },
      {
       "g": "F8.",
-      "e": "F8.0",
-      "u": "ipm",
+      "e": "feed:8.0",
       "d": "Feed rate 8.0 inches per minute"
      },
      {
@@ -368,13 +366,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -396,17 +393,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y0.5",
-      "e": "Y0.5",
+      "e": "movy:0.5",
       "d": "Y position 0.5"
      },
      {
       "g": "R0.5",
-      "e": "RAD0.5",
+      "e": "radius:0.5",
       "d": "Arc radius"
      },
      {
@@ -428,7 +425,7 @@
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
@@ -450,7 +447,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -489,7 +486,7 @@
      },
      {
       "g": "T5",
-      "e": "TOOL5",
+      "e": "tool:5",
       "d": "Tool number 5"
      },
      {
@@ -527,12 +524,12 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
@@ -549,8 +546,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -577,12 +573,12 @@
      },
      {
       "g": "H05",
-      "e": "LOFS05",
+      "e": "toffset:05",
       "d": "Tool length offset number 05"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -614,33 +610,32 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z-0.6",
-      "e": "Z-0.6",
+      "e": "movz:-0.6",
       "d": "Z position -0.6"
      },
      {
       "g": "R0.1",
-      "e": "RPLN0.1",
+      "e": "rplane:0.1",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "Q0.15",
-      "e": "PECK0.15",
+      "e": "peck:0.15",
       "d": "Peck depth 0.15"
      },
      {
       "g": "F6.",
-      "e": "F6.0",
-      "u": "ipm",
+      "e": "feed:6.0",
       "d": "Feed rate 6.0 inches per minute"
      },
      {
@@ -657,7 +652,7 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
@@ -684,7 +679,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -716,7 +711,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      },
      {
@@ -1344,7 +1339,7 @@
     [
      {
       "g": "O0042",
-      "e": "PROG0042",
+      "e": "prog:0042",
       "d": "Program number 0042"
      },
      {
@@ -1409,7 +1404,7 @@
      },
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
@@ -1447,12 +1442,12 @@
      },
      {
       "g": "X-0.3",
-      "e": "X-0.3",
+      "e": "movx:-0.3",
       "d": "X position -0.3"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
@@ -1469,8 +1464,7 @@
      },
      {
       "g": "S2400",
-      "e": "S2400",
-      "u": "rpm",
+      "e": "speed:2400",
       "d": "Spindle speed 2400 RPM"
      },
      {
@@ -1497,12 +1491,12 @@
      },
      {
       "g": "H03",
-      "e": "LOFS03",
+      "e": "toffset:03",
       "d": "Tool length offset number 03"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -1529,13 +1523,12 @@
      },
      {
       "g": "Z-0.25",
-      "e": "Z-0.25",
+      "e": "movz:-0.25",
       "d": "Z position -0.25"
      },
      {
       "g": "F8.",
-      "e": "F8.0",
-      "u": "ipm",
+      "e": "feed:8.0",
       "d": "Feed rate 8.0 inches per minute"
      },
      {
@@ -1552,13 +1545,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -1580,17 +1572,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y0.5",
-      "e": "Y0.5",
+      "e": "movy:0.5",
       "d": "Y position 0.5"
      },
      {
       "g": "R0.5",
-      "e": "RAD0.5",
+      "e": "radius:0.5",
       "d": "Arc radius"
      },
      {
@@ -1612,7 +1604,7 @@
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
@@ -1634,7 +1626,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -1673,7 +1665,7 @@
      },
      {
       "g": "T5",
-      "e": "TOOL5",
+      "e": "tool:5",
       "d": "Tool number 5"
      },
      {
@@ -1711,12 +1703,12 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
@@ -1733,8 +1725,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -1761,12 +1752,12 @@
      },
      {
       "g": "H05",
-      "e": "LOFS05",
+      "e": "toffset:05",
       "d": "Tool length offset number 05"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -1798,33 +1789,32 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z-0.6",
-      "e": "Z-0.6",
+      "e": "movz:-0.6",
       "d": "Z position -0.6"
      },
      {
       "g": "R0.1",
-      "e": "RPLN0.1",
+      "e": "rplane:0.1",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "Q0.15",
-      "e": "PECK0.15",
+      "e": "peck:0.15",
       "d": "Peck depth 0.15"
      },
      {
       "g": "F6.",
-      "e": "F6.0",
-      "u": "ipm",
+      "e": "feed:6.0",
       "d": "Feed rate 6.0 inches per minute"
      },
      {
@@ -1841,7 +1831,7 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
@@ -1868,7 +1858,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -1900,7 +1890,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      },
      {
@@ -1936,7 +1926,7 @@
     [
      {
       "g": "O0042",
-      "e": "PROG0042",
+      "e": "prog:0042",
       "d": "Program number 0042"
      },
      {
@@ -2001,7 +1991,7 @@
      },
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
@@ -2039,12 +2029,12 @@
      },
      {
       "g": "X-0.3",
-      "e": "X-0.3",
+      "e": "movx:-0.3",
       "d": "X position -0.3"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
@@ -2061,8 +2051,7 @@
      },
      {
       "g": "S2400",
-      "e": "S2400",
-      "u": "rpm",
+      "e": "speed:2400",
       "d": "Spindle speed 2400 RPM"
      },
      {
@@ -2089,12 +2078,12 @@
      },
      {
       "g": "H03",
-      "e": "LOFS03",
+      "e": "toffset:03",
       "d": "Tool length offset number 03"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2121,13 +2110,12 @@
      },
      {
       "g": "Z-0.25",
-      "e": "Z-0.25",
+      "e": "movz:-0.25",
       "d": "Z position -0.25"
      },
      {
       "g": "F8.",
-      "e": "F8.0",
-      "u": "ipm",
+      "e": "feed:8.0",
       "d": "Feed rate 8.0 inches per minute"
      },
      {
@@ -2144,13 +2132,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2172,17 +2159,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y0.5",
-      "e": "Y0.5",
+      "e": "movy:0.5",
       "d": "Y position 0.5"
      },
      {
       "g": "R0.5",
-      "e": "RAD0.5",
+      "e": "radius:0.5",
       "d": "Arc radius"
      },
      {
@@ -2204,7 +2191,7 @@
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
@@ -2226,7 +2213,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2265,7 +2252,7 @@
      },
      {
       "g": "T5",
-      "e": "TOOL5",
+      "e": "tool:5",
       "d": "Tool number 5"
      },
      {
@@ -2303,12 +2290,12 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
@@ -2325,8 +2312,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -2353,12 +2339,12 @@
      },
      {
       "g": "H05",
-      "e": "LOFS05",
+      "e": "toffset:05",
       "d": "Tool length offset number 05"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2390,33 +2376,32 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z-0.6",
-      "e": "Z-0.6",
+      "e": "movz:-0.6",
       "d": "Z position -0.6"
      },
      {
       "g": "R0.1",
-      "e": "RPLN0.1",
+      "e": "rplane:0.1",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "Q0.15",
-      "e": "PECK0.15",
+      "e": "peck:0.15",
       "d": "Peck depth 0.15"
      },
      {
       "g": "F6.",
-      "e": "F6.0",
-      "u": "ipm",
+      "e": "feed:6.0",
       "d": "Feed rate 6.0 inches per minute"
      },
      {
@@ -2433,7 +2418,7 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
@@ -2460,7 +2445,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2492,7 +2477,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      },
      {
@@ -2528,7 +2513,7 @@
     [
      {
       "g": "O0042",
-      "e": "PROG0042",
+      "e": "prog:0042",
       "d": "Program number 0042"
      },
      {
@@ -2593,7 +2578,7 @@
      },
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
@@ -2631,12 +2616,12 @@
      },
      {
       "g": "X-0.3",
-      "e": "X-0.3",
+      "e": "movx:-0.3",
       "d": "X position -0.3"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
@@ -2653,8 +2638,7 @@
      },
      {
       "g": "S2400",
-      "e": "S2400",
-      "u": "rpm",
+      "e": "speed:2400",
       "d": "Spindle speed 2400 RPM"
      },
      {
@@ -2681,12 +2665,12 @@
      },
      {
       "g": "H03",
-      "e": "LOFS03",
+      "e": "toffset:03",
       "d": "Tool length offset number 03"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2713,13 +2697,12 @@
      },
      {
       "g": "Z-0.25",
-      "e": "Z-0.25",
+      "e": "movz:-0.25",
       "d": "Z position -0.25"
      },
      {
       "g": "F8.",
-      "e": "F8.0",
-      "u": "ipm",
+      "e": "feed:8.0",
       "d": "Feed rate 8.0 inches per minute"
      },
      {
@@ -2736,13 +2719,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2764,17 +2746,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y0.5",
-      "e": "Y0.5",
+      "e": "movy:0.5",
       "d": "Y position 0.5"
      },
      {
       "g": "R0.5",
-      "e": "RAD0.5",
+      "e": "radius:0.5",
       "d": "Arc radius"
      },
      {
@@ -2796,7 +2778,7 @@
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
@@ -2818,7 +2800,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2857,7 +2839,7 @@
      },
      {
       "g": "T5",
-      "e": "TOOL5",
+      "e": "tool:5",
       "d": "Tool number 5"
      },
      {
@@ -2895,12 +2877,12 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
@@ -2917,8 +2899,7 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
@@ -2945,12 +2926,12 @@
      },
      {
       "g": "H05",
-      "e": "LOFS05",
+      "e": "toffset:05",
       "d": "Tool length offset number 05"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2982,33 +2963,32 @@
      },
      {
       "g": "X0.5",
-      "e": "X0.5",
+      "e": "movx:0.5",
       "d": "X position 0.5"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z-0.6",
-      "e": "Z-0.6",
+      "e": "movz:-0.6",
       "d": "Z position -0.6"
      },
      {
       "g": "R0.1",
-      "e": "RPLN0.1",
+      "e": "rplane:0.1",
       "d": "Retract plane for the drilling cycle"
      },
      {
       "g": "Q0.15",
-      "e": "PECK0.15",
+      "e": "peck:0.15",
       "d": "Peck depth 0.15"
      },
      {
       "g": "F6.",
-      "e": "F6.0",
-      "u": "ipm",
+      "e": "feed:6.0",
       "d": "Feed rate 6.0 inches per minute"
      },
      {
@@ -3025,7 +3005,7 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
@@ -3052,7 +3032,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -3084,7 +3064,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      },
      {

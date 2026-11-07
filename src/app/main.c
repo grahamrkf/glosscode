@@ -425,6 +425,27 @@ static void bind_set_title(const char *id, const char *req, void *arg)
     reply(id, 1, "null");
 }
 
+/* gcClipboard() reads the clipboard's text (null when it holds none); gcClipboard(text) puts text on it. */
+static void bind_clipboard(const char *id, const char *req, void *arg)
+{
+    (void)arg;
+    gc_json *a = args_of(req);
+    const char *t = gc_json_str(gc_json_at(a, 0));
+    void *win = webview_get_window(W);
+    if (t) reply(id, 1, plat_clipboard_set(win, t) ? "true" : "false");
+    else {
+        char *text = plat_clipboard_get(win);
+        gc_buf b;
+        gc_buf_init(&b);
+        if (text) gc_buf_json_str(&b, text);
+        else gc_buf_puts(&b, "null");
+        reply(id, 1, gc_buf_str(&b));
+        gc_buf_free(&b);
+        free(text);
+    }
+    gc_json_free(a);
+}
+
 /* gcQuit(): closes the window (used by the smoke test, tests/app_smoke.html). */
 static void bind_quit(const char *id, const char *req, void *arg)
 {
@@ -531,6 +552,7 @@ int gc_main(int argc, char **argv)
     webview_bind(W, "gcSaveSettings", bind_save_settings, NULL);
     webview_bind(W, "gcOpenUrl", bind_open_url, NULL);
     webview_bind(W, "gcSetTitle", bind_set_title, NULL);
+    webview_bind(W, "gcClipboard", bind_clipboard, NULL);
     webview_bind(W, "gcQuit", bind_quit, NULL);
     webview_set_html(W, html ? html : (const char *)gc_find_resource("ui/index.html")->data);
     free(html);

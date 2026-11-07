@@ -89,7 +89,7 @@
     [
      {
       "g": "O2020",
-      "e": "PROG2020",
+      "e": "prog:2020",
       "d": "Program number 2020"
      },
      {
@@ -129,7 +129,7 @@
      },
      {
       "g": "T0101",
-      "e": "TOOL0101",
+      "e": "tool:0101",
       "d": "Tool number 0101"
      }
     ],
@@ -146,8 +146,7 @@
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      }
     ],
@@ -164,8 +163,7 @@
      },
      {
       "g": "S400",
-      "e": "S400",
-      "u": "sfm",
+      "e": "speed:400",
       "d": "Surface speed 400 surface feet per minute"
      },
      {
@@ -187,12 +185,12 @@
      },
      {
       "g": "X0.75",
-      "e": "X0.75",
+      "e": "movx:0.75",
       "d": "X position 0.75"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -209,13 +207,12 @@
      },
      {
       "g": "Z0.",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      },
      {
       "g": "F.008",
-      "e": "F0.008",
-      "u": "ipr",
+      "e": "feed:0.008",
       "d": "Feed rate 0.008 inches per rev"
      }
     ],
@@ -227,12 +224,12 @@
      },
      {
       "g": "X1.0",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": ",C0.05",
-      "e": "CHAMFER0.05",
+      "e": "chamfer:0.05",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.05"
      }
     ],
@@ -244,12 +241,12 @@
      },
      {
       "g": "Z-1.0",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": ",R0.06",
-      "e": "ROUND0.06",
+      "e": "round:0.06",
       "d": "Rounds the corner at the end of this move with this radius 0.06"
      }
     ],
@@ -261,12 +258,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": ",C0.04",
-      "e": "CHAMFER0.04",
+      "e": "chamfer:0.04",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.04"
      }
     ],
@@ -278,7 +275,7 @@
      },
      {
       "g": "Z-2.0",
-      "e": "Z-2.0",
+      "e": "movz:-2.0",
       "d": "Z position -2.0"
      }
     ],
@@ -295,7 +292,7 @@
      },
      {
       "g": "X1.7",
-      "e": "X1.7",
+      "e": "movx:1.7",
       "d": "X position 1.7"
      }
     ],
@@ -581,7 +578,7 @@
     [
      {
       "g": "O2020",
-      "e": "PROG2020",
+      "e": "prog:2020",
       "d": "Program number 2020"
      },
      {
@@ -621,7 +618,7 @@
      },
      {
       "g": "T0101",
-      "e": "TOOL0101",
+      "e": "tool:0101",
       "d": "Tool number 0101"
      }
     ],
@@ -638,8 +635,7 @@
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "rpm",
+      "e": "speed:3000",
       "d": "Spindle speed 3000 RPM"
      }
     ],
@@ -656,8 +652,7 @@
      },
      {
       "g": "S400",
-      "e": "S400",
-      "u": "sfm",
+      "e": "speed:400",
       "d": "Surface speed 400 surface feet per minute"
      },
      {
@@ -679,12 +674,12 @@
      },
      {
       "g": "X0.75",
-      "e": "X0.75",
+      "e": "movx:0.75",
       "d": "X position 0.75"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      }
     ],
@@ -701,13 +696,12 @@
      },
      {
       "g": "Z0.",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      },
      {
       "g": "F.008",
-      "e": "F0.008",
-      "u": "ipr",
+      "e": "feed:0.008",
       "d": "Feed rate 0.008 inches per rev"
      }
     ],
@@ -719,12 +713,12 @@
      },
      {
       "g": "X1.0",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": ",C0.05",
-      "e": "CHAMFER0.05",
+      "e": "chamfer:0.05",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.05"
      }
     ],
@@ -736,12 +730,12 @@
      },
      {
       "g": "Z-1.0",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": ",R0.06",
-      "e": "ROUND0.06",
+      "e": "round:0.06",
       "d": "Rounds the corner at the end of this move with this radius 0.06"
      }
     ],
@@ -753,12 +747,12 @@
      },
      {
       "g": "X1.5",
-      "e": "X1.5",
+      "e": "movx:1.5",
       "d": "X position 1.5"
      },
      {
       "g": ",C0.04",
-      "e": "CHAMFER0.04",
+      "e": "chamfer:0.04",
       "d": "Chamfers the corner at the end of this move, starting this far before the corner 0.04"
      }
     ],
@@ -770,7 +764,7 @@
      },
      {
       "g": "Z-2.0",
-      "e": "Z-2.0",
+      "e": "movz:-2.0",
       "d": "Z position -2.0"
      }
     ],
@@ -787,7 +781,7 @@
      },
      {
       "g": "X1.7",
-      "e": "X1.7",
+      "e": "movx:1.7",
       "d": "X position 1.7"
      }
     ],

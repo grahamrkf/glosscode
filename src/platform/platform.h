@@ -42,6 +42,12 @@ const plat_dirs *plat_get_dirs(void);
 /* Opens a web address in the default browser. */
 void plat_open_url(const char *url);
 
+/* The system clipboard as UTF-8 text, for the right-click Cut, Copy and Paste (the page itself can't reach the
+   clipboard outside a key press). window is the webview's native window (webview_get_window).
+   plat_clipboard_get returns a malloc'd string, or NULL when the clipboard holds no text. */
+char *plat_clipboard_get(void *window);
+int plat_clipboard_set(void *window, const char *text);
+
 /* Shows a message box for errors that happen before the window exists. */
 void plat_error_box(const char *title, const char *msg);
 

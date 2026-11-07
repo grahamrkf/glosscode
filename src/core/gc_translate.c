@@ -491,6 +491,19 @@ static void cell_set(gc_cell *cell, const char *e, const char *u, const char *d,
     cell->flags = flags;
 }
 
+/* A word with a value: in full words the name in lower case, a colon and the value (speed:2100, movx:-0.4215);
+   short words run the two together (S2100, iX0.5). vw() in the mockup. */
+static void vword(char *e, size_t n, const char *sk, const char *name, const char *v)
+{
+    if (!strcmp(sk, "short")) {
+        snprintf(e, n, "%s%s", name, v);
+        return;
+    }
+    size_t k = 0;
+    for (; name[k] && k + 1 < n; k++) e[k] = (name[k] >= 'A' && name[k] <= 'Z') ? (char)(name[k] - 'A' + 'a') : name[k];
+    snprintf(e + k, n - k, ":%s", v);
+}
+
 /* Fagor 8060/8065: labels (N10: and [NAME]), the NR repeat count, and statements read by their first word
    ($IF, #CALL, %L, LL). Returns 0 for other words. */
 static int fagor_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell)
@@ -503,7 +516,7 @@ static int fagor_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell 
         size_t k = 1;
         while (gc_is_digit((unsigned char)t[k])) k++;
         if (k == tl - 1) {
-            snprintf(e, sizeof e, "%s%s", js_str(style_get(gc_json_get(addr, "N"), sk)), t + 1);
+            snprintf(e, sizeof e, "N%s", t + 1);
             snprintf(d, sizeof d, "Sequence number %.*s, a label other lines can jump to", (int)(tl - 2), t + 1);
             cell_set(cell, e, NULL, d, 0);
             return 1;
@@ -514,14 +527,14 @@ static int fagor_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell 
         for (size_t q = 1; q + 1 < tl; q++)
             if (!gc_is_alpha((unsigned char)t[q]) && !gc_is_digit((unsigned char)t[q]) && t[q] != '_') ok = 0;
         if (ok) {
-            snprintf(e, sizeof e, "LABEL%s", t);
+            vword(e, sizeof e, sk, "LABEL", t);
             snprintf(d, sizeof d, "Label %.*s, a place other lines can jump to", (int)(tl - 2), t + 1);
             cell_set(cell, e, NULL, d, 0);
             return 1;
         }
     }
     if (t[0] == 'N' && t[1] == 'R' && t[2] && gc_all_digits(t + 2)) {
-        snprintf(e, sizeof e, "%s%s", strcmp(sk, "short") ? "REPEAT" : "x", t + 2);
+        vword(e, sizeof e, sk, strcmp(sk, "short") ? "rept" : "x", t + 2);
         snprintf(d, sizeof d, "Run this line %s times", t + 2);
         cell_set(cell, e, NULL, d, 0);
         return 1;
@@ -560,7 +573,7 @@ static int fagor_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell 
             if (t[q] == '.') dots++;
             else if (!gc_is_digit((unsigned char)t[q])) ok = 0;
         if (ok && dots <= 1) {
-            snprintf(e, sizeof e, "%s%s", js_str(style_get(gc_json_get(gc_json_get(addr, "P"), "dwell"), sk)), t);
+            vword(e, sizeof e, sk, js_str(style_get(gc_json_get(gc_json_get(addr, "P"), "dwell"), sk)), t);
             snprintf(d, sizeof d, "Dwell for %s seconds", t);
             cell_set(cell, e, NULL, d, 0);
             return 1;
@@ -646,7 +659,7 @@ static int kl_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *ce
     const char *sk = style_key(c);
     const gc_json *addr = gc_json_get(c->data->words, "address");
     if (gc_all_digits(t)) {
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(gc_json_get(addr, "N"), sk)), t);
+        snprintf(e, sizeof e, "N%s", t);
         snprintf(d, sizeof d, "Block %s", t);
         cell_set(cell, e, NULL, d, 0);
         return 1;
@@ -706,7 +719,7 @@ static int kl_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *ce
                 const char *v = num ? f.v : val;
                 const gc_json *qp = st && st->kl_def[0] ? gc_json_get(gc_json_get(c->dialect, "qParams"), name) : NULL;
                 if (qp) {
-                    snprintf(e, sizeof e, "%s%s", js_str(gc_json_at(qp, 0)), v);
+                    vword(e, sizeof e, sk, js_str(gc_json_at(qp, 0)), v);
                     snprintf(d, sizeof d, "%s (%s, cycle %s)", js_str(gc_json_at(qp, 1)), name, st->kl_def);
                 } else {
                     snprintf(e, sizeof e, "%s", t);
@@ -758,10 +771,11 @@ static int kl_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *ce
                 if (!strchr("FS", t[0]) && a) {
                     const gc_json *ab = gc_json_get(a, "abs");
                     head = js_str(style_get(gc_json_truthy(ab) ? ab : a, sk));
-                }
+                } else if (strcmp(sk, "short") && strchr("FS", t[0]))
+                    head = t[0] == 'F' ? "feed" : "speed";
                 const char *q = t + 1;
                 if (*q == '-' || *q == '+') q++;
-                snprintf(e, sizeof e, "%s%s", head, t + 1);
+                vword(e, sizeof e, sk, head, t + 1);
                 snprintf(d, sizeof d, "%c from Q parameter %s, worked out when the line runs", t[0], q);
                 cell_set(cell, e, NULL, d, 0);
                 return 1;
@@ -796,7 +810,7 @@ static int kl_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *ce
         v = f.v;
     }
     if (!name[1] && strchr("ABC", name[0])) {
-        snprintf(e, sizeof e, "%s%s", name, v);
+        vword(e, sizeof e, sk, name, v);
         snprintf(d, sizeof d, "%s axis position %s", name, v);
         cell_set(cell, e, NULL, d, 0);
         return 1;
@@ -818,14 +832,18 @@ static int kl_word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *ce
         return 1;
     }
     if (!strcmp(name, "DR")) {
-        snprintf(e, sizeof e, "DELTAR%s", v);
+        vword(e, sizeof e, sk, "DELTAR", v);
         snprintf(d, sizeof d, "Tool radius oversize %s", v);
         cell_set(cell, e, NULL, d, 0);
         return 1;
     }
     const gc_json *k = gc_json_get(KW, name);
     if (k) {
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_at(k, 0)), v);
+        if (v[0]) vword(e, sizeof e, sk, js_str(gc_json_at(k, 0)), v);
+        else { /* a word on its own (FMAX), in lower case for full words */
+            vword(e, sizeof e, sk, js_str(gc_json_at(k, 0)), "");
+            if (strcmp(sk, "short")) e[strlen(e) - 1] = '\0';
+        }
         snprintf(d, sizeof d, "%s%s%s", js_str(gc_json_at(k, 1)), v[0] ? " " : "", v);
         cell_set(cell, e, NULL, d, 0);
         return 1;
@@ -853,7 +871,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         if (a) {
             gc_num f;
             gc_fmt_num(c, 'X', t + 2, st->inch, &f);
-            snprintf(e, sizeof e, "%s%s", js_str(style_get(a, style_key(c))), f.v);
+            vword(e, sizeof e, style_key(c), js_str(style_get(a, style_key(c))), f.v);
             snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(a, "desc")), f.v);
             cell_set(cell, e, NULL, d, 0);
             return;
@@ -924,7 +942,8 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
             cell_set(cell, "?/", NULL, "Block delete isn't in the dictionary.", GC_CELL_UNKNOWN);
             return;
         }
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(en, sk)), t + 1);
+        if (t[1]) vword(e, sizeof e, sk, js_str(style_get(en, sk)), t + 1);
+        else snprintf(e, sizeof e, "%s", js_str(style_get(en, sk)));
         if (t[1]) snprintf(d, sizeof d, "%s (switch %s)", js_str(gc_json_get(en, "desc")), t + 1);
         else snprintf(d, sizeof d, "%s", js_str(gc_json_get(en, "desc")));
         cell_set(cell, e, NULL, d, 0);
@@ -987,11 +1006,11 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     /* A subprogram call whose program word isn't P (Mitsubishi M2/M0: G22 L2200 P5, P the repeat count) */
     if (st->sub_word && st->sub_word != 'P' && (L == st->sub_word || L == 'P')) {
         if (L == 'P') {
-            snprintf(e, sizeof e, "%s%s", strcmp(sk, "short") ? "REPEAT" : "x", v);
+            vword(e, sizeof e, sk, strcmp(sk, "short") ? "rept" : "x", v);
             snprintf(d, sizeof d, "Repeat %s times", v);
         } else {
             const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "P"), "sub");
-            if (strcmp(sk, "short")) snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+            if (strcmp(sk, "short")) vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
             else snprintf(e, sizeof e, "%c%s", L, v);
             snprintf(d, sizeof d, "Program number %s", v);
         }
@@ -1004,7 +1023,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         char Ls1[2] = { L, '\0' };
         const gc_json *cw = gc_json_get(gc_json_get(cd, "words"), Ls1);
         if (cw) {
-            snprintf(e, sizeof e, "%s%s", js_str(gc_json_at(cw, 0)), gc_json_has_str(gc_json_get(cd, "labels"), Ls1) ? raw : v);
+            vword(e, sizeof e, sk, js_str(gc_json_at(cw, 0)), gc_json_has_str(gc_json_get(cd, "labels"), Ls1) ? raw : v);
             snprintf(d, sizeof d, "%s (%s)", js_str(gc_json_at(cw, 1)), st->code_w);
             cell_set(cell, e, NULL, d, f.implied ? GC_CELL_IMPLIED : 0);
             return;
@@ -1039,13 +1058,13 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         if (kind && !strcmp(kind, "feed")) unit = feed_unit(st->per_rev, st->inch);
         else if (kind && !strcmp(kind, "speed")) unit = speed_unit(st->css, st->inch);
         int imp = f.implied && kind && !strcmp(kind, "distance");
-        snprintf(e, sizeof e, "%s%s", js_str(gc_json_get(a, "name")), v);
+        vword(e, sizeof e, sk, js_str(gc_json_get(a, "name")), v);
         char var[16];
         int n = arg_var(L);
         if (n) snprintf(var, sizeof var, "%d", n);
         else strcpy(var, "undefined");
         snprintf(d, sizeof d, "%s: %s%s%s (#%s in O%s)", js_str(gc_json_get(a, "desc")), v, *unit ? " " : "", unit, var, prog);
-        cell_set(cell, e, unit, d, imp ? GC_CELL_IMPLIED : 0);
+        cell_set(cell, e, strcmp(sk, "short") ? NULL : unit, d, imp ? GC_CELL_IMPLIED : 0);
         return;
     }
     /* Inside a canned cycle, a word can mean something special (Haas G76 A is the tool angle). */
@@ -1053,7 +1072,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         const gc_json *cw = gc_cycle_word(c, st->cycle_code, L);
         const char *en = gc_json_str(gc_json_at(cw, 2));
         if (en && *en) {
-            snprintf(e, sizeof e, "%s%s", en, v);
+            vword(e, sizeof e, sk, en, v);
             snprintf(d, sizeof d, "%s (%s)", js_str(gc_json_at(cw, 1)), st->cycle_code);
             cell_set(cell, e, NULL, d, f.implied ? GC_CELL_IMPLIED : 0);
             return;
@@ -1066,7 +1085,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
             char kl[24];
             snprintf(kl, sizeof kl, "%s.L", st->corner);
             const gc_json *x = gc_entry(c, kl);
-            snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+            vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
             snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(x, "desc")), v);
             cell_set(cell, e, NULL, d, f.implied ? GC_CELL_IMPLIED : 0);
             return;
@@ -1075,7 +1094,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         const char *ar = gc_json_get_str(c->dialect, "arcRadius");
         if (ar && ar[0] == L && !ar[1] && (!strcmp(st->motion, "G02") || !strcmp(st->motion, "G03")) && !st->cycle_code[0]) {
             const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "R"), "arc");
-            snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+            vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
             cell_set(cell, e, NULL, "Arc radius", f.implied ? GC_CELL_IMPLIED : 0);
             return;
         }
@@ -1090,14 +1109,14 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
         int zeros = *raw != '\0';
         for (const char *q = raw; *q; q++)
             if (*q != '0') zeros = 0;
-        snprintf(e, sizeof e, "%s%s", strcmp(sk, "short") ? "REPEAT" : "x", raw);
+        vword(e, sizeof e, sk, strcmp(sk, "short") ? "rept" : "x", raw);
         if (zeros) snprintf(d, sizeof d, "Make the move without running the active cycle");
         else snprintf(d, sizeof d, "Run this line %s times", raw);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
     if (L == 'N' && ref) {
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(a, sk)), raw);
+        snprintf(e, sizeof e, "N%s", raw);
         snprintf(d, sizeof d, "The line labeled N%s", raw);
         cell_set(cell, e, NULL, d, 0);
         return;
@@ -1105,14 +1124,14 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     /* G04 K0.5 (Fagor 8060), in seconds */
     if (L == 'K' && st->dwell && gc_json_has_str(gc_json_get(c->dialect, "dwellWords"), "K") &&
         gc_json_truthy(gc_json_get(c->dialect, "dwellHundredths"))) { /* Fagor 8055: K50 is half a second */
-        snprintf(e, sizeof e, "%s%s", strcmp(sk, "short") ? "DWELL" : "DWL", v);
+        vword(e, sizeof e, sk, strcmp(sk, "short") ? "dwell" : "DWL", v);
         snprintf(d, sizeof d, "Dwell for %s hundredths of a second", v);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
     if (L == 'K' && st->dwell && gc_json_has_str(gc_json_get(c->dialect, "dwellWords"), "K")) {
         const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "P"), "dwell");
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+        vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
         snprintf(d, sizeof d, "Dwell for %s seconds", v);
         cell_set(cell, e, NULL, d, 0);
         return;
@@ -1120,7 +1139,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     /* G04 F2. on controls that give the dwell time with F (Okuma) */
     if (L == 'F' && st->dwell && gc_json_has_str(gc_json_get(c->dialect, "dwellWords"), "F")) {
         const gc_json *x = gc_json_get(gc_json_get(gc_json_get(c->data->words, "address"), "P"), "dwell");
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+        vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
         snprintf(d, sizeof d, "Dwell for %s seconds", v);
         cell_set(cell, e, NULL, d, 0);
         return;
@@ -1138,22 +1157,22 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     if (L == 'F') {
         const char *u = feed_unit(st->per_rev, st->inch);
-        snprintf(e, sizeof e, "F%s", v);
+        vword(e, sizeof e, sk, strcmp(sk, "short") ? "feed" : "F", v);
         snprintf(d, sizeof d, "Feed rate %s %s", v, unit_words(u));
-        cell_set(cell, e, u, d, 0);
+        cell_set(cell, e, strcmp(sk, "short") ? NULL : u, d, 0);
         return;
     }
     if (L == 'S') {
         const char *u = speed_unit(st->css, st->inch);
-        snprintf(e, sizeof e, "S%s", v);
+        vword(e, sizeof e, sk, strcmp(sk, "short") ? "speed" : "S", v);
         if (st->css) snprintf(d, sizeof d, "Surface speed %s %s", v, unit_words(u));
         else snprintf(d, sizeof d, "Spindle speed %s RPM", v);
-        cell_set(cell, e, u, d, 0);
+        cell_set(cell, e, strcmp(sk, "short") ? NULL : u, d, 0);
         return;
     }
     if (L == 'X' || L == 'Y' || L == 'Z') {
         const gc_json *x = gc_json_get(a, st->inc ? "inc" : "abs");
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+        vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
         if (*d2) snprintf(d, sizeof d, "%s", d2);
         else if (st->inc) snprintf(d, sizeof d, "Move %s in %c from where the tool is", v, L);
         else snprintf(d, sizeof d, "%c position %s", L, v);
@@ -1168,7 +1187,7 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
             return;
         }
         const gc_json *x = gc_json_get(a, "lathe");
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+        vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
         if (*d2) snprintf(d, sizeof d, "%s", d2);
         else snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(x, "desc")), v);
         cell_set(cell, e, NULL, d, imp);
@@ -1176,54 +1195,60 @@ static void word(const gc_ctx *c, const char *t, const tstate *st, gc_cell *cell
     }
     if (L == 'R') {
         const gc_json *x = gc_json_get(a, st->cycle ? "cycle" : "arc");
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+        vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
         snprintf(d, sizeof d, "%s", *d2 ? d2 : st->cycle ? "Retract plane for the drilling cycle" : "Arc radius");
         cell_set(cell, e, NULL, d, imp);
         return;
     }
     const gc_json *cy = st->cycle_code[0] ? gc_json_get(c->cycles, st->cycle_code) : NULL;
     if (cy && gc_json_has_str(gc_json_get(cy, "labels"), Ls)) {
-        snprintf(e, sizeof e, "%s%s", L == 'P' ? "FROM" : "TO", raw);
+        vword(e, sizeof e, sk, L == 'P' ? "FROM" : "TO", raw);
         snprintf(d, sizeof d, "%s line of the contour, N%s", L == 'P' ? "First" : "Last", raw);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
     if (cy && c->lathe && L == 'D') {
-        snprintf(e, sizeof e, "DEPTH%s", v);
+        vword(e, sizeof e, sk, "DEPTH", v);
         snprintf(d, sizeof d, "Depth of each pass, %s", v);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
     if (cy && c->lathe && L == 'K' && gc_json_truthy(gc_json_get(cy, "leadF"))) {
-        snprintf(e, sizeof e, "THDHT%s", v);
+        vword(e, sizeof e, sk, "THDHT", v);
         snprintf(d, sizeof d, "Thread height, %s", v);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
     if (L == 'H' && (st->chg & CH_WCS) && gc_starts_with(st->wcs, "G15")) {
-        snprintf(e, sizeof e, "WOFS%s", raw);
+        vword(e, sizeof e, sk, strcmp(sk, "short") ? "woffset" : "WOFS", raw);
         snprintf(d, sizeof d, "Work offset number %s", raw);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
     if (L == 'P' && st->local) {
-        snprintf(e, sizeof e, "LBL%s", v);
+        vword(e, sizeof e, sk, strcmp(sk, "short") ? "label" : "LBL", v);
         snprintf(d, sizeof d, "Jump to the line labeled N%s and run it until M99", v);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
     if (L == 'P') {
         const gc_json *x = gc_json_get(a, st->sub ? "sub" : "dwell");
-        snprintf(e, sizeof e, "%s%s", js_str(style_get(x, sk)), v);
+        vword(e, sizeof e, sk, js_str(style_get(x, sk)), v);
         if (st->sub) snprintf(d, sizeof d, "Program number %s", v);
         else snprintf(d, sizeof d, "Dwell for %s seconds", v);
         cell_set(cell, e, NULL, d, 0);
         return;
     }
+    if (L == 'N') { /* a sequence number reads as written: N10 */
+        snprintf(e, sizeof e, "N%s", v);
+        snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(a, "desc")), v);
+        cell_set(cell, e, NULL, d, imp);
+        return;
+    }
     /* A letter can read differently on one machine type (D is the kerf on a plasma table). */
     const gc_json *ax = gc_json_get(a, c->type);
     if (!gc_json_truthy(gc_json_get(ax, "words"))) ax = a;
-    snprintf(e, sizeof e, "%s%s", js_str(style_get(ax, sk)), v);
+    vword(e, sizeof e, sk, js_str(style_get(ax, sk)), v);
     if (*d2) snprintf(d, sizeof d, "%s", d2);
     else snprintf(d, sizeof d, "%s %s", js_str(gc_json_get(ax, "desc")), v);
     cell_set(cell, e, NULL, d, imp);

@@ -400,17 +400,17 @@
      },
      {
       "g": "X+0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Y+0",
-      "e": "Y0",
+      "e": "movy:0",
       "d": "Y position 0"
      },
      {
       "g": "Z-20",
-      "e": "Z-20",
+      "e": "movz:-20",
       "d": "Z position -20"
      }
     ],
@@ -427,17 +427,17 @@
      },
      {
       "g": "X+100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Y+80",
-      "e": "Y80",
+      "e": "movy:80",
       "d": "Y position 80"
      },
      {
       "g": "Z+0",
-      "e": "Z0",
+      "e": "movz:0",
       "d": "Z position 0"
      }
     ],
@@ -467,24 +467,22 @@
      },
      {
       "g": "S3500",
-      "e": "S3500",
-      "u": "rpm",
+      "e": "speed:3500",
       "d": "Spindle speed 3500 RPM"
      },
      {
       "g": "F400",
-      "e": "F400.0",
-      "u": "mmpm",
+      "e": "feed:400.0",
       "d": "Feed rate 400.0 mm per minute"
      },
      {
       "g": "DL+0.1",
-      "e": "DELTAL0.1",
+      "e": "deltal:0.1",
       "d": "Tool length oversize 0.1"
      },
      {
       "g": "DR-0.05",
-      "e": "DELTAR-0.05",
+      "e": "deltar:-0.05",
       "d": "Tool radius oversize -0.05"
      }
     ],
@@ -501,7 +499,7 @@
      },
      {
       "g": "Z+50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      },
      {
@@ -511,7 +509,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      },
      {
@@ -533,12 +531,12 @@
      },
      {
       "g": "X-10",
-      "e": "X-10",
+      "e": "movx:-10",
       "d": "X position -10"
      },
      {
       "g": "Y-10",
-      "e": "Y-10",
+      "e": "movy:-10",
       "d": "Y position -10"
      },
      {
@@ -548,7 +546,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      }
     ],
@@ -565,7 +563,7 @@
      },
      {
       "g": "Z-5",
-      "e": "Z-5",
+      "e": "movz:-5",
       "d": "Z position -5"
      },
      {
@@ -575,8 +573,7 @@
      },
      {
       "g": "F200",
-      "e": "F200.0",
-      "u": "mmpm",
+      "e": "feed:200.0",
       "d": "Feed rate 200.0 mm per minute"
      },
      {
@@ -598,28 +595,27 @@
      },
      {
       "g": "X+10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y+10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      },
      {
       "g": "R5",
-      "e": "RAD5",
+      "e": "rad:5",
       "d": "Radius 5"
      },
      {
       "g": "RL",
-      "e": "COMPL",
+      "e": "compl",
       "d": "Tool radius compensation, tool on the left"
      },
      {
       "g": "F300",
-      "e": "F300.0",
-      "u": "mmpm",
+      "e": "feed:300.0",
       "d": "Feed rate 300.0 mm per minute"
      }
     ],
@@ -636,7 +632,7 @@
      },
      {
       "g": "Y+60",
-      "e": "Y60",
+      "e": "movy:60",
       "d": "Y position 60"
      }
     ],
@@ -653,7 +649,7 @@
      },
      {
       "g": "R8",
-      "e": "RAD8",
+      "e": "rad:8",
       "d": "Radius 8"
      }
     ],
@@ -670,7 +666,7 @@
      },
      {
       "g": "X+50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      }
     ],
@@ -687,12 +683,12 @@
      },
      {
       "g": "X+50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Y+40",
-      "e": "Y40",
+      "e": "movy:40",
       "d": "Y position 40"
      }
     ],
@@ -709,12 +705,12 @@
      },
      {
       "g": "X+70",
-      "e": "X70",
+      "e": "movx:70",
       "d": "X position 70"
      },
      {
       "g": "Y+40",
-      "e": "Y40",
+      "e": "movy:40",
       "d": "Y position 40"
      },
      {
@@ -736,17 +732,17 @@
      },
      {
       "g": "X+90",
-      "e": "X90",
+      "e": "movx:90",
       "d": "X position 90"
      },
      {
       "g": "Y+20",
-      "e": "Y20",
+      "e": "movy:20",
       "d": "Y position 20"
      },
      {
       "g": "R+20",
-      "e": "RAD20",
+      "e": "rad:20",
       "d": "Radius 20"
      },
      {
@@ -768,12 +764,12 @@
      },
      {
       "g": "X+80",
-      "e": "X80",
+      "e": "movx:80",
       "d": "X position 80"
      },
      {
       "g": "Y+10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
@@ -790,7 +786,7 @@
      },
      {
       "g": "X+30",
-      "e": "X30",
+      "e": "movx:30",
       "d": "X position 30"
      }
     ],
@@ -819,12 +815,12 @@
      },
      {
       "g": "X+10",
-      "e": "X10",
+      "e": "movx:10",
       "d": "X position 10"
      },
      {
       "g": "Y+10",
-      "e": "Y10",
+      "e": "movy:10",
       "d": "Y position 10"
      }
     ],
@@ -841,23 +837,22 @@
      },
      {
       "g": "X-10",
-      "e": "X-10",
+      "e": "movx:-10",
       "d": "X position -10"
      },
      {
       "g": "Y-10",
-      "e": "Y-10",
+      "e": "movy:-10",
       "d": "Y position -10"
      },
      {
       "g": "R5",
-      "e": "RAD5",
+      "e": "rad:5",
       "d": "Radius 5"
      },
      {
       "g": "F1000",
-      "e": "F1000.0",
-      "u": "mmpm",
+      "e": "feed:1000.0",
       "d": "Feed rate 1000.0 mm per minute"
      }
     ],
@@ -874,7 +869,7 @@
      },
      {
       "g": "Z+50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      },
      {
@@ -884,7 +879,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      }
     ],
@@ -914,14 +909,12 @@
      },
      {
       "g": "S2000",
-      "e": "S2000",
-      "u": "rpm",
+      "e": "speed:2000",
       "d": "Spindle speed 2000 RPM"
      },
      {
       "g": "F150",
-      "e": "F150.0",
-      "u": "mmpm",
+      "e": "feed:150.0",
       "d": "Feed rate 150.0 mm per minute"
      }
     ],
@@ -945,7 +938,7 @@
     [
      {
       "g": "Q200=+2",
-      "e": "CLEARANCE2",
+      "e": "clearance:2",
       "d": "Set-up clearance above the surface (incremental) (Q200, cycle 200)"
      },
      {
@@ -958,7 +951,7 @@
     [
      {
       "g": "Q201=-15",
-      "e": "DEPTH-15",
+      "e": "depth:-15",
       "d": "Depth from the surface (incremental; the sign gives the direction) (Q201, cycle 200)"
      },
      {
@@ -971,7 +964,7 @@
     [
      {
       "g": "Q206=+150",
-      "e": "PLUNGEF150",
+      "e": "plungef:150",
       "d": "Feed for plunging (Q206, cycle 200)"
      },
      {
@@ -984,7 +977,7 @@
     [
      {
       "g": "Q202=+5",
-      "e": "PECK5",
+      "e": "peck:5",
       "d": "Depth of each plunge (Q202, cycle 200)"
      },
      {
@@ -997,7 +990,7 @@
     [
      {
       "g": "Q210=+0",
-      "e": "DWELLTOP0",
+      "e": "dwelltop:0",
       "d": "Dwell at the top, in seconds (Q210, cycle 200)"
      },
      {
@@ -1010,7 +1003,7 @@
     [
      {
       "g": "Q203=+0",
-      "e": "SURFACE0",
+      "e": "surface:0",
       "d": "Workpiece surface coordinate (absolute) (Q203, cycle 200)"
      },
      {
@@ -1023,7 +1016,7 @@
     [
      {
       "g": "Q204=+20",
-      "e": "CLEAR220",
+      "e": "clear2:20",
       "d": "2nd set-up clearance, used when it's larger (Q204, cycle 200)"
      },
      {
@@ -1036,7 +1029,7 @@
     [
      {
       "g": "Q211=+0",
-      "e": "DWELL0",
+      "e": "dwell:0",
       "d": "Dwell at the bottom, in seconds (Q211, cycle 200)"
      },
      {
@@ -1059,12 +1052,12 @@
      },
      {
       "g": "X+20",
-      "e": "X20",
+      "e": "movx:20",
       "d": "X position 20"
      },
      {
       "g": "Y+20",
-      "e": "Y20",
+      "e": "movy:20",
       "d": "Y position 20"
      },
      {
@@ -1074,7 +1067,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      },
      {
@@ -1108,12 +1101,12 @@
      },
      {
       "g": "X+40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Y+20",
-      "e": "Y20",
+      "e": "movy:20",
       "d": "Y position 20"
      },
      {
@@ -1123,7 +1116,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      },
      {
@@ -1181,7 +1174,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      }
     ],
@@ -1211,14 +1204,12 @@
      },
      {
       "g": "S3500",
-      "e": "S3500",
-      "u": "rpm",
+      "e": "speed:3500",
       "d": "Spindle speed 3500 RPM"
      },
      {
       "g": "F400",
-      "e": "F400.0",
-      "u": "mmpm",
+      "e": "feed:400.0",
       "d": "Feed rate 400.0 mm per minute"
      }
     ],
@@ -1242,7 +1233,7 @@
     [
      {
       "g": "Q215=+0",
-      "e": "MODE0",
+      "e": "mode:0",
       "d": "0 rough and finish, 1 rough only, 2 finish only (Q215, cycle 251)"
      },
      {
@@ -1255,7 +1246,7 @@
     [
      {
       "g": "Q218=+30",
-      "e": "LENGTH130",
+      "e": "length1:30",
       "d": "Length of the first side (Q218, cycle 251)"
      },
      {
@@ -1268,7 +1259,7 @@
     [
      {
       "g": "Q219=+20",
-      "e": "LENGTH220",
+      "e": "length2:20",
       "d": "Length of the second side (Q219, cycle 251)"
      },
      {
@@ -1281,7 +1272,7 @@
     [
      {
       "g": "Q220=+3",
-      "e": "CORNERRAD3",
+      "e": "cornerrad:3",
       "d": "Corner radius (Q220, cycle 251)"
      },
      {
@@ -1294,7 +1285,7 @@
     [
      {
       "g": "Q201=-8",
-      "e": "DEPTH-8",
+      "e": "depth:-8",
       "d": "Depth from the surface (incremental; the sign gives the direction) (Q201, cycle 251)"
      },
      {
@@ -1307,7 +1298,7 @@
     [
      {
       "g": "Q203=+0",
-      "e": "SURFACE0",
+      "e": "surface:0",
       "d": "Workpiece surface coordinate (absolute) (Q203, cycle 251)"
      },
      {
@@ -1320,7 +1311,7 @@
     [
      {
       "g": "Q200=+2",
-      "e": "CLEARANCE2",
+      "e": "clearance:2",
       "d": "Set-up clearance above the surface (incremental) (Q200, cycle 251)"
      },
      {
@@ -1333,7 +1324,7 @@
     [
      {
       "g": "Q204=+50",
-      "e": "CLEAR250",
+      "e": "clear2:50",
       "d": "2nd set-up clearance, used when it's larger (Q204, cycle 251)"
      },
      {
@@ -1356,17 +1347,17 @@
      },
      {
       "g": "X+75",
-      "e": "X75",
+      "e": "movx:75",
       "d": "X position 75"
      },
      {
       "g": "Y+60",
-      "e": "Y60",
+      "e": "movy:60",
       "d": "Y position 60"
      },
      {
       "g": "Z+0",
-      "e": "Z0",
+      "e": "movz:0",
       "d": "Z position 0"
      }
     ],
@@ -1431,7 +1422,7 @@
      },
      {
       "g": "IX+5",
-      "e": "INCX5",
+      "e": "incx:5",
       "d": "Move this far in X from where the tool is 5"
      },
      {
@@ -1441,8 +1432,7 @@
      },
      {
       "g": "F500",
-      "e": "F500.0",
-      "u": "mmpm",
+      "e": "feed:500.0",
       "d": "Feed rate 500.0 mm per minute"
      }
     ],
@@ -1483,7 +1473,7 @@
      },
      {
       "g": "Z+100",
-      "e": "Z100",
+      "e": "movz:100",
       "d": "Z position 100"
      },
      {
@@ -1493,7 +1483,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      }
     ],
@@ -1522,12 +1512,12 @@
      },
      {
       "g": "X+50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Y+40",
-      "e": "Y40",
+      "e": "movy:40",
       "d": "Y position 40"
      }
     ],
@@ -1544,12 +1534,12 @@
      },
      {
       "g": "PR+15",
-      "e": "POLRAD15",
+      "e": "polrad:15",
       "d": "Polar radius from the pole CC 15"
      },
      {
       "g": "PA+0",
-      "e": "POLANG0",
+      "e": "polang:0",
       "d": "Polar angle around the pole CC 0"
      },
      {
@@ -1559,7 +1549,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      }
     ],
@@ -1576,7 +1566,7 @@
      },
      {
       "g": "IPA+360",
-      "e": "IPOLANG360",
+      "e": "ipolang:360",
       "d": "Change in the polar angle 360"
      },
      {
@@ -1586,8 +1576,7 @@
      },
      {
       "g": "F300",
-      "e": "F300.0",
-      "u": "mmpm",
+      "e": "feed:300.0",
       "d": "Feed rate 300.0 mm per minute"
      }
     ],
@@ -1604,7 +1593,7 @@
      },
      {
       "g": "Z+100",
-      "e": "Z100",
+      "e": "movz:100",
       "d": "Z position 100"
      },
      {
@@ -1614,7 +1603,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      },
      {
@@ -1648,12 +1637,12 @@
      },
      {
       "g": "X+Q2",
-      "e": "X+Q2",
+      "e": "movx:+Q2",
       "d": "X from Q parameter Q2, worked out when the line runs"
      },
      {
       "g": "Y+5",
-      "e": "Y5",
+      "e": "movy:5",
       "d": "Y position 5"
      },
      {
@@ -1663,7 +1652,7 @@
      },
      {
       "g": "FMAX",
-      "e": "RAPID",
+      "e": "rapid",
       "d": "Rapid traverse, this block only"
      }
     ],

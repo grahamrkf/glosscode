@@ -222,20 +222,19 @@
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      }
     ],
     [
      {
       "g": "S1000",
-      "e": "S1000",
-      "u": "rpm",
+      "e": "speed:1000",
       "d": "Spindle speed 1000 RPM"
      },
      {
@@ -252,20 +251,19 @@
      },
      {
       "g": "X60",
-      "e": "X60",
+      "e": "movx:60",
       "d": "X position 60"
      },
      {
       "g": "Z5",
-      "e": "Z5",
+      "e": "movz:5",
       "d": "Z position 5"
      }
     ],
     [
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 mm per rev"
      }
     ],
@@ -282,7 +280,7 @@
      },
      {
       "g": "X55",
-      "e": "X55",
+      "e": "movx:55",
       "d": "X position 55"
      }
     ],
@@ -294,49 +292,49 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass. (G69)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G69)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G69)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. Left out, it equals L. (G69)"
      },
      {
       "g": "P20",
-      "e": "PROFSUB20",
+      "e": "profsub:20",
       "d": "Local subroutine that holds the whole profile; S and E are then ignored. (G69)"
      }
     ],
     [
      {
       "g": "X60",
-      "e": "X60",
+      "e": "movx:60",
       "d": "X position 60"
      },
      {
       "g": "Z10",
-      "e": "Z10",
+      "e": "movz:10",
       "d": "Z position 10"
      }
     ],
@@ -348,37 +346,37 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass. (G68)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G68)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. Left out, it equals L. (G68)"
      },
      {
       "g": "Q300",
-      "e": "PROFPRG300",
+      "e": "profprg:300",
       "d": "Global subroutine that holds the profile, alone or with S and E. (G68)"
      }
     ],
@@ -390,47 +388,47 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass. (G68)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G68)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. Left out, it equals L. (G68)"
      },
      {
       "g": "Q300",
-      "e": "PROFPRG300",
+      "e": "profprg:300",
       "d": "Global subroutine that holds the profile, alone or with S and E. (G68)"
      },
      {
       "g": "S10",
-      "e": "PROFFROM10",
+      "e": "proffrom:10",
       "d": "Label of the first line of the profile. Not used with P. (G68)"
      },
      {
       "g": "E20",
-      "e": "PROFTO20",
+      "e": "profto:20",
       "d": "Label of the last line of the profile. Not used with P. (G68)"
      }
     ],
@@ -442,32 +440,32 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "I5",
-      "e": "STOCK5",
+      "e": "stock:5",
       "d": "Stock to remove. (G66)"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass. (G66)"
      },
      {
       "g": "S10",
-      "e": "PROFFROM10",
+      "e": "proffrom:10",
       "d": "Label of the first line of the profile. Not used with P. (G66)"
      },
      {
       "g": "E20",
-      "e": "PROFTO20",
+      "e": "profto:20",
       "d": "Label of the last line of the profile. Not used with P. (G66)"
      }
     ],
@@ -479,42 +477,42 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass. (G68)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G68)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. Left out, it equals L. (G68)"
      },
      {
       "g": "S500",
-      "e": "PROFFROM500",
+      "e": "proffrom:500",
       "d": "Label of the first line of the profile. Not used with P. (G68)"
      },
      {
       "g": "E600",
-      "e": "PROFTO600",
+      "e": "profto:600",
       "d": "Label of the last line of the profile. Not used with P. (G68)"
      }
     ],
@@ -526,32 +524,32 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass. (G68)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G68)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. Left out, it equals L. (G68)"
      }
     ],
@@ -565,12 +563,12 @@
     [
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
       "g": "D3",
-      "e": "DOFS3",
+      "e": "doffset:3",
       "d": "Tool diameter offset number 3"
      }
     ],
@@ -582,47 +580,47 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z1",
-      "e": "Z1",
+      "e": "movz:1",
       "d": "Z position 1"
      },
      {
       "g": "I5",
-      "e": "DEPTH5",
+      "e": "depth:5",
       "d": "Depth. (G160)"
      },
      {
       "g": "B2",
-      "e": "PECK2",
+      "e": "peck:2",
       "d": "Peck depth. B0 taps. (G160)"
      },
      {
       "g": "Q0",
-      "e": "STARTANG0",
+      "e": "startang:0",
       "d": "Spindle angle of the first hole. (G160)"
      },
      {
       "g": "A90",
-      "e": "ANGSTEP90",
+      "e": "angstep:90",
       "d": "Angle between holes. (G160)"
      },
      {
       "g": "J4",
-      "e": "COUNT4",
+      "e": "count:4",
       "d": "Number of holes, counting the first. (G160)"
      },
      {
       "g": "S1500",
-      "e": "LIVERPM1500",
+      "e": "liverpm:1500",
       "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G160)"
      },
      {
       "g": "N2",
-      "e": "SPINDLE2",
+      "e": "spindle:2",
       "d": "Number of the live tool spindle. (G160)"
      }
     ],
@@ -634,8 +632,7 @@
      },
      {
       "g": "F150",
-      "e": "F150.0",
-      "u": "mmpm",
+      "e": "feed:150.0",
       "d": "Feed rate 150.0 mm per minute"
      }
     ],
@@ -654,62 +651,61 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-10",
-      "e": "Z-10",
+      "e": "movz:-10",
       "d": "Z position -10"
      },
      {
       "g": "I5",
-      "e": "DEPTH5",
+      "e": "depth:5",
       "d": "Depth. (G161)"
      },
      {
       "g": "B2",
-      "e": "PECK2",
+      "e": "peck:2",
       "d": "Peck depth. B0 taps. (G161)"
      },
      {
       "g": "Q0",
-      "e": "STARTANG0",
+      "e": "startang:0",
       "d": "Spindle angle of the first hole. (G161)"
      },
      {
       "g": "A90",
-      "e": "ANGSTEP90",
+      "e": "angstep:90",
       "d": "Angle between holes. (G161)"
      },
      {
       "g": "J4",
-      "e": "COUNT4",
+      "e": "count:4",
       "d": "Number of holes, counting the first. (G161)"
      },
      {
       "g": "N2",
-      "e": "SPINDLE2",
+      "e": "spindle:2",
       "d": "Number of the live tool spindle. (G161)"
      }
     ],
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      }
     ],
     [
      {
       "g": "S1000",
-      "e": "S1000",
-      "u": "rpm",
+      "e": "speed:1000",
       "d": "Spindle speed 1000 RPM"
      },
      {
@@ -726,18 +722,17 @@
      },
      {
       "g": "X100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      },
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 mm per rev"
      }
     ],
@@ -761,24 +756,24 @@
      },
      {
       "g": "X20",
-      "e": "X20",
+      "e": "movx:20",
       "d": "X position 20"
      },
      {
       "g": "Z0",
-      "e": "Z0",
+      "e": "movz:0",
       "d": "Z position 0"
      }
     ],
     [
      {
       "g": "X30",
-      "e": "X30",
+      "e": "movx:30",
       "d": "X position 30"
      },
      {
       "g": "Z-10",
-      "e": "Z-10",
+      "e": "movz:-10",
       "d": "Z position -10"
      }
     ],
@@ -795,7 +790,7 @@
      },
      {
       "g": "Z-30",
-      "e": "Z-30",
+      "e": "movz:-30",
       "d": "Z position -30"
      }
     ]

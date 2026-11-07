@@ -141,7 +141,7 @@
     [
      {
       "g": "O1004",
-      "e": "PROG1004",
+      "e": "prog:1004",
       "d": "Program number 1004"
      },
      {
@@ -204,7 +204,7 @@
      },
      {
       "g": "T8",
-      "e": "TOOL8",
+      "e": "tool:8",
       "d": "Tool number 8"
      },
      {
@@ -237,12 +237,12 @@
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y1.2",
-      "e": "Y1.2",
+      "e": "movy:1.2",
       "d": "Y position 1.2"
      }
     ],
@@ -254,8 +254,7 @@
      },
      {
       "g": "S8000",
-      "e": "S8000",
-      "u": "rpm",
+      "e": "speed:8000",
       "d": "Spindle speed 8000 RPM"
      },
      {
@@ -277,12 +276,12 @@
      },
      {
       "g": "H08",
-      "e": "LOFS08",
+      "e": "toffset:08",
       "d": "Tool length offset number 08"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -304,43 +303,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y1.2",
-      "e": "Y1.2",
+      "e": "movy:1.2",
       "d": "Y position 1.2"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.15",
-      "e": "ARCJ0.15",
+      "e": "arcj:0.15",
       "d": "Arc center offset in Y 0.15"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -369,43 +367,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y0.8",
-      "e": "Y0.8",
+      "e": "movy:0.8",
       "d": "Y position 0.8"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.1",
-      "e": "ARCJ0.1",
+      "e": "arcj:0.1",
       "d": "Arc center offset in Y 0.1"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -434,43 +431,42 @@
      },
      {
       "g": "P1",
-      "e": "SEC1",
+      "e": "dwell:1",
       "d": "Dwell for 1 seconds"
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y0.8",
-      "e": "Y0.8",
+      "e": "movy:0.8",
       "d": "Y position 0.8"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.1",
-      "e": "ARCJ0.1",
+      "e": "arcj:0.1",
       "d": "Arc center offset in Y 0.1"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -499,43 +495,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X2.4",
-      "e": "X2.4",
+      "e": "movx:2.4",
       "d": "X position 2.4"
      },
      {
       "g": "Y0.2",
-      "e": "Y0.2",
+      "e": "movy:0.2",
       "d": "Y position 0.2"
      },
      {
       "g": "I30.",
-      "e": "ARCI30.0",
+      "e": "arci:30.0",
       "d": "Arc center offset in X 30.0"
      },
      {
       "g": "J0.08",
-      "e": "ARCJ0.08",
+      "e": "arcj:0.08",
       "d": "Arc center offset in Y 0.08"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -564,7 +559,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -603,7 +598,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -1243,7 +1238,7 @@
     [
      {
       "g": "O1004",
-      "e": "PROG1004",
+      "e": "prog:1004",
       "d": "Program number 1004"
      },
      {
@@ -1306,7 +1301,7 @@
      },
      {
       "g": "T8",
-      "e": "TOOL8",
+      "e": "tool:8",
       "d": "Tool number 8"
      },
      {
@@ -1339,12 +1334,12 @@
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y1.2",
-      "e": "Y1.2",
+      "e": "movy:1.2",
       "d": "Y position 1.2"
      }
     ],
@@ -1356,8 +1351,7 @@
      },
      {
       "g": "S8000",
-      "e": "S8000",
-      "u": "rpm",
+      "e": "speed:8000",
       "d": "Spindle speed 8000 RPM"
      },
      {
@@ -1379,12 +1373,12 @@
      },
      {
       "g": "H08",
-      "e": "LOFS08",
+      "e": "toffset:08",
       "d": "Tool length offset number 08"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -1407,43 +1401,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y1.2",
-      "e": "Y1.2",
+      "e": "movy:1.2",
       "d": "Y position 1.2"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.15",
-      "e": "ARCJ0.15",
+      "e": "arcj:0.15",
       "d": "Arc center offset in Y 0.15"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -1473,43 +1466,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y0.8",
-      "e": "Y0.8",
+      "e": "movy:0.8",
       "d": "Y position 0.8"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.1",
-      "e": "ARCJ0.1",
+      "e": "arcj:0.1",
       "d": "Arc center offset in Y 0.1"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -1539,43 +1531,42 @@
      },
      {
       "g": "P1",
-      "e": "SEC1",
+      "e": "dwell:1",
       "d": "Dwell for 1 seconds"
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y0.8",
-      "e": "Y0.8",
+      "e": "movy:0.8",
       "d": "Y position 0.8"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.1",
-      "e": "ARCJ0.1",
+      "e": "arcj:0.1",
       "d": "Arc center offset in Y 0.1"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -1605,43 +1596,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X2.4",
-      "e": "X2.4",
+      "e": "movx:2.4",
       "d": "X position 2.4"
      },
      {
       "g": "Y0.2",
-      "e": "Y0.2",
+      "e": "movy:0.2",
       "d": "Y position 0.2"
      },
      {
       "g": "I30.",
-      "e": "ARCI30.0",
+      "e": "arci:30.0",
       "d": "Arc center offset in X 30.0"
      },
      {
       "g": "J0.08",
-      "e": "ARCJ0.08",
+      "e": "arcj:0.08",
       "d": "Arc center offset in Y 0.08"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -1670,7 +1660,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -1709,7 +1699,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -1822,7 +1812,7 @@
     [
      {
       "g": "O1004",
-      "e": "PROG1004",
+      "e": "prog:1004",
       "d": "Program number 1004"
      },
      {
@@ -1885,7 +1875,7 @@
      },
      {
       "g": "T8",
-      "e": "TOOL8",
+      "e": "tool:8",
       "d": "Tool number 8"
      },
      {
@@ -1918,12 +1908,12 @@
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y1.2",
-      "e": "Y1.2",
+      "e": "movy:1.2",
       "d": "Y position 1.2"
      }
     ],
@@ -1935,8 +1925,7 @@
      },
      {
       "g": "S8000",
-      "e": "S8000",
-      "u": "rpm",
+      "e": "speed:8000",
       "d": "Spindle speed 8000 RPM"
      },
      {
@@ -1958,12 +1947,12 @@
      },
      {
       "g": "H08",
-      "e": "LOFS08",
+      "e": "toffset:08",
       "d": "Tool length offset number 08"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -1986,43 +1975,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y1.2",
-      "e": "Y1.2",
+      "e": "movy:1.2",
       "d": "Y position 1.2"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.15",
-      "e": "ARCJ0.15",
+      "e": "arcj:0.15",
       "d": "Arc center offset in Y 0.15"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2052,43 +2040,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y0.8",
-      "e": "Y0.8",
+      "e": "movy:0.8",
       "d": "Y position 0.8"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.1",
-      "e": "ARCJ0.1",
+      "e": "arcj:0.1",
       "d": "Arc center offset in Y 0.1"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2118,43 +2105,42 @@
      },
      {
       "g": "P1",
-      "e": "SEC1",
+      "e": "dwell:1",
       "d": "Dwell for 1 seconds"
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y0.8",
-      "e": "Y0.8",
+      "e": "movy:0.8",
       "d": "Y position 0.8"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.1",
-      "e": "ARCJ0.1",
+      "e": "arcj:0.1",
       "d": "Arc center offset in Y 0.1"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2184,43 +2170,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X2.4",
-      "e": "X2.4",
+      "e": "movx:2.4",
       "d": "X position 2.4"
      },
      {
       "g": "Y0.2",
-      "e": "Y0.2",
+      "e": "movy:0.2",
       "d": "Y position 0.2"
      },
      {
       "g": "I30.",
-      "e": "ARCI30.0",
+      "e": "arci:30.0",
       "d": "Arc center offset in X 30.0"
      },
      {
       "g": "J0.08",
-      "e": "ARCJ0.08",
+      "e": "arcj:0.08",
       "d": "Arc center offset in Y 0.08"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2249,7 +2234,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2288,7 +2273,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],
@@ -2401,7 +2386,7 @@
     [
      {
       "g": "O1004",
-      "e": "PROG1004",
+      "e": "prog:1004",
       "d": "Program number 1004"
      },
      {
@@ -2464,7 +2449,7 @@
      },
      {
       "g": "T8",
-      "e": "TOOL8",
+      "e": "tool:8",
       "d": "Tool number 8"
      },
      {
@@ -2497,12 +2482,12 @@
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y1.2",
-      "e": "Y1.2",
+      "e": "movy:1.2",
       "d": "Y position 1.2"
      }
     ],
@@ -2514,8 +2499,7 @@
      },
      {
       "g": "S8000",
-      "e": "S8000",
-      "u": "rpm",
+      "e": "speed:8000",
       "d": "Spindle speed 8000 RPM"
      },
      {
@@ -2537,12 +2521,12 @@
      },
      {
       "g": "H08",
-      "e": "LOFS08",
+      "e": "toffset:08",
       "d": "Tool length offset number 08"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2565,43 +2549,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y1.2",
-      "e": "Y1.2",
+      "e": "movy:1.2",
       "d": "Y position 1.2"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.15",
-      "e": "ARCJ0.15",
+      "e": "arcj:0.15",
       "d": "Arc center offset in Y 0.15"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2631,43 +2614,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X0.2",
-      "e": "X0.2",
+      "e": "movx:0.2",
       "d": "X position 0.2"
      },
      {
       "g": "Y0.8",
-      "e": "Y0.8",
+      "e": "movy:0.8",
       "d": "Y position 0.8"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.1",
-      "e": "ARCJ0.1",
+      "e": "arcj:0.1",
       "d": "Arc center offset in Y 0.1"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2697,43 +2679,42 @@
      },
      {
       "g": "P1",
-      "e": "SEC1",
+      "e": "dwell:1",
       "d": "Dwell for 1 seconds"
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y0.8",
-      "e": "Y0.8",
+      "e": "movy:0.8",
       "d": "Y position 0.8"
      },
      {
       "g": "I0.",
-      "e": "ARCI0.0",
+      "e": "arci:0.0",
       "d": "Arc center offset in X 0.0"
      },
      {
       "g": "J0.1",
-      "e": "ARCJ0.1",
+      "e": "arcj:0.1",
       "d": "Arc center offset in Y 0.1"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2763,43 +2744,42 @@
      },
      {
       "g": "P0",
-      "e": "SEC0",
+      "e": "dwell:0",
       "d": "Dwell for 0 seconds"
      },
      {
       "g": "X2.4",
-      "e": "X2.4",
+      "e": "movx:2.4",
       "d": "X position 2.4"
      },
      {
       "g": "Y0.2",
-      "e": "Y0.2",
+      "e": "movy:0.2",
       "d": "Y position 0.2"
      },
      {
       "g": "I30.",
-      "e": "ARCI30.0",
+      "e": "arci:30.0",
       "d": "Arc center offset in X 30.0"
      },
      {
       "g": "J0.08",
-      "e": "ARCJ0.08",
+      "e": "arcj:0.08",
       "d": "Arc center offset in Y 0.08"
      },
      {
       "g": "R0.05",
-      "e": "RAD0.05",
+      "e": "radius:0.05",
       "d": "Arc radius"
      },
      {
       "g": "Z-0.005",
-      "e": "Z-0.005",
+      "e": "movz:-0.005",
       "d": "Z position -0.005"
      },
      {
       "g": "F15.",
-      "e": "F15.0",
-      "u": "ipm",
+      "e": "feed:15.0",
       "d": "Feed rate 15.0 inches per minute"
      },
      {
@@ -2828,7 +2808,7 @@
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      },
      {
@@ -2867,7 +2847,7 @@
      },
      {
       "g": "Z0.",
-      "e": "INCZ0.0",
+      "e": "incz:0.0",
       "d": "Move 0.0 in Z from where the tool is"
      }
     ],

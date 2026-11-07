@@ -28,6 +28,9 @@
     saveSettings: function (obj) { return call("gcSaveSettings", [obj]); },
     openUrl: function (url) { return call("gcOpenUrl", [String(url)]); },
     setTitle: function (title) { return call("gcSetTitle", [String(title)]); },
+    // The clipboard's text (null when it holds none), and putting text on it (resolves true when it worked).
+    clipboardText: function () { return call("gcClipboard", []); },
+    setClipboardText: function (text) { return call("gcClipboard", [String(text)]); },
     quit: function () { return call("gcQuit", []); }
   };
   // This runs before the <html> element exists in WebView2, so nothing here may touch the page itself.

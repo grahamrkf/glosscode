@@ -1,6 +1,7 @@
 /* Linux (and other POSIX) platform file. */
 #define _XOPEN_SOURCE 700   /* POSIX 2008 plus XSI, which declares realpath */
 #include <dirent.h>
+#include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -231,4 +232,58 @@ void plat_error_box(const char *title, const char *msg)
 void plat_prepare_webview(const plat_dirs *dirs)
 {
     (void)dirs; /* WebKitGTK keeps its data under the XDG folders already. */
+}
+
+/* The clipboard through GTK 3, which the webview already loaded. The functions are looked up when first used, so
+   this file needs no GTK headers. */
+typedef void *(*gtk_clip_get_fn)(void *selection);
+typedef void *(*gdk_atom_fn)(const char *name, int only_if_exists);
+typedef void (*gtk_clip_set_fn)(void *clipboard, const char *text, int len);
+typedef char *(*gtk_clip_wait_fn)(void *clipboard);
+typedef void (*g_free_fn)(void *p);
+static struct {
+    int tried;
+    gtk_clip_get_fn get;
+    gdk_atom_fn atom;
+    gtk_clip_set_fn set;
+    gtk_clip_wait_fn wait;
+    g_free_fn gfree;
+} GTK;
+
+static void *clipboard(void)
+{
+    if (!GTK.tried) {
+        void *self = dlopen(NULL, RTLD_LAZY);
+        GTK.tried = 1;
+        if (self) {
+            *(void **)&GTK.get = dlsym(self, "gtk_clipboard_get");
+            *(void **)&GTK.atom = dlsym(self, "gdk_atom_intern");
+            *(void **)&GTK.set = dlsym(self, "gtk_clipboard_set_text");
+            *(void **)&GTK.wait = dlsym(self, "gtk_clipboard_wait_for_text");
+            *(void **)&GTK.gfree = dlsym(self, "g_free");
+        }
+    }
+    if (!GTK.get || !GTK.atom || !GTK.set || !GTK.wait || !GTK.gfree) return NULL;
+    return GTK.get(GTK.atom("CLIPBOARD", 0));
+}
+
+char *plat_clipboard_get(void *window)
+{
+    (void)window;
+    void *cb = clipboard();
+    char *t = cb ? GTK.wait(cb) : NULL, *out = NULL;
+    if (t) {
+        out = strdup(t);
+        GTK.gfree(t);
+    }
+    return out;
+}
+
+int plat_clipboard_set(void *window, const char *text)
+{
+    (void)window;
+    void *cb = clipboard();
+    if (!cb) return 0;
+    GTK.set(cb, text, -1);
+    return 1;
 }

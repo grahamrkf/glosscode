@@ -252,28 +252,26 @@
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "smm",
+      "e": "speed:3000",
       "d": "Surface speed 3000 surface meters per minute"
      }
     ],
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      }
     ],
     [
      {
       "g": "S180",
-      "e": "S180",
-      "u": "smm",
+      "e": "speed:180",
       "d": "Surface speed 180 surface meters per minute"
      },
      {
@@ -295,20 +293,19 @@
      },
      {
       "g": "X60",
-      "e": "X60",
+      "e": "movx:60",
       "d": "X position 60"
      },
      {
       "g": "Z5",
-      "e": "Z5",
+      "e": "movz:5",
       "d": "Z position 5"
      }
     ],
     [
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 mm per rev"
      }
     ],
@@ -320,47 +317,47 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "Q40",
-      "e": "ENDX40",
+      "e": "endx:40",
       "d": "End point in X. (G81)"
      },
      {
       "g": "R-30",
-      "e": "ENDZ-30",
+      "e": "endz:-30",
       "d": "End point in Z. (G81)"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass. (G81)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance. D0 or left out: the tool goes back along the profile. (G81)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G81)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. Left out, 0. (G81)"
      },
      {
       "g": "H0.1",
-      "e": "FINFEED0.1",
+      "e": "finfeed:0.1",
       "d": "Finish pass feed. None or 0: no finish pass. (G81)"
      }
     ],
@@ -372,52 +369,52 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass. (G68)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance. D0 keeps the tool on the profile between passes; left out, it climbs the profile. (G68)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G68)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. Left out, it equals L. (G68)"
      },
      {
       "g": "F0.2",
-      "e": "LASTFEED0.2",
+      "e": "lastfeed:0.2",
       "d": "Feed for the last roughing pass. (G68)"
      },
      {
       "g": "H0.1",
-      "e": "FINFEED0.1",
+      "e": "finfeed:0.1",
       "d": "Finish pass feed. None or 0: no finish pass. (G68)"
      },
      {
       "g": "S100",
-      "e": "PROFFROM100",
+      "e": "proffrom:100",
       "d": "Label of the first line of the profile. Not used with P. (G68)"
      },
      {
       "g": "E140",
-      "e": "PROFTO140",
+      "e": "profto:140",
       "d": "Label of the last line of the profile. Not used with P. (G68)"
      }
     ],
@@ -429,24 +426,24 @@
      },
      {
       "g": "X100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
     [
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
       "g": "D2",
-      "e": "DOFS2",
+      "e": "doffset:2",
       "d": "Tool diameter offset number 2"
      }
     ],
@@ -458,8 +455,7 @@
      },
      {
       "g": "S800",
-      "e": "S800",
-      "u": "rpm",
+      "e": "speed:800",
       "d": "Spindle speed 800 RPM"
      },
      {
@@ -476,32 +472,32 @@
      },
      {
       "g": "X45",
-      "e": "X45",
+      "e": "movx:45",
       "d": "X position 45"
      },
      {
       "g": "Z-20",
-      "e": "Z-20",
+      "e": "movz:-20",
       "d": "Z position -20"
      },
      {
       "g": "Q36",
-      "e": "ENDX36",
+      "e": "endx:36",
       "d": "End point in X. (G88)"
      },
      {
       "g": "R-26",
-      "e": "ENDZ-26",
+      "e": "endz:-26",
       "d": "End point in Z. (G88)"
      },
      {
       "g": "C3",
-      "e": "PASS3",
+      "e": "pass:3",
       "d": "Step between plunges. (G88)"
      },
      {
       "g": "K1",
-      "e": "DWELL1",
+      "e": "dwell:1",
       "d": "Dwell at the bottom, in hundredths of a second. (G88)"
      }
     ],
@@ -513,42 +509,42 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "Q40",
-      "e": "ENDX40",
+      "e": "endx:40",
       "d": "End point in X. (G86)"
      },
      {
       "g": "R-18",
-      "e": "ENDZ-18",
+      "e": "endz:-18",
       "d": "End point in Z. (G86)"
      },
      {
       "g": "I0.92",
-      "e": "DEPTH0.92",
+      "e": "depth:0.92",
       "d": "Thread depth. (G86)"
      },
      {
       "g": "B0.2",
-      "e": "PASS0.2",
+      "e": "pass:0.2",
       "d": "Pass depth. (G86)"
      },
      {
       "g": "C1.5",
-      "e": "PITCH1.5",
+      "e": "pitch:1.5",
       "d": "Thread pitch. (G86)"
      },
      {
       "g": "A30",
-      "e": "INFANG30",
+      "e": "infang:30",
       "d": "Infeed angle. Left out, 30°. (G86)"
      }
     ],
@@ -560,17 +556,17 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-15",
-      "e": "Z-15",
+      "e": "movz:-15",
       "d": "Z position -15"
      },
      {
       "g": "K1.5",
-      "e": "PITCH1.5",
+      "e": "pitch:1.5",
       "d": "Thread pitch along Z (G33)"
      }
     ],
@@ -582,27 +578,26 @@
      },
      {
       "g": "K1.5",
-      "e": "SEC1.5",
+      "e": "dwell:1.5",
       "d": "Dwell for 1.5 seconds"
      }
     ],
     [
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
       "g": "D3",
-      "e": "DOFS3",
+      "e": "doffset:3",
       "d": "Tool diameter offset number 3"
      }
     ],
     [
      {
       "g": "S1200",
-      "e": "S1200",
-      "u": "rpm",
+      "e": "speed:1200",
       "d": "Spindle speed 1200 RPM"
      },
      {
@@ -619,27 +614,27 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "I25",
-      "e": "DEPTH25",
+      "e": "depth:25",
       "d": "Depth. (G83)"
      },
      {
       "g": "B5",
-      "e": "PECK5",
+      "e": "peck:5",
       "d": "Peck depth. B0 taps. (G83)"
      },
      {
       "g": "D1",
-      "e": "APPR1",
+      "e": "appr:1",
       "d": "Approach distance before the hole. (G83)"
      }
     ],
@@ -658,8 +653,7 @@
      },
      {
       "g": "F120",
-      "e": "F120.0",
-      "u": "mmpm",
+      "e": "feed:120.0",
       "d": "Feed rate 120.0 mm per minute"
      }
     ],
@@ -671,47 +665,47 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z1",
-      "e": "Z1",
+      "e": "movz:1",
       "d": "Z position 1"
      },
      {
       "g": "I5",
-      "e": "DEPTH5",
+      "e": "depth:5",
       "d": "Depth. (G160)"
      },
      {
       "g": "B2",
-      "e": "PECK2",
+      "e": "peck:2",
       "d": "Peck depth. B0 taps. (G160)"
      },
      {
       "g": "Q0",
-      "e": "STARTANG0",
+      "e": "startang:0",
       "d": "Spindle angle of the first hole. (G160)"
      },
      {
       "g": "A90",
-      "e": "ANGSTEP90",
+      "e": "angstep:90",
       "d": "Angle between holes. (G160)"
      },
      {
       "g": "J4",
-      "e": "COUNT4",
+      "e": "count:4",
       "d": "Number of holes, counting the first. (G160)"
      },
      {
       "g": "S1500",
-      "e": "LIVERPM1500",
+      "e": "liverpm:1500",
       "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G160)"
      },
      {
       "g": "N2",
-      "e": "SPINDLE2",
+      "e": "spindle:2",
       "d": "Number of the live tool spindle. (G160)"
      }
     ],
@@ -723,52 +717,52 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-5",
-      "e": "Z-5",
+      "e": "movz:-5",
       "d": "Z position -5"
      },
      {
       "g": "L20",
-      "e": "LENGTH20",
+      "e": "length:20",
       "d": "Slot length. (G162)"
      },
      {
       "g": "I3",
-      "e": "DEPTH3",
+      "e": "depth:3",
       "d": "Slot depth. (G162)"
      },
      {
       "g": "Q0",
-      "e": "STARTANG0",
+      "e": "startang:0",
       "d": "Spindle angle of the first slot. (G162)"
      },
      {
       "g": "A90",
-      "e": "ANGSTEP90",
+      "e": "angstep:90",
       "d": "Angle between slots. (G162)"
      },
      {
       "g": "J4",
-      "e": "COUNT4",
+      "e": "count:4",
       "d": "Number of slots, counting the first. (G162)"
      },
      {
       "g": "S1500",
-      "e": "LIVERPM1500",
+      "e": "liverpm:1500",
       "d": "Live tool speed in rpm; the sign gives the direction. Left out, the live tool doesn't start. (G162)"
      },
      {
       "g": "F100",
-      "e": "SLOTFEED100.0",
+      "e": "slotfeed:100.0",
       "d": "Feed along the slot. Doesn't replace the active feed. (G162)"
      },
      {
       "g": "N2",
-      "e": "SPINDLE2",
+      "e": "spindle:2",
       "d": "Number of the live tool spindle. (G162)"
      }
     ],
@@ -780,16 +774,14 @@
      },
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 mm per rev"
      }
     ],
     [
      {
       "g": "S180",
-      "e": "S180",
-      "u": "rpm",
+      "e": "speed:180",
       "d": "Spindle speed 180 RPM"
      },
      {
@@ -806,8 +798,7 @@
      },
      {
       "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
+      "e": "speed:2500",
       "d": "Spindle speed 2500 RPM"
      }
     ],
@@ -819,12 +810,12 @@
      },
      {
       "g": "X100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -848,24 +839,24 @@
      },
      {
       "g": "X20",
-      "e": "X20",
+      "e": "movx:20",
       "d": "X position 20"
      },
      {
       "g": "Z0",
-      "e": "Z0",
+      "e": "movz:0",
       "d": "Z position 0"
      }
     ],
     [
      {
       "g": "X30",
-      "e": "X30",
+      "e": "movx:30",
       "d": "X position 30"
      },
      {
       "g": "Z-10",
-      "e": "Z-10",
+      "e": "movz:-10",
       "d": "Z position -10"
      }
     ],
@@ -877,22 +868,22 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-15",
-      "e": "Z-15",
+      "e": "movz:-15",
       "d": "Z position -15"
      },
      {
       "g": "I0",
-      "e": "ARCI0",
+      "e": "arci:0",
       "d": "Arc center offset in X 0"
      },
      {
       "g": "K-5",
-      "e": "ARCK-5",
+      "e": "arck:-5",
       "d": "Arc center offset in Z -5"
      }
     ],
@@ -909,7 +900,7 @@
      },
      {
       "g": "Z-30",
-      "e": "Z-30",
+      "e": "movz:-30",
       "d": "Z position -30"
      }
     ]
@@ -1715,28 +1706,26 @@
      },
      {
       "g": "S3000",
-      "e": "S3000",
-      "u": "smm",
+      "e": "speed:3000",
       "d": "Surface speed 3000 surface meters per minute"
      }
     ],
     [
      {
       "g": "T1",
-      "e": "TOOL1",
+      "e": "tool:1",
       "d": "Tool number 1"
      },
      {
       "g": "D1",
-      "e": "DOFS1",
+      "e": "doffset:1",
       "d": "Tool diameter offset number 1"
      }
     ],
     [
      {
       "g": "S180",
-      "e": "S180",
-      "u": "smm",
+      "e": "speed:180",
       "d": "Surface speed 180 surface meters per minute"
      },
      {
@@ -1758,20 +1747,19 @@
      },
      {
       "g": "X60",
-      "e": "X60",
+      "e": "movx:60",
       "d": "X position 60"
      },
      {
       "g": "Z5",
-      "e": "Z5",
+      "e": "movz:5",
       "d": "Z position 5"
      }
     ],
     [
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 mm per rev"
      }
     ],
@@ -1783,47 +1771,47 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "Q40",
-      "e": "ENDX40",
+      "e": "endx:40",
       "d": "End point in X. (G81)"
      },
      {
       "g": "R-30",
-      "e": "ENDZ-30",
+      "e": "endz:-30",
       "d": "End point in Z. (G81)"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass (radius). (G81)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance the tool pulls back. (G81)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G81)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. (G81)"
      },
      {
       "g": "H0.1",
-      "e": "FINFEED0.1",
+      "e": "finfeed:0.1",
       "d": "Finish pass feed. None or 0: no finish pass. (G81)"
      }
     ],
@@ -1835,52 +1823,52 @@
      },
      {
       "g": "X50",
-      "e": "X50",
+      "e": "movx:50",
       "d": "X position 50"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "C2",
-      "e": "PASS2",
+      "e": "pass:2",
       "d": "Depth of each pass (radius). (G68)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance the tool pulls back. (G68)"
      },
      {
       "g": "L0.2",
-      "e": "FINX0.2",
+      "e": "finx:0.2",
       "d": "Finish stock in X (radius). (G68)"
      },
      {
       "g": "M0.1",
-      "e": "FINZ0.1",
+      "e": "finz:0.1",
       "d": "Finish stock in Z. (G68)"
      },
      {
       "g": "F0.2",
-      "e": "LASTFEED0.2",
+      "e": "lastfeed:0.2",
       "d": "Feed for the last roughing pass. None or 0: no last pass. (G68)"
      },
      {
       "g": "H0.1",
-      "e": "FINFEED0.1",
+      "e": "finfeed:0.1",
       "d": "Finish pass feed. None or 0: no finish pass. (G68)"
      },
      {
       "g": "S100",
-      "e": "PROFFROM100",
+      "e": "proffrom:100",
       "d": "Label of the first line of the profile. (G68)"
      },
      {
       "g": "E140",
-      "e": "PROFTO140",
+      "e": "profto:140",
       "d": "Label of the last line of the profile. (G68)"
      }
     ],
@@ -1892,24 +1880,24 @@
      },
      {
       "g": "X100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
     [
      {
       "g": "T2",
-      "e": "TOOL2",
+      "e": "tool:2",
       "d": "Tool number 2"
      },
      {
       "g": "D2",
-      "e": "DOFS2",
+      "e": "doffset:2",
       "d": "Tool diameter offset number 2"
      }
     ],
@@ -1921,8 +1909,7 @@
      },
      {
       "g": "S800",
-      "e": "S800",
-      "u": "rpm",
+      "e": "speed:800",
       "d": "Spindle speed 800 RPM"
      },
      {
@@ -1939,32 +1926,32 @@
      },
      {
       "g": "X45",
-      "e": "X45",
+      "e": "movx:45",
       "d": "X position 45"
      },
      {
       "g": "Z-20",
-      "e": "Z-20",
+      "e": "movz:-20",
       "d": "Z position -20"
      },
      {
       "g": "Q36",
-      "e": "ENDX36",
+      "e": "endx:36",
       "d": "End point in X. (G88)"
      },
      {
       "g": "R-26",
-      "e": "ENDZ-26",
+      "e": "endz:-26",
       "d": "End point in Z. (G88)"
      },
      {
       "g": "C3",
-      "e": "PASS3",
+      "e": "pass:3",
       "d": "Step between plunges. None: the tool's width. (G88)"
      },
      {
       "g": "K1",
-      "e": "DWELL1",
+      "e": "dwell:1",
       "d": "Dwell at the bottom, in hundredths of a second. (G88)"
      }
     ],
@@ -1976,42 +1963,42 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "Q40",
-      "e": "ENDX40",
+      "e": "endx:40",
       "d": "End point in X. (G86)"
      },
      {
       "g": "R-18",
-      "e": "ENDZ-18",
+      "e": "endz:-18",
       "d": "End point in Z. (G86)"
      },
      {
       "g": "I0.92",
-      "e": "DEPTH0.92",
+      "e": "depth:0.92",
       "d": "Thread depth (radius; + outside, - inside). (G86)"
      },
      {
       "g": "B0.2",
-      "e": "PASS0.2",
+      "e": "pass:0.2",
       "d": "Pass depth: + passes get smaller, - equal passes. (G86)"
      },
      {
       "g": "C1.5",
-      "e": "PITCH1.5",
+      "e": "pitch:1.5",
       "d": "Thread pitch: + along the taper, - along the axis. (G86)"
      },
      {
       "g": "A30",
-      "e": "INFANG30",
+      "e": "infang:30",
       "d": "Infeed angle: 0 radial, negative zig-zag. (G86)"
      }
     ],
@@ -2023,17 +2010,17 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-15",
-      "e": "Z-15",
+      "e": "movz:-15",
       "d": "Z position -15"
      },
      {
       "g": "K1.5",
-      "e": "ARCK1.5",
+      "e": "arck:1.5",
       "d": "Arc center offset in Z 1.5"
      }
     ],
@@ -2045,27 +2032,26 @@
      },
      {
       "g": "K1.5",
-      "e": "DWELL1.5",
+      "e": "dwell:1.5",
       "d": "Dwell for 1.5 hundredths of a second"
      }
     ],
     [
      {
       "g": "T3",
-      "e": "TOOL3",
+      "e": "tool:3",
       "d": "Tool number 3"
      },
      {
       "g": "D3",
-      "e": "DOFS3",
+      "e": "doffset:3",
       "d": "Tool diameter offset number 3"
      }
     ],
     [
      {
       "g": "S1200",
-      "e": "S1200",
-      "u": "rpm",
+      "e": "speed:1200",
       "d": "Spindle speed 1200 RPM"
      },
      {
@@ -2082,27 +2068,27 @@
      },
      {
       "g": "X0",
-      "e": "X0",
+      "e": "movx:0",
       "d": "X position 0"
      },
      {
       "g": "Z2",
-      "e": "Z2",
+      "e": "movz:2",
       "d": "Z position 2"
      },
      {
       "g": "I25",
-      "e": "DEPTH25",
+      "e": "depth:25",
       "d": "Depth, positive going in. (G83)"
      },
      {
       "g": "B5",
-      "e": "PECK5",
+      "e": "peck:5",
       "d": "Peck depth. B0 taps. (G83)"
      },
      {
       "g": "D1",
-      "e": "SAFETY1",
+      "e": "safety:1",
       "d": "Safety distance the tool pulls back. (G83)"
      }
     ],
@@ -2121,8 +2107,7 @@
      },
      {
       "g": "F120",
-      "e": "F120.0",
-      "u": "mmpm",
+      "e": "feed:120.0",
       "d": "Feed rate 120.0 mm per minute"
      }
     ],
@@ -2135,17 +2120,17 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z1",
-      "e": "Z1",
+      "e": "movz:1",
       "d": "Z position 1"
      },
      {
       "g": "I5",
-      "e": "ARCI5",
+      "e": "arci:5",
       "d": "Arc center offset in X 5"
      },
      {
@@ -2156,7 +2141,7 @@
      },
      {
       "g": "Q0",
-      "e": "PECK0",
+      "e": "peck:0",
       "d": "Peck depth 0"
      },
      {
@@ -2167,18 +2152,17 @@
      },
      {
       "g": "J4",
-      "e": "ARCJ4",
+      "e": "arcj:4",
       "d": "Arc center offset in Y 4"
      },
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
       "g": "N2",
-      "e": "REPEAT2",
+      "e": "rept:2",
       "d": "Run this line 2 times"
      }
     ],
@@ -2191,12 +2175,12 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-5",
-      "e": "Z-5",
+      "e": "movz:-5",
       "d": "Z position -5"
      },
      {
@@ -2207,12 +2191,12 @@
      },
      {
       "g": "I3",
-      "e": "ARCI3",
+      "e": "arci:3",
       "d": "Arc center offset in X 3"
      },
      {
       "g": "Q0",
-      "e": "PECK0",
+      "e": "peck:0",
       "d": "Peck depth 0"
      },
      {
@@ -2223,24 +2207,22 @@
      },
      {
       "g": "J4",
-      "e": "ARCJ4",
+      "e": "arcj:4",
       "d": "Arc center offset in Y 4"
      },
      {
       "g": "S1500",
-      "e": "S1500",
-      "u": "rpm",
+      "e": "speed:1500",
       "d": "Spindle speed 1500 RPM"
      },
      {
       "g": "F100",
-      "e": "F100.0",
-      "u": "mmpm",
+      "e": "feed:100.0",
       "d": "Feed rate 100.0 mm per minute"
      },
      {
       "g": "N2",
-      "e": "REPEAT2",
+      "e": "rept:2",
       "d": "Run this line 2 times"
      }
     ],
@@ -2252,16 +2234,14 @@
      },
      {
       "g": "F0.25",
-      "e": "F0.25",
-      "u": "mmpr",
+      "e": "feed:0.25",
       "d": "Feed rate 0.25 mm per rev"
      }
     ],
     [
      {
       "g": "S180",
-      "e": "S180",
-      "u": "rpm",
+      "e": "speed:180",
       "d": "Spindle speed 180 RPM"
      },
      {
@@ -2278,8 +2258,7 @@
      },
      {
       "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
+      "e": "speed:2500",
       "d": "Spindle speed 2500 RPM"
      }
     ],
@@ -2291,12 +2270,12 @@
      },
      {
       "g": "X100",
-      "e": "X100",
+      "e": "movx:100",
       "d": "X position 100"
      },
      {
       "g": "Z50",
-      "e": "Z50",
+      "e": "movz:50",
       "d": "Z position 50"
      }
     ],
@@ -2320,24 +2299,24 @@
      },
      {
       "g": "X20",
-      "e": "X20",
+      "e": "movx:20",
       "d": "X position 20"
      },
      {
       "g": "Z0",
-      "e": "Z0",
+      "e": "movz:0",
       "d": "Z position 0"
      }
     ],
     [
      {
       "g": "X30",
-      "e": "X30",
+      "e": "movx:30",
       "d": "X position 30"
      },
      {
       "g": "Z-10",
-      "e": "Z-10",
+      "e": "movz:-10",
       "d": "Z position -10"
      }
     ],
@@ -2349,22 +2328,22 @@
      },
      {
       "g": "X40",
-      "e": "X40",
+      "e": "movx:40",
       "d": "X position 40"
      },
      {
       "g": "Z-15",
-      "e": "Z-15",
+      "e": "movz:-15",
       "d": "Z position -15"
      },
      {
       "g": "I0",
-      "e": "ARCI0",
+      "e": "arci:0",
       "d": "Arc center offset in X 0"
      },
      {
       "g": "K-5",
-      "e": "ARCK-5",
+      "e": "arck:-5",
       "d": "Arc center offset in Z -5"
      }
     ],
@@ -2381,7 +2360,7 @@
      },
      {
       "g": "Z-30",
-      "e": "Z-30",
+      "e": "movz:-30",
       "d": "Z position -30"
      }
     ]

@@ -287,3 +287,43 @@ void plat_prepare_webview(const plat_dirs *dirs)
     free(w);
     free(udf);
 }
+
+char *plat_clipboard_get(void *window)
+{
+    char *out = NULL;
+    if (!OpenClipboard((HWND)window)) return NULL;
+    HANDLE h = GetClipboardData(CF_UNICODETEXT);
+    if (h) {
+        const wchar_t *w = GlobalLock(h);
+        if (w) {
+            out = to_utf8(w);
+            GlobalUnlock(h);
+        }
+    }
+    CloseClipboard();
+    return out;
+}
+
+int plat_clipboard_set(void *window, const char *text)
+{
+    wchar_t *w = to_wide(text);
+    if (!w) return 0;
+    size_t bytes = (wcslen(w) + 1) * sizeof *w;
+    HGLOBAL h = GlobalAlloc(GMEM_MOVEABLE, bytes);
+    int ok = 0;
+    if (h) {
+        void *p = GlobalLock(h);
+        if (p) {
+            memcpy(p, w, bytes);
+            GlobalUnlock(h);
+            if (OpenClipboard((HWND)window)) {
+                EmptyClipboard();
+                ok = SetClipboardData(CF_UNICODETEXT, h) != NULL;
+                CloseClipboard();
+            }
+        }
+        if (!ok) GlobalFree(h);   /* once set, the clipboard owns it */
+    }
+    free(w);
+    return ok;
+}

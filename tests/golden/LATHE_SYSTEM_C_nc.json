@@ -117,7 +117,7 @@
     [
      {
       "g": "O0202",
-      "e": "PROG0202",
+      "e": "prog:0202",
       "d": "Program number 0202"
      },
      {
@@ -162,8 +162,7 @@
      },
      {
       "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
+      "e": "speed:2500",
       "d": "Spindle speed 2500 RPM"
      }
     ],
@@ -175,7 +174,7 @@
      },
      {
       "g": "T0101",
-      "e": "TOOL0101",
+      "e": "tool:0101",
       "d": "Tool number 0101"
      }
     ],
@@ -192,8 +191,7 @@
      },
      {
       "g": "S500",
-      "e": "S500",
-      "u": "sfm",
+      "e": "speed:500",
       "d": "Surface speed 500 surface feet per minute"
      },
      {
@@ -215,12 +213,12 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      },
      {
@@ -242,28 +240,27 @@
      },
      {
       "g": "P70",
-      "e": "FROM70",
+      "e": "from:70",
       "d": "First line of the contour, N70"
      },
      {
       "g": "Q90",
-      "e": "TO90",
+      "e": "to:90",
       "d": "Last line of the contour, N90"
      },
      {
       "g": "U0.02",
-      "e": "INCX0.02",
+      "e": "incx:0.02",
       "d": "Incremental X (lathe) 0.02"
      },
      {
       "g": "W0.005",
-      "e": "INCZ0.005",
+      "e": "incz:0.005",
       "d": "Incremental Z (lathe) 0.005"
      },
      {
       "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
+      "e": "feed:0.01",
       "d": "Feed rate 0.01 inches per rev"
      }
     ],
@@ -280,7 +277,7 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      }
     ],
@@ -297,7 +294,7 @@
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      }
     ],
@@ -309,7 +306,7 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      }
     ],
@@ -326,12 +323,12 @@
      },
      {
       "g": "P70",
-      "e": "FROM70",
+      "e": "from:70",
       "d": "First line of the contour, N70"
      },
      {
       "g": "Q90",
-      "e": "TO90",
+      "e": "to:90",
       "d": "Last line of the contour, N90"
      }
     ],
@@ -348,18 +345,17 @@
      },
      {
       "g": "X1.8",
-      "e": "X1.8",
+      "e": "movx:1.8",
       "d": "X position 1.8"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "F0.008",
-      "e": "F0.008",
-      "u": "ipr",
+      "e": "feed:0.008",
       "d": "Feed rate 0.008 inches per rev"
      }
     ],
@@ -376,18 +372,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Z0.",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      },
      {
       "g": "F0.006",
-      "e": "F0.006",
-      "u": "ipr",
+      "e": "feed:0.006",
       "d": "Feed rate 0.006 inches per rev"
      }
     ],
@@ -404,18 +399,17 @@
      },
      {
       "g": "X0.95",
-      "e": "X0.95",
+      "e": "movx:0.95",
       "d": "X position 0.95"
      },
      {
       "g": "Z-0.75",
-      "e": "Z-0.75",
+      "e": "movz:-0.75",
       "d": "Z position -0.75"
      },
      {
       "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
+      "e": "feed:0.0625",
       "d": "Feed rate 0.0625 inches per rev"
      }
     ],
@@ -437,12 +431,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -847,7 +841,7 @@
     [
      {
       "g": "O0202",
-      "e": "PROG0202",
+      "e": "prog:0202",
       "d": "Program number 0202"
      },
      {
@@ -892,8 +886,7 @@
      },
      {
       "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
+      "e": "speed:2500",
       "d": "Spindle speed 2500 RPM"
      }
     ],
@@ -905,7 +898,7 @@
      },
      {
       "g": "T0101",
-      "e": "TOOL0101",
+      "e": "tool:0101",
       "d": "Tool number 0101"
      }
     ],
@@ -922,8 +915,7 @@
      },
      {
       "g": "S500",
-      "e": "S500",
-      "u": "sfm",
+      "e": "speed:500",
       "d": "Surface speed 500 surface feet per minute"
      },
      {
@@ -945,12 +937,12 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      },
      {
@@ -972,28 +964,27 @@
      },
      {
       "g": "P70",
-      "e": "FROM70",
+      "e": "from:70",
       "d": "First line of the contour, N70"
      },
      {
       "g": "Q90",
-      "e": "TO90",
+      "e": "to:90",
       "d": "Last line of the contour, N90"
      },
      {
       "g": "U0.02",
-      "e": "INCX0.02",
+      "e": "incx:0.02",
       "d": "Incremental X (lathe) 0.02"
      },
      {
       "g": "W0.005",
-      "e": "INCZ0.005",
+      "e": "incz:0.005",
       "d": "Incremental Z (lathe) 0.005"
      },
      {
       "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
+      "e": "feed:0.01",
       "d": "Feed rate 0.01 inches per rev"
      }
     ],
@@ -1010,7 +1001,7 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      }
     ],
@@ -1027,7 +1018,7 @@
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      }
     ],
@@ -1039,7 +1030,7 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      }
     ],
@@ -1056,12 +1047,12 @@
      },
      {
       "g": "P70",
-      "e": "FROM70",
+      "e": "from:70",
       "d": "First line of the contour, N70"
      },
      {
       "g": "Q90",
-      "e": "TO90",
+      "e": "to:90",
       "d": "Last line of the contour, N90"
      }
     ],
@@ -1078,18 +1069,17 @@
      },
      {
       "g": "X1.8",
-      "e": "X1.8",
+      "e": "movx:1.8",
       "d": "X position 1.8"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "F0.008",
-      "e": "F0.008",
-      "u": "ipr",
+      "e": "feed:0.008",
       "d": "Feed rate 0.008 inches per rev"
      }
     ],
@@ -1106,18 +1096,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Z0.",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      },
      {
       "g": "F0.006",
-      "e": "F0.006",
-      "u": "ipr",
+      "e": "feed:0.006",
       "d": "Feed rate 0.006 inches per rev"
      }
     ],
@@ -1134,18 +1123,17 @@
      },
      {
       "g": "X0.95",
-      "e": "X0.95",
+      "e": "movx:0.95",
       "d": "X position 0.95"
      },
      {
       "g": "Z-0.75",
-      "e": "Z-0.75",
+      "e": "movz:-0.75",
       "d": "Z position -0.75"
      },
      {
       "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "ipr",
+      "e": "feed:0.0625",
       "d": "Feed rate 0.0625 inches per rev"
      }
     ],
@@ -1167,12 +1155,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],
@@ -1212,7 +1200,7 @@
     [
      {
       "g": "O0202",
-      "e": "PROG0202",
+      "e": "prog:0202",
       "d": "Program number 0202"
      },
      {
@@ -1257,8 +1245,7 @@
      },
      {
       "g": "S2500",
-      "e": "S2500",
-      "u": "rpm",
+      "e": "speed:2500",
       "d": "Spindle speed 2500 RPM"
      }
     ],
@@ -1270,7 +1257,7 @@
      },
      {
       "g": "T0101",
-      "e": "TOOL0101",
+      "e": "tool:0101",
       "d": "Tool number 0101"
      }
     ],
@@ -1287,8 +1274,7 @@
      },
      {
       "g": "S500",
-      "e": "S500",
-      "u": "sfm",
+      "e": "speed:500",
       "d": "Surface speed 500 surface feet per minute"
      },
      {
@@ -1310,12 +1296,12 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      },
      {
       "g": "Z0.1",
-      "e": "Z0.1",
+      "e": "movz:0.1",
       "d": "Z position 0.1"
      },
      {
@@ -1337,28 +1323,27 @@
      },
      {
       "g": "P70",
-      "e": "FROM70",
+      "e": "from:70",
       "d": "First line of the contour, N70"
      },
      {
       "g": "Q90",
-      "e": "TO90",
+      "e": "to:90",
       "d": "Last line of the contour, N90"
      },
      {
       "g": "U0.02",
-      "e": "INCX0.02",
+      "e": "incx:0.02",
       "d": "Incremental X (lathe) 0.02"
      },
      {
       "g": "W0.005",
-      "e": "INCZ0.005",
+      "e": "incz:0.005",
       "d": "Incremental Z (lathe) 0.005"
      },
      {
       "g": "F0.01",
-      "e": "F0.01",
-      "u": "ipr",
+      "e": "feed:0.01",
       "d": "Feed rate 0.01 inches per rev"
      }
     ],
@@ -1375,7 +1360,7 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      }
     ],
@@ -1392,7 +1377,7 @@
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      }
     ],
@@ -1404,7 +1389,7 @@
      },
      {
       "g": "X2.1",
-      "e": "X2.1",
+      "e": "movx:2.1",
       "d": "X position 2.1"
      }
     ],
@@ -1421,12 +1406,12 @@
      },
      {
       "g": "P70",
-      "e": "FROM70",
+      "e": "from:70",
       "d": "First line of the contour, N70"
      },
      {
       "g": "Q90",
-      "e": "TO90",
+      "e": "to:90",
       "d": "Last line of the contour, N90"
      }
     ],
@@ -1443,18 +1428,17 @@
      },
      {
       "g": "X1.8",
-      "e": "X1.8",
+      "e": "movx:1.8",
       "d": "X position 1.8"
      },
      {
       "g": "Z-1.",
-      "e": "Z-1.0",
+      "e": "movz:-1.0",
       "d": "Z position -1.0"
      },
      {
       "g": "F0.008",
-      "e": "F0.008",
-      "u": "ipr",
+      "e": "feed:0.008",
       "d": "Feed rate 0.008 inches per rev"
      }
     ],
@@ -1472,18 +1456,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Z0.",
-      "e": "Z0.0",
+      "e": "movz:0.0",
       "d": "Z position 0.0"
      },
      {
       "g": "F0.006",
-      "e": "F0.006",
-      "u": "ipr",
+      "e": "feed:0.006",
       "d": "Feed rate 0.006 inches per rev"
      }
     ],
@@ -1500,18 +1483,17 @@
      },
      {
       "g": "X0.95",
-      "e": "X0.95",
+      "e": "movx:0.95",
       "d": "X position 0.95"
      },
      {
       "g": "Z-0.75",
-      "e": "Z-0.75",
+      "e": "movz:-0.75",
       "d": "Z position -0.75"
      },
      {
       "g": "F0.0625",
-      "e": "F0.0625",
-      "u": "mmpr",
+      "e": "feed:0.0625",
       "d": "Feed rate 0.0625 mm per rev"
      }
     ],
@@ -1533,12 +1515,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Z1.",
-      "e": "Z1.0",
+      "e": "movz:1.0",
       "d": "Z position 1.0"
      }
     ],

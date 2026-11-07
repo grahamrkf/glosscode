@@ -201,12 +201,12 @@
      },
      {
       "g": "X1.75",
-      "e": "X1.75",
+      "e": "movx:1.75",
       "d": "X position 1.75"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -235,7 +235,7 @@
      },
      {
       "g": "D1",
-      "e": "KERF1",
+      "e": "kerf:1",
       "d": "Kerf compensation offset 1"
      }
     ],
@@ -252,18 +252,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "F45.",
-      "e": "F45.0",
-      "u": "ipm",
+      "e": "feed:45.0",
       "d": "Feed rate 45.0 inches per minute"
      }
     ],
@@ -280,22 +279,22 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "I-.5",
-      "e": "ARCI-0.5",
+      "e": "arci:-0.5",
       "d": "Arc center offset in X -0.5"
      },
      {
       "g": "J0.",
-      "e": "ARCJ0.0",
+      "e": "arcj:0.0",
       "d": "Arc center offset in Y 0.0"
      }
     ],
@@ -344,12 +343,12 @@
      },
      {
       "g": "X-.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y-.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -378,7 +377,7 @@
      },
      {
       "g": "D1",
-      "e": "KERF1",
+      "e": "kerf:1",
       "d": "Kerf compensation offset 1"
      }
     ],
@@ -395,18 +394,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "F110.",
-      "e": "F110.0",
-      "u": "ipm",
+      "e": "feed:110.0",
       "d": "Feed rate 110.0 inches per minute"
      }
     ],
@@ -423,7 +421,7 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      }
     ],
@@ -440,7 +438,7 @@
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      }
     ],
@@ -457,22 +455,22 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      },
      {
       "g": "I-1.",
-      "e": "ARCI-1.0",
+      "e": "arci:-1.0",
       "d": "Arc center offset in X -1.0"
      },
      {
       "g": "J0.",
-      "e": "ARCJ0.0",
+      "e": "arcj:0.0",
       "d": "Arc center offset in Y 0.0"
      }
     ],
@@ -489,7 +487,7 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      }
     ],
@@ -506,7 +504,7 @@
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],
@@ -547,12 +545,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],
@@ -1082,12 +1080,12 @@
      },
      {
       "g": "X1.75",
-      "e": "X1.75",
+      "e": "movx:1.75",
       "d": "X position 1.75"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -1117,7 +1115,7 @@
      },
      {
       "g": "D1",
-      "e": "KERF1",
+      "e": "kerf:1",
       "d": "Kerf compensation offset 1"
      }
     ],
@@ -1134,18 +1132,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "F45.",
-      "e": "F45.0",
-      "u": "ipm",
+      "e": "feed:45.0",
       "d": "Feed rate 45.0 inches per minute"
      }
     ],
@@ -1162,22 +1159,22 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "I-.5",
-      "e": "ARCI-0.5",
+      "e": "arci:-0.5",
       "d": "Arc center offset in X -0.5"
      },
      {
       "g": "J0.",
-      "e": "ARCJ0.0",
+      "e": "arcj:0.0",
       "d": "Arc center offset in Y 0.0"
      }
     ],
@@ -1226,12 +1223,12 @@
      },
      {
       "g": "X-.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y-.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -1261,7 +1258,7 @@
      },
      {
       "g": "D1",
-      "e": "KERF1",
+      "e": "kerf:1",
       "d": "Kerf compensation offset 1"
      }
     ],
@@ -1278,18 +1275,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "F110.",
-      "e": "F110.0",
-      "u": "ipm",
+      "e": "feed:110.0",
       "d": "Feed rate 110.0 inches per minute"
      }
     ],
@@ -1306,7 +1302,7 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      }
     ],
@@ -1323,7 +1319,7 @@
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      }
     ],
@@ -1340,22 +1336,22 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      },
      {
       "g": "I-1.",
-      "e": "ARCI-1.0",
+      "e": "arci:-1.0",
       "d": "Arc center offset in X -1.0"
      },
      {
       "g": "J0.",
-      "e": "ARCJ0.0",
+      "e": "arcj:0.0",
       "d": "Arc center offset in Y 0.0"
      }
     ],
@@ -1372,7 +1368,7 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      }
     ],
@@ -1389,7 +1385,7 @@
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],
@@ -1430,12 +1426,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],
@@ -1550,12 +1546,12 @@
      },
      {
       "g": "X1.75",
-      "e": "X1.75",
+      "e": "movx:1.75",
       "d": "X position 1.75"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      }
     ],
@@ -1584,7 +1580,7 @@
      },
      {
       "g": "D1",
-      "e": "KERF1",
+      "e": "kerf:1",
       "d": "Kerf compensation offset 1"
      }
     ],
@@ -1601,18 +1597,17 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "F45.",
-      "e": "F45.0",
-      "u": "ipm",
+      "e": "feed:45.0",
       "d": "Feed rate 45.0 inches per minute"
      }
     ],
@@ -1629,22 +1624,22 @@
      },
      {
       "g": "X2.",
-      "e": "X2.0",
+      "e": "movx:2.0",
       "d": "X position 2.0"
      },
      {
       "g": "Y1.5",
-      "e": "Y1.5",
+      "e": "movy:1.5",
       "d": "Y position 1.5"
      },
      {
       "g": "I-.5",
-      "e": "ARCI-0.5",
+      "e": "arci:-0.5",
       "d": "Arc center offset in X -0.5"
      },
      {
       "g": "J0.",
-      "e": "ARCJ0.0",
+      "e": "arcj:0.0",
       "d": "Arc center offset in Y 0.0"
      }
     ],
@@ -1693,12 +1688,12 @@
      },
      {
       "g": "X-.25",
-      "e": "X-0.25",
+      "e": "movx:-0.25",
       "d": "X position -0.25"
      },
      {
       "g": "Y-.25",
-      "e": "Y-0.25",
+      "e": "movy:-0.25",
       "d": "Y position -0.25"
      }
     ],
@@ -1727,7 +1722,7 @@
      },
      {
       "g": "D1",
-      "e": "KERF1",
+      "e": "kerf:1",
       "d": "Kerf compensation offset 1"
      }
     ],
@@ -1744,18 +1739,17 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      },
      {
       "g": "F110.",
-      "e": "F110.0",
-      "u": "ipm",
+      "e": "feed:110.0",
       "d": "Feed rate 110.0 inches per minute"
      }
     ],
@@ -1772,7 +1766,7 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      }
     ],
@@ -1789,7 +1783,7 @@
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      }
     ],
@@ -1806,22 +1800,22 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "Y3.",
-      "e": "Y3.0",
+      "e": "movy:3.0",
       "d": "Y position 3.0"
      },
      {
       "g": "I-1.",
-      "e": "ARCI-1.0",
+      "e": "arci:-1.0",
       "d": "Arc center offset in X -1.0"
      },
      {
       "g": "J0.",
-      "e": "ARCJ0.0",
+      "e": "arcj:0.0",
       "d": "Arc center offset in Y 0.0"
      }
     ],
@@ -1838,7 +1832,7 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      }
     ],
@@ -1855,7 +1849,7 @@
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],
@@ -1896,12 +1890,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],

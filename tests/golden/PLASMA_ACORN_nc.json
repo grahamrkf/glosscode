@@ -128,17 +128,17 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z0.5",
-      "e": "Z0.5",
+      "e": "movz:0.5",
       "d": "Z position 0.5"
      }
     ],
@@ -194,7 +194,7 @@
      },
      {
       "g": "D2",
-      "e": "KERF2",
+      "e": "kerf:2",
       "d": "Kerf compensation offset 2"
      },
      {
@@ -204,13 +204,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "F90.",
-      "e": "F90.0",
-      "u": "ipm",
+      "e": "feed:90.0",
       "d": "Feed rate 90.0 inches per minute"
      }
     ],
@@ -227,17 +226,17 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      },
      {
       "g": "R1.",
-      "e": "RAD1.0",
+      "e": "radius:1.0",
       "d": "Arc radius"
      }
     ],
@@ -272,12 +271,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],
@@ -295,7 +294,7 @@
      },
      {
       "g": "P2",
-      "e": "SEC2",
+      "e": "dwell:2",
       "d": "Dwell for 2 seconds"
      }
     ],
@@ -325,13 +324,12 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "F90.",
-      "e": "F90.0",
-      "u": "ipm",
+      "e": "feed:90.0",
       "d": "Feed rate 90.0 inches per minute"
      }
     ],
@@ -790,17 +788,17 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z0.5",
-      "e": "Z0.5",
+      "e": "movz:0.5",
       "d": "Z position 0.5"
      }
     ],
@@ -855,7 +853,7 @@
      },
      {
       "g": "D2",
-      "e": "KERF2",
+      "e": "kerf:2",
       "d": "Kerf compensation offset 2"
      },
      {
@@ -865,13 +863,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "F90.",
-      "e": "F90.0",
-      "u": "ipm",
+      "e": "feed:90.0",
       "d": "Feed rate 90.0 inches per minute"
      }
     ],
@@ -888,17 +885,17 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      },
      {
       "g": "R1.",
-      "e": "RAD1.0",
+      "e": "radius:1.0",
       "d": "Arc radius"
      }
     ],
@@ -932,12 +929,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],
@@ -954,7 +951,7 @@
      },
      {
       "g": "P2",
-      "e": "SEC2",
+      "e": "dwell:2",
       "d": "Dwell for 2 seconds"
      }
     ],
@@ -983,13 +980,12 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "F90.",
-      "e": "F90.0",
-      "u": "ipm",
+      "e": "feed:90.0",
       "d": "Feed rate 90.0 inches per minute"
      }
     ],
@@ -1093,17 +1089,17 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "Y1.",
-      "e": "Y1.0",
+      "e": "movy:1.0",
       "d": "Y position 1.0"
      },
      {
       "g": "Z0.5",
-      "e": "Z0.5",
+      "e": "movz:0.5",
       "d": "Z position 0.5"
      }
     ],
@@ -1156,7 +1152,7 @@
      },
      {
       "g": "D2",
-      "e": "KERF2",
+      "e": "kerf:2",
       "d": "Kerf compensation offset 2"
      },
      {
@@ -1166,13 +1162,12 @@
      },
      {
       "g": "X3.",
-      "e": "X3.0",
+      "e": "movx:3.0",
       "d": "X position 3.0"
      },
      {
       "g": "F90.",
-      "e": "F90.0",
-      "u": "ipm",
+      "e": "feed:90.0",
       "d": "Feed rate 90.0 inches per minute"
      }
     ],
@@ -1189,17 +1184,17 @@
      },
      {
       "g": "X4.",
-      "e": "X4.0",
+      "e": "movx:4.0",
       "d": "X position 4.0"
      },
      {
       "g": "Y2.",
-      "e": "Y2.0",
+      "e": "movy:2.0",
       "d": "Y position 2.0"
      },
      {
       "g": "R1.",
-      "e": "RAD1.0",
+      "e": "radius:1.0",
       "d": "Arc radius"
      }
     ],
@@ -1233,12 +1228,12 @@
      },
      {
       "g": "X0.",
-      "e": "X0.0",
+      "e": "movx:0.0",
       "d": "X position 0.0"
      },
      {
       "g": "Y0.",
-      "e": "Y0.0",
+      "e": "movy:0.0",
       "d": "Y position 0.0"
      }
     ],
@@ -1255,7 +1250,7 @@
      },
      {
       "g": "P2",
-      "e": "SEC2",
+      "e": "dwell:2",
       "d": "Dwell for 2 seconds"
      }
     ],
@@ -1284,13 +1279,12 @@
      },
      {
       "g": "X1.",
-      "e": "X1.0",
+      "e": "movx:1.0",
       "d": "X position 1.0"
      },
      {
       "g": "F90.",
-      "e": "F90.0",
-      "u": "ipm",
+      "e": "feed:90.0",
       "d": "Feed rate 90.0 inches per minute"
      }
     ],

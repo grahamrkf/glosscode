@@ -248,7 +248,7 @@ static void test_api(const gc_data *data)
     free(r);
     p = "{\"lines\":[[\"N10\",\"G97\",\"S600\",\"M03\"]],\"machine\":{\"type\":\"mill\",\"brand\":\"fanuc\"}}";
     r = gc_api_call(data, "analyze", p, strlen(p));
-    CHECK(r && strstr(r, "\"e\":\"S600\",\"u\":\"rpm\"") && strstr(r, "\"id\":\"no-program-end\"") && strstr(r, "\"spinDir\":\"M03\""),
+    CHECK(r && strstr(r, "\"e\":\"speed:600\",\"d\"") && strstr(r, "\"id\":\"no-program-end\"") && strstr(r, "\"spinDir\":\"M03\""),
           "analyze: %s", r ? r : "(null)");
     free(r);
     r = gc_api_call(data, "nope", "{}", 2);
