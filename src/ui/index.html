@@ -5266,7 +5266,7 @@ function tlDot(steps, idx, sim, X, Y, mode, lathe, CLIP, vals, ends){
   }
   return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.6" fill="#d13438" stroke="#fff" stroke-width="1.2"><title>Where the tool is</title></circle>`;
 }
-/* Scale lines across the Z (or X) timeline, in powers of ten: the finest that are still at least 5 px apart are drawn
+/* Scale lines across the Z (or X) timeline, in powers of ten: the finest that are still at least 3.5 px apart are drawn
    light, and every tenth one (the next power of ten up) darker, with its value at the left edge. So a part 1.2 deep shows
    0" and -1" with the tenths between; 11 deep shows 0" and -10" with the inches between, and no tenths. When the darker
    lines leave only one in view, the light ones are labeled too. On a lathe the values are diameters (X), CL at zero. */
@@ -5274,7 +5274,7 @@ function tlGrid(lo, hi, Y, ph, lathe, idx, W){
   const st = EXEC.steps[idx], mm = (st && lineState[st.li]?.units)==="mm", f = lathe ? 2 : 1;   // f: value shown per value plotted
   const a = lo*f, b = hi*f, pxu = ph/((b - a) || 1);
   let minor = mm ? 0.1 : 0.01;
-  while (minor*pxu < 5 && minor < 1e6) minor *= 10;
+  while (minor*pxu < 3.5 && minor < 1e6) minor *= 10;
   const major = minor*10, on = (v, d) => Math.abs(v/d - Math.round(v/d)) < 1e-6;
   const ticks = []; for (let n = Math.ceil(a/minor - 1e-9); n*minor <= b + 1e-9; n++) ticks.push(n*minor);
   const majors = ticks.filter(v => on(v, major)), labelMinor = majors.length < 2 && minor*pxu >= 10;
@@ -5283,8 +5283,11 @@ function tlGrid(lo, hi, Y, ph, lathe, idx, W){
   let lines = "", labels = "";
   ticks.forEach(v => {
     const big = on(v, major), y = (+Y(v/f)).toFixed(1);
-    lines += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="${big ? "#d5dbe3" : "#eef1f4"}" stroke-width="${big ? 1 : .8}"/>`;
-    if (big || labelMinor) labels += `<text x="3" y="${(+y - 2).toFixed(1)}" font-size="${big ? 7.5 : 6.5}" fill="${big ? "#6b7480" : "#a0a7b0"}" font-family="Consolas,monospace" stroke="#fff" stroke-width="2.5" paint-order="stroke">${txt(v, big ? major : minor)}</text>`;
+    const zero = Math.abs(v) < 1e-9;
+    lines += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="${big ? "#b9c3cf" : "#dbe1e8"}" stroke-width="1"/>`;
+    // The origin: a circle with a cross through it, on the zero line at the left edge
+    if (zero) labels += `<g><title>${lathe ? "Centerline (X0)" : "Part zero (Z0)"}</title><circle cx="7" cy="${y}" r="4" fill="#fff" stroke="#3b4350" stroke-width="1.1"/><path d="M1.5 ${y} H12.5 M7 ${(+y - 5.5).toFixed(1)} V${(+y + 5.5).toFixed(1)}" stroke="#3b4350" stroke-width="1.1"/></g>`;
+    if (big || labelMinor) labels += `<text x="${zero ? 15 : 3}" y="${(+y - 2).toFixed(1)}" font-size="${big ? 7.5 : 6.5}" fill="${big ? "#5b6470" : "#8f97a1"}" font-family="Consolas,monospace" stroke="#fff" stroke-width="2.5" paint-order="stroke">${txt(v, big ? major : minor)}</text>`;
   });
   return { lines, labels };
 }
