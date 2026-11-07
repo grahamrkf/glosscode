@@ -65,6 +65,7 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .ln.lsel:not(.ins){background:#dbe9f8}.ln.lsel:not(.ins) .gut{background:#0f6cbd;color:#fff}
 .tl{position:relative;overflow:hidden;background:#fff;border:1px solid #e5e5e5;border-radius:4px;height:106px;cursor:pointer}
 .tl svg{position:absolute;left:0;top:0;transition:transform .25s ease}
+.tl svg.tlg{transition:none;pointer-events:none;overflow:visible}
 .tlmid{position:absolute;left:50%;top:0;bottom:0;width:0;border-left:1px dashed #d13438;pointer-events:none}
 @media (prefers-reduced-motion:reduce){.tl svg{transition:none}}
 .modes{flex:1;min-height:0;overflow:auto}
@@ -151,6 +152,9 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .vbox:hover .vzoom, .vzoom:focus-within{opacity:1}
 .vzoom button{font:600 11px var(--w-ui);min-width:20px;height:18px;padding:0 4px;border:1px solid #d0d0d0;border-radius:3px;background:#fff;color:#333;cursor:pointer;line-height:1}
 .vzoom button:hover{background:#f0f4f9}
+.vzoom .vzsep{width:1px;margin:2px 2px;background:#d0d0d0}
+.vzoom button svg{display:block}
+.vzoom #s-fut[aria-pressed="true"] .fut{display:none}
 .vzoom button[aria-pressed="true"], .vzoom button.on{background:#e6f0fb;border-color:#0f6cbd;color:#0f6cbd}
 .info{font-size:12px;color:#333;display:flex;flex-direction:column;gap:5px}
 .info .k{font:700 12px var(--w-mono);color:#0f6cbd}
@@ -220,7 +224,6 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .simbar select{font:11px var(--w-ui);height:21px;border:1px solid #d1d1d1;border-radius:4px;background:#fff;color:#1b1b1b}
 .simbar button.tgl{min-width:30px;font-family:var(--w-mono)}
 .simbar button.tgl[aria-pressed="true"]{background:#e8f1fb;border-color:#0f6cbd;color:#0f6cbd;font-weight:700}
-.simbar .big{margin-left:auto}
 .simpos{display:flex;gap:12px;font:11.5px var(--w-mono);color:#1b1b1b;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;min-height:15px}
 .simpos b{color:#8a8a8a;font-weight:400;margin-right:3px}
 .simpos .stop{margin-left:auto;font:600 11px var(--w-ui);color:#9a5b00;background:#fff4e0;border:1px solid #f0d29a;border-radius:3px;padding:0 5px}
@@ -712,18 +715,17 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
             <div class="h" id="v1h">Toolpath XY <span>top view</span></div>
             <div class="simbar">
               <button id="s-reset" title="Restart">⏮</button><button id="s-back" title="Step back one line (Ctrl+←)">|◀</button><button id="s-play" title="Play or pause (F5)">▶</button><button id="s-fwd" title="Step forward one line (Ctrl+→)">▶|</button>
-              <select id="s-speed" aria-label="Simulation speed"><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option><option value="16">16×</option><option value="32">32×</option><option value="64">64×</option><option value="1024" title="As fast as the screen can draw">Max</option></select>
-              <button id="s-opt" class="tgl" aria-pressed="false" title="Optional stop: when on, the simulation also pauses at M01">M01</button><button id="s-bd" class="tgl" aria-pressed="false" title="Block delete: when on, lines that start with / are skipped">/</button><button id="s-rap" class="tgl" aria-pressed="true" title="Rapid moves: when off, the toolpath shows feed moves only, like the control's graphics screen">G00</button>
-              <button id="s-big" class="big" aria-pressed="false" title="Expanded view (Ctrl+Shift+E)">⤢</button>
+              <select id="s-speed" aria-label="Simulation speed" title="Moves per step of the simulation: 1× runs about 16 moves a second, whatever their length"><option value="0.25">¼×</option><option value="0.5">½×</option><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option><option value="16">16×</option><option value="32">32×</option><option value="64">64×</option><option value="1024" title="As fast as the screen can draw">Max</option></select>
+              <button id="s-opt" class="tgl" aria-pressed="false" title="Optional stop: when on, the simulation also pauses at M01">M01</button><button id="s-bd" class="tgl" aria-pressed="false" title="Block delete: when on, lines that start with / are skipped">/</button>
             </div>
             <div class="simpos" id="s-pos"></div>
             <div class="vbox" id="vbox"><svg id="v1" viewBox="0 0 278 128" height="128" aria-label="Toolpath. Drag to pan, scroll to zoom, Shift+drag to zoom to a box, double-click to fit."></svg>
-              <div class="vzoom" role="toolbar" aria-label="Toolpath zoom"><button id="vz-in" title="Zoom in (or scroll up over the toolpath)">+</button><button id="vz-out" title="Zoom out (or scroll down over the toolpath)">−</button><button id="vz-box" aria-pressed="false" title="Zoom to a box: drag a rectangle around what you want to see (or Shift+drag)">⬚</button><button id="vz-fit" title="Fit the cutting moves (or double-click the toolpath). Rapid moves far away, like a home return, are left out of the fit">Fit</button></div></div>
+              <div class="vzoom" role="toolbar" aria-label="Toolpath zoom"><button id="vz-in" title="Zoom in (or scroll up over the toolpath)">+</button><button id="vz-out" title="Zoom out (or scroll down over the toolpath)">−</button><button id="vz-box" aria-pressed="false" title="Zoom to a box: drag a rectangle around what you want to see (or Shift+drag)">⬚</button><button id="vz-fit" title="Fit the cutting moves (or double-click the toolpath). Rapid moves far away, like a home return, are left out of the fit">Fit</button><i class="vzsep"></i><button id="s-rap" aria-pressed="true" title="Show rapid moves (G00) in the drawing. Only changes what is drawn: the simulation runs the same either way">G00</button><button id="s-fut" aria-pressed="false" title="Hide the toolpath still to come: only the moves already run (and the one running) are drawn" aria-label="Hide the toolpath still to come"><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M1 8 L7 2" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="7" cy="2" r="1.7" fill="currentColor"/><path class="fut" d="M8.5 2.5 H17" stroke="currentColor" stroke-width="1.4" stroke-dasharray="1.6 1.6" fill="none"/></svg></button><button id="s-big" aria-pressed="false" title="Expanded view (Ctrl+Shift+E)">⤢</button></div></div>
             <div class="tleg" id="tleg"></div>
           </div>
           <div class="panel">
             <div class="h"><span id="tlh">Z by line <span></span></span><select id="tl-mode" class="tlmode" aria-label="What the timeline shows" title="What the timeline shows"></select></div>
-            <div class="tl" id="tl"><svg id="tlsvg" height="104"></svg><div class="tlmid"></div></div>
+            <div class="tl" id="tl"><svg id="tlsvg" height="104"></svg><svg id="tlgrid" class="tlg" width="70" height="104" aria-hidden="true"></svg><div class="tlmid"></div></div>
           </div>
           <div class="panel modes">
             <div class="h" id="mh">Active modes</div>
@@ -4970,7 +4972,7 @@ function drawViews(){
   wrapR.forEach(r => { if (r.turn!=null) pts.push({ x:r.xa, y:r.ya, z:0 }, { x:r.xb, y:r.yb, z:0 }); });
   if (!pts.length){   // nothing moves yet (a new program): clear the toolpath, timeline and position
     v1.innerHTML = ""; document.getElementById("tleg").innerHTML = ""; document.getElementById("s-pos").textContent = "No moves yet";
-    document.getElementById("tlsvg").innerHTML = ""; document.querySelector("#tlh span").textContent = ""; tlSteps = []; return; }
+    document.getElementById("tlsvg").innerHTML = document.getElementById("tlgrid").innerHTML = ""; document.querySelector("#tlh span").textContent = ""; tlSteps = []; return; }
   const win = VIEWWIN && VIEWWIN.doc===doc && VIEWWIN.lathe===lathe ? VIEWWIN : null, pad = win ? 0 : 12;
   let x0, x1, y0, y1;
   if (win) ({ x0, x1, y0, y1 } = win);
@@ -5246,7 +5248,7 @@ function tlDot(steps, idx, sim, X, Y, mode, lathe, CLIP, vals, ends){
   const s = steps[idx]; if (!s) return "";
   const n = s.s1 - s.s0, done = sim ? Math.max(s.s0, Math.min(simIdx, s.s1)) : s.s1, k = done - s.s0, x0 = X(idx);
   const pos = mode==="z" || mode==="x", seg = k > 0 ? EXEC.segs[done-1] : null;
-  const val = q => lathe ? q.x/2 : Math.min(q.z, CLIP);
+  const val = q => Math.min(lathe ? q.x/2 : q.z, CLIP);
   let x, y;
   if (!n){ x = x0 + SLOT/2; y = Y(vals[idx]); }
   else if (!seg){ x = x0; y = Y(pos ? (ends[idx-1] ?? vals[idx]) : vals[idx]); }
@@ -5264,6 +5266,28 @@ function tlDot(steps, idx, sim, X, Y, mode, lathe, CLIP, vals, ends){
   }
   return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.6" fill="#d13438" stroke="#fff" stroke-width="1.2"><title>Where the tool is</title></circle>`;
 }
+/* Scale lines across the Z (or X) timeline, in powers of ten: the finest that are still at least 5 px apart are drawn
+   light, and every tenth one (the next power of ten up) darker, with its value at the left edge. So a part 1.2 deep shows
+   0" and -1" with the tenths between; 11 deep shows 0" and -10" with the inches between, and no tenths. When the darker
+   lines leave only one in view, the light ones are labeled too. On a lathe the values are diameters (X), CL at zero. */
+function tlGrid(lo, hi, Y, ph, lathe, idx, W){
+  const st = EXEC.steps[idx], mm = (st && lineState[st.li]?.units)==="mm", f = lathe ? 2 : 1;   // f: value shown per value plotted
+  const a = lo*f, b = hi*f, pxu = ph/((b - a) || 1);
+  let minor = mm ? 0.1 : 0.01;
+  while (minor*pxu < 5 && minor < 1e6) minor *= 10;
+  const major = minor*10, on = (v, d) => Math.abs(v/d - Math.round(v/d)) < 1e-6;
+  const ticks = []; for (let n = Math.ceil(a/minor - 1e-9); n*minor <= b + 1e-9; n++) ticks.push(n*minor);
+  const majors = ticks.filter(v => on(v, major)), labelMinor = majors.length < 2 && minor*pxu >= 10;
+  const dec = v => Math.max(0, -Math.floor(Math.log10(v) + 1e-9));
+  const txt = (v, d) => Math.abs(v) < 1e-9 ? (lathe ? "CL" : mm ? "0 mm" : '0"') : (lathe ? "Ø" : "") + v.toFixed(dec(d)) + (mm ? " mm" : '"');
+  let lines = "", labels = "";
+  ticks.forEach(v => {
+    const big = on(v, major), y = (+Y(v/f)).toFixed(1);
+    lines += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="${big ? "#d5dbe3" : "#eef1f4"}" stroke-width="${big ? 1 : .8}"/>`;
+    if (big || labelMinor) labels += `<text x="3" y="${(+y - 2).toFixed(1)}" font-size="${big ? 7.5 : 6.5}" fill="${big ? "#6b7480" : "#a0a7b0"}" font-family="Consolas,monospace" stroke="#fff" stroke-width="2.5" paint-order="stroke">${txt(v, big ? major : minor)}</text>`;
+  });
+  return { lines, labels };
+}
 function drawTimeline(steps, lathe){
   tlSteps = steps;
   const box = document.getElementById("tl"), svg = document.getElementById("tlsvg"), sel = document.getElementById("tl-mode");
@@ -5275,8 +5299,16 @@ function drawTimeline(steps, lathe){
   const BW = box.clientWidth || 278, H = 104, top = P ? 18 : 12, bot = 20, half = BW/2;
   const W = steps.length*SLOT + BW;
   svg.setAttribute("width", W); svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  const CLIP = 0.3, pos = mode==="z" || mode==="x";
-  const vals = steps.map(s => mode==="feed" ? s.f : mode==="speed" ? s.s : lathe ? s.v : Math.min(s.v, CLIP));
+  const pos = mode==="z" || mode==="x";
+  // Values above CLIP are drawn at CLIP with a ↑: on a mill, Z more than 0.3 above Z0; on a lathe, X beyond the cutting
+  // moves (a rapid to a tool change position far from the part would squash the cutting into a flat line near CL).
+  let CLIP = 0.3;
+  if (lathe && pos){
+    const cv = steps.filter(s => s.kind && s.kind!=="rapid").map(s => s.v), all = cv.length ? cv : steps.map(s => s.v);
+    const a = Math.min(0, minOf(all)), b = Math.max(maxOf(all), 0.05);
+    CLIP = b + Math.max((b - a)*0.2, 0.025);
+  }
+  const vals = steps.map(s => mode==="feed" ? s.f : mode==="speed" ? s.s : Math.min(s.v, CLIP));
   const dipZ = mode==="z" && !lathe ? steps.flatMap(s => [...(s.dips || []).map(d => d.z), ...(s.engZ!=null ? [s.engZ] : [])]) : [];
   const lo = pos ? Math.min(minOf(vals), minOf(dipZ), 0) : 0, hi = pos ? Math.max(maxOf(vals), lathe ? 0.1 : 0.05) : Math.max(maxOf(vals), 1) * 1.1;
   const Y = v => top + (hi - v) / (hi - lo || 1) * (H - top - bot);
@@ -5290,6 +5322,8 @@ function drawTimeline(steps, lathe){
   const near = (s, i) => i >= lo0 && i < hi0;
   let g = `<defs><pattern id="tlbd" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#d8dde4" stroke-width="1.4"/></pattern></defs>`;
   steps.forEach((s, i) => { if (near(s, i) && isCur(s, i)) g += `<rect x="${X(i)}" y="0" width="${SLOT}" height="${H-bot+4}" fill="#fde7e8"/>`; });
+  const grid = pos ? tlGrid(lo, hi, Y, H - top - bot, lathe, idx, W) : { lines:"", labels:"" };
+  g += grid.lines;
   g += `<line x1="${half-8}" x2="${W-half+8}" y1="${Y(0)}" y2="${Y(0)}" stroke="#b9c2cf" stroke-dasharray="2 3" stroke-width=".8"/>`;
   if (P){   // the torch band along the top, and the lines that change the process or material
     g += `<rect x="${half-8}" y="3" width="${steps.length*SLOT+16}" height="6" rx="2" fill="#eef0f3"/>`;
@@ -5347,7 +5381,7 @@ function drawTimeline(steps, lathe){
     if (m==="end") g += `<line x1="${x0+SLOT-5}" x2="${x0+SLOT-5}" y1="3" y2="${H-bot}" stroke="#2b2f36" stroke-width="1"/><line x1="${x0+SLOT-2}" x2="${x0+SLOT-2}" y1="3" y2="${H-bot}" stroke="#2b2f36" stroke-width="2.4"/>`;
     if (tip) g += `<title>${esc(tip)}</title>`;
     g += "</g>";
-    if (mode==="z" && s.v > CLIP && m!=="tool" && m!=="home") g += `<text x="${X(i)+SLOT/2}" y="${Y(v)-3}" font-size="7" text-anchor="middle" fill="#9a9a9a">↑</text>`;
+    if (pos && s.v > CLIP + 1e-9 && m!=="tool" && m!=="home") g += `<text x="${X(i)+SLOT/2}" y="${Y(v)-3}" font-size="7" text-anchor="middle" fill="#9a9a9a">↑</text>`;
     const nw = doc[s.li]?.[isBlockDel(doc[s.li]) ? 1 : 0]; const lab = /^N\d+$/.test(nw||"") ? nw : "L" + (s.li+1);
     const cur = isCur(s, i);
     if (cur || i % 2 === 0) g += `<text x="${X(i)+SLOT/2}" y="${H-6}" font-size="${cur?8:6.5}" text-anchor="middle" fill="${cur?"#d13438":"#9a9a9a"}" font-weight="${cur?700:400}" font-family="Consolas,monospace">${lab}</text>`;
@@ -5355,8 +5389,9 @@ function drawTimeline(steps, lathe){
     ends[i] = prev;
   });
   g += tlDot(steps, idx, sim, X, Y, mode, lathe, CLIP, vals, ends);
-  g += `<text x="${half-6}" y="${Y(0)-3}" font-size="7.5" text-anchor="end" fill="#8a8a8a" font-family="Consolas,monospace">${mode==="x" ? "CL" : mode==="z" ? "Z0" : "0"}</text>`;
+  if (!pos) g += `<text x="${half-6}" y="${Y(0)-3}" font-size="7.5" text-anchor="end" fill="#8a8a8a" font-family="Consolas,monospace">0</text>`;
   svg.innerHTML = g;
+  document.getElementById("tlgrid").innerHTML = grid.labels;
   tlShift = -(idx*SLOT + SLOT/2);
   svg.style.transform = `translateX(${tlShift}px)`;
   const st = steps[idx], ls = st ? lineState[st.li] || {} : {};
@@ -5443,8 +5478,10 @@ function playSim(){
   if (simIdx==null || (simIdx >= EXEC.segs.length && nextStop(simIdx, simIdx)==null)){ simIdx = 0; simStops = new Set(); }
   simStopAt = null;
   clearInterval(simTimer);
+  let owed = 0;   // ½× and ¼×: a move every second or fourth step
   simTimer = setInterval(() => {
-    const to = Math.min(EXEC.segs.length, simIdx + simSpeed()), k = nextStop(simIdx, to);
+    owed += simSpeed(); const n = Math.floor(owed + 1e-9); if (!n) return; owed -= n;
+    const to = Math.min(EXEC.segs.length, simIdx + n), k = nextStop(simIdx, to);
     if (k!=null){
       const st = EXEC.steps[k]; simIdx = st.s0; simStops.add(k); simStopAt = k;
       clearInterval(simTimer); simTimer = null; simFollow(k, true);
@@ -5511,6 +5548,16 @@ document.getElementById("s-opt").onclick = () => setSimOpt(!simOpt);
 document.getElementById("s-bd").onclick = () => setSimBD(!simBD);
 document.getElementById("s-rap").onclick = () => setSimRapids(!simRapids);
 document.getElementById("s-big").onclick = () => setSimX(!simX);
+// The moves still to come: greyed, hidden or shown like the rest (View menu). The toolpath button hides them, and a
+// second press brings back whichever of grey or shown was picked before.
+let futureShown = "grey";
+function setFuture(f){
+  if (f!=="hide") futureShown = f;
+  future = f; document.getElementById("s-fut").setAttribute("aria-pressed", f==="hide");
+  drawViews();
+}
+document.getElementById("s-fut").onclick = () => { setFuture(future==="hide" ? futureShown : "hide");
+  setMsg(future==="hide" ? "The toolpath still to come is hidden: only the moves already run are drawn." : "The toolpath still to come is shown again."); };
 window.addEventListener("resize", () => { if (simX && activeTab >= 0) drawViews(); });
 
 document.getElementById("probs-l").addEventListener("mousedown", e => { const r = e.target.closest(".pr"); if (!r) return; e.preventDefault(); selectLine(+r.dataset.li); });
@@ -5579,9 +5626,9 @@ const MENUS = {
     R("By move type", () => colorBy==="motion", () => { colorBy = "motion"; drawViews(); }),
     R("By tool", () => colorBy==="tool", () => { colorBy = "tool"; drawViews(); }),
     "-", { grp:"Moves after the selected line" },
-    R("Grey them out", () => future==="grey", () => { future = "grey"; drawViews(); }),
-    R("Hide them", () => future==="hide", () => { future = "hide"; drawViews(); }),
-    R("Show normally", () => future==="show", () => { future = "show"; drawViews(); }),
+    R("Grey them out", () => future==="grey", () => setFuture("grey")),
+    R("Hide them", () => future==="hide", () => setFuture("hide")),
+    R("Show normally", () => future==="show", () => setFuture("show")),
     "-", { grp:"Fold long runs of moves" },
     { label:"Fold all", fn:() => foldAll(true) },
     { label:"Unfold all", fn:() => foldAll(false) },
