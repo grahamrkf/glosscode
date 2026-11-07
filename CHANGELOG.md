@@ -17,6 +17,11 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - A closed fold's line shows a progress bar while the simulation runs through the folded moves, like a hidden subprogram call's.
 
 ### Simulation
+- New speeds ½× and ¼×. 1× runs one move per step, about 16 moves a second whatever their length, so a long feed move goes by in a moment; the slower speeds take two or four steps per move.
+- The G00 (show rapid moves) and expanded view (⤢) buttons moved from the playback bar onto the toolpath, beside the zoom and Fit buttons. G00 only changes what is drawn: the simulation runs the same either way.
+- A new button on the toolpath hides the moves still to come; pressing it again goes back to greyed or shown (View › Moves after the selected line).
+- The lathe X timeline is scaled to the cutting moves. Rapids out to a tool change position far from the part used to squash the cutting into a flat line near CL; they now run off the top with ↑, like Z above the part on a mill.
+- Scale lines on the Z (X on a lathe) timeline, in powers of ten. The finest ones still 3.5 px apart are drawn light and every tenth one darker with its value at the left (0", -1"; on a lathe Ø1" and CL), and the origin is marked with a circle and cross. A part 11" deep shows 0" and -10" with lines every inch.
 - The ⏸ button pauses the simulation on Linux. Its text was rewritten on every step, which made WebKitGTK drop the click.
 - Space, F5 and the other keys still work after clicking a blank part of a panel; they used to do nothing until you clicked the editor. Clicking a row while the simulation plays no longer leaves "Playing…" in the status bar.
 
