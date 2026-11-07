@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MSIX package manifest for the Microsoft Store. scripts/package-msix.ps1 fills in the @...@ values:
+     the identity (Name, Publisher, PublisherDisplayName) must match what Partner Center shows under
+     Product identity for GlossCode, and the version is VERSION with a fourth number, 0.
+     See docs/microsoft-store.md. -->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap rescap">
+
+  <Identity Name="@IDENTITY_NAME@" Publisher="@PUBLISHER@" Version="@VERSION@" ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>GlossCode</DisplayName>
+    <PublisherDisplayName>@PUBLISHER_DISPLAY_NAME@</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <Description>G-code editor with a plain-English gloss line above every line of code.</Description>
+  </Properties>
+
+  <Dependencies>
+    <!-- Windows 10 1809 or later. GlossCode also needs the Microsoft Edge WebView2 Runtime, which
+         Windows 11 includes and Windows 10 gets with Microsoft Edge. -->
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <Application Id="GlossCode" Executable="GlossCode.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="GlossCode"
+        Description="G-code editor with a plain-English gloss line above every line of code"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+      </uap:VisualElements>
+      <Extensions>
+        <!-- Adds GlossCode to "Open with" for these program files, without taking over the default. -->
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="gcode">
+            <uap:DisplayName>G-code program</uap:DisplayName>
+            <uap:Logo>Assets\Square44x44Logo.png</uap:Logo>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.nc</uap:FileType>
+              <uap:FileType>.tap</uap:FileType>
+              <uap:FileType>.gcode</uap:FileType>
+              <uap:FileType>.ngc</uap:FileType>
+              <uap:FileType>.min</uap:FileType>
+              <uap:FileType>.mpf</uap:FileType>
+              <uap:FileType>.eia</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- Every desktop (Win32) program in a package needs this. -->
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

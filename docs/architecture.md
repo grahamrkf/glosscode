@@ -83,6 +83,12 @@ To change a built-in machine, the user picks **Make my own copy** (a new file th
 
 If a file named `portable` sits beside the .exe, GlossCode keeps settings, personal files and caches in a `GlossCode-data` folder beside the .exe instead. This is for running from a USB drive or a shared folder at the machine. Without that file, the standard folders above are used.
 
+### Microsoft Store copy
+
+A copy installed from the Microsoft Store runs from an MSIX package. It keeps both folders in the package's own `%LOCALAPPDATA%\Packages\<package family name>\LocalCache` (`Roaming\GlossCode` and `Local\GlossCode`), because Windows redirects a package's writes under `%APPDATA%` to a hidden copy, and it ignores a `portable` file. See [microsoft-store.md](microsoft-store.md).
+
+Help › Open settings folder opens the settings folder in the file manager, wherever it is.
+
 ## Data files
 
 - `data/gcode-words.json`: the base dictionary. Each code has a full word (`words`, such as `run.rapid`), a `short` word and a description. Codes that differ between machine types have `mill` and `lathe` entries.

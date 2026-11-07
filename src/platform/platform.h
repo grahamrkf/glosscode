@@ -34,6 +34,8 @@ typedef struct plat_dirs {
     const char *config;   /* settings, personal machines and library: %APPDATA%\GlossCode or ~/.config/glosscode */
     const char *cache;    /* WebView data and caches: %LOCALAPPDATA%\GlossCode or ~/.cache/glosscode */
     int portable;         /* a file named "portable" sits beside the program: both live in GlossCode-data there */
+    int store;            /* Windows: running from an MSIX package (the Microsoft Store); both live in the
+                             package's LocalCache folder, and the portable file is ignored */
 } plat_dirs;
 
 /* Works the folders out once (and creates them). */
@@ -41,6 +43,9 @@ const plat_dirs *plat_get_dirs(void);
 
 /* Opens a web address in the default browser. */
 void plat_open_url(const char *url);
+
+/* Opens a folder in the system's file manager. */
+void plat_open_folder(const char *path);
 
 /* Shows a message box for errors that happen before the window exists. */
 void plat_error_box(const char *title, const char *msg);

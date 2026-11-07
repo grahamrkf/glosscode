@@ -4,7 +4,8 @@
 # - linux: the whole program with GTK 3 and WebKitGTK, including a smoke test in a virtual display,
 #   packaged as .deb, .rpm and a portable .tar.gz
 # - windows: the whole program with MinGW-w64 as one static GlossCode.exe, packaged as an installer
-#   and a portable .zip
+#   and a portable .zip, plus the Microsoft Store package (.msix, its own artifact, not a release file)
+# - msix: installs that package on a clean runner with a test signature, to catch manifest mistakes
 # - examples: the sample programs, which aren't built into the program, as their own .zip
 # Each packaging job uploads the release files (docs/releasing.md) as an artifact; release.yml calls
 # this workflow on a version tag and attaches them to a draft release.
@@ -156,6 +157,59 @@ jobs:
           name: release-windows
           path: dist/*
           if-no-files-found: error
+      - name: Microsoft Store package
+        shell: pwsh
+        # The identity comes from the repository's variables (Settings › Secrets and variables ›
+        # Actions › Variables), copied from Partner Center; without them it's a test identity.
+        env:
+          MSIX_IDENTITY_NAME: ${{ vars.MSIX_IDENTITY_NAME }}
+          MSIX_PUBLISHER: ${{ vars.MSIX_PUBLISHER }}
+          MSIX_PUBLISHER_DISPLAY_NAME: ${{ vars.MSIX_PUBLISHER_DISPLAY_NAME }}
+        run: ./scripts/package-msix.ps1 -Build build -Out dist-store
+      - uses: actions/upload-artifact@v6
+        with:
+          name: store-windows
+          path: dist-store/*.msix
+          if-no-files-found: error
+
+  msix:
+    name: Microsoft Store package installs
+    needs: windows
+    runs-on: windows-2022
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: store-windows
+          path: store
+      - name: Sign with a test certificate, install and remove
+        # Windows PowerShell: the Appx module doesn't load in PowerShell 7.
+        shell: powershell
+        run: |
+          $msix = Get-ChildItem store\*.msix | Select-Object -First 1
+          # The certificate's subject must equal the manifest's Publisher.
+          $xml = [xml](& {
+            Add-Type -AssemblyName System.IO.Compression.FileSystem
+            $z = [System.IO.Compression.ZipFile]::OpenRead($msix.FullName)
+            try { $r = New-Object System.IO.StreamReader(($z.Entries | Where-Object FullName -eq "AppxManifest.xml").Open()); $r.ReadToEnd() } finally { $z.Dispose() }
+          })
+          $publisher = $xml.Package.Identity.Publisher
+          $name = $xml.Package.Identity.Name
+          Write-Host "Package $name, publisher $publisher, version $($xml.Package.Identity.Version)"
+          $cert = New-SelfSignedCertificate -Type Custom -Subject $publisher -KeyUsage DigitalSignature `
+            -CertStoreLocation Cert:\CurrentUser\My -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
+          $pw = ConvertTo-SecureString -String "test" -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath test.pfx -Password $pw | Out-Null
+          Export-Certificate -Cert $cert -FilePath test.cer | Out-Null
+          Import-Certificate -FilePath test.cer -CertStoreLocation Cert:\LocalMachine\TrustedPeople | Out-Null
+          $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\10.*\x64\signtool.exe" | Sort-Object FullName -Descending | Select-Object -First 1
+          & $signtool.FullName sign /fd SHA256 /f test.pfx /p test $msix.FullName
+          if ($LASTEXITCODE -ne 0) { throw "signtool failed ($LASTEXITCODE)" }
+          Add-AppxPackage -Path $msix.FullName
+          $pkg = Get-AppxPackage -Name $name
+          if (-not $pkg) { throw "the package didn't install" }
+          if (-not (Test-Path (Join-Path $pkg.InstallLocation "GlossCode.exe"))) { throw "GlossCode.exe isn't in the package" }
+          Get-ChildItem $pkg.InstallLocation | Format-Table Name, Length
+          Remove-AppxPackage -Package $pkg.PackageFullName
 
   examples:
     name: Example programs

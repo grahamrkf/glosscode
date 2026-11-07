@@ -227,6 +227,21 @@ static char *known_folder(int csidl)
     return to_utf8(buf);
 }
 
+/* The package family name when GlossCode runs from an MSIX package (the Microsoft Store), or NULL.
+   GetCurrentPackageFamilyName is looked up at run time so the program still starts on systems
+   without it. */
+static char *package_family_name(void)
+{
+    typedef LONG(WINAPI * get_pfn)(UINT32 *, PWSTR);
+    HMODULE k = GetModuleHandleW(L"kernel32.dll");
+    get_pfn fn = k ? (get_pfn)(void (*)(void))GetProcAddress(k, "GetCurrentPackageFamilyName") : NULL;
+    if (!fn) return NULL;
+    wchar_t name[256];
+    UINT32 len = 256;
+    if (fn(&len, name) != ERROR_SUCCESS) return NULL; /* APPMODEL_ERROR_NO_PACKAGE: not packaged */
+    return to_utf8(name);
+}
+
 const plat_dirs *plat_get_dirs(void)
 {
     static plat_dirs d;
@@ -240,10 +255,35 @@ const plat_dirs *plat_get_dirs(void)
     if (slash) *slash = 0;
     char *exe_dir = to_utf8(exe);
     d.exe_dir = exe_dir;
-    char *marker = join(exe_dir, "portable");
-    d.portable = plat_file_exists(marker);
-    free(marker);
-    if (d.portable) {
+    char *pfn = package_family_name();
+    d.store = pfn != NULL;
+    if (d.store) {
+        /* Windows redirects a packaged program's writes under %APPDATA% to a private copy, which
+           the user can't find at that path. Use the package's own folders instead, so Help › Open
+           settings folder shows the real place. The install folder is read-only, so there is no
+           portable mode. */
+        char *local = known_folder(CSIDL_LOCAL_APPDATA);
+        char *pkgs = join(local ? local : exe_dir, "Packages");
+        char *pkg = join(pkgs, pfn);
+        char *lc = join(pkg, "LocalCache");
+        char *roaming = join(lc, "Roaming"), *loc = join(lc, "Local");
+        d.config = join(roaming, "GlossCode");
+        d.cache = join(loc, "GlossCode");
+        free(local);
+        free(pkgs);
+        free(pkg);
+        free(lc);
+        free(roaming);
+        free(loc);
+        free(pfn);
+    } else {
+        char *marker = join(exe_dir, "portable");
+        d.portable = plat_file_exists(marker);
+        free(marker);
+    }
+    if (d.store) {
+        /* The folders are set above. */
+    } else if (d.portable) {
         char *base = join(exe_dir, "GlossCode-data");
         d.config = base;
         d.cache = join(base, "cache");
@@ -263,6 +303,13 @@ void plat_open_url(const char *url)
 {
     if (strncmp(url, "https://", 8) != 0 && strncmp(url, "http://", 7) != 0) return;
     wchar_t *w = to_wide(url);
+    ShellExecuteW(NULL, L"open", w, NULL, NULL, SW_SHOWNORMAL);
+    free(w);
+}
+
+void plat_open_folder(const char *path)
+{
+    wchar_t *w = to_wide(path);
     ShellExecuteW(NULL, L"open", w, NULL, NULL, SW_SHOWNORMAL);
     free(w);
 }

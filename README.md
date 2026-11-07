@@ -135,13 +135,22 @@ docs/architecture.md    Core, platform layer, UI and build plan
 docs/building.md        How to build and test on Windows and Linux
 docs/checks.md          Every check, the rules file format, and Haas/Okuma coverage
 docs/features.md        Feature list and open questions
-docs/releasing.md       Version number, release files, update check, and what a first release still needs
+docs/releasing.md       Version number, release files, how updates reach users (winget, apt, dnf)
+docs/microsoft-store.md The Microsoft Store package and how to submit it
+PRIVACY.md              Privacy policy (GlossCode collects nothing)
 docs/subprogram-library.md  Subprogram library: file format, variables, call or write in, folders
 docs/images/            Mockup screenshots
 src/ui/index.html       The program's screen (HTML, CSS, JavaScript); also runs in a browser
 VERSION                 Current version number
 examples/               Sample programs used by the mockup (Haas, Fanuc and Okuma; BRACKET_0MC.nc ends lines with ;). Not built into the program; a separate download
 ```
+
+## Installing
+
+- **Windows:** the installer or portable .zip from the [Releases page](https://github.com/grahamrkf/glosscode/releases), or `winget install GlossCode.GlossCode` (`winget upgrade` updates it). A Microsoft Store listing is on its way.
+- **Linux:** the .deb, .rpm or portable .tar.gz from the Releases page, or add the [package repository](https://grahamrkf.github.io/glosscode/) once and get updates with the rest of the system (`apt upgrade`, `dnf upgrade`).
+
+GlossCode doesn't check for updates itself and collects nothing ([privacy policy](PRIVACY.md)). Sample programs are a separate download on the Releases page.
 
 ## Try it in a browser
 

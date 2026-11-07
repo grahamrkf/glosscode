@@ -624,17 +624,10 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
 .alinks{display:grid;grid-template-columns:118px 1fr;gap:4px 10px;font-size:12.5px;color:#555}
 .alinks a{color:#0f6cbd;text-decoration:none}
 .alinks a:hover{text-decoration:underline}
-.aupd{border:1px solid #e5e5e5;border-radius:6px;background:#fafafa;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.aupd{border:1px solid #e5e5e5;border-radius:6px;background:#fafafa;padding:10px 12px;display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:#333;line-height:1.4}
 .aupd .arow{display:flex;align-items:center;gap:10px}
-.aupd .astat{flex:1;font-size:12.5px;color:#333;line-height:1.4}
-.aupd .astat.ok{color:#107c10}
-.aupd .astat.err{color:#a4262c}
-.aupd .astat.new{color:#1b1b1b;font-weight:600}
-.aupd .anotes{font-size:11.5px;color:#555;max-height:84px;overflow:auto;white-space:pre-wrap;border-top:1px solid #eee;padding-top:6px}
-.aupd .adl{display:flex;gap:8px;flex-wrap:wrap}
-.aupd .btn:disabled{opacity:.5;cursor:default}
+.aupd .apath{flex:1;font-family:Consolas,"Cascadia Mono",monospace;font-size:11.5px;color:#555;word-break:break-all}
 .aupd [hidden]{display:none}
-.ack{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
 .acopy{font-size:11px;color:#888}
 .dlg .afoot{display:flex;justify-content:flex-end}
 </style>
@@ -922,10 +915,8 @@ small.u{font-size:.62em;font-weight:500;margin-left:1px;opacity:.85;letter-spaci
               <span>Report a problem</span><a id="a-issues" target="_blank" rel="noopener">Issues on GitHub</a>
             </div>
             <div class="aupd">
-              <div class="arow"><span class="astat" id="a-stat">Not checked yet.</span><button class="btn" id="a-check">Check for updates</button></div>
-              <div class="adl" id="a-dl" hidden></div>
-              <div class="anotes" id="a-notes" hidden></div>
-              <label class="ack"><input type="checkbox" id="a-auto" checked> Check for updates when GlossCode starts</label>
+              <div id="a-upd"></div>
+              <div class="arow" id="a-cfgrow" hidden><span class="apath" id="a-cfg"></span><button class="btn" id="a-cfgopen">Open settings folder</button></div>
             </div>
             <div class="acopy">© 2026 Graham Fluet. MIT License. Uses the webview and nativefiledialog-extended libraries.</div>
           </div>
@@ -7497,96 +7488,62 @@ window.openConvert = openConvert; window.convertProgram = convert;
 </script>
 <script>
 /* ---------- About window ----------
-   Help › About GlossCode shows the version, the website and an update check. The check asks the GitHub
-   Releases API for the latest published release, compares its tag (v0.2.0) with APP_VERSION, and offers
-   the download that matches this copy: the installer for an installed copy, the portable archive for a
-   portable one. Release files follow the names in docs/releasing.md, so the right one can be picked by
-   its ending. In the app, the platform file downloads the file to the Downloads folder, checks it against
-   SHA256SUMS.txt from the same release, and offers to run the installer; the mockup just opens the link.
+   Help › About GlossCode shows the version, the website, how this copy gets updates and where its
+   settings are kept. GlossCode doesn't check for updates itself and makes no network connections:
+   the Microsoft Store, winget, apt and dnf update it (docs/releasing.md), and a portable copy is
+   updated by downloading a new one from the Releases page.
    APP_VERSION comes from the VERSION file at the repository root (scripts/sync-mockup-data.mjs).
    Kept in its own script block so it can move into the app as one piece. */
 (() => {
 const APP_VERSION = "0.1.9";
 const REPO = "grahamrkf/glosscode";
 const SITE = `https://github.com/${REPO}`;
-const API = `https://api.github.com/repos/${REPO}/releases/latest`;
 const $ = id => document.getElementById(id);
 const adlg = $("adlg");
-const NATIVE = window.GlossCodeNative;   // set when running in the app; the app checks for a "portable" file beside itself
-const os = NATIVE ? NATIVE.platform : /Linux/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent) ? "linux" : "windows";
-const portable = NATIVE ? NATIVE.portable : new URLSearchParams(location.search).has("portable");
-// Which release files fit this copy, best first.
-const WANT = {
-  windows: portable ? [[/-windows-x64-portable\.zip$/i, "Download portable (.zip)"]]
-                    : [[/-windows-x64-setup\.exe$/i, "Download installer"]],
-  linux:   portable ? [[/-linux-x86_64-portable\.tar\.gz$/i, "Download portable (.tar.gz)"]]
-                    : [[/-linux-amd64\.deb$/i, "Download installer (.deb)"], [/-linux-x86_64\.rpm$/i, "Download installer (.rpm)"]]
-};
-let busy = false;
+const NATIVE = window.GlossCodeNative;   // set when running in the app
+const q = new URLSearchParams(location.search);
+const store = NATIVE ? !!NATIVE.store : q.has("store");          // installed from the Microsoft Store (an MSIX package)
+const os = NATIVE ? NATIVE.platform : !store && /Linux/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent) ? "linux" : "windows";
+const portable = !store && (NATIVE ? NATIVE.portable : q.has("portable"));
+const kind = store ? "Microsoft Store" : portable ? "portable" : "installed";
 
-const parse = v => (String(v).replace(/^v/i, "").match(/^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?/) || []).slice(1);
-function newer(a, b){   // is version a newer than version b? A pre-release (0.2.0-beta.1) is older than its release.
-  const x = parse(a), y = parse(b); if (!x.length || !y.length) return false;
-  for (let i = 0; i < 3; i++) if (+x[i] !== +y[i]) return +x[i] > +y[i];
-  if (!x[3] !== !y[3]) return !x[3];
-  return (x[3] || "") > (y[3] || "");
-}
-function status(text, cls = ""){ const s = $("a-stat"); s.textContent = text; s.className = "astat " + cls; }
-
-function showRelease(rel){
-  const tag = rel.tag_name, dl = $("a-dl"), notes = $("a-notes");
-  const files = WANT[os].map(([re, label]) => [rel.assets?.find(a => re.test(a.name)), label]).filter(([a]) => a);
-  if (!newer(tag, APP_VERSION)){
-    status(`GlossCode ${APP_VERSION} is up to date.`, "ok"); dl.hidden = notes.hidden = true; return;
-  }
-  status(`GlossCode ${tag.replace(/^v/i, "")} is available.`, "new");
-  dl.innerHTML = files.map(([a, label], i) => `<button class="btn${i ? "" : " pri"}" data-url="${esc(a.browser_download_url)}" data-name="${esc(a.name)}">${label} · ${(a.size / 1048576).toFixed(1)} MB</button>`).join("")
-    + `<button class="btn" data-url="${esc(rel.html_url)}">${files.length ? "Other downloads" : "Open the release page"}</button>`;
-  dl.hidden = false;
-  notes.textContent = (rel.body || "").trim(); notes.hidden = !notes.textContent;
-}
-
-async function check(){
-  if (busy) return; busy = true;
-  $("a-check").disabled = true; status("Checking GitHub for a newer release…");
-  $("a-dl").hidden = $("a-notes").hidden = true;
-  try {
-    const r = await fetch(API, { headers:{ Accept:"application/vnd.github+json" } });
-    if (r.status === 404) status("No releases have been published yet.");
-    else if (r.status === 403 || r.status === 429) status("GitHub is limiting update checks right now. Try again in an hour.", "err");
-    else if (!r.ok) status(`GitHub answered ${r.status}. Try again later.`, "err");
-    else showRelease(await r.json());
-  } catch {
-    status("Couldn't reach GitHub. Check the network connection, or download from the website.", "err");
-  } finally { busy = false; $("a-check").disabled = false; }
+function updateText(){
+  const rel = `<a href="${SITE}/releases" target="_blank" rel="noopener">Releases page</a>`;
+  if (store) return "The Microsoft Store keeps this copy up to date.";
+  if (portable) return `This portable copy doesn't update itself. To update it, download the new portable archive from the ${rel} and replace this folder's program. Your settings in GlossCode-data stay where they are.`;
+  if (os === "linux") return `If you added the GlossCode package repository, your system's updates (apt or dnf) keep GlossCode up to date. Otherwise, install the new .deb or .rpm from the ${rel}.`;
+  return `If you installed GlossCode with winget, <code>winget upgrade GlossCode.GlossCode</code> updates it. Otherwise, run the new installer from the ${rel}; it updates this copy in place.`;
 }
 
 function openAbout(){
   closeMenu?.();
   $("a-ver").textContent = APP_VERSION;
-  $("a-plat").textContent = `${os === "linux" ? "Linux" : "Windows"}, 64-bit, ${portable ? "portable" : "installed"}`;
+  $("a-plat").textContent = `${os === "linux" ? "Linux" : "Windows"}, 64-bit, ${kind}`;
   $("a-site").href = SITE; $("a-site").textContent = SITE.replace(/^https:\/\//, "");
   $("a-rel").href = SITE + "/releases"; $("a-issues").href = SITE + "/issues";
+  $("a-upd").innerHTML = updateText();
+  const cfg = NATIVE?.configDir;
+  $("a-cfgrow").hidden = !cfg; $("a-cfg").textContent = cfg ? "Settings: " + cfg : "";
   adlg.hidden = false; $("a-close").focus();
 }
 function closeAbout(){ adlg.hidden = true; $("ed")?.focus({ preventScroll:true }); }
+// Opens the folder with settings.json, personal machine profiles and library files in the file manager.
+function openSettingsFolder(){
+  closeMenu?.();
+  if (!NATIVE?.openConfigDir){ setMsg("The settings folder can be opened from the installed program."); return; }
+  NATIVE.openConfigDir();
+}
 
-$("a-check").addEventListener("click", check);
+$("a-cfgopen").addEventListener("click", openSettingsFolder);
 $("a-close").addEventListener("click", closeAbout);
 $("a-x").addEventListener("click", closeAbout);
 adlg.addEventListener("mousedown", e => { if (e.target === adlg) closeAbout(); });
 document.addEventListener("keydown", e => { if (!adlg.hidden && e.key === "Escape"){ e.preventDefault(); e.stopPropagation(); closeAbout(); } }, true);
-$("a-dl").addEventListener("click", e => {
-  const b = e.target.closest("button"); if (!b) return;
-  window.open(b.dataset.url, "_blank", "noopener");
-  if (b.dataset.name) status(`Downloading ${b.dataset.name}. GlossCode checks it against the release's SHA256SUMS.txt, then offers to run it.`, "new");
-});
-$("a-auto").addEventListener("change", e => setMsg(e.target.checked
-  ? "GlossCode will check GitHub for a newer release once each time it starts, and only says something when there is one."
-  : "GlossCode won't check for updates by itself. Use Help › About GlossCode to check."));
 
-MENUS.Help.push("-", { label:"About GlossCode", fn:openAbout });
-window.openAbout = openAbout; window.checkForUpdates = check;
+MENUS.Help.push("-");
+if (NATIVE) MENUS.Help.push({ label:"Open settings folder", fn:openSettingsFolder });
+MENUS.Help.push({ label:"About GlossCode", fn:openAbout });
+window.openAbout = openAbout;
 })();
 </script>
 </body>
