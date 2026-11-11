@@ -2,7 +2,7 @@
 
 What changed in each GlossCode release. The newest release is at the top. Versions follow `MAJOR.MINOR.PATCH` (see [docs/releasing.md](docs/releasing.md)); while the version starts with `0.`, file formats may still change between releases.
 
-## [Unreleased]
+## [0.4.0] - 2026-11-11
 
 ### Simulation
 - Run time. Each move now takes as long as it would on the machine, worked out from its length and the programmed feed: G94 per minute, G95 per rev times the spindle speed (and threading's lead), G96 surface speed turned into rpm at each move's diameter and capped by the G50 clamp or the machine's max spindle, and a feed above the machine's max feed capped to it. Rapids take the longest axis's distance at the rapid rate; G04 dwells, dwells at the bottom of G82/G89 holes, the extra rapids of G83/G73 pecks and the feed back out of taps and bores count too. Acceleration, tool changes and spindle start aren't counted yet, so a real run takes a bit longer.
