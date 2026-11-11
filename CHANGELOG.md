@@ -4,6 +4,9 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Code
+- The C core now only reads and writes files. Its copy of the gloss and checks (kept identical to the UI's JavaScript, but never used by the program) is gone, and so is the `--data` option, which only affected that copy. The golden files in `tests/golden/` stay, as a record of what the UI shows.
+
 ## [0.2.0] - 2026-11-07
 
 ### Editor

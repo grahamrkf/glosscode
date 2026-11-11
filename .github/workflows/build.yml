@@ -1,6 +1,6 @@
 # Builds, tests and packages GlossCode on every push and pull request:
 # - core: the portable C core and its tests with gcc and clang (sanitizers on), plus a check that the
-#   golden files still match the mockup's JavaScript
+#   golden files still match what the UI shows, and the UI tests
 # - linux: the whole program with GTK 3 and WebKitGTK, including a smoke test in a virtual display,
 #   packaged as .deb, .rpm and a portable .tar.gz
 # - windows: the whole program with MinGW-w64 as one static GlossCode.exe, packaged as an installer
@@ -33,8 +33,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-      - name: Golden files match the mockup
-        run: node scripts/make-core-goldens.mjs --check
+      - name: Golden files match the UI
+        run: node scripts/make-goldens.mjs --check
+      - name: UI checks
+        run: node tests/test_ui.mjs
       - name: Mockup data is in sync
         run: |
           node scripts/sync-mockup-data.mjs

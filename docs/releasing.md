@@ -54,9 +54,9 @@ The UI, data, icons, the packaging plan, the core and the program exist. Before 
 | ✓ | License (MIT) | Done |
 | ✓ | Where user files go, portable mode, single executable plan ([architecture.md](architecture.md#packaging)) | Written down |
 | ✓ | Version number and release file names | This page |
-| ✓ | **Core in C**: parser, mode tracker, translator, checks, dictionary loader | Done (`src/core/`), checked against the mockup by `test_golden` |
+| ✓ | **Core in C**: reading and writing files | Done (`src/core/`). The gloss, checks and simulation run in the UI's JavaScript |
 | – | **Platform files** `platform_win32.c` and `platform_posix.c` | Done except the download function and file watching |
-| – | **Webview shell**: window, bindings between the UI and the core, embedded UI and data | Done for Open, Save, Save As and About; plus the home page, recent files and default machines (`settings.json`); the UI still draws with its own copy of the logic |
+| – | **Webview shell**: window, bindings between the UI and the core, embedded UI and data | Done for Open, Save, Save As and About; plus the home page, recent files and default machines (`settings.json`) |
 | ✓ | **Build script** (CMake) for MinGW-w64 on Windows and gcc on Linux, with webview and nativefiledialog-extended added as pinned dependencies | Done, with CI on Windows and Linux ([building.md](building.md)) |
 | ✓ | **Windows resource file**: icon, version info shown in the file's Properties | Done (`src/app/glosscode.rc.in`) |
 | ✓ | **Windows installer script** (Inno Setup): per-user install, Start menu entry, uninstaller, optional `.nc` file association | Done (`packaging/windows/glosscode.iss`, `scripts/package-windows.ps1`) |

@@ -1,20 +1,15 @@
 /* The JSON interface the UI calls through the webview. Each method takes a JSON object and returns one.
 
-   parse      { "text": "N10 G00 X1.\r\n…", "syntax"?: "fagor8060" }   (syntax: the dialect's blockSyntax; also on tokenize,
-                                                                    serialize and analyze)
+   parse      { "text": "N10 G00 X1.\r\n…", "syntax"?: "fagor8060" }   (syntax: the dialect's blockSyntax; also on tokenize
+                                                                    and serialize)
               -> { "lines": [ { "tok": ["N10","G00","X1."], "raw": "N10 G00 X1." }, … ],
                    "eob": false, "eol": "\r\n", "finalEol": true }
    serialize  { "lines": [ { "tok": […], "raw": "…" } | ["N10", …], … ], "eob": true, "eol": "\r\n", "finalEol": true }
               -> { "text": "…" }
-   analyze    { "lines": […as above…] or "text": "…", "machine": { "type": "mill", "brand": "haas", … },
-                "style": "words" | "short" }
-              -> { "lines": [ { "cells": [ { "g", "e", "u"?, "d", "unk"?, "imp"?, "cm"? } ], "kind": "feed"|null,
-                                "modes": { … } } ],
-                   "problems": [ { "line", "id", "sev", "title", "msg", "why" } ],
-                   "dialect": { "label": "…", "verified": true } }
    tokenize   { "text": "g1x1." } -> { "tok": ["G1","X1."] }
 */
-#include "gc_internal.h"
+#include "glosscode.h"
+#include "gc_util.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,111 +72,7 @@ static void write_doc(gc_buf *b, const gc_doc *doc)
     gc_buf_printf(b, ",\"finalEol\":%s}", doc->final_eol ? "true" : "false");
 }
 
-static void kv(gc_buf *b, const char *k, const char *v, int *first)
-{
-    if (!*first) gc_buf_putc(b, ',');
-    *first = 0;
-    gc_buf_json_str(b, k);
-    gc_buf_putc(b, ':');
-    if (v && *v) gc_buf_json_str(b, v);
-    else gc_buf_puts(b, "null");
-}
-
-static void write_modes(gc_buf *b, const gc_modes *m)
-{
-    int first = 1;
-    gc_buf_putc(b, '{');
-    kv(b, "motion", m->motion, &first);
-    kv(b, "plane", m->plane, &first);
-    kv(b, "units", m->units, &first);
-    kv(b, "unitCode", m->unit_code, &first);
-    kv(b, "distCode", m->dist_code, &first);
-    kv(b, "feed", m->feed_mode, &first);
-    kv(b, "feedCode", m->feed_code, &first);
-    kv(b, "spin", m->spin_mode, &first);
-    kv(b, "spinCode", m->spin_code, &first);
-    kv(b, "comp", m->comp, &first);
-    kv(b, "tlen", m->tlen, &first);
-    kv(b, "wcs", m->wcs, &first);
-    kv(b, "spinDir", m->spin_dir, &first);
-    kv(b, "cool", m->cool, &first);
-    kv(b, "torch", m->torch, &first);
-    kv(b, "cycleCode", m->cycle, &first);
-    kv(b, "F", m->F, &first);
-    kv(b, "S", m->S, &first);
-    kv(b, "T", m->T, &first);
-    kv(b, "H", m->H, &first);
-    gc_buf_printf(b, ",\"tlenOn\":%s,\"pos\":[", m->tlen_on ? "true" : "false");
-    for (int i = 0; i < 3; i++) {
-        if (i) gc_buf_putc(b, ',');
-        if (m->has_pos[i]) gc_buf_num(b, m->pos[i]);
-        else gc_buf_puts(b, "null");
-    }
-    gc_buf_puts(b, "],\"changed\":[");
-    static const char *const NAMES[] = { "F", "S", "T", "H", "wcs", "motion", "plane", "unitCode", "distCode",
-                                         "feedCode", "spinCode", "comp", "tlen", "cycleCode", "spinDir", "cool", "torch" };
-    int n = 0;
-    for (unsigned i = 0; i < sizeof NAMES / sizeof *NAMES; i++)
-        if (m->changed & (1u << i)) {
-            if (n++) gc_buf_putc(b, ',');
-            gc_buf_json_str(b, NAMES[i]);
-        }
-    gc_buf_puts(b, "]}");
-}
-
-static void write_analysis(gc_buf *b, const gc_analysis *a)
-{
-    gc_buf_puts(b, "{\"lines\":[");
-    for (int i = 0; i < a->nlines; i++) {
-        if (i) gc_buf_putc(b, ',');
-        gc_buf_puts(b, "{\"cells\":[");
-        for (int k = 0; k < a->ncells[i]; k++) {
-            const gc_cell *c = &a->cells[i][k];
-            if (k) gc_buf_putc(b, ',');
-            gc_buf_puts(b, "{\"g\":");
-            gc_buf_json_str(b, c->g);
-            gc_buf_puts(b, ",\"e\":");
-            gc_buf_json_str(b, c->e);
-            if (c->u) {
-                gc_buf_puts(b, ",\"u\":");
-                gc_buf_json_str(b, c->u);
-            }
-            gc_buf_puts(b, ",\"d\":");
-            gc_buf_json_str(b, c->d);
-            if (c->flags & GC_CELL_UNKNOWN) gc_buf_puts(b, ",\"unk\":true");
-            if (c->flags & GC_CELL_IMPLIED) gc_buf_puts(b, ",\"imp\":true");
-            if (c->flags & GC_CELL_COMMENT) gc_buf_puts(b, ",\"cm\":true");
-            gc_buf_putc(b, '}');
-        }
-        gc_buf_puts(b, "],\"kind\":");
-        if (a->kind[i]) gc_buf_json_str(b, a->kind[i]);
-        else gc_buf_puts(b, "null");
-        gc_buf_puts(b, ",\"modes\":");
-        write_modes(b, &a->modes[i]);
-        gc_buf_putc(b, '}');
-    }
-    gc_buf_puts(b, "],\"problems\":[");
-    for (int i = 0; i < a->nproblems; i++) {
-        const gc_problem *p = &a->problems[i];
-        if (i) gc_buf_putc(b, ',');
-        gc_buf_printf(b, "{\"line\":%d,\"id\":", p->line);
-        gc_buf_json_str(b, p->id);
-        gc_buf_puts(b, ",\"sev\":");
-        gc_buf_json_str(b, p->sev);
-        gc_buf_puts(b, ",\"title\":");
-        gc_buf_json_str(b, p->title);
-        gc_buf_puts(b, ",\"msg\":");
-        gc_buf_json_str(b, p->msg);
-        gc_buf_puts(b, ",\"why\":");
-        gc_buf_json_str(b, p->why);
-        gc_buf_putc(b, '}');
-    }
-    gc_buf_puts(b, "],\"dialect\":{\"label\":");
-    gc_buf_json_str(b, a->dialect_label);
-    gc_buf_printf(b, ",\"verified\":%s}}", a->dialect_verified ? "true" : "false");
-}
-
-char *gc_api_call(const gc_data *data, const char *method, const char *params_json, size_t params_len)
+char *gc_api_call(const char *method, const char *params_json, size_t params_len)
 {
     char err[200];
     gc_json *p = params_len ? gc_json_parse(params_json, params_len, err, sizeof err) : gc_json_new(GC_JOBJ);
@@ -217,21 +108,6 @@ char *gc_api_call(const gc_data *data, const char *method, const char *params_js
         }
         gc_buf_puts(&b, "]}");
         gc_tokens_free(t, n);
-    } else if (!strcmp(method, "analyze")) {
-        if (!data) {
-            gc_json_free(p);
-            return error_json("the dictionary and rules aren't loaded");
-        }
-        gc_doc *doc = doc_from(p);
-        const gc_json *machine = gc_json_get(p, "machine");
-        gc_json *empty = NULL;
-        if (!gc_json_is_obj(machine)) machine = empty = gc_json_new(GC_JOBJ);
-        const char *style = gc_json_get_str(p, "style");
-        gc_analysis *a = gc_analyze(data, machine, doc, style && !strcmp(style, "short") ? GC_STYLE_SHORT : GC_STYLE_WORDS);
-        write_analysis(&b, a);
-        gc_analysis_free(a);
-        gc_doc_free(doc);
-        gc_json_free(empty);
     } else {
         gc_json_free(p);
         snprintf(err, sizeof err, "unknown method \"%s\"", method);

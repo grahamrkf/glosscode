@@ -23,11 +23,8 @@ void gc_json_free(gc_json *v);
 gc_json *gc_json_clone(const gc_json *v);
 
 gc_json *gc_json_new(gc_jtype type);
-gc_json *gc_json_new_str(const char *s);
-gc_json *gc_json_new_num(double n);
 /* Sets key on an object, taking ownership of v. An existing key keeps its place. */
 void gc_json_set(gc_json *obj, const char *key, gc_json *v);
-void gc_json_del(gc_json *obj, const char *key);
 void gc_json_push(gc_json *arr, gc_json *v);
 
 /* Lookups return NULL when v isn't the right type or the item isn't there. */
@@ -40,8 +37,6 @@ int gc_json_is_obj(const gc_json *v);
 int gc_json_is_arr(const gc_json *v);
 /* JavaScript truthiness: null, false, 0, NaN and "" are false; a missing value (NULL) is false. */
 int gc_json_truthy(const gc_json *v);
-/* True when arr is an array holding the string s. */
-int gc_json_has_str(const gc_json *arr, const char *s);
 size_t gc_json_len(const gc_json *v);
 
 /* Writes v as compact JSON. */

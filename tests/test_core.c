@@ -1,6 +1,6 @@
 /* Unit tests for the core's building blocks: number formatting, the JSON reader, the word splitter,
-   reading and writing files, machine profile overrides and the JSON interface.
-   Usage: test_core <repo root> */
+   reading and writing files, and the JSON interface.
+   Usage: test_core */
 #include "glosscode.h"
 #include "gc_util.h"
 #include "test_util.h"
@@ -156,124 +156,36 @@ static void test_doc(void)
     free(l);
 }
 
-static gc_data *load(const char *root)
-{
-    char *wp = join_path(root, "data/gcode-words.json"), *rp = join_path(root, "data/gcode-rules.json");
-    size_t wl, rl;
-    char *w = read_file(wp, &wl), *r = read_file(rp, &rl);
-    char err[200];
-    gc_data *d = (w && r) ? gc_data_load(w, wl, r, rl, err, sizeof err) : NULL;
-    free(w);
-    free(r);
-    free(wp);
-    free(rp);
-    return d;
-}
-
-static const gc_problem *find_problem(const gc_analysis *a, const char *id)
-{
-    for (int i = 0; i < a->nproblems; i++)
-        if (!strcmp(a->problems[i].id, id)) return &a->problems[i];
-    return NULL;
-}
-
-static void test_machine_overrides(const gc_data *data)
-{
-    const char *prog = "N10 G20 G90\nN20 T1 M06\nN30 G00 X1 Y0.\nN40 M51\nN50 M51 M52\nN60 M30\n";
-    gc_doc *doc = gc_doc_parse(prog, strlen(prog));
-    char err[200];
-    const char *plain = "{\"type\":\"mill\",\"brand\":\"haas\"}";
-    const char *shop = "{\"type\":\"mill\",\"brand\":\"haas\",\"codes\":{\"M51\":{\"words\":\"vise.open\",\"short\":\"VOPN\",\"desc\":\"Open the vise\"}},"
-                       "\"checks\":{\"missing-decimal\":\"off\",\"unknown-word\":\"error\"},\"mConflicts\":[[\"M51\",\"M52\"]]}";
-    gc_json *m1 = gc_json_parse(plain, strlen(plain), err, sizeof err), *m2 = gc_json_parse(shop, strlen(shop), err, sizeof err);
-    gc_analysis *a = gc_analyze(data, m1, doc, GC_STYLE_WORDS);
-    CHECK(find_problem(a, "missing-decimal") != NULL, "X1 is flagged by default");
-    CHECK(a->cells[3][1].flags & GC_CELL_UNKNOWN, "M51 is unknown on a plain Haas");
-    CHECK(!strcmp(a->modes[2].motion, "G00") && a->modes[2].has_pos[0] && a->modes[2].pos[0] == 0.0001, "X1 is at 0.0001 in");
-    gc_analysis_free(a);
-    a = gc_analyze(data, m2, doc, GC_STYLE_SHORT);
-    CHECK(find_problem(a, "missing-decimal") == NULL, "a profile can turn a check off");
-    CHECK_STR(a->cells[3][1].e, "VOPN", "a profile can add English words");
-    const gc_problem *p = find_problem(a, "m-conflict");
-    CHECK(p && p->line == 4, "profile mConflicts are checked");
-    gc_analysis_free(a);
-    gc_json_free(m1);
-    gc_json_free(m2);
-    gc_doc_free(doc);
-}
-
-/* The older Okuma lathe controls read Okuma's language (no G54 work offset, G80 ends a LAP contour), and a
-   router reads like its control's mill. */
-static void test_controls(const gc_data *data)
-{
-    const char *prog = "N10 G50 S2000\nN20 G00 X2. Z0.1\nN30 G91 G50 Z-V1\nN40 M30\n";
-    gc_doc *doc = gc_doc_parse(prog, strlen(prog));
-    char err[200];
-    const char *u10 = "{\"type\":\"lathe\",\"brand\":\"okumau10l\"}", *rt = "{\"type\":\"router\",\"brand\":\"generic\"}";
-    gc_json *m1 = gc_json_parse(u10, strlen(u10), err, sizeof err), *m2 = gc_json_parse(rt, strlen(rt), err, sizeof err);
-    gc_analysis *a = gc_analyze(data, m1, doc, GC_STYLE_WORDS);
-    CHECK(!strcmp(a->modes[1].wcs, ""), "an OSP-U10L lathe has no G54 work offset");
-    CHECK_STR(a->cells[2][2].e, "set.coords", "G91 G50 Z-V1 is a zero shift on an OSP-U10L lathe");
-    gc_analysis_free(a);
-    a = gc_analyze(data, m2, doc, GC_STYLE_WORDS);
-    CHECK_STR(a->cells[1][1].e, "run.rapid", "a generic router reads G00");
-    gc_analysis_free(a);
-    gc_json_free(m1);
-    gc_json_free(m2);
-    gc_doc_free(doc);
-
-    /* On the OSP-E100L (and every Okuma lathe) G30 is a skip cycle, and M99 is tailstock thrust high */
-    const char *e1 = "{\"type\":\"lathe\",\"brand\":\"okumae100l\"}";
-    const char *p2 = "N10 G30\nN20 M99\n";
-    doc = gc_doc_parse(p2, strlen(p2));
-    m1 = gc_json_parse(e1, strlen(e1), err, sizeof err);
-    a = gc_analyze(data, m1, doc, GC_STYLE_WORDS);
-    CHECK_STR(a->cells[0][1].e, "cycle.skip", "G30 is the skip cycle on an Okuma lathe");
-    CHECK_STR(a->cells[1][1].e, "machine.tailstock.thrusthigh", "M99 is tailstock thrust high on an OSP-E100L");
-    gc_analysis_free(a);
-    gc_json_free(m1);
-    gc_doc_free(doc);
-}
-
-static void test_api(const gc_data *data)
+static void test_api(void)
 {
     const char *p = "{\"text\":\"N10 G0 X1.;\\r\\nN20 M30;\\r\\n\"}";
-    char *r = gc_api_call(data, "parse", p, strlen(p));
+    char *r = gc_api_call("parse", p, strlen(p));
     CHECK_STR(r, "{\"lines\":[{\"tok\":[\"N10\",\"G0\",\"X1.\",\";\"],\"raw\":\"N10 G0 X1.;\"},{\"tok\":[\"N20\",\"M30\",\";\"],\"raw\":\"N20 M30;\"}],"
                  "\"eob\":true,\"eol\":\"\\r\\n\",\"finalEol\":true}", "parse");
     free(r);
     p = "{\"lines\":[[\"N10\",\"G01\",\"X2.\"],{\"tok\":[\"N20\",\"M30\"],\"raw\":\"N20  M30\"}],\"eob\":true,\"eol\":\"\\n\",\"finalEol\":true}";
-    r = gc_api_call(data, "serialize", p, strlen(p));
+    r = gc_api_call("serialize", p, strlen(p));
     CHECK_STR(r, "{\"text\":\"N10 G01 X2.;\\nN20  M30;\\n\"}", "serialize keeps unchanged raw text");
     free(r);
-    p = "{\"lines\":[[\"N10\",\"G97\",\"S600\",\"M03\"]],\"machine\":{\"type\":\"mill\",\"brand\":\"fanuc\"}}";
-    r = gc_api_call(data, "analyze", p, strlen(p));
-    CHECK(r && strstr(r, "\"e\":\"speed:600\",\"d\"") && strstr(r, "\"id\":\"no-program-end\"") && strstr(r, "\"spinDir\":\"M03\""),
-          "analyze: %s", r ? r : "(null)");
-    free(r);
-    r = gc_api_call(data, "nope", "{}", 2);
+    r = gc_api_call("nope", "{}", 2);
     CHECK_STR(r, "{\"error\":\"unknown method \\\"nope\\\"\"}", "unknown method");
     free(r);
-    r = gc_api_call(data, "parse", "{", 1);
+    r = gc_api_call("parse", "{", 1);
     CHECK(r && strstr(r, "\"error\""), "bad JSON parameters");
     free(r);
-    r = gc_api_call(data, "tokenize", "{\"text\":\"g1x1.\"}", 16);
+    r = gc_api_call("tokenize", "{\"text\":\"g1x1.\"}", 16);
     CHECK_STR(r, "{\"tok\":[\"G1\",\"X1.\"]}", "tokenize");
     free(r);
 }
 
-/* Random text made of G-code-ish pieces must never crash or hang the core (run under sanitizers in CI). */
-static void test_garbage(const gc_data *data)
+/* Random text made of G-code-ish pieces must never crash or hang the reader and writer (run under sanitizers in CI). */
+static void test_garbage(void)
 {
     static const char *const bits[] = { "G", "M", "X", "Y", "Z", "U", "W", "R", "Q", "P", "F", "S", "T", "H", "D", "N", "O",
                                         "I", "J", "K", "-", ".", "0", "1", "5", "99", "97", "65", "83", "02", "03", "41",
                                         " ", " ", " ", "(", ")", ";", "\n", "\r\n", "CALL ", "RTS", "GOTO", "#", "/", "%",
                                         "\xe9", "M30", "M99", "G04", "G28", "G96", "G50", "G15 H", "G71", "G76" };
-    static const char *const machines[] = { "{\"type\":\"mill\",\"brand\":\"haas\"}", "{\"type\":\"lathe\",\"brand\":\"haas\"}",
-                                            "{\"type\":\"mill\",\"brand\":\"okuma\"}", "{\"type\":\"lathe\",\"brand\":\"okuma\"}",
-                                            "{\"type\":\"mill\",\"brand\":\"fanuc\"}", "{}" };
     unsigned long seed = 12345;
-    char err[200];
     for (int round = 0; round < 300; round++) {
         gc_buf b;
         gc_buf_init(&b);
@@ -283,36 +195,21 @@ static void test_garbage(const gc_data *data)
             gc_buf_puts(&b, bits[(seed >> 33) % (sizeof bits / sizeof *bits)]);
         }
         gc_doc *doc = gc_doc_parse(gc_buf_str(&b), b.len);
-        const char *mj = machines[round % (sizeof machines / sizeof *machines)];
-        gc_json *m = gc_json_parse(mj, strlen(mj), err, sizeof err);
-        gc_analysis *a = gc_analyze(data, m, doc, round & 1);
-        CHECK(a && a->nlines == doc->nlines, "garbage round %d", round);
+        CHECK(doc && doc->nlines >= 0, "garbage round %d", round);
         size_t len;
         free(gc_doc_serialize(doc, round & 2, &len));
-        gc_analysis_free(a);
-        gc_json_free(m);
         gc_doc_free(doc);
         gc_buf_free(&b);
     }
 }
 
-int main(int argc, char **argv)
+int main(void)
 {
-    const char *root = argc > 1 ? argv[1] : ".";
     test_numbers();
     test_json();
     test_tokenize();
     test_doc();
-    gc_data *data = load(root);
-    CHECK(data != NULL, "load data from %s", root);
-    if (data) {
-        test_machine_overrides(data);
-        test_controls(data);
-        test_api(data);
-        test_garbage(data);
-        char err[200];
-        CHECK(!gc_data_add_library(data, "{}", 2, "shop", err, sizeof err) && err[0], "a library file needs program and args");
-    }
-    gc_data_free(data);
+    test_api();
+    test_garbage();
     return t_summary("test_core");
 }
