@@ -1,7 +1,7 @@
 /* ---------- Tabs, the home page and files ----------
    Each open program has a tab; Home is always first. Everything (menus, panels, checks, simulation) works
    on the active tab, and each tab keeps its own program, machine, selected line and word, undo history
-   and scroll position. Switching tabs swaps the editor's globals (doc, machineId, curLine…).
+   and scroll position (see newTab in state.js: doc, machineId, curLine… are the active tab's).
    GlossCode starts on the home page: recent programs, New program and Open. A new program asks which
    machine it's for. A file opened before reopens with the machine used last time; any other file uses the
    default machine for its extension (.nc, .MIN…) when one is set, and otherwise asks.
@@ -36,10 +36,9 @@ async function loadSettings(){
 window.saveMachines = () => { Object.assign(SETTINGS, window.machineData()); saveSettings(); };
 // A deleted profile: open programs, recent files and file type defaults that used it move to "repl".
 window.machineDeleted = (id, repl) => {
-  for (const t of TABS) if (t!==cur() && t.machineId===id) t.machineId = repl;
+  for (const t of TABS) if (t.machineId===id) t.machineId = repl;
   for (const r of SETTINGS.recent) if (r.machine===id) r.machine = repl;
   for (const [ext, m] of Object.entries(SETTINGS.extDefaults)) if (m===id) SETTINGS.extDefaults[ext] = repl;
-  if (cur() && machineId===id){ cur().machineId = repl; }
   drawTabs?.();
 };
 function saveSettings(){
@@ -51,18 +50,12 @@ function saveSettings(){
 const extOf = name => (/\.[^./\\]+$/.exec(name || "") || [""])[0].toLowerCase();
 const folderOf = path => path.slice(0, Math.max(0, path.lastIndexOf("/"), path.lastIndexOf("\\")));
 
-/* Tab state. The active tab's program lives in the editor's globals; the others keep theirs here. */
+/* Tabs. Each tab object holds its own program (newTab in state.js); leaving a tab only keeps its scroll position. */
 const cur = () => TABS[activeTab];
-const tabName = t => t===cur() ? fileName : t.name;
-const tabMachine = t => t===cur() ? machineId : t.machineId;
-const isDirty = t => (t===cur() ? docVer : t.docVer) !== t.savedVer;
-function stash(){
-  const t = cur(); if (!t) return;
-  Object.assign(t, { name:fileName, machineId, doc, curLine, expanded, undoStack, redoStack, fileEob, docVer, scroll:[ed.scrollTop, ed.scrollLeft] });
-}
-function unstash(t){
-  ({ name:fileName, machineId, doc, curLine, expanded, undoStack, redoStack, fileEob, docVer } = t);
-}
+const tabName = t => t.name;
+const tabMachine = t => t.machineId;
+const isDirty = t => t.docVer !== t.savedVer;
+function leaveTab(){ const t = cur(); if (t) t.scroll = [ed.scrollTop, ed.scrollLeft]; }
 function setTitle(t){ document.title = t; if (NATIVE) NATIVE.setTitle(t); }
 function showActive(){
   $("app").classList.toggle("at-home", activeTab < 0);
@@ -81,21 +74,19 @@ function activate(i){
   if (editing && !commit()) return false;
   if (i===activeTab) return true;
   stopSim(true); closeMenu();
-  stash(); activeTab = i;
-  if (i >= 0) unstash(TABS[i]);
+  leaveTab(); activeTab = i;
   showActive();
   return true;
 }
 // Adds a tab for a program and shows it. o: { name, path, sample, machine, src (lines), expand, native }.
 function openProgram(o){
   if (editing && !commit()) return null;
-  stopSim(true); stash();
-  const t = { id:++TAB_SEQ, name:o.name, path:o.path || null, sample:!!o.sample, scroll:[0, 0],
-    native:o.native || { eol:"\r\n", finalEol:true, latin1:false, raw:new Map() } };
+  stopSim(true); leaveTab();
+  const t = newTab({ id:++TAB_SEQ, name:o.name, machineId:o.machine, path:o.path || null, sample:!!o.sample, scroll:[0, 0],
+    native:o.native || { eol:"\r\n", finalEol:true, latin1:false, raw:new Map() } });
   TABS.push(t); activeTab = TABS.length - 1;
-  fileName = o.name; machineId = o.machine;
   loadLines(o.src, o.expand);
-  t.savedVer = docVer; stash();
+  t.savedVer = docVer;
   showActive();
   if (t.path) remember(t);
   return t;
@@ -104,9 +95,9 @@ function closeTab(i){
   const t = TABS[i]; if (!t) return;
   if (i===activeTab && editing && !commit()) return;
   if (isDirty(t) && !confirm(`${tabName(t)} has changes that haven't been saved. Close it anyway?`)) return;
-  if (i===activeTab){ stopSim(true); stash(); }
+  if (i===activeTab) stopSim(true);
   TABS.splice(i, 1);
-  if (i===activeTab){ activeTab = -1; const to = Math.min(i, TABS.length - 1); if (to >= 0) unstash(TABS[to]); activeTab = to; showActive(); }
+  if (i===activeTab){ activeTab = Math.min(i, TABS.length - 1); showActive(); }
   else { if (i < activeTab) activeTab--; drawTabs(); }
 }
 function drawTabs(){
@@ -374,7 +365,7 @@ async function nativeSave(as){
   if (!r) return;
   t.path = r.path; t.sample = false; t.savedVer = ver;
   nf.raw = rawMap(lines.map(l => [l.tok, l.raw]));
-  if (t===cur()){ fileName = r.name; setTitle(r.name + " - GlossCode"); } else t.name = r.name;
+  t.name = r.name; if (t===cur()) setTitle(r.name + " - GlossCode");
   remember(t); drawTabs();
   setMsg(`Saved ${r.path} (${r.bytes} bytes)${eobOn() ? ", with ; at the end of every line" : ""}.`);
 }
@@ -485,7 +476,7 @@ window.openProgram = openProgram;
 // Program › Convert remembers each answer per pair of controls ("haas>fanuc": { "call.local": "comment" }).
 window.convertAnswers = pair => ((SETTINGS.convert ||= {})[pair] ||= {});
 window.saveConvertAnswers = () => saveSettings();
-window.tabMachineChanged = () => { const t = cur(); if (t){ t.machineId = machineId; if (t.path) remember(t); } };
+window.tabMachineChanged = () => { const t = cur(); if (t?.path) remember(t); };
 window.markSaved = () => { const t = cur(); if (t){ t.savedVer = docVer; remember(t); drawTabs(); } };
 window.nativeOpen = nativeOpen;
 window.nativeSave = nativeSave;
