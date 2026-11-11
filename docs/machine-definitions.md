@@ -204,30 +204,23 @@ A machine can add a cycle (a builder's own G-code), remove one with `null`, or c
 
 Help text is plain English and is the same in every layer unless a layer overrides it. Translations, later, would be separate files keyed by cycle and word, not more fields here.
 
-### Column order
+### Word order
 
-The **Columns by word type** layout reads its columns from `columns`, in order from left to right. The built-in order puts the most used words first: the G column (motion, canned cycles, cycle cancel and spindle speed mode G96/G97, which rarely share a line with a motion code), X, Y, Z, the arc and cycle words, F, S, the spindle M-codes, the tool, coolant, then other G-codes, other M-codes, rare words and the comment. A word goes in the first column that matches it, so a code listed in an earlier column (M03 under Spindle) never reaches a later catch-all (M).
+Program › Sort words puts each line's words in the order of `columns`, from first to last. The built-in order puts the most used words first: motion, canned cycles, cycle cancel and spindle speed mode (G96/G97), then X, Y, Z, the arc and cycle words, F, S, the spindle M-codes, the tool, coolant, then other G-codes, other M-codes, rare words and the comment. A word goes with the first entry that matches it, so a code listed in an earlier entry (M03 under Spindle) never reaches a later catch-all (M).
 
 ```jsonc
 "columns": [
-  { "id": "MOT",  "label": "G",       "groups": ["motion", "canned cycle"], "cycles": true, "codes": ["G96", "G97"],
-    "carry": "motion", "aligns": true, "alignsExcept": ["G80"] },
-  { "id": "X",    "label": "X",       "letters": ["X", "U"], "carry": "position", "aligns": true },
-  { "id": "SPIN", "label": "Spindle", "codes": ["M03", "M04", "M05"], "carry": "spindle", "aligns": true },
+  { "id": "MOT",  "label": "G",       "groups": ["motion", "canned cycle"], "cycles": true, "codes": ["G96", "G97"] },
+  { "id": "X",    "label": "X",       "letters": ["X", "U"] },
+  { "id": "SPIN", "label": "Spindle", "codes": ["M03", "M04", "M05"] },
   { "id": "G",    "label": "Other G", "letters": ["G"] },
   { "id": "OTHER","label": "Other",   "other": true },
   { "id": "NOTE", "label": "Comment", "comments": true }
-],
-"programOrderCodes": ["M00", "M01", "M02", "M30", "M06", "M97", "M98", "M99", "G65", "G04", "G10", "G28", "G30", "G53", "G92"]
+]
 ```
 
-- `letters`: any word starting with these letters. `codes`: these exact codes. `groups`: every code in these modal groups. `cycles`: every canned cycle the machine has. `about`: the column heading's tooltip.
-- `carry`: what an empty cell shows in grey when a modal value is still in effect from an earlier line: `motion` (the motion code or active cycle), `position` (where the axis was last sent), `cycle` (R and Q kept by an active canned cycle), `value` (the last F or S), `spindle`, `coolant` and `tool`. Columns with no `carry` stay empty. A carried value stays on one line and is cut short with … if it doesn't fit.
-- `aligns`: a line is laid out in columns only when it has a word from one of these columns (motion, axes, arc and cycle words, F, S, spindle). Codes in `alignsExcept` don't count, so the safety line `G80 G20 G90 G17 G40 G49` isn't pulled into the grid by its G80.
-- `programOrderCodes`: a line with any of these codes, or with an Okuma keyword (`CALL`, `RTS`, `GOTO`…), is shown in program order even if it has axis words. These are lines that don't make a cutting or positioning move: program stop (M00), optional stop (M01), program end (M02, M30), tool change (M06), subprogram and macro calls and returns (M97, M98, M99, G65), dwell (G04, where X or P is a time), data setting (G10), reference return (G28, G30), machine coordinate moves (G53) and coordinate system setting (G92 on mills, G50 on lathes). Lathes leave out G92, which is a threading cycle there.
-- Lines in program order, and lines with no words at all for the aligned columns (the program number, the safety line, a tool preselect, a comment), don't split into columns: their words fill cells from the left in the order they're written.
-- Several words in one cell stack one above the other, so a column is only as wide as its widest single word and a line with a stacked cell gets taller.
-- Like other arrays, a layer that sets `columns` or `programOrderCodes` replaces the whole list. Only columns used by lines laid out in columns are shown, so extra columns cost nothing.
+- `letters`: any word starting with these letters. `codes`: these exact codes. `groups`: every code in these modal groups. `cycles`: every canned cycle the machine has. `other`: any word. `comments`: comments.
+- Like other arrays, a layer that sets `columns` replaces the whole list.
 
 ## Controls and machine profiles
 

@@ -4,6 +4,10 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ## [Unreleased]
 
+### Editor
+- Code with gloss above is now the only layout. The two older layouts (words in program order, and columns by word type with modal values in empty cells) are gone, and so is typing gloss to write code (View › Edit in) with its autocomplete. View › Layout and Edit in are removed from the menu, and Edit › Break line after the selected word and Delete selected word with them: Enter breaks the line being edited, and Delete and Backspace edit the line.
+- Pasting one line of words while a line is being edited puts them in at the caret; with no line being edited, they go at the end of the current line, before its comment.
+
 ### Code
 - The C core now only reads and writes files. Its copy of the gloss and checks (kept identical to the UI's JavaScript, but never used by the program) is gone, and so is the `--data` option, which only affected that copy. The golden files in `tests/golden/` stay, as a record of what the UI shows.
 

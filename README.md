@@ -24,17 +24,15 @@ N40    M03 G97 S6000
 N50    G43 H01 Z1.0 M08
 ```
 
-The older layout, with every word in a fixed-width column under its gloss word, is still in View › Layout.
-
 The gloss words come from a dictionary of consistent abbreviations ([`data/gcode-words.json`](data/gcode-words.json)). Each code has a full word and a short one. Full words (the default) name what the code does as a group, then the action, such as `run.rapid` (G00), `run.feed` (G01), `set.inch` (G20), `tlen.on` (G43) and `cycle.peck` (G83). There are 20 fixed groups: `run` is for moves and other things the machine does on that line, `set` for modes that stay in effect, `cycle` for canned cycles, `call` and `flow` for subprograms and jumps, `prog` for the program itself, and a feature name (`spindle`, `cool`, `tool`, `tlen`, `ccomp`, `work`, `probe`, `thread`, `torch` and others) for the rest. Short words are the compact style: 3 to 8 characters, made from the group's core letters, an optional alternate and the option (`SFWD` spindle forward, `S2FWD` on the second spindle, `CON` coolant on, `TLON`, `WRK1` for G54, `INCH` and `INCR`). Two letters are used only for a standard abbreviation or a two-letter word (`MM`, `XY`, `IF`, `DO`). Codes that only some controls have are underlined with dots. A word with a value is its name, a colon and the value in full words (`tool:1`, `toffset:01`, `movz:1.0`, `speed:6000`), and the name and value run together in short words (`T1`, `H01`, `Z1.0`, `S6000`). N numbers read as written (`N40`). Numbers always show their decimal point (`X1.` reads `X1.0`), and a distance written without one is shown the way the control reads it, so `X1` reads `X0.0001`. Full words leave the unit off (`speed:600`); the info panel says whether it's RPM or surface speed. Short words keep a small unit that follows the active modes, so `S600` reads `S600 rpm` under G97 and `S600 sfm` under G96.
 
 | Full words | Short words | Gloss only |
 |---|---|---|
 | ![Full words](docs/images/editor-overview.png) | ![Short words](docs/images/short-words.png) | ![Gloss only](docs/images/gloss-only.png) |
 
-| Columns by word type | Simulation | Find |
-|---|---|---|
-| ![Columns by word type](docs/images/columns-layout.png) | ![Simulation](docs/images/simulation.png) | ![Find](docs/images/find.png) |
+| Simulation | Find |
+|---|---|
+| ![Simulation](docs/images/simulation.png) | ![Find](docs/images/find.png) |
 
 | Problems panel | Lathe checks | Okuma mill |
 |---|---|---|
@@ -89,10 +87,10 @@ The gloss words come from a dictionary of consistent abbreviations ([`data/gcode
 
 **Reading**
 - Show both lines, gloss only, or code only (View menu).
-- Three layouts: code with gloss above (the default), words in program order, or columns by word type (motion and cycle codes first, then X, Y, Z, F, S and the spindle M-codes, with rare words at the end). In columns, modal values still in effect from earlier lines show in grey in the empty cells, and lines that don't move the machine (program number, safety line, M30, subprogram calls) keep their words in program order. A Sort command puts the words on each line in a consistent order.
+- Program › Sort words puts the words on each line in a consistent order (motion and cycle codes first, then X, Y, Z, F, S and the spindle M-codes, with rare words at the end).
 - Subprogram and canned-cycle calls (for example Haas `M97 P1000`) expand inline below the call, marked with purple N numbers. Editing an expanded row edits the subprogram itself.
 - An active-modes panel for the selected line: motion, units, absolute or incremental, plane, feed mode and rate, spindle, coolant, tool and offsets. A dot marks modes set on that line.
-- A bar beside each line's number by motion: amber for rapid, blue for feed, teal for arcs, magenta for drilling cycles. In the default layout, lines with a problem are tinted yellow (warning), orange (error) or red (machine alarm), with the word at fault underlined.
+- A bar beside each line's number by motion: amber for rapid, blue for feed, teal for arcs, magenta for drilling cycles. Lines with a problem are tinted yellow (warning), orange (error) or red (machine alarm), with the word at fault underlined.
 
 **Previews**
 - XY toolpath view that follows subprogram calls, colored by move type or by tool. Moves after the selected line can be greyed out, hidden, or shown normally.
@@ -147,7 +145,7 @@ examples/               Sample programs used by the mockup (Haas, Fanuc and Okum
 
 ## Try it in a browser
 
-Open [`src/ui/index.html`](src/ui/index.html) in any browser. Click a word to edit it (or use the arrow keys and Enter), open a sample program from the home page, try the View menu (edit in gloss or code, show one or both lines, columns), and use **▸ show N1000** to expand the subprogram. Press F1 on a canned cycle to see how it works. In a browser the sample programs are built in and Open shows a pretend file list; the program uses real files instead.
+Open [`src/ui/index.html`](src/ui/index.html) in any browser. Open a sample program from the home page, click a line to edit its code, try the View menu (show one or both lines, full or short words), and use **▸ show N1000** to expand the subprogram. Press F1 on a canned cycle to see how it works. In a browser the sample programs are built in and Open shows a pretend file list; the program uses real files instead.
 
 ## License
 
