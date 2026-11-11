@@ -102,6 +102,13 @@ int plat_file_exists(const char *path)
     return stat(path, &st) == 0;
 }
 
+int plat_remove_file(const char *path, char *err, size_t errsz)
+{
+    if (unlink(path) == 0) return 0;
+    snprintf(err, errsz, "Couldn't delete %s: %s", path, strerror(errno));
+    return -1;
+}
+
 char *plat_full_path(const char *path)
 {
     char *r = realpath(path, NULL);

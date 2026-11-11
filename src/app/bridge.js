@@ -26,6 +26,11 @@
     // The saved settings object (recent files, default machines by file type), or null; and saving it.
     settings: function () { return call("gcSettings", []); },
     saveSettings: function (obj) { return call("gcSaveSettings", [obj]); },
+    // The personal subprogram library folder (<configDir>/library): [{ path, name, entry }] for each file;
+    // writing one subprogram's file (text is its JSON) resolves with the path; deleting one by id.
+    library: function () { return call("gcLibrary", []); },
+    saveLibrary: function (id, text) { return call("gcSaveLibrary", [String(id), String(text)]); },
+    deleteLibrary: function (id) { return call("gcDeleteLibrary", [String(id)]); },
     openUrl: function (url) { return call("gcOpenUrl", [String(url)]); },
     setTitle: function (title) { return call("gcSetTitle", [String(title)]); },
     // The clipboard's text (null when it holds none), and putting text on it (resolves true when it worked).

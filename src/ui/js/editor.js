@@ -1,5 +1,5 @@
 /* ---------- Rendering ---------- */
-const ed = document.getElementById("ed");
+const ed = $("ed");
 function render(){
   if (activeTab < 0){ window.drawTabs?.(); return; }   // the home page has no program to draw
   translateAll();
@@ -12,7 +12,9 @@ function render(){
       msg:`${key} is read here before the program sets it, so the simulation takes it as ${/^#/.test(key) ? "empty" : "0"}. Give it a start value under Variables.`,
       why:isCommonVar(key) ? "It's a common variable, so it's probably set at the machine (an offset page or another program). Enter the value it has there; Save common values keeps it on the machine profile." : "Nothing before this line sets it." });
   for (const nt of EXEC.notes || []) PROBLEMS.push({ li:nt.li, id:"sim-note", sev:"info", title:"Simulation note", msg:nt.text + ".", why:"The simulation can't work this out from the program." });
-  if ((EXEC.vars && Object.values(EXEC.vars).some(u => u.early!=null && !u.seed)) || EXEC.notes?.length) PROBLEMS.sort((a, b) => a.li - b.li || SEV_RANK[b.sev] - SEV_RANK[a.sev]);
+  if ((EXEC.vars && Object.values(EXEC.vars).some(u => u.early!=null && !u.seed)) || EXEC.notes?.length) {
+    PROBLEMS.sort((a, b) => a.li - b.li || SEV_RANK[b.sev] - SEV_RANK[a.sev]);
+  }
   // The simulation's alarm (the machine would stop there) is an error too; the lines after it never run.
   if (EXEC.alarm){
     PROBLEMS.push({ li:EXEC.alarm.li, id:"machine-alarm", sev:"error", title:"Machine alarm", msg:"Alarm: " + EXEC.alarm.text,
@@ -42,7 +44,10 @@ function render(){
   // Run order: the number of the block each row is, counting every line the program runs, subprogram lines once per
   // call (the line count some controls show). Lines only reached through a call are numbered on the call's inserted rows.
   const runNo = {};
-  if (runNums) EXEC.steps.forEach((st, k) => { const c = st.calls || [], rk = !c.length ? "m" + st.li : c.length===1 ? `x${c[0]}-${st.li}` : null; if (rk && runNo[rk]==null) runNo[rk] = k + 1; });
+  if (runNums) EXEC.steps.forEach((st, k) => {
+    const c = st.calls || [], rk = !c.length ? "m" + st.li : c.length===1 ? `x${c[0]}-${st.li}` : null;
+    if (rk && runNo[rk]==null) runNo[rk] = k + 1;
+  });
   const simOn = simIdx!=null && simKey!=null, pr = simOn ? rowProgress(simK, simKey) : null;
   patchRows(rows.map(r => r.key), rows.map(({li, key, ins, from, lib, fold}) => {
     if (lib) return window.libRowHTML(lib, li);
@@ -113,7 +118,11 @@ function patchRows(keys, html){
   }
   if (MEMO_CHECK){
     const t = document.createElement("template"); t.innerHTML = html.join("");
-    if (t.innerHTML!==ed.innerHTML){ console.warn("Redrawing only the changed rows left rows that differ from a full redraw."); setMsg("memoCheck: redrawing only the changed rows left different rows (see the console).", true); full(); }
+    if (t.innerHTML!==ed.innerHTML){
+      console.warn("Redrawing only the changed rows left rows that differ from a full redraw.");
+      setMsg("memoCheck: redrawing only the changed rows left different rows (see the console).", true);
+      full();
+    }
   }
 }
 /* Moving the cursor (a click, an arrow key, the simulation going to the next line) changes nothing but which row and
@@ -123,7 +132,9 @@ let drawnSig = null;
 const drawSig = () => [activeTab, TABS[activeTab]?.id, docVer, doc.length, machineId, style, showMode, runNums,
   [...expanded].join(), FOLDV, findQ, simBD, !!editing, simIdx!=null && simKey!=null].join("|");
 function renderCursor(){
-  if (activeTab < 0 || drawnSig!==drawSig() || !ed.firstElementChild || foldAutoPending || (foldHiding(curLine) >= 0 && !(simIdx!=null && simKey!=null))) return render();
+  if (activeTab < 0 || drawnSig!==drawSig() || !ed.firstElementChild || foldAutoPending || (foldHiding(curLine) >= 0 && !(simIdx!=null && simKey!=null))) {
+    return render();
+  }
   const simOn = simIdx!=null && simKey!=null, fh = findQ ? new Set(findHits()) : null;
   ed.querySelectorAll(".xpbar").forEach(b => { touchRow(b); b.remove(); });
   for (const r of ed.children){
@@ -196,7 +207,10 @@ function textRowHTML({ li, key, ins, from, c, pmark, eob, xp, num, fh }){
 // The width of one character of code, for putting the caret where the mouse is.
 let CHW = 0;
 function charW(){
-  const p = document.createElement("span"); p.className = "tc"; p.style.cssText = "position:absolute;visibility:hidden;white-space:pre"; p.textContent = "0".repeat(20);
+  const p = document.createElement("span");
+  p.className = "tc";
+  p.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+  p.textContent = "0".repeat(20);
   ed.appendChild(p); const w = p.getBoundingClientRect().width / 20; p.remove(); return CHW = w || CHW || 7.8;
 }
 // The caret position in a line's code under the mouse (0 before the first character, the text's length after the last).
@@ -220,7 +234,9 @@ function startLineEdit(li, key, caret, sel){
   input.addEventListener("input", onLineInput);
   input.addEventListener("keydown", onLineKey);
   input.addEventListener("keyup", lineInfo); input.addEventListener("mouseup", lineInfo);
-  input.addEventListener("blur", () => setTimeout(() => { if (editing && editing.input===input && document.activeElement!==input){ if (commit()) render(); } }, 120));
+  input.addEventListener("blur", () => setTimeout(() => {
+    if (editing && editing.input===input && document.activeElement!==input){ if (commit()) render(); }
+  }, 120));
   lineInfo();
 }
 // The words typed on the line being edited, with its N number in front (a typed N number takes its place).
@@ -273,17 +289,32 @@ function lineStep(li, d){
   return to;
 }
 function onLineKey(e){
-  const E = editing; if (!E?.line) return;
-  const { input, li, key } = E, v = input.value, a = input.selectionStart, b = input.selectionEnd, ctrl = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
+  const edit = editing; if (!edit?.line) return;
+  const { input, li, key } = edit;
+  const text = input.value;
+  const selStart = input.selectionStart;
+  const selEnd = input.selectionEnd;
+  const ctrl = e.ctrlKey || e.metaKey;
+  const keyName = e.key.toLowerCase();
   const main = key[0]==="m";
-  if (e.key==="Escape"){ e.preventDefault(); clearTimeout(lineTimer); doc[li] = E.orig; editing = null; translateAll(); render(); ed.focus({preventScroll:true}); setMsg(""); return; }
+  if (e.key==="Escape"){
+    e.preventDefault();
+    clearTimeout(lineTimer);
+    doc[li] = edit.orig;
+    editing = null;
+    translateAll();
+    render();
+    ed.focus({preventScroll:true});
+    setMsg("");
+    return;
+  }
   if (e.key==="Tab"){ e.preventDefault(); return; }
   if (e.key==="Enter" && ctrl){ e.preventDefault(); if (commit()) newLine(li); return; }
   if (e.key==="Enter"){
     e.preventDefault();
-    const before = v.slice(0, a), after = v.slice(b);
-    const head = before===E.text0 ? E.orig : lineWords(before), restW = tokenize(after);
-    clearTimeout(lineTimer); editing = null; doc[li] = E.orig;
+    const before = text.slice(0, selStart), after = text.slice(selEnd);
+    const head = before===edit.text0 ? edit.orig : lineWords(before), restW = tokenize(after);
+    clearTimeout(lineTimer); editing = null; doc[li] = edit.orig;
     pushUndo();
     const nn = restW.length && nOf(restW)!=null ? { n:null } : nextN(li), lineB = nn.n!=null ? [nWord(nn.n), ...restW] : restW;
     doc[li] = head; doc.splice(li+1, 0, lineB);
@@ -292,23 +323,23 @@ function onLineKey(e){
     startLineEdit(li+1, null, 0);
     return;
   }
-  if (e.key==="Backspace" && a===0 && b===0 && li > 0 && main){
+  if (e.key==="Backspace" && selStart===0 && selEnd===0 && li > 0 && main){
     e.preventDefault();
-    const cur = lineWords(v).slice(E.n ? 1 : 0); clearTimeout(lineTimer); editing = null; doc[li] = E.orig;
+    const cur = lineWords(text).slice(edit.n ? 1 : 0); clearTimeout(lineTimer); editing = null; doc[li] = edit.orig;
     pushUndo();
     const prev = doc[li-1], at = codeText(hasNcol(prev) ? prev.slice(1) : prev).length;
-    doc[li-1] = [...prev, ...(E.n && !cur.length ? [] : cur)]; doc.splice(li, 1);
+    doc[li-1] = [...prev, ...(edit.n && !cur.length ? [] : cur)]; doc.splice(li, 1);
     expanded = new Set([...expanded].filter(i => i!==li).map(i => i > li ? i-1 : i));
     startLineEdit(li-1, null, at + (prev.length > (hasNcol(prev) ? 1 : 0) && cur.length ? 1 : 0));
     return;
   }
-  if (e.key==="Delete" && a===v.length && b===v.length && li < doc.length-1 && main){
+  if (e.key==="Delete" && selStart===text.length && selEnd===text.length && li < doc.length-1 && main){
     e.preventDefault();
-    const next = doc[li+1], nextW = hasNcol(next) ? next.slice(1) : next, mine = lineWords(v);
-    clearTimeout(lineTimer); editing = null; doc[li] = E.orig;
+    const next = doc[li+1], nextW = hasNcol(next) ? next.slice(1) : next, mine = lineWords(text);
+    clearTimeout(lineTimer); editing = null; doc[li] = edit.orig;
     pushUndo(); doc[li] = [...mine, ...nextW]; doc.splice(li+1, 1);
     expanded = new Set([...expanded].filter(i => i!==li+1).map(i => i > li+1 ? i-1 : i));
-    startLineEdit(li, null, a);
+    startLineEdit(li, null, selStart);
     return;
   }
   if ((e.key==="ArrowUp" || e.key==="ArrowDown" || e.key==="PageUp" || e.key==="PageDown") && !e.altKey){
@@ -318,26 +349,30 @@ function onLineKey(e){
     if (e.shiftKey && Math.abs(d)===1){ render(); extendSel(Math.max(0, Math.min(doc.length-1, li + d))); return; }
     let to = li; for (let n = Math.abs(d); n > 0; n--) to = lineStep(to, Math.sign(d));
     if (!main && to!==li){ render(); selectLine(to); return; }
-    startLineEdit(to, null, a);
+    startLineEdit(to, null, selStart);
     return;
   }
-  if (ctrl && k==="z" && !e.shiftKey && v===E.text0){ e.preventDefault(); if (commit()) undo(); return; }
-  if (ctrl && (k==="y" || (k==="z" && e.shiftKey)) && v===E.text0){ e.preventDefault(); if (commit()) redo(); return; }
-  if (ctrl && k==="d"){ e.preventDefault(); if (commit()) duplicateLines(); return; }
-  if (ctrl && e.shiftKey && k==="k"){ e.preventDefault(); if (commit()){ render(); deleteLine(); } return; }
-  if (ctrl && (k==="c" || k==="x") && a===b){ e.preventDefault(); if (commit()){ render(); copyFromMenu(k==="x"); } return; }   // nothing selected: the whole line, like other editors
+  if (ctrl && keyName==="z" && !e.shiftKey && text===edit.text0){ e.preventDefault(); if (commit()) undo(); return; }
+  if (ctrl && (keyName==="y" || (keyName==="z" && e.shiftKey)) && text===edit.text0){ e.preventDefault(); if (commit()) redo(); return; }
+  if (ctrl && keyName==="d"){ e.preventDefault(); if (commit()) duplicateLines(); return; }
+  if (ctrl && e.shiftKey && keyName==="k"){ e.preventDefault(); if (commit()){ render(); deleteLine(); } return; }
+  if (ctrl && (keyName==="c" || keyName==="x") && selStart===selEnd){
+    e.preventDefault();
+    if (commit()){ render(); copyFromMenu(keyName==="x"); }
+    return;
+  }   // nothing selected: the whole line, like other editors
 }
 function status(){
   const st = lineState[curLine] || newState();
-  document.getElementById("st-pos").textContent = `Ln ${curLine+1}`;
-  document.getElementById("st-mode").textContent = simIdx!=null ? "Simulating" : "Editing code";
-  document.getElementById("st-modal").textContent = (style==="short" ? [st.units==="inch"?"INCH":"MM", st.dist==="abs"?"ABS":"INCR", ...(DIALECT.process ? [st.torch && DIALECT.process.on.includes(st.torch) ? "PLON" : "PLOFF"] : [st.feed==="perMin"?"FPM":"FPR", st.spin==="rpm"?"RPM":"SFM"])]
+  $("st-pos").textContent = `Ln ${curLine+1}`;
+  $("st-mode").textContent = simIdx!=null ? "Simulating" : "Editing code";
+  $("st-modal").textContent = (style==="short" ? [st.units==="inch"?"INCH":"MM", st.dist==="abs"?"ABS":"INCR", ...(DIALECT.process ? [st.torch && DIALECT.process.on.includes(st.torch) ? "PLON" : "PLOFF"] : [st.feed==="perMin"?"FPM":"FPR", st.spin==="rpm"?"RPM":"SFM"])]
     : [st.units==="inch"?"set.inch":"set.mm", st.dist==="abs"?"set.abs":"set.incr", ...(DIALECT.process ? [st.torch && DIALECT.process.on.includes(st.torch) ? "torch.on" : "torch.off"] : [st.feed==="perMin"?"set.fpm":"set.fpr", st.spin==="rpm"?"set.rpm":"set.sfm"])]).join("  ");
   const cnt = sev => PROBLEMS.filter(p => p.sev===sev).length;
   const e = cnt("error"), w = cnt("warning"), i = cnt("info");
-  document.getElementById("st-warn").innerHTML = (e || w || i) ? `<span class="se">✕ ${e}</span> <span class="sw2">⚠ ${w}</span> <span class="si">i ${i}</span>` : `<span class="ok">✓ No problems</span>`;
+  $("st-warn").innerHTML = (e || w || i) ? `<span class="se">✕ ${e}</span> <span class="sw2">⚠ ${w}</span> <span class="si">i ${i}</span>` : `<span class="ok">✓ No problems</span>`;
 }
-function setMsg(t, bad){ const m = document.getElementById("st-msg"); m.textContent = t || ""; m.className = "msg" + (bad ? " bad" : ""); }
+function setMsg(t, bad){ const m = $("st-msg"); m.textContent = t || ""; m.className = "msg" + (bad ? " bad" : ""); }
 // The canned cycle a line uses: one written on the line, or the active one on a continuation line.
 function lineCycle(li){
   const k = (doc[li] || []).filter(t => /^G\d/.test(t)).map(pad2).find(c => DIALECT.cycles?.[c]);
@@ -345,8 +380,12 @@ function lineCycle(li){
 }
 const cycBtn = code => code && DIALECT.cycles?.[code] ? `<button class="cyc" data-cyc="${code}" title="F1">How ${code} works…</button>` : "";
 function showInfo(li, idx, warn){
-  const c = idx!=null ? view[li]?.[idx] : null; const box = document.getElementById("info");
-  if (!c){ const lp = PBYLINE[curLine]; box.innerHTML = (lp ? lp.map(p => `<span class="warn ${p.sev}"><b>${esc(p.title)}.</b> ${esc(p.msg)}</span>`).join("") : "<span>Hover a word to see what it means.</span>") + cycBtn(lineCycle(curLine)); return; }
+  const c = idx!=null ? view[li]?.[idx] : null; const box = $("info");
+  if (!c){
+    const lp = PBYLINE[curLine];
+    box.innerHTML = (lp ? lp.map(p => `<span class="warn ${p.sev}"><b>${esc(p.title)}.</b> ${esc(p.msg)}</span>`).join("") : "<span>Hover a word to see what it means.</span>") + cycBtn(lineCycle(curLine));
+    return;
+  }
   box.innerHTML = `<span><span class="k">${esc(c.g)}</span> &nbsp;→&nbsp; <span class="k">${esc(c.e || "—")}${c.u ? `<small class="u">${esc(c.u)}</small>` : ""}</span></span><span>${esc(c.d)}</span>` + (warn ? `<span class="warn">${esc(warn)}</span>` : "") + varValues(li, idx, c) + (c.unk ? `<span class="warn">Unknown words are flagged instead of guessed.</span>` : "") + (c.cs ? `<span>Control-specific: ${esc(MACHINES[machineId].name)} has this code, but it isn't a standard one most controls share.</span>` : "")
     + cycBtn(c.code && DIALECT.cycles?.[c.code] ? c.code : lineCycle(li));
 }
@@ -359,7 +398,12 @@ function varValues(li, idx, c){
   const d = lineState[li]?.units==="mm" ? 3 : 4, shown = list.slice(0, 8).map(v => v==null ? "not set" : String(+v.toFixed(d)));
   return `<span>${list.length===1 ? "Works out to" : `Works out to ${list.length} values as it runs:`} <span class="k">${esc(shown.join(", "))}${list.length > 8 ? "…" : ""}</span>${list.includes(null) ? " (a variable used here was never set)" : ""}</span>`;
 }
-document.getElementById("info").addEventListener("mousedown", e => { const b = e.target.closest(".cyc"); if (!b) return; e.preventDefault(); openCycleHelp(b.dataset.cyc); });
+$("info").addEventListener("mousedown", e => {
+  const b = e.target.closest(".cyc");
+  if (!b) return;
+  e.preventDefault();
+  openCycleHelp(b.dataset.cyc);
+});
 // The fourth item says which machines show the row: "spindle" rows on mills and lathes, "process" rows
 // on machines with a process instead of a spindle (a plasma torch).
 // Klartext shows its own words for the path function (L FMAX, C DR+) and compensation (RL, RR, R0)
@@ -384,11 +428,14 @@ const MODE_ROWS = [
 function drawModes(){
   const st = lineState[curLine] || newState();
   const n = /^N\d+$/.test(doc[curLine]?.[0] || "") ? doc[curLine][0] : "line " + (curLine+1);
-  document.getElementById("mh").innerHTML = `Active modes at ${n} <span><span class="new">●</span> set on this line</span>`;
-  document.getElementById("modes").innerHTML = MODE_ROWS.filter(([lb, , , on]) => (lb!=="Positions" || DIALECT.modalGroups?.distance) && (lb!=="Work offset" || !DIALECT.process || DIALECT.modalGroups?.["work offset"]) && (lb!=="Feed mode" || !DIALECT.process || DIALECT.modalGroups?.["feed mode"]) && (!on || (on==="process")===!!DIALECT.process) && (SYNTAX!=="klartext" || KL_MODE_ROWS.includes(lb))).map(([lb, f, keys]) => {
+  $("mh").innerHTML = `Active modes at ${n} <span><span class="new">●</span> set on this line</span>`;
+  $("modes").innerHTML = MODE_ROWS.filter(([lb, , , on]) => (lb!=="Positions" || DIALECT.modalGroups?.distance) && (lb!=="Work offset" || !DIALECT.process || DIALECT.modalGroups?.["work offset"]) && (lb!=="Feed mode" || !DIALECT.process || DIALECT.modalGroups?.["feed mode"]) && (!on || (on==="process")===!!DIALECT.process) && (SYNTAX!=="klartext" || KL_MODE_ROWS.includes(lb))).map(([lb, f, keys]) => {
     const code = f(st); const isNew = keys.some(k => st.chg.includes(k));
     if (lb==="Cutter comp" && DIALECT.process) lb = "Kerf comp";
-    const en = !code ? "—" : code.split(" ").map(w => { const c = word(w, st, lb==="Work offset" ? "wcs" : null); return esc(c.e) + (c.u ? `<small class="u">${esc(c.u)}</small>` : ""); }).join(" ");
+    const en = !code ? "—" : code.split(" ").map(w => {
+      const c = word(w, st, lb==="Work offset" ? "wcs" : null);
+      return esc(c.e) + (c.u ? `<small class="u">${esc(c.u)}</small>` : "");
+    }).join(" ");
     return `<span class="lb">${isNew ? '<span class="new">●</span> ' : ""}${lb}</span><span class="cd">${esc(code || "not set")}</span><span class="ew"${isNew?' style="color:#d13438"':""}>${en}</span>`;
   }).join("");
   drawVarPanel();
@@ -399,10 +446,13 @@ function drawModes(){
    so their start values can be saved to the machine profile, where every program on that machine starts with them. */
 const isCommonVar = k => { const m = /^#(\d+)$/.exec(k); return m ? +m[1] >= 100 : /^VC\d+$/.test(k); };
 function varSeeds(){ return { ...(MACHINES[machineId]?.vars || {}), ...(TABS[activeTab]?.vars || {}) }; }
-const varOrder = (a, b) => { const na = /^#(\d+)$/.exec(a), nb = /^#(\d+)$/.exec(b); return na && nb ? na[1] - nb[1] : na ? -1 : nb ? 1 : a.localeCompare(b, undefined, { numeric:true }); };
+const varOrder = (a, b) => {
+  const na = /^#(\d+)$/.exec(a), nb = /^#(\d+)$/.exec(b);
+  return na && nb ? na[1] - nb[1] : na ? -1 : nb ? 1 : a.localeCompare(b, undefined, { numeric:true });
+};
 function varAt(u, k){ let v; for (const [s, x] of u.hist) if (s <= k) v = x; return v; }
 function drawVarPanel(){
-  const box = document.getElementById("vars"), hd = document.getElementById("vh"), U = EXEC.vars || {};
+  const box = $("vars"), hd = $("vh"), U = EXEC.vars || {};
   const keys = Object.keys(U).sort(varOrder);
   hd.hidden = box.hidden = !keys.length; if (!keys.length) return;
   const k = simIdx!=null && simK!=null ? simK : stepIndexFor(curLine), here = EXEC.steps[k]?.li ?? curLine;
@@ -422,24 +472,31 @@ function drawVarPanel(){
       + warn;
   }).join("") + (keys.some(isCommonVar) ? `<div class="vfoot"><button id="v-save" ${keys.some(key => isCommonVar(key) && key in tv) ? "" : "disabled"} title="Keep these start values on the machine profile, so every program on it starts with them">Save common values to ${esc(MACHINES[machineId]?.name || "this machine")}</button></div>` : "");
 }
-document.getElementById("vars").addEventListener("change", e => {
+$("vars").addEventListener("change", e => {
   const key = e.target.dataset?.var, t = TABS[activeTab]; if (!key || !t) return;
   const s = e.target.value.trim(), v = parseFloat(s);
   t.vars ||= {};
   if (s==="") delete t.vars[key];
-  else if (!isFinite(v)){ setMsg(`${s} isn't a number. A start value is a number, such as 0.25 or -1.`, true); e.target.value = key in t.vars ? fmt4(t.vars[key]) : ""; return; }
+  else if (!isFinite(v)){
+    setMsg(`${s} isn't a number. A start value is a number, such as 0.25 or -1.`, true);
+    e.target.value = key in t.vars ? fmt4(t.vars[key]) : "";
+    return;
+  }
   else t.vars[key] = v;
   render();
   setMsg(s==="" ? `${key} starts empty.` : `The simulation now starts with ${key} = ${fmt4(v)}.`);
 });
-document.getElementById("vars").addEventListener("click", e => {
+$("vars").addEventListener("click", e => {
   const t = TABS[activeTab], id = machineId;
   if (e.target.dataset?.vforget){
     const key = e.target.dataset.vforget; if (!USER_MACHINES.has(id)) return;
     delete USER_DATA[id].vars?.[key]; rebuildMachines(); persistMachines(); render(); setMsg(`Removed ${key} from ${MACHINES[id].name}.`); return;
   }
   if (e.target.id!=="v-save" || !t) return;
-  if (!USER_MACHINES.has(id)){ setMsg(`${MACHINES[id].name} isn't one of your machine profiles, so it can't keep values. Make a profile in File › Machine profiles…, then save them.`, true); return; }
+  if (!USER_MACHINES.has(id)){
+    setMsg(`${MACHINES[id].name} isn't one of your machine profiles, so it can't keep values. Make a profile in File › Machine profiles…, then save them.`, true);
+    return;
+  }
   const keys = Object.keys(t.vars || {}).filter(isCommonVar); if (!keys.length) return;
   USER_DATA[id].vars = { ...(USER_DATA[id].vars || {}) };
   for (const key of keys){ USER_DATA[id].vars[key] = t.vars[key]; delete t.vars[key]; }
@@ -461,7 +518,10 @@ ed.addEventListener("mousedown", e => {
     setFold(h, cl, !foldClosed(h, cl)); if (cl==null && foldClosed(h) && FOLD.owner[curLine]===h) curLine = h; render(); return; }
   const x = e.target.closest(".xp[data-x]");
   if (x){ e.preventDefault(); if (editing) commit(); const li = +x.dataset.x; expanded.has(li) ? expanded.delete(li) : expanded.add(li); render(); return; }
-  if (e.shiftKey && !x){ const ln = e.target.closest(".ln[data-li]:not(.ins)"); if (ln && !ln.classList.contains("lib")){ e.preventDefault(); extendSel(+ln.dataset.li); return; } }
+  if (e.shiftKey && !x){
+    const ln = e.target.closest(".ln[data-li]:not(.ins)");
+    if (ln && !ln.classList.contains("lib")){ e.preventDefault(); extendSel(+ln.dataset.li); return; }
+  }
   if (e.target.tagName==="INPUT" || e.button!==0) return;
   const ln = e.target.closest(".ln[data-li]:not(.lib)"); if (!ln) return;
   e.preventDefault();
@@ -476,7 +536,15 @@ ed.addEventListener("mousedown", e => {
 // docVer names the program's current state, so a tab knows whether it differs from what was last saved.
 function snap(){ return JSON.stringify({ doc, ex:[...expanded], cur:curLine, v:docVer }); }
 function pushUndo(){ undoStack.push(snap()); if (undoStack.length > 300) undoStack.shift(); redoStack = []; docVer = ++VER_SEQ; }
-function restore(s){ selAnchor = null; const o = JSON.parse(s); doc = o.doc; expanded = new Set(o.ex); curLine = Math.min(o.cur, doc.length-1); docVer = o.v; foldAutoPending = true; }
+function restore(s){
+  selAnchor = null;
+  const o = JSON.parse(s);
+  doc = o.doc;
+  expanded = new Set(o.ex);
+  curLine = Math.min(o.cur, doc.length-1);
+  docVer = o.v;
+  foldAutoPending = true;
+}
 function undo(){
   if (editing && !commit()) return;
   if (!undoStack.length){ setMsg("Nothing to undo"); return; }
@@ -495,12 +563,16 @@ const nWord = n => SYNTAX==="klartext" ? String(n) : "N" + n;
 const nStep = () => SYNTAX==="klartext" ? 1 : N_STEP;
 // Labels are "N1000" (Haas M97 P1000) or "O1200" (Okuma CALL O1200, a program block in the same file).
 function labels(){ const m = {}; doc.forEach((t, i) => { const n = nOf(t); if (n!=null && m["N"+n]===undefined) m["N"+n] = i; if (/^N[A-Z]/.test(t[0]||"") && m[t[0]]===undefined) m[t[0]] = i; if (/^O\d+$/.test(t[0]||"")) m["O"+parseInt(t[0].slice(1))] = i; const nm = t.find(w => /^\[\w+\]$/.test(w)); if (nm && m[nm]===undefined) m[nm] = i; if (/^%L /.test(t[0]||"") && m[t[0]]===undefined) m[t[0]] = i; const sb = SYNTAX==="fagor8055" && t.map(w => /^\(SUB ?(\d+)\)$/.exec(w)).find(Boolean); if (sb && m["SUB " + parseInt(sb[1])]===undefined) m["SUB " + parseInt(sb[1])] = i;
-  const kl = SYNTAX==="klartext" && t.find(w => /^LBL (?!0$)/.test(w)); if (kl && m[klLabel(kl.slice(4))]===undefined) m[klLabel(kl.slice(4))] = i; }); return m; }
+  const kl = SYNTAX==="klartext" && t.find(w => /^LBL (?!0$)/.test(w));
+  if (kl && m[klLabel(kl.slice(4))]===undefined) m[klLabel(kl.slice(4))] = i; }); return m; }
 // "N90" or "NA1" as a key into labels()
 const labelKey = w => /^N\d+:?$/.test(w) ? "N" + parseInt(w.slice(1)) : w;
 function callTarget(toks){
   // Klartext: CALL LBL 5 runs the subprogram at LBL 5 (with REP it repeats a section instead: the simulation follows it)
-  if (SYNTAX==="klartext"){ const c = toks.map(t => /^CALL LBL ("[^"]*"|\d+)(.*)$/.exec(t)).find(Boolean); return c && !/\bREP/.test(c[2]) ? klLabel(c[1]) : null; }
+  if (SYNTAX==="klartext"){
+    const c = toks.map(t => /^CALL LBL ("[^"]*"|\d+)(.*)$/.exec(t)).find(Boolean);
+    return c && !/\bREP/.test(c[2]) ? klLabel(c[1]) : null;
+  }
   // Fagor: LL NAME, #CALL NAME or #PCALL NAME … calls the local subroutine "%L NAME" (a global one is another file)
   const fc = toks.map(t => /^(?:LL|#CALL|#PCALL) ([^ ,]+)/.exec(t)).find(Boolean); if (fc) return "%L " + fc[1];
   // Fagor 8055: (CALL 12) or (PCALL 12, …) calls the "(SUB 12)" in the same file
@@ -556,7 +628,12 @@ function pasteText(text, fromMenu){
   if (lines.length===1){
     // One line of words: typed in at the caret of the line being edited, or added at the end of the current line
     // (before its comment).
-    if (editing?.line){ const inp = editing.input; inp.setRangeText(text.replace(/[\r\n]+/g, " ").trim(), inp.selectionStart, inp.selectionEnd, "end"); onLineInput(); return true; }
+    if (editing?.line){
+      const inp = editing.input;
+      inp.setRangeText(text.replace(/[\r\n]+/g, " ").trim(), inp.selectionStart, inp.selectionEnd, "end");
+      onLineInput();
+      return true;
+    }
     const li = curLine, toks = doc[li], words = lines[0];
     const at = toks.length && isComment(toks[toks.length-1]) ? toks.length-1 : toks.length;
     pushUndo();
@@ -601,7 +678,9 @@ function clipWrite(t){
   const N = window.GlossCodeNative;
   if (N?.setClipboardText) return N.setClipboardText(t).then(ok => { if (!ok) throw new Error("clipboard refused"); });
   if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(t);
-  const ta = document.createElement("textarea"); ta.value = t; ta.style.cssText = "position:fixed;left:-9999px;top:0";   // the old way, still allowed from a click
+  const ta = document.createElement("textarea");
+  ta.value = t;
+  ta.style.cssText = "position:fixed;left:-9999px;top:0";   // the old way, still allowed from a click
   document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch {} ta.remove();
   return ok ? Promise.resolve() : Promise.reject(new Error("no clipboard"));
 }
@@ -621,7 +700,10 @@ ed.addEventListener("paste", e => {
    Shift+↑↓ or Shift+click selects lines. Ctrl+C copies them as G-code text (what Save would write),
    Ctrl+X cuts them, Ctrl+D puts a copy below, and Ctrl+V pastes over them. With no lines selected,
    these act on the current line. */
-function selRange(){ if (selAnchor==null || selAnchor===curLine || !doc[selAnchor]) return null; return [Math.min(selAnchor, curLine), Math.max(selAnchor, curLine)]; }
+function selRange(){
+  if (selAnchor==null || selAnchor===curLine || !doc[selAnchor]) return null;
+  return [Math.min(selAnchor, curLine), Math.max(selAnchor, curLine)];
+}
 const inSel = li => { const r = selRange(); return !!r && li >= r[0] && li <= r[1]; };
 const linesToCopy = () => { const r = selRange() || [curLine, curLine]; return r; };
 function extendSel(to){
@@ -630,7 +712,12 @@ function extendSel(to){
   selectLine(to, false, true);
   const r = selRange(); setMsg(r ? `${r[1]-r[0]+1} lines selected. Ctrl+C copies, Ctrl+X cuts, Ctrl+D duplicates, Delete removes them.` : "");
 }
-function selectAllLines(){ if (editing && !commit()) return; selAnchor = 0; selectLine(doc.length-1, false, true); setMsg(`All ${doc.length} lines selected.`); }
+function selectAllLines(){
+  if (editing && !commit()) return;
+  selAnchor = 0;
+  selectLine(doc.length-1, false, true);
+  setMsg(`All ${doc.length} lines selected.`);
+}
 function clearSel(){ if (selAnchor==null) return false; selAnchor = null; render(); setMsg(""); return true; }
 // The selected lines as G-code text, one block per line, the same as Save writes them.
 function copyText(){ const [a, b] = linesToCopy(); return doc.slice(a, b+1).map(lineText).join("\r\n") + "\r\n"; }
@@ -641,7 +728,13 @@ function removeLines(a, b){
   else { doc.splice(a, n); expanded = new Set([...expanded].filter(i => i < a || i > b).map(i => i > b ? i - n : i)); curLine = Math.min(a, doc.length-1); }
   selAnchor = null;
 }
-function cutLines(){ const [a, b] = linesToCopy(), msg = copyMsg("Cut"); pushUndo(); removeLines(a, b); render(); setMsg(msg + ` Ctrl+V pastes ${b > a ? "them" : "it"}, Ctrl+Z puts ${b > a ? "them" : "it"} back.`); }
+function cutLines(){
+  const [a, b] = linesToCopy(), msg = copyMsg("Cut");
+  pushUndo();
+  removeLines(a, b);
+  render();
+  setMsg(msg + ` Ctrl+V pastes ${b > a ? "them" : "it"}, Ctrl+Z puts ${b > a ? "them" : "it"} back.`);
+}
 function duplicateLines(){
   if (editing && !commit()) return;
   const [a, b] = linesToCopy(), copy = doc.slice(a, b+1).map(t => [...t]), n = copy.length;
@@ -656,12 +749,21 @@ function duplicateLines(){
 function copyFromMenu(cut){
   if (editing && !commit()) return;
   const t = copyText(), msg = copyMsg(cut ? "Cut" : "Copied");
-  clipWrite(t).then(() => { if (cut) cutLines(); else setMsg(msg); }).catch(() => setMsg(`GlossCode couldn't use the clipboard. Press Ctrl+${cut ? "X" : "C"} instead.`, true));
+  clipWrite(t).then(() => {
+    if (cut) cutLines(); else setMsg(msg);
+  }).catch(() => setMsg(`GlossCode couldn't use the clipboard. Press Ctrl+${cut ? "X" : "C"} instead.`, true));
 }
 ed.addEventListener("copy", e => {
-  if (editing?.line && editing.input.selectionStart===editing.input.selectionEnd){ e.preventDefault(); e.clipboardData.setData("text/plain", copyText()); setMsg(copyMsg("Copied")); return; }
+  if (editing?.line && editing.input.selectionStart===editing.input.selectionEnd){
+    e.preventDefault();
+    e.clipboardData.setData("text/plain", copyText());
+    setMsg(copyMsg("Copied"));
+    return;
+  }
   if (editing || activeTab < 0) return;
-  e.preventDefault(); e.clipboardData.setData("text/plain", copyText()); setMsg(copyMsg("Copied") + " Ctrl+V pastes them, or Ctrl+D duplicates without the clipboard.");
+  e.preventDefault();
+  e.clipboardData.setData("text/plain", copyText());
+  setMsg(copyMsg("Copied") + " Ctrl+V pastes them, or Ctrl+D duplicates without the clipboard.");
 });
 ed.addEventListener("cut", e => {
   if (editing || activeTab < 0) return;
@@ -716,7 +818,14 @@ ed.addEventListener("contextmenu", e => {
   document.body.appendChild(ctxEl);
   const w = ctxEl.offsetWidth, h = ctxEl.offsetHeight;
   ctxEl.style.left = Math.min(e.clientX, innerWidth - w - 4) + "px"; ctxEl.style.top = Math.min(e.clientY, innerHeight - h - 4) + "px";
-  ctxEl.addEventListener("mousedown", ev => { ev.preventDefault(); const it = ev.target.closest(".it"); if (!it) return; const item = items[+it.dataset.i]; closeCtx(); item.fn(); });
+  ctxEl.addEventListener("mousedown", ev => {
+    ev.preventDefault();
+    const it = ev.target.closest(".it");
+    if (!it) return;
+    const item = items[+it.dataset.i];
+    closeCtx();
+    item.fn();
+  });
 });
 document.addEventListener("mousedown", e => { if (ctxEl && !ctxEl.contains(e.target)) closeCtx(); });
 document.addEventListener("keydown", e => { if (ctxEl && e.key==="Escape"){ e.stopPropagation(); closeCtx(); } }, true);
@@ -741,7 +850,8 @@ function renumber(){
   const called = new Set(doc.map(callTarget).filter(n => n!=null));
   const end = mainEnd(); let n = N_STEP, count = 0;
   for (let i = 0; i <= end; i++){
-    const t = doc[i]; if (!t.length || t[0].startsWith("O") || t.every(w => isComment(w) || !/^[A-Z#\/]/.test(w))) continue;   // comments and "%" lines get no N
+    const t = doc[i];
+    if (!t.length || t[0].startsWith("O") || t.every(w => isComment(w) || !/^[A-Z#\/]/.test(w))) continue;   // comments and "%" lines get no N
     const old = nOf(t); if (old!=null && called.has("N"+old)) continue;
     const w = "N"+n; if (old!=null) t[0] = w; else t.unshift(w);
     n += N_STEP; count++;
@@ -764,7 +874,12 @@ function moveLine(d){
 // Start editing the current line with the caret at its end, typing `typed` there.
 function editLineEnd(typed){
   const toks = doc[curLine]; startLineEdit(curLine, null, null);
-  if (typed && editing?.line){ const inp = editing.input, v = inp.value; inp.value = v + (v && !/\s$/.test(v) && /^[A-Z(#/]/i.test(typed) ? " " : "") + typed; inp.setSelectionRange(inp.value.length, inp.value.length); onLineInput(); }
+  if (typed && editing?.line){
+    const inp = editing.input, v = inp.value;
+    inp.value = v + (v && !/\s$/.test(v) && /^[A-Z(#/]/i.test(typed) ? " " : "") + typed;
+    inp.setSelectionRange(inp.value.length, inp.value.length);
+    onLineInput();
+  }
   return toks;
 }
 /* ---------- Selection ---------- */
@@ -796,7 +911,7 @@ const fst = toks => { let f = FSTATE.get(toks); if (!f) FSTATE.set(toks, f = { a
 function foldScan(){
   const key = [docVer, doc.length, machineId, foldFast, SYNTAX].join("|");
   if (FOLD && FOLD.key===key && FOLD.doc===doc) return FOLD;
-  const n = doc.length, end = new Int32Array(n).fill(-1), owner = new Int32Array(n).fill(-1), depth = new Float64Array(n);
+  const count = doc.length, end = new Int32Array(count).fill(-1), owner = new Int32Array(count).fill(-1), depth = new Float64Array(count);
   FOLD = { key, doc, end, owner, depth, refs:new Set() };
   if (SYNTAX==="klartext") return FOLD;
   const lathe = mtype()==="lathe", AX = lathe ? "X" : "Z";
@@ -805,10 +920,15 @@ function foldScan(){
   FOLD.refs = refs;
   doc.forEach(t => { if (t.some(w => isCode(w, "M97") || isCode(w, "M98") || isCode(w, "M99") || isCode(w, "G65") || /^GOTO/.test(w)))
     t.forEach(w => { const m = /^(?:P|GOTO ?N?)(\d+)$/.exec(w); if (m) refs.add(parseInt(m[1])); }); });
-  const num = w => { const v = w.slice(1); if (!/^[-+]?(\d+\.?\d*|\.\d+)$/.test(v)) return NaN; const x = parseFloat(v); return v.includes(".") || x===0 ? x : NaN; };
+  const num = w => {
+    const v = w.slice(1);
+    if (!/^[-+]?(\d+\.?\d*|\.\d+)$/.test(v)) return NaN;
+    const x = parseFloat(v);
+    return v.includes(".") || x===0 ? x : NaN;
+  };
   let mode = null, abs = true, pos = null, F = null, cutF = null;
-  const move = new Uint8Array(n), down = new Uint8Array(n);
-  for (let li = 0; li < n; li++){
+  const move = new Uint8Array(count), down = new Uint8Array(count);
+  for (let li = 0; li < count; li++){
     const t = doc[li]; let ok = t.length > 0 && !isBlockDel(t), m = mode, val = null, f = null, xy = false;
     for (const w of t){
       if (w===";") continue;
@@ -829,7 +949,14 @@ function foldScan(){
     // Lines are read in file order, not run order: a subprogram's lines come after the main program's M30, so at a
     // label that's called, an M99 or an M30 the position is forgotten and G90 assumed (a "G28 G91 Z0." before M30
     // would otherwise make the subprogram's moves incremental).
-    if (t.some(w => isCode(w, "M30") || isCode(w, "M99") || isCode(w, "M02") || /^N\d+$/.test(w) && refs.has(parseInt(w.slice(1))))){ abs = true; pos = null; mode = null; F = cutF = null; move[li] = down[li] = 0; continue; }
+    if (t.some(w => isCode(w, "M30") || isCode(w, "M99") || isCode(w, "M02") || /^N\d+$/.test(w) && refs.has(parseInt(w.slice(1))))){
+      abs = true;
+      pos = null;
+      mode = null;
+      F = cutF = null;
+      move[li] = down[li] = 0;
+      continue;
+    }
     mode = m; if (f!=null) F = f;
     const prev = pos;
     if (val!=null) pos = abs ? val : (pos ?? 0) + val;
@@ -841,9 +968,9 @@ function foldScan(){
     down[li] = ok && val!=null && (prev==null || pos < prev - 1e-9) ? 1 : 0;   // the first depth after a label counts as going down
   }
   // runs of plain moves, cut into folds where a descent starts
-  for (let a = 0; a < n; ){
+  for (let a = 0; a < count; ){
     if (!move[a]){ a++; continue; }
-    let b = a; while (b + 1 < n && move[b + 1]) b++;
+    let b = a; while (b + 1 < count && move[b + 1]) b++;
     const starts = []; for (let i = a; i <= b; i++) if (down[i] && !(i > a && down[i - 1])) starts.push(i);
     let fs = starts.map((st, k) => [st, k + 1 < starts.length ? starts[k + 1] - 1 : b]);
     for (let k = 0; k < fs.length && fs.length > 1; ){   // merge the small ones into a neighbour
@@ -876,7 +1003,10 @@ function foldOnOpen(){
   if (doc.length <= rows) return;
   const brk = t => !t.length || t.every(w => /^N\d+$/.test(w) || w[0]==="(" || w===";") || t.some(w => isCode(w, "M06") || isCode(w, "M99") || isCode(w, "M30") || /^N\d+$/.test(w) && F.refs.has(parseInt(w.slice(1))));
   let sec = [], hid = 0;
-  const flush = () => { if (hid > rows) for (const h of sec){ let bad = false; for (let i = h; i <= F.end[h]; i++) if (PBYLINE[i]?.some(p => p.sev!=="info")){ bad = true; break; }
+  const flush = () => { if (hid > rows) for (const h of sec){ let bad = false; for (let i = h; i <= F.end[h]; i++) if (PBYLINE[i]?.some(p => p.sev!=="info")){
+    bad = true;
+    break;
+  }
     if (!bad && !(curLine > h && curLine <= F.end[h])) fst(doc[h]).auto = true; } sec = []; hid = 0; };
   for (let li = 0; li < doc.length; li++){
     if (F.end[li] >= 0){ sec.push(li); hid += F.end[li] - li; li = F.end[li]; continue; }
@@ -905,15 +1035,17 @@ function selectLine(li, keepSim, keepSel){
 }
 
 /* ---------- Find ---------- */
-const findbar = document.getElementById("findbar"), findq = document.getElementById("findq");
+const findbar = $("findbar"), findq = $("findq");
 function findHits(){
   if (!findQ) return [];
   const out = [];
-  doc.forEach((toks, li) => { if (toks.some((t, i) => t.toUpperCase().includes(findQ) || (view[li][i]?.e || "").toUpperCase().includes(findQ))) out.push(li); });
+  doc.forEach((toks, li) => {
+    if (toks.some((t, i) => t.toUpperCase().includes(findQ) || (view[li][i]?.e || "").toUpperCase().includes(findQ))) out.push(li);
+  });
   return out;
 }
 function updateFindCount(h){
-  const c = document.getElementById("fcnt");
+  const c = $("fcnt");
   if (!findQ){ c.textContent = ""; return; }
   const i = h.indexOf(curLine);
   c.textContent = h.length ? (i >= 0 ? `${i+1} of ${h.length} lines` : `${h.length} line${h.length>1?"s":""}`) : "No matches";
@@ -926,8 +1058,17 @@ function findNext(dir){
   if (n===undefined) n = dir > 0 ? h[0] : h[h.length-1];
   selectLine(n); findq.focus();
 }
-findq.addEventListener("input", () => { findQ = findq.value.trim().toUpperCase(); const h = findHits(); if (h.length && !h.includes(curLine)){ curLine = h.find(li => li >= curLine) ?? h[0]; } render(); scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`)); });
-findq.addEventListener("keydown", e => { if (e.key==="Enter"){ e.preventDefault(); findNext(e.shiftKey ? -1 : 1); } if (e.key==="Escape"){ e.preventDefault(); closeFind(); } });
-document.getElementById("f-next").onclick = () => findNext(1);
-document.getElementById("f-prev").onclick = () => findNext(-1);
-document.getElementById("f-x").onclick = closeFind;
+findq.addEventListener("input", () => {
+  findQ = findq.value.trim().toUpperCase();
+  const h = findHits();
+  if (h.length && !h.includes(curLine)){ curLine = h.find(li => li >= curLine) ?? h[0]; }
+  render();
+  scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`));
+});
+findq.addEventListener("keydown", e => {
+  if (e.key==="Enter"){ e.preventDefault(); findNext(e.shiftKey ? -1 : 1); }
+  if (e.key==="Escape"){ e.preventDefault(); closeFind(); }
+});
+$("f-next").onclick = () => findNext(1);
+$("f-prev").onclick = () => findNext(-1);
+$("f-x").onclick = closeFind;

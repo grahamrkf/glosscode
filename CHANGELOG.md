@@ -8,6 +8,9 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - Code with gloss above is now the only layout. The two older layouts (words in program order, and columns by word type with modal values in empty cells) are gone, and so is typing gloss to write code (View › Edit in) with its autocomplete. View › Layout and Edit in are removed from the menu, and Edit › Break line after the selected word and Delete selected word with them: Enter breaks the line being edited, and Delete and Backspace edit the line.
 - Pasting one line of words while a line is being edited puts them in at the caret; with no line being edited, they go at the end of the current line, before its comment.
 
+### Subprogram library
+- Your own library subprograms are now saved in the program. Save writes the subprogram's file to the `library` folder inside the settings folder (`%APPDATA%\GlossCode\library`, or `~/.config/glosscode/library` on Linux), Delete removes it, and the files there are read when GlossCode starts. Before, the program kept them only until it closed. A file with a built-in subprogram's id replaces the built-in one, and deleting it brings the built-in one back. The window shows the real file each one is in. The shop folder and Export aren't in the program yet.
+
 ### Code
 - The C core now only reads and writes files. Its copy of the gloss and checks (kept identical to the UI's JavaScript, but never used by the program) is gone, and so is the `--data` option, which only affected that copy. The golden files in `tests/golden/` stay, as a record of what the UI shows.
 - The UI page is split into files: `src/ui/index.html` holds the page itself and loads its styles from `src/ui/css/` and its scripts from `src/ui/js/` (one per part of the screen and one per dialog). The build joins them back into one page, so the program is unchanged. `--ui src/ui/index.html` loads the page from its folder.
@@ -16,6 +19,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - The simulation's 660-line `interpret()` is now a `SimRun` class (`js/run-program.js`): setup, the line-by-line run, one line's step, and one method per cycle or pattern. `checkProgram()`'s line checks are one function per group (grammar, modes, tool change, spindle, tool length, cutter comp, cycles, the move).
 - Code only one control family uses has its own file: `js/control-klartext.js`, `js/control-fagor.js`, `js/control-okuma.js`.
 - Each tab keeps its program in its own object, so switching tabs no longer copies the editor's state in and out.
+- Packed lines are split: a line over 160 characters holds one statement, and short names that lived for 50 lines or more have longer ones (`dialect`, `labelMap`, `toX`, `svg`…). The dialogs share one `$`, `showDialog`, `hideDialog` and `dialogKeys` (`js/state.js`).
+- Which machines each test program runs on is in `tests/machines.json` instead of in `scripts/make-goldens.mjs`.
 
 ## [0.2.0] - 2026-11-07
 

@@ -1,0 +1,38 @@
+{
+  "about": "Which machines scripts/make-goldens.mjs runs each program in examples/ and tests/cases/ on. A file not listed under files runs on the default group. A file's entry is a group name or a list of machine ids; the first machine also sets how the words are split and gets a short-style run. Machine ids are in src/ui/js/machines.js.",
+  "groups": {
+    "mill": ["haas_vf2", "fanuc_0imf", "fanuc_0mc", "okuma_m560"],
+    "lathe": ["haas_st10", "okuma_lb3000"],
+    "plasma": ["hyp_plasma", "acorn_plasma", "tormach_plasma"],
+    "okuma-mill": ["okuma_m560", "haas_vf2", "fanuc_0imf", "fanuc_0mc"],
+    "okuma-lathe": ["okuma_lb3000", "haas_st10"]
+  },
+  "default": "mill",
+  "files": {
+    "LATHE_CHECKS.nc": "lathe",
+    "SHAFT_OD.nc": "lathe",
+    "LATHE_EDGE.nc": "lathe",
+    "CORNERS_LATHE.nc": "lathe",
+    "PLASMA_BRACKET.nc": "plasma",
+    "PLASMA_HYPERTHERM.nc": "plasma",
+    "PLASMA_ACORN.nc": "plasma",
+    "OKUMA_PLATE.MIN": "okuma-mill",
+    "OKUMA_CALLS.MIN": "okuma-mill",
+    "OKUMA_LATHE.MIN": "okuma-lathe",
+    "OKUMA_GRAPHIC.MIN": "okuma-lathe",
+
+    "LATHE_SYSTEM_B.nc": ["gen.lathe.fanuclb", "gen.lathe.mazaklb", "gen.lathe.mitsubishilb", "gen.lathe.fanuc"],
+    "LATHE_SYSTEM_C.nc": ["gen.lathe.fanuclc", "gen.lathe.mazaklc", "gen.lathe.fanuc"],
+    "MITSU_M2.nc": ["gen.mill.mitsubishim2", "gen.mill.mitsubishi"],
+    "FAGOR_8060.nc": ["gen.mill.fagor8060", "gen.mill.fanuc"],
+    "FAGOR_8055.nc": ["gen.mill.fagor8055", "gen.mill.fagor8060"],
+    "FAGOR_8055_PATTERNS.nc": ["gen.mill.fagor8055"],
+    "FAGOR_8055_LATHE.nc": ["gen.lathe.fagor8055", "gen.lathe.fanuc"],
+    "FAGOR_8060_LATHE.nc": ["gen.lathe.fagor8060", "gen.lathe.fagor8055"],
+    "FAGOR_8060_LATHE_CHECKS.nc": ["gen.lathe.fagor8060"],
+    "HEIDENHAIN.H": ["gen.mill.heidenhain"],
+    "HEIDENHAIN_CHECKS.H": ["gen.mill.heidenhain"],
+    "HAAS_PATTERNS.nc": ["haas_vf2", "gen.mill.fanuc"],
+    "OKUMA_CYCLES.MIN": ["gen.lathe.okumau10l", "okuma_lb3000"]
+  }
+}

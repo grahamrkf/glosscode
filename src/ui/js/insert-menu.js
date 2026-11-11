@@ -6,7 +6,6 @@
    without it, roughing on a mill) isn't shown. Y and C words are hidden on lathes without a Y axis or
    live tooling. */
 (() => {
-const $ = id => document.getElementById(id);
 const CYCLE_CATS = [
   ["Drilling",           { mill:["G81","G82","G83","G73"], lathe:["G81","G82","G83"] }],
   ["Tapping",            { mill:["G84","G74"], lathe:["G84","G184"] }],
@@ -22,7 +21,11 @@ const CYCLE_CATS = [
 const CYCLE_NAMES = { Roughing:/rough|pattern/i, Finishing:/finish/i, "Turning and facing":/turning cycle|facing cycle/i, Grooving:/groove/i, Threading:/thread/i };
 function categories(cycles){
   const t = mtype(), have = Object.keys(cycles || {}), used = new Set(), byName = t==="lathe" && DIALECT.cycleCatsByName;
-  const cats = CYCLE_CATS.map(([label, by]) => { const codes = byName ? have.filter(c => !used.has(c) && CYCLE_NAMES[label]?.test(cycles[c].name || "")) : (by[t] || []).filter(c => have.includes(c)); codes.forEach(c => used.add(c)); return { label, codes }; }).filter(c => c.codes.length);
+  const cats = CYCLE_CATS.map(([label, by]) => {
+    const codes = byName ? have.filter(c => !used.has(c) && CYCLE_NAMES[label]?.test(cycles[c].name || "")) : (by[t] || []).filter(c => have.includes(c));
+    codes.forEach(c => used.add(c));
+    return { label, codes };
+  }).filter(c => c.codes.length);
   const rest = have.filter(c => !used.has(c)).sort();
   if (rest.length) cats.push({ label:"Other cycles", codes:rest });
   return cats;
@@ -65,11 +68,11 @@ function openInsertCycle(code){
   iState = { ...(lineState[curLine] || newState()) };
   const L = labels();
   $("i-nlist").innerHTML = Object.keys(L).filter(k => k[0]==="N").map(k => `<option value="${k.slice(1)}">`).join("");
-  drawInsert(); idlg.hidden = false;
+  drawInsert();
+  showDialog(idlg, idlg.querySelector(".iform input:not(:disabled)"));
   idlg.querySelector(".clist .ci.sel")?.scrollIntoView({ block:"nearest" });
-  idlg.querySelector(".iform input:not(:disabled)")?.focus();
 }
-function closeInsert(){ idlg.hidden = true; ed.focus({ preventScroll:true }); }
+const closeInsert = () => hideDialog(idlg);
 
 function drawInsert(){
   const m = MACHINES[machineId], cats = categories(DIALECT.cycles);
@@ -160,10 +163,11 @@ idlg.addEventListener("input", e => { const L = e.target.dataset?.l; if (!L) ret
 $("i-ok").onclick = () => insertCycle(false);
 $("i-holes").onclick = () => insertCycle(true);
 $("i-cancel").onclick = $("i-x").onclick = closeInsert;
-idlg.addEventListener("keydown", e => {
-  e.stopPropagation();
-  if (e.key==="Escape"){ e.preventDefault(); closeInsert(); }
-  else if (e.key==="Enter" && e.target.tagName==="INPUT" && e.target.type!=="radio"){ e.preventDefault(); insertCycle(false); }
+dialogKeys(idlg, closeInsert, e => {
+  if (e.key==="Enter" && e.target.tagName==="INPUT" && e.target.type!=="radio"){
+    e.preventDefault();
+    insertCycle(false);
+  }
 });
 window.openInsertCycle = openInsertCycle;
 })();

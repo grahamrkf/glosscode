@@ -4,7 +4,7 @@ function setShow(m){
   showMode = m;
   render();
 }
-const R = (label, on, fn, sc) => ({ label, check:on, fn, ...(sc ? { sc } : {}) });
+const checkItem = (label, on, fn, sc) => ({ label, check:on, fn, ...(sc ? { sc } : {}) });
 const MENUS = {
   File: [],   // built by the tabs script below, since it lists recent files
   Edit: [
@@ -25,32 +25,44 @@ const MENUS = {
   ],
   View: [
     { grp:"Show" },
-    R("Gloss and code", () => showMode==="both", () => setShow("both")),
-    R("Gloss only", () => showMode==="en", () => setShow("en")),
-    R("Code only", () => showMode==="gc", () => setShow("gc")),
-    R("Run order numbers", () => runNums, () => { runNums = !runNums; render(); setMsg(runNums ? "Each line shows its run order number (grey, left): the block count as the program runs, counting subprogram lines on every call." : "Run order numbers are hidden."); }),
+    checkItem("Gloss and code", () => showMode==="both", () => setShow("both")),
+    checkItem("Gloss only", () => showMode==="en", () => setShow("en")),
+    checkItem("Code only", () => showMode==="gc", () => setShow("gc")),
+    checkItem("Run order numbers", () => runNums, () => {
+      runNums = !runNums;
+      render();
+      setMsg(runNums ? "Each line shows its run order number (grey, left): the block count as the program runs, counting subprogram lines on every call." : "Run order numbers are hidden.");
+    }),
     "-", { grp:"Gloss words" },
-    R("Full words (spindle.fwd)", () => style==="words", () => { style = "words"; render(); }),
-    R("Short (SFWD)", () => style==="short", () => { style = "short"; render(); }),
+    checkItem("Full words (spindle.fwd)", () => style==="words", () => { style = "words"; render(); }),
+    checkItem("Short (SFWD)", () => style==="short", () => { style = "short"; render(); }),
     "-", { grp:"Toolpath colors" },
-    R("By move type", () => colorBy==="motion", () => { colorBy = "motion"; drawViews(); }),
-    R("By tool", () => colorBy==="tool", () => { colorBy = "tool"; drawViews(); }),
+    checkItem("By move type", () => colorBy==="motion", () => { colorBy = "motion"; drawViews(); }),
+    checkItem("By tool", () => colorBy==="tool", () => { colorBy = "tool"; drawViews(); }),
     "-", { grp:"Moves after the selected line" },
-    R("Grey them out", () => future==="grey", () => setFuture("grey")),
-    R("Hide them", () => future==="hide", () => setFuture("hide")),
-    R("Show normally", () => future==="show", () => setFuture("show")),
+    checkItem("Grey them out", () => future==="grey", () => setFuture("grey")),
+    checkItem("Hide them", () => future==="hide", () => setFuture("hide")),
+    checkItem("Show normally", () => future==="show", () => setFuture("show")),
     "-", { grp:"Fold long runs of moves" },
     { label:"Fold all", fn:() => foldAll(true) },
     { label:"Unfold all", fn:() => foldAll(false) },
-    R("Fold long sections when a file opens", () => foldAuto, () => { foldAuto = !foldAuto; saveFoldPrefs(); setMsg(foldAuto ? "Opening a file folds the moves in sections too long for the window." : "Opening a file shows every line."); }),
-    R("G01 at 10× the cutting feed is a rapid", () => foldFast===10, () => setFoldFast(10)),
-    R("G01 at 5× the cutting feed is a rapid", () => foldFast===5, () => setFoldFast(5)),
-    R("G01 at 3× the cutting feed is a rapid", () => foldFast===3, () => setFoldFast(3)),
-    R("Only G00 is a rapid", () => foldFast===0, () => setFoldFast(0)),
+    checkItem("Fold long sections when a file opens", () => foldAuto, () => {
+      foldAuto = !foldAuto;
+      saveFoldPrefs();
+      setMsg(foldAuto ? "Opening a file folds the moves in sections too long for the window." : "Opening a file shows every line.");
+    }),
+    checkItem("G01 at 10× the cutting feed is a rapid", () => foldFast===10, () => setFoldFast(10)),
+    checkItem("G01 at 5× the cutting feed is a rapid", () => foldFast===5, () => setFoldFast(5)),
+    checkItem("G01 at 3× the cutting feed is a rapid", () => foldFast===3, () => setFoldFast(3)),
+    checkItem("Only G00 is a rapid", () => foldFast===0, () => setFoldFast(0)),
     "-",
-    R("Cutter comp side (G41/G42)", () => compBand, () => { compBand = !compBand; drawViews(); setMsg(compBand ? "Moves with cutter comp show a grey band on the side the tool's centre is on." : "Cutter comp bands hidden."); }),
+    checkItem("Cutter comp side (G41/G42)", () => compBand, () => {
+      compBand = !compBand;
+      drawViews();
+      setMsg(compBand ? "Moves with cutter comp show a grey band on the side the tool's centre is on." : "Cutter comp bands hidden.");
+    }),
     "-",
-    R("Problems panel", () => probsOpen, () => toggleProblems())
+    checkItem("Problems panel", () => probsOpen, () => toggleProblems())
   ],
   Insert: [],   // built by the Insert menu script below, since it follows the machine
   Program: [
@@ -61,7 +73,10 @@ const MENUS = {
     { label:"Previous problem", sc:"Shift+F8", fn:() => nextProblem(-1) },
     "-",
     { label:"Renumber", fn:renumber },
-    R("Auto N on new lines", () => autoN, () => { autoN = !autoN; setMsg(autoN ? `New lines get the next free N number, counting by ${N_STEP}.` : "New lines get no N number."); }),
+    checkItem("Auto N on new lines", () => autoN, () => {
+      autoN = !autoN;
+      setMsg(autoN ? `New lines get the next free N number, counting by ${N_STEP}.` : "New lines get no N number.");
+    }),
     "-",
     { label:"Show all subprograms", fn:() => { doc.forEach((t, i) => { if (callTarget(t)!=null || window.libFor?.(t)) expanded.add(i); }); render(); } },
     { label:"Hide all subprograms", fn:() => { expanded.clear(); render(); } }
@@ -72,10 +87,10 @@ const MENUS = {
     { label:"Step back one line", sc:"Ctrl+←", fn:() => simStep(-1) },
     { label:"Restart", fn:simReset },
     "-",
-    R("Optional stop (M01)", () => simOpt, () => setSimOpt(!simOpt)),
-    R("Block delete (/)", () => simBD, () => setSimBD(!simBD)),
-    R("Show rapid moves (G00)", () => simRapids, () => setSimRapids(!simRapids)),
-    R("Expanded view", () => simX, () => setSimX(!simX), "Ctrl+Shift+E"),
+    checkItem("Optional stop (M01)", () => simOpt, () => setSimOpt(!simOpt)),
+    checkItem("Block delete (/)", () => simBD, () => setSimBD(!simBD)),
+    checkItem("Show rapid moves (G00)", () => simRapids, () => setSimRapids(!simRapids)),
+    checkItem("Expanded view", () => simX, () => setSimX(!simX), "Ctrl+Shift+E"),
     "-",
     { label:"Stop simulating", sc:"Esc", fn:() => stopSim(), dis:() => simIdx==null }
   ],
@@ -85,7 +100,7 @@ const MENUS = {
     { label:"About the dictionary", fn:() => setMsg("Words come from gcode-words.json plus the selected machine's file.") }
   ]
 };
-const menubar = document.getElementById("menubar");
+const menubar = $("menubar");
 let openMenu = null, menuEl = null;
 menubar.innerHTML = Object.keys(MENUS).map(m => `<span class="mi" data-m="${m}">${m}</span>`).join("")
   + `<span class="mchip" id="mchip" role="button" tabindex="0" aria-haspopup="menu" title="Machine profile"></span>`;
@@ -106,7 +121,12 @@ function showMenu(name){
   });
 }
 function closeMenu(){ menuEl?.remove(); menuEl = null; menubar.querySelectorAll(".open").forEach(x => x.classList.remove("open")); openMenu = null; }
-menubar.addEventListener("mousedown", e => { const mi = e.target.closest(".mi"); if (!mi) return; e.preventDefault(); openMenu===mi.dataset.m ? closeMenu() : showMenu(mi.dataset.m); });
+menubar.addEventListener("mousedown", e => {
+  const mi = e.target.closest(".mi");
+  if (!mi) return;
+  e.preventDefault();
+  openMenu===mi.dataset.m ? closeMenu() : showMenu(mi.dataset.m);
+});
 menubar.addEventListener("mouseover", e => { const mi = e.target.closest(".mi"); if (mi && openMenu && openMenu!==mi.dataset.m) showMenu(mi.dataset.m); });
 document.addEventListener("mousedown", e => { if (openMenu && !menubar.contains(e.target)) closeMenu(); });
 
@@ -118,10 +138,16 @@ document.addEventListener("keydown", e => {
   const c = new KeyboardEvent("keydown", { key:e.key, code:e.code, ctrlKey:e.ctrlKey, shiftKey:e.shiftKey, altKey:e.altKey, metaKey:e.metaKey, repeat:e.repeat, bubbles:true, cancelable:true });
   if (!ed.dispatchEvent(c)) e.preventDefault();
 });
-document.getElementById("app").addEventListener("keydown", e => {
+$("app").addEventListener("keydown", e => {
   const k = e.key.toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
   if (activeTab < 0 && !(ctrl && (k==="o" || k==="n"))) return;   // the home page has no program
-  if (!cdlg.hidden){ if (e.key==="Escape" || e.key==="F1"){ e.preventDefault(); cdlg.hidden = true; ed.focus({preventScroll:true}); } return; }
+  if (!cdlg.hidden){
+    if (e.key==="Escape" || e.key==="F1"){
+      e.preventDefault();
+      hideDialog(cdlg);
+    }
+    return;
+  }
   if (e.key==="F1"){ e.preventDefault(); openCycleHelp(); return; }
   if (e.key==="F5"){ e.preventDefault(); if (editing && !commit()) return; togglePlay(); return; }
   if (ctrl && k==="f"){ e.preventDefault(); openFind(); return; }
@@ -148,7 +174,10 @@ document.getElementById("app").addEventListener("keydown", e => {
   else if (e.shiftKey && e.key==="ArrowUp"){ e.preventDefault(); extendSel(Math.max(0, curLine-1)); }
   else if (e.key==="ArrowDown"){ e.preventDefault(); moveLine(1); }
   else if (e.key==="ArrowUp"){ e.preventDefault(); moveLine(-1); }
-  else if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)){ e.preventDefault(); startLineEdit(curLine, null, e.key==="ArrowLeft" || e.key==="Home" ? 0 : null); }
+  else if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)){
+    e.preventDefault();
+    startLineEdit(curLine, null, e.key==="ArrowLeft" || e.key==="Home" ? 0 : null);
+  }
   else if (e.key==="Enter" && e.shiftKey){ e.preventDefault(); newLine(curLine); }
   else if (e.key==="Enter" || e.key===" "){ e.preventDefault(); editLineEnd(); }
   else if ((e.key==="Delete" || e.key==="Backspace") && selRange()){ e.preventDefault(); deleteLine(); }

@@ -12,7 +12,6 @@
    they're a separate download. */
 (() => {
 const NATIVE = window.GlossCodeNative;
-const $ = id => document.getElementById(id);
 const EXAMPLES_URL = "https://github.com/grahamrkf/glosscode/tree/main/examples";
 const MAX_RECENT = 12;
 const SETTINGS = { recent:[], extDefaults:{} };
@@ -110,7 +109,9 @@ function drawTabs(){
     }).join("")
     + `<button class="tnew" data-new="1" title="New program (Ctrl+N)" aria-label="New program">+</button>`;
   const on = el.querySelector(".tab.on");
-  if (on){ if (on.offsetLeft < el.scrollLeft) el.scrollLeft = on.offsetLeft; else if (on.offsetLeft + on.offsetWidth > el.scrollLeft + el.clientWidth) el.scrollLeft = on.offsetLeft + on.offsetWidth - el.clientWidth; }
+  if (on){
+    if (on.offsetLeft < el.scrollLeft) el.scrollLeft = on.offsetLeft; else if (on.offsetLeft + on.offsetWidth > el.scrollLeft + el.clientWidth) el.scrollLeft = on.offsetLeft + on.offsetWidth - el.clientWidth;
+  }
 }
 $("tabs").addEventListener("mousedown", e => {
   if (e.button > 1) return;
@@ -184,7 +185,8 @@ function pickMachine(o){
     $("mp-text").textContent = o.text + (s0 ? ` It looks like it was written for ${controlLabel(s0)} (${o.suggest.why[s0]}), so ${m.name} is picked. Check it before you open.` : "");
     $("mp-defl").hidden = !MP.ext; $("mp-def").checked = false;
     $("mp-deft").textContent = MP.ext ? ` Always use this machine for ${MP.ext} files` : "";
-    drawPicker(); $("mpdlg").hidden = false; $("mp-list").focus();
+    drawPicker();
+    showDialog($("mpdlg"), $("mp-list"));
   });
 }
 window.pickMachine = pickMachine;
@@ -287,12 +289,19 @@ async function openNativeResult(r, machine){
   if (!m) return;
   // A control with its own block syntax (Fagor 8060: ";" is a comment) has the text read again its way
   const syntax = dialectFor(MACHINES[m.id].brand, MACHINES[m.id].type).blockSyntax;
-  if (syntax && r.text!=null){ try { const d = await NATIVE.core("parse", { text:r.text, syntax }); if (d?.lines) r.doc = d; } catch { /* keep the usual reading */ } }
+  if (syntax && r.text!=null){ try {
+    const d = await NATIVE.core("parse", { text:r.text, syntax });
+    if (d?.lines) r.doc = d;
+  } catch { /* keep the usual reading */ } }
   const native = { eol:r.doc.eol, finalEol:r.doc.finalEol, latin1:r.latin1, raw:rawMap(r.doc.lines.map(l => [l.tok, l.raw])) };
   if (openProgram({ name:r.name, path:r.path, machine:m.id, src:r.doc.lines.map(l => l.raw), native })) openedMsg(m);
 }
 // Each block's original text, by its words, so unchanged lines are written back exactly as they were.
-function rawMap(pairs){ const m = new Map(); for (const [tok, raw] of pairs){ const k = tok.join(" "); if (!m.has(k)) m.set(k, []); m.get(k).push(raw ?? k); } return m; }
+function rawMap(pairs){
+  const m = new Map();
+  for (const [tok, raw] of pairs){ const k = tok.join(" "); if (!m.has(k)) m.set(k, []); m.get(k).push(raw ?? k); }
+  return m;
+}
 async function nativeOpen(){
   let r;
   try { r = await NATIVE.open(cur()?.path || SETTINGS.recent[0]?.path || null); } catch (e){ setMsg(String(e?.message || e), true); return; }
@@ -319,7 +328,7 @@ function askMissing(r){
     $("mf-title").textContent = `Can't find ${r.name}`;
     $("mf-text").textContent = `It may have been moved, renamed or deleted, or it's on a drive that isn't connected. Locate it to open it and keep it in the list with ${MACHINES[r.machine]?.name || "its machine"}, or remove it from the list.`;
     $("mf-path").textContent = r.path;
-    $("mfdlg").hidden = false; $("mf-locate").focus();
+    showDialog($("mfdlg"), $("mf-locate"));
   });
 }
 function closeMissing(choice){

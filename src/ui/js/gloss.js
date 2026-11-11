@@ -29,7 +29,10 @@ function newState(){
 }
 // G-codes for feed per minute and per rev on this control (G94/G95, or G98/G99 on Fanuc-style lathes)
 // A plasma control with no feed mode codes has none (Hypertherm's G98 ends a loop).
-function feedCodes(){ const g = DIALECT.modalGroups?.["feed mode"] || [], none = !!DIALECT.process && !g.length; return { perMin: g.includes("G94") ? "G94" : none ? null : "G98", perRev: g.includes("G95") ? "G95" : none ? null : "G99" }; }
+function feedCodes(){
+  const g = DIALECT.modalGroups?.["feed mode"] || [], none = !!DIALECT.process && !g.length;
+  return { perMin: g.includes("G94") ? "G94" : none ? null : "G98", perRev: g.includes("G95") ? "G95" : none ? null : "G99" };
+}
 // The lathe code that clamps the spindle speed and, with X or Z, sets the coordinates:
 // G50 in G code system A, G92 in systems B and C.
 const clampCode = () => DIALECT.speedClamp?.code || "G50";
@@ -56,7 +59,10 @@ function applyModes(toks, st){
   let after = [];   // modes the line's cycle leaves active (Fagor 8065 lathe: G00, G40 and G90 after G68)
   for (const t of toks){
     if (own.includes(t[0])) continue;   // a cycle's own word (Fagor 8055 lathe: S is a label, M a finish stock)
-    if (/^[FSTH](?:[-+]?[\d.]+|[-+]?[#[].*)$/.test(t)){ if (t[0]==="H" && wcsLine) set("wcs", "G15 " + t); else if (!(t[0]==="S" && toks.some(w => isCode(w, clampCode())) && mtype()==="lathe")) set(t[0], t); continue; }
+    if (/^[FSTH](?:[-+]?[\d.]+|[-+]?[#[].*)$/.test(t)){
+      if (t[0]==="H" && wcsLine) set("wcs", "G15 " + t); else if (!(t[0]==="S" && toks.some(w => isCode(w, clampCode())) && mtype()==="lathe")) set(t[0], t);
+      continue;
+    }
     if (t==="CALL") st.sub = true;
     if (!/^[GM]\d/.test(t)) continue;
     const k = pad2(t), cyc = D.cycles?.[k];
@@ -72,7 +78,12 @@ function applyModes(toks, st){
     if ((groups["tool length"] || []).includes(k)){ set("tlen", k); st.tlenOn = (D.toolLength?.on || []).includes(k); }
     if ((groups["work offset"] || []).includes(k) && k!=="G15") set("wcs", k);
     if (cyc){ st.cycle = true; set("cycleCode", k); st.oneShot = cyc.modal===false; after = cyc.after || after; }
-    if (k==="G80" && !(mtype()==="lathe" && isOkuma())){ st.cycle = false; set("cycleCode", null); st.cyc = {}; if (mtype()!=="lathe") st.pos.Z = st.posW.Z = null; }
+    if (k==="G80" && !(mtype()==="lathe" && isOkuma())){
+      st.cycle = false;
+      set("cycleCode", null);
+      st.cyc = {};
+      if (mtype()!=="lathe") st.pos.Z = st.posW.Z = null;
+    }
     if (D.process){ if (D.process.on.includes(k) || D.process.off.includes(k)) set("torch", k); }   // a plasma torch, not a spindle and coolant
     else {
       if (["M03","M04","M05"].includes(k)) set("spinDir", k);
@@ -102,7 +113,9 @@ function trackCarry(toks, st){
     const h = klHeadOf(toks); if (!h || !KL_MOVE.test(h)) return;
     if (/^(?:LP|CP|CTP)$|^(?:APPR|DEP) P/.test(h)){ st.pos = { ...st.pos, X:null, Y:null }; st.posW = { ...st.posW, X:null, Y:null }; }
     for (const A of ["X","Y","Z"]){
-      const ta = toks.find(t => new RegExp("^" + A + "[-+]?[\\d.]+$").test(t)), ti = toks.find(t => new RegExp("^I" + A + "[-+]?[\\d.]+$").test(t)), tq = toks.find(t => new RegExp("^I?" + A + "[-+]?Q").test(t));
+      const ta = toks.find(t => new RegExp("^" + A + "[-+]?[\\d.]+$").test(t));
+      const ti = toks.find(t => new RegExp("^I" + A + "[-+]?[\\d.]+$").test(t));
+      const tq = toks.find(t => new RegExp("^I?" + A + "[-+]?Q").test(t));
       if (tq){ st.pos[A] = null; st.posW[A] = null; continue; }
       if (ta){ st.pos[A] = parseFloat(ta.slice(1)); st.posW[A] = ta; }
       else if (ti){ st.pos[A] = st.pos[A]!=null ? st.pos[A] + parseFloat(ti.slice(2)) : null; st.posW[A] = null; }
@@ -157,7 +170,10 @@ let BASEW = null, BASEW_OF = null;
 function isCs(e){
   if (!e?.words || e.words.startsWith("torch.")) return false;   // torch words are standard on every plasma control
   if (BASEW_OF!==DICT.codes){ BASEW = new Set(); BASEW_OF = DICT.codes;
-    for (const v of Object.values(DICT.codes)){ if (v.words) BASEW.add(v.words); for (const x of Object.values(v)) if (x && typeof x==="object" && x.words) BASEW.add(x.words); } }
+    for (const v of Object.values(DICT.codes)){
+      if (v.words) BASEW.add(v.words);
+      for (const x of Object.values(v)) if (x && typeof x==="object" && x.words) BASEW.add(x.words);
+    } }
   return !BASEW.has(e.words);
 }
 function word(t, st, ctx){
@@ -169,7 +185,10 @@ function word(t, st, ctx){
     if (/^\[\w+\]$/.test(t)) return { g:t, e:vw("LABEL", t), d:`Label ${t.slice(1, -1)}, a place other lines can jump to` };
     if (/^NR\d+$/.test(t)) return { g:t, e:vsty(REPT, t.slice(2)), d:`Run this line ${t.slice(2)} times` };
     const w1 = /^(?:[#$][A-Z]+|%L(?= )|%|LL?(?= ))/.exec(t)?.[0];
-    if (w1){ const e = entry(w1), rest = t.slice(w1.length); return e ? { g:t, e:sty(e)+(rest && rest[0]!==" " ? " " : "")+rest, d:e.desc, code:w1 } : { g:t, e:"?"+t, unk:true, d:`${w1} isn't a statement GlossCode knows on this control.` }; }
+    if (w1){
+      const e = entry(w1), rest = t.slice(w1.length);
+      return e ? { g:t, e:sty(e)+(rest && rest[0]!==" " ? " " : "")+rest, d:e.desc, code:w1 } : { g:t, e:"?"+t, unk:true, d:`${w1} isn't a statement GlossCode knows on this control.` };
+    }
     if (st?.dwell && /^\d*\.?\d+$/.test(t)) return { g:t, e:vsty(DICT.address.P.dwell, t), d:`Dwell for ${t} seconds` };
   }
   if (SYNTAX==="fagor8055"){
@@ -194,7 +213,11 @@ function word(t, st, ctx){
     if (t==="\x1a") return { g:t, e:"EOF", d:"End-of-file mark (Ctrl+Z) that older systems write after the last line, kept as written" };
     return { g:t, e:"?"+t, unk:true, d:`${t} isn't G-code GlossCode can read. It's kept as written.` };
   }
-  if (t[0]==="/"){ const e = entry("/"); if (!e) return { g:t, e:"?/", unk:true, d:"Block delete isn't in the dictionary." }; return { g:t, e:t.length > 1 ? vsty(e, t.slice(1)) : sty(e), d:e.desc + (t.length > 1 ? ` (switch ${t.slice(1)})` : ""), code:"/" }; }
+  if (t[0]==="/"){
+    const e = entry("/");
+    if (!e) return { g:t, e:"?/", unk:true, d:"Block delete isn't in the dictionary." };
+    return { g:t, e:t.length > 1 ? vsty(e, t.slice(1)) : sty(e), d:e.desc + (t.length > 1 ? ` (switch ${t.slice(1)})` : ""), code:"/" };
+  }
   if (isMacroTok(t)) return macroWord(t);
   if (isKw(t)){
     // A statement with arguments (Okuma PS LC,[0,0],[-2,55]) reads by its first word, and the rest as written
@@ -202,55 +225,98 @@ function word(t, st, ctx){
     if (e1) return { g:t, e:sty(e1) + t.slice(w1.length), d:e1.desc, code:w1 };
     return e ? { g:t, e:sty(e), d:e.desc, code:t, ...(isCs(e) ? { cs:true } : {}) } : { g:t, e:"?"+t, unk:true, d:`${t} isn't a keyword on this machine.` };
   }
-  const L = t[0], raw = t.slice(1), f = fmtNum(L, raw, st), v = f.v;
-  const own = st.cycleCode && (DIALECT.cycles?.[st.cycleCode]?.ownWords || []).includes(L);
-  if ((L==="G" || L==="M") && /^.P\d/.test(t)) return { g:t, e:t, d:`${L} code from parameter ${raw}, known when the line runs` };
-  if (L==="G" || (L==="M" && !own)){
-    const k = pad2(t), e = (k===coordSetCode() && st.zeroShift && entry(k + ".shift")) || entry(k);   // a lathe G50 (G92 in systems B and C) with X or Z sets the coordinates
+  const letter = t[0], raw = t.slice(1), num = fmtNum(letter, raw, st), value = num.v;
+  const own = st.cycleCode && (DIALECT.cycles?.[st.cycleCode]?.ownWords || []).includes(letter);
+  if ((letter==="G" || letter==="M") && /^.P\d/.test(t)) return { g:t, e:t, d:`${letter} code from parameter ${raw}, known when the line runs` };
+  if (letter==="G" || (letter==="M" && !own)){
+    const k = pad2(t);
+    const e = (k===coordSetCode() && st.zeroShift && entry(k + ".shift")) || entry(k);   // a lathe G50 (G92 in systems B and C) with X or Z sets the coordinates
     if (!e) return { g:t, e:"?"+k, unk:true, d:`${k} isn't in the dictionary or this machine's file.` };
     return { g:t, e:sty(e), d:e.desc, code:k, ...(isCs(e) ? { cs:true } : {}) };
   }
   // A subprogram call whose program word isn't P (Mitsubishi M2/M0: G22 L2200 P5, P the repeat count)
-  if (st.subWord && (L===st.subWord || L==="P")) return L==="P" ? { g:t, e:vsty(REPT, v), d:`Repeat ${v} times` } : { g:t, e:vsty({ ...DICT.address.P.sub, short:L }, v), d:`Program number ${v}` };
+  if (st.subWord && (letter===st.subWord || letter==="P")) {
+    return letter==="P" ? { g:t, e:vsty(REPT, value), d:`Repeat ${value} times` } : { g:t, e:vsty({ ...DICT.address.P.sub, short:letter }, value), d:`Program number ${value}` };
+  }
   // On a code with words of its own (Fagor 8055 G60 linear pattern: X is its length, K the number of points)
-  if (st.codeW && L!=="N"){ const cd = DIALECT.codeWords[st.codeW], cw = cd.words?.[L]; if (cw) return { g:t, e:vw(cw[0], (cd.labels || []).includes(L) ? raw : v), ...(f.implied ? { imp:true } : {}), d:`${cw[1]} (${st.codeW})` }; }
+  if (st.codeW && letter!=="N"){
+    const cd = DIALECT.codeWords[st.codeW], cw = cd.words?.[letter];
+    if (cw) return { g:t, e:vw(cw[0], (cd.labels || []).includes(letter) ? raw : value), ...(num.implied ? { imp:true } : {}), d:`${cw[1]} (${st.codeW})` };
+  }
   // On a G65 line that calls a library subprogram, each argument reads as the name the library gives it.
-  if (st.lib && L!=="N" && L!=="O"){ const lw = window.libWord?.(st.lib, L, raw, f, st); if (lw) return lw; }
+  if (st.lib && letter!=="N" && letter!=="O"){ const lw = window.libWord?.(st.lib, letter, raw, num, st); if (lw) return lw; }
   // Inside a canned cycle, a word can mean something special (Haas G76 A is the tool angle). cycleHelp says so.
-  if (st.cycleCode && (L!=="N" || ctx==="ref") && (!"FSXYZ".includes(L) || (L==="Z" && DIALECT.cycleRefZ) || own)){ const cw = cycleWord(st.cycleCode, L); if (cw?.en) return { g:t, e:vw(cw.en, v), ...(f.implied ? { imp:true } : {}), d:`${cw.what} (${st.cycleCode})` }; }
-  const a = DICT.address[L];
-  if (!a) {
+  if (st.cycleCode && (letter!=="N" || ctx==="ref") && (!"FSXYZ".includes(letter) || (letter==="Z" && DIALECT.cycleRefZ) || own)){
+    const cw = cycleWord(st.cycleCode, letter);
+    if (cw?.en) return { g:t, e:vw(cw.en, value), ...(num.implied ? { imp:true } : {}), d:`${cw.what} (${st.cycleCode})` };
+  }
+  const address = DICT.address[letter];
+  if (!address) {
     // Okuma lathes give an arc's radius with L (G03 X Z L), where other controls use R
-    if (L==="L" && st.corner){ const x = entry(st.corner + ".L"); return { g:t, e:vsty(x, v), ...(f.implied ? { imp:true } : {}), d:`${x.desc} ${v}` }; }
-    if (L===DIALECT.arcRadius && ["G02","G03"].includes(st.motion) && !st.cycleCode) return { g:t, e:vsty(DICT.address.R.arc, v), ...(f.implied ? { imp:true } : {}), d:"Arc radius" };
-    return { g:t, e:"?"+L, unk:true, d:`Address letter ${L} isn't in the dictionary.` };
+    if (letter==="L" && st.corner){
+      const x = entry(st.corner + ".L");
+      return { g:t, e:vsty(x, value), ...(num.implied ? { imp:true } : {}), d:`${x.desc} ${value}` };
+    }
+    if (letter===DIALECT.arcRadius && ["G02","G03"].includes(st.motion) && !st.cycleCode) {
+      return { g:t, e:vsty(DICT.address.R.arc, value), ...(num.implied ? { imp:true } : {}), d:"Arc radius" };
+    }
+    return { g:t, e:"?"+letter, unk:true, d:`Address letter ${letter} isn't in the dictionary.` };
   }
   // A later N word names another line: the one a GOTO or IF jumps to, or where an Okuma LAP contour starts (G85 NA1)
   // Fagor 8055: an N after the first word repeats the line (N0 makes the move without the active cycle)
-  if (L==="N" && ctx==="ref" && SYNTAX==="fagor8055") return { g:t, e:vsty(REPT, raw), d: /^0+$/.test(raw) ? "Make the move without running the active cycle" : `Run this line ${raw} times` };
-  if (L==="N" && ctx==="ref") return { g:t, e:"N"+raw, d:`The line labeled N${raw}` };
-  // G04 F2. on controls that give the dwell time with F (Okuma)
-  if (L==="K" && st.dwell && (DIALECT.dwellWords || []).includes("K")){
-    if (DIALECT.dwellHundredths) return { g:t, e:vsty({ words:"dwell", short:"DWL" }, v), d:`Dwell for ${v} hundredths of a second` };   // Fagor 8055: K50 is half a second
-    const x = DICT.address.P.dwell; return { g:t, e:vsty(x, v), d:`Dwell for ${v} seconds` };
+  if (letter==="N" && ctx==="ref" && SYNTAX==="fagor8055") {
+    return { g:t, e:vsty(REPT, raw), d: /^0+$/.test(raw) ? "Make the move without running the active cycle" : `Run this line ${raw} times` };
   }
-  if (L==="F" && st.dwell && (DIALECT.dwellWords || []).includes("F")){ const x = DICT.address.P.dwell; return { g:t, e:vsty(x, v), d:`Dwell for ${v} seconds` }; }
-  const imp = f.implied ? { imp:true, d2:`No decimal point, so this reads as ${v} ${st.units==="inch"?"in":"mm"}. Write ${L}${f.intended} for ${f.intended.replace(/\.$/,"")} ${st.units==="inch"?"in":"mm"}.` } : {};
-  if (L==="F"){ const u = FEED_UNIT[st.feed]?.[st.units] || ""; return { g:t, e:vw(style==="short" ? "F" : "feed", v), u:style==="short" ? u : "", d:`Feed rate ${v} ${UNIT_WORDS[u] || ""}` }; }
-  if (L==="S"){ const u = SPEED_UNIT[st.spin][st.units]; return { g:t, e:vw(style==="short" ? "S" : "speed", v), u:style==="short" ? u : "", d: st.spin==="css" ? `Surface speed ${v} ${UNIT_WORDS[u]}` : `Spindle speed ${v} RPM` }; }
-  if ("XYZ".includes(L)){ const x = a[st.dist]; return { g:t, e:vsty(x, v), ...imp, d: imp.d2 || (st.dist==="inc" ? `Move ${v} in ${L} from where the tool is` : `${L} position ${v}`) }; }
-  if (L==="U"||L==="W"){ if (mtype()!=="lathe") return { g:t, e:"?"+L, unk:true, d:`${L} is only used on lathes.` }; return { g:t, e:vsty(a.lathe, v), ...imp, d: imp.d2 || a.lathe.desc+" "+v }; }
-  if (L==="R"){ const x = st.cycle ? a.cycle : a.arc; return { g:t, e:vsty(x, v), ...imp, d: imp.d2 || (st.cycle ? "Retract plane for the drilling cycle" : "Arc radius") }; }
+  if (letter==="N" && ctx==="ref") return { g:t, e:"N"+raw, d:`The line labeled N${raw}` };
+  // G04 F2. on controls that give the dwell time with F (Okuma)
+  if (letter==="K" && st.dwell && (DIALECT.dwellWords || []).includes("K")){
+    if (DIALECT.dwellHundredths) {
+      return { g:t, e:vsty({ words:"dwell", short:"DWL" }, value), d:`Dwell for ${value} hundredths of a second` };
+    }   // Fagor 8055: K50 is half a second
+    const x = DICT.address.P.dwell; return { g:t, e:vsty(x, value), d:`Dwell for ${value} seconds` };
+  }
+  if (letter==="F" && st.dwell && (DIALECT.dwellWords || []).includes("F")){
+    const x = DICT.address.P.dwell;
+    return { g:t, e:vsty(x, value), d:`Dwell for ${value} seconds` };
+  }
+  const imp = num.implied ? { imp:true, d2:`No decimal point, so this reads as ${value} ${st.units==="inch"?"in":"mm"}. Write ${letter}${num.intended} for ${num.intended.replace(/\.$/,"")} ${st.units==="inch"?"in":"mm"}.` } : {};
+  if (letter==="F"){
+    const u = FEED_UNIT[st.feed]?.[st.units] || "";
+    return { g:t, e:vw(style==="short" ? "F" : "feed", value), u:style==="short" ? u : "", d:`Feed rate ${value} ${UNIT_WORDS[u] || ""}` };
+  }
+  if (letter==="S"){
+    const u = SPEED_UNIT[st.spin][st.units];
+    return { g:t, e:vw(style==="short" ? "S" : "speed", value), u:style==="short" ? u : "", d: st.spin==="css" ? `Surface speed ${value} ${UNIT_WORDS[u]}` : `Spindle speed ${value} RPM` };
+  }
+  if ("XYZ".includes(letter)){
+    const x = address[st.dist];
+    return { g:t, e:vsty(x, value), ...imp, d: imp.d2 || (st.dist==="inc" ? `Move ${value} in ${letter} from where the tool is` : `${letter} position ${value}`) };
+  }
+  if (letter==="U"||letter==="W"){
+    if (mtype()!=="lathe") return { g:t, e:"?"+letter, unk:true, d:`${letter} is only used on lathes.` };
+    return { g:t, e:vsty(address.lathe, value), ...imp, d: imp.d2 || address.lathe.desc+" "+value };
+  }
+  if (letter==="R"){
+    const x = st.cycle ? address.cycle : address.arc;
+    return { g:t, e:vsty(x, value), ...imp, d: imp.d2 || (st.cycle ? "Retract plane for the drilling cycle" : "Arc radius") };
+  }
   const cy = st.cycleCode && DIALECT.cycles?.[st.cycleCode];
-  if (cy?.labels?.includes(L)) return { g:t, e:vw(L==="P" ? "FROM" : "TO", raw), d:`${L==="P" ? "First" : "Last"} line of the contour, N${raw}` };
-  if (cy && mtype()==="lathe" && L==="D") return { g:t, e:vw("DEPTH", v), d:`Depth of each pass, ${v}` };
-  if (cy && mtype()==="lathe" && L==="K" && cy.leadF) return { g:t, e:vw("THDHT", v), d:`Thread height, ${v}` };
-  if (L==="H" && (ctx==="wcs" || (st.chg?.includes("wcs") && String(st.wcs).startsWith("G15")))) return { g:t, e:vw(style==="short" ? "WOFS" : "woffset", raw), d:`Work offset number ${raw}` };
-  if (L==="P" && st.local) return { g:t, e:vw(style==="short" ? "LBL" : "label", v), d:`Jump to the line labeled N${v} and run it until M99` };
-  if (L==="P"){ const x = st.sub ? a.sub : a.dwell; return { g:t, e:vsty(x, v), d: st.sub ? `Program number ${v}` : `Dwell for ${v} seconds` }; }
-  if (L==="N") return { g:t, e:"N"+v, ...imp, d: imp.d2 || `${a.desc} ${v}` };   // a sequence number reads as written: N10
-  const ax = a[mtype()]?.words ? a[mtype()] : a;   // a letter can read differently on one machine type (D is the kerf on a plasma table)
-  return { g:t, e:vsty(ax, v), ...imp, d: imp.d2 || `${ax.desc} ${v}` };
+  if (cy?.labels?.includes(letter)) {
+    return { g:t, e:vw(letter==="P" ? "FROM" : "TO", raw), d:`${letter==="P" ? "First" : "Last"} line of the contour, N${raw}` };
+  }
+  if (cy && mtype()==="lathe" && letter==="D") return { g:t, e:vw("DEPTH", value), d:`Depth of each pass, ${value}` };
+  if (cy && mtype()==="lathe" && letter==="K" && cy.leadF) return { g:t, e:vw("THDHT", value), d:`Thread height, ${value}` };
+  if (letter==="H" && (ctx==="wcs" || (st.chg?.includes("wcs") && String(st.wcs).startsWith("G15")))) {
+    return { g:t, e:vw(style==="short" ? "WOFS" : "woffset", raw), d:`Work offset number ${raw}` };
+  }
+  if (letter==="P" && st.local) return { g:t, e:vw(style==="short" ? "LBL" : "label", value), d:`Jump to the line labeled N${value} and run it until M99` };
+  if (letter==="P"){
+    const x = st.sub ? address.sub : address.dwell;
+    return { g:t, e:vsty(x, value), d: st.sub ? `Program number ${value}` : `Dwell for ${value} seconds` };
+  }
+  if (letter==="N") return { g:t, e:"N"+value, ...imp, d: imp.d2 || `${address.desc} ${value}` };   // a sequence number reads as written: N10
+  const ax = address[mtype()]?.words ? address[mtype()] : address;   // a letter can read differently on one machine type (D is the kerf on a plasma table)
+  return { g:t, e:vsty(ax, value), ...imp, d: imp.d2 || `${ax.desc} ${value}` };
 }
 // Macro text: "#110=-0.035" sets a variable; IF, WHILE and END are macro statements. They read as written.
 function macroWord(t){
@@ -260,7 +326,9 @@ function macroWord(t){
     return { g:t, e:t, d:/^[-+]?[\d.]+$/.test(m[2]) ? `Sets macro variable ${m[1]} to ${m[2]}` : `Sets macro variable ${m[1]} to ${m[2]}, worked out when the line runs` };
   }
   { const m = /^([A-Z][A-Z0-9]+)=(.+)$/.exec(t);   // Okuma: V1=3 (a common variable) or DIA1=160 (a local variable)
-    if (m) return { g:t, e:t, d:/^[-+]?[\d.]+$/.test(m[2]) ? `Sets variable ${m[1]} to ${m[2]}` : `Sets variable ${m[1]} to ${m[2]}, worked out when the line runs` }; }
+    if (m) {
+      return { g:t, e:t, d:/^[-+]?[\d.]+$/.test(m[2]) ? `Sets variable ${m[1]} to ${m[2]}` : `Sets variable ${m[1]} to ${m[2]}, worked out when the line runs` };
+    } }
   if (t.startsWith("GOTO ")) return { g:t, e:t, d:`Jump to N${t.slice(5).replace(/^N/, "")}` };
   if (t.startsWith("IF")) return { g:t, e:t, d:"Macro IF statement: when the condition in [ ] is true, the rest of the line runs" };
   if (t.startsWith("WHILE")) return { g:t, e:t, d:"Macro WHILE loop: runs the lines down to the matching END while the condition in [ ] is true" };
@@ -293,11 +361,19 @@ function memoCompare(){
   }
   if (j(pr)!==j(pf)) bad.push(`problems differ: ${pr.length} vs ${pf.length}`);
   PROBLEMS = pf;
-  if (bad.length){ TRUN = CRUN = null; console.warn("Re-reading only the changed lines gave different results:\n" + bad.join("\n")); setMsg("memoCheck: re-reading only the changed lines gave different results (see the console).", true); }
+  if (bad.length){
+    TRUN = CRUN = null;
+    console.warn("Re-reading only the changed lines gave different results:\n" + bad.join("\n"));
+    setMsg("memoCheck: re-reading only the changed lines gave different results (see the console).", true);
+  }
   return bad;
 }
 // A copy of a state two levels deep (pos, cyc, ever and the like are objects of plain values).
-function snapSt(st){ const o = {}; for (const k in st){ const v = st[k]; o[k] = v && typeof v==="object" ? (Array.isArray(v) ? v.slice() : { ...v }) : v; } return o; }
+function snapSt(st){
+  const o = {};
+  for (const k in st){ const v = st[k]; o[k] = v && typeof v==="object" ? (Array.isArray(v) ? v.slice() : { ...v }) : v; }
+  return o;
+}
 function sameVal(x, y, d){
   if (x===y) return true;
   if (!d || !x || !y || typeof x!=="object" || typeof y!=="object" || Array.isArray(x)!==Array.isArray(y)) return false;
@@ -366,7 +442,11 @@ function translateAll(full){
 }
 function lineKind(li){
   const st = lineState[li], toks = doc[li] || [];
-  if (SYNTAX==="klartext"){ const h = klHeadOf(toks); if (!st || !h || !KL_MOVE.test(h)) return null; return st.motion==="G00" ? "rapid" : KL_ARC.test(h) ? "arc" : "feed"; }
+  if (SYNTAX==="klartext"){
+    const h = klHeadOf(toks);
+    if (!st || !h || !KL_MOVE.test(h)) return null;
+    return st.motion==="G00" ? "rapid" : KL_ARC.test(h) ? "arc" : "feed";
+  }
   if (!st || !toks.some(t => /^[XYZUW][-+]?[\d.#[]/.test(t)) || toks.some(t => isCode(t,"G65") && !DIALECT.codeWords?.G65)) return null;
   if (toks.some(t => isCode(t,"G28") || isCode(t,"G53"))) return "rapid";
   if (st.cycleCode) return "cyc";
@@ -383,7 +463,11 @@ function cycleHelp(code){
   const layers = [CH[type], ...seen.map(n => CH[n+"."+type])].filter(Boolean);
   const out = { words:{} };
   for (const ly of layers) Object.assign(out.words, ly.common?.words || {});
-  for (const ly of layers){ const e = ly[code]; if (!e) continue; for (const [k, v] of Object.entries(e)){ if (k==="words") Object.assign(out.words, v); else out[k] = v; } }
+  for (const ly of layers){
+    const e = ly[code];
+    if (!e) continue;
+    for (const [k, v] of Object.entries(e)){ if (k==="words") Object.assign(out.words, v); else out[k] = v; }
+  }
   return out;
 }
 function cycleWord(code, L){

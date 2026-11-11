@@ -10,7 +10,6 @@
 const REPO = "grahamrkf/glosscode";
 const SITE = `https://github.com/${REPO}`;
 const API = `https://api.github.com/repos/${REPO}/releases/latest`;
-const $ = id => document.getElementById(id);
 const adlg = $("adlg");
 const NATIVE = window.GlossCodeNative;   // set when running in the app; the app checks for a "portable" file beside itself
 const os = NATIVE ? NATIVE.platform : /Linux/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent) ? "linux" : "windows";
@@ -67,9 +66,9 @@ function openAbout(){
   $("a-plat").textContent = `${os === "linux" ? "Linux" : "Windows"}, 64-bit, ${portable ? "portable" : "installed"}`;
   $("a-site").href = SITE; $("a-site").textContent = SITE.replace(/^https:\/\//, "");
   $("a-rel").href = SITE + "/releases"; $("a-issues").href = SITE + "/issues";
-  adlg.hidden = false; $("a-close").focus();
+  showDialog(adlg, $("a-close"));
 }
-function closeAbout(){ adlg.hidden = true; $("ed")?.focus({ preventScroll:true }); }
+const closeAbout = () => hideDialog(adlg);
 
 $("a-check").addEventListener("click", check);
 $("a-close").addEventListener("click", closeAbout);

@@ -4,10 +4,9 @@
    is active there drills each one. Values are written with a decimal point (X1.5, Y0.), as absolute
    positions under G90 or as distances from the previous hole under G91. On a lathe, X is a diameter. */
 (() => {
-const $ = id => document.getElementById(id);
 const PLANES = { G17:{ ax:["X","Y"], name:"G17 · XY plane" }, G18:{ ax:["Z","X"], name:"G18 · XZ plane" }, G19:{ ax:["Y","Z"], name:"G19 · YZ plane" } };
 const hdlg = $("hdlg");
-let H = null, kind = "grid", skipTouched = false, initUnits = null;
+let holes = null, kind = "grid", skipTouched = false, initUnits = null;
 
 // Tool position after line li, in program coordinates as written (on a lathe X is a diameter).
 function posAt(li){
@@ -20,11 +19,11 @@ function posAt(li){
 const num = id => { const v = $(id).value.trim(); return v==="" ? NaN : Number(v); };
 const rad = d => d * Math.PI / 180;
 function fmt(v){
-  const d = H.mm ? 3 : 4;
+  const d = holes.mm ? 3 : 4;
   return (Math.round(v * 10**d) / 10**d).toFixed(d).replace(/0+$/, "");   // 1.5000 → 1.5, 1.0000 → 1., always a decimal point
 }
 const fmtEn = v => fmt(v).replace(/\.$/, ".0");   // in sentences a whole number reads 3.0, like the English line
-const scale = A => H.dia && A==="X" ? 2 : 1;   // lathe X is written as a diameter
+const scale = A => holes.dia && A==="X" ? 2 : 1;   // lathe X is written as a diameter
 
 function openHoles(){
   if (editing && !commit()) return;
@@ -34,40 +33,54 @@ function openHoles(){
   const plane = PLANES[st.plane] ? st.plane : "G17";
   const [a1, a2] = PLANES[plane].ax;
   const p = posAt(curLine);
-  H = { li:curLine, st, plane, a1, a2, dia: mtype()==="lathe" && !!DIALECT.diameterX, inc: st.dist==="inc", mm: st.units==="mm",
+  holes = { li:curLine, st, plane, a1, a2, dia: mtype()==="lathe" && !!DIALECT.diameterX, inc: st.dist==="inc", mm: st.units==="mm",
         pos: [p[a1.toLowerCase()], p[a2.toLowerCase()]] };
   if (initUnits!==st.units){   // starting values, kept between openings until the units change
     initUnits = st.units;
-    const m = H.mm ? 25 : 1;
+    const m = holes.mm ? 25 : 1;
     const set = (id, v) => $(id).value = v;
     set("hg-d1", fmt(m)); set("hg-a1", "0."); set("hg-n1", "4"); set("hg-d2", fmt(m)); set("hg-a2", "90."); set("hg-n2", "3");
     set("hc-c1", "0."); set("hc-c2", "0."); set("hc-r", fmt(3*m)); set("hc-n", "6"); set("hc-a0", "0."); set("hc-v", "30.");
   }
   // The first hole defaults to where the selected line leaves the tool.
-  $("hg-o1").value = fmt(H.pos[0]); $("hg-o2").value = fmt(H.pos[1]);
+  $("hg-o1").value = fmt(holes.pos[0]); $("hg-o2").value = fmt(holes.pos[1]);
   hdlg.querySelectorAll(".ax1").forEach(e => e.textContent = a1 + (scale(a1)===2 ? " dia." : ""));
   hdlg.querySelectorAll(".ax2").forEach(e => e.textContent = a2 + (scale(a2)===2 ? " dia." : ""));
   hdlg.querySelector(".rowlab").textContent = `Along ${a1} (rows)`;
   hdlg.querySelector(".collab").textContent = `Along ${a2} (columns)`;
-  hdlg.querySelectorAll(".hu").forEach(e => e.textContent = H.mm ? "mm" : "in");
+  hdlg.querySelectorAll(".hu").forEach(e => e.textContent = holes.mm ? "mm" : "in");
   $("h-plane").textContent = `${PLANES[plane].name}, active on this line. Angles count from +${a1} toward +${a2}.`;
   skipTouched = false;
-  hdlg.hidden = false; update();
+  showDialog(hdlg);
+  update();
   (kind==="grid" ? $("hg-d1") : $("hc-r")).focus();
 }
-function closeHoles(){ hdlg.hidden = true; H = null; ed.focus({preventScroll:true}); }
+function closeHoles(){
+  holes = null;
+  hideDialog(hdlg);
+}
 
 // Hole centers in true lengths (lathe X as a radius), in plane axis order [a1, a2].
 function points(){
   const bad = msg => ({ err: msg, pts: [] });
-  const s1 = scale(H.a1), s2 = scale(H.a2);
+  const s1 = scale(holes.a1), s2 = scale(holes.a2);
   if (kind==="grid"){
-    const o = [num("hg-o1")/s1, num("hg-o2")/s2], d1 = num("hg-d1"), d2 = num("hg-d2"), q1 = num("hg-a1"), q2 = num("hg-a2"), n1 = num("hg-n1"), n2 = num("hg-n2");
+    const o = [num("hg-o1")/s1, num("hg-o2")/s2];
+    const d1 = num("hg-d1");
+    const d2 = num("hg-d2");
+    const q1 = num("hg-a1");
+    const q2 = num("hg-a2");
+    const n1 = num("hg-n1");
+    const n2 = num("hg-n2");
     if (![...o, d1, d2, q1, q2].every(Number.isFinite)) return bad("Fill in every box with a number.");
-    if (!Number.isInteger(n1) || !Number.isInteger(n2) || n1 < 1 || n2 < 1) return bad("The number of holes in each direction has to be a whole number, 1 or more.");
+    if (!Number.isInteger(n1) || !Number.isInteger(n2) || n1 < 1 || n2 < 1) {
+      return bad("The number of holes in each direction has to be a whole number, 1 or more.");
+    }
     if (n1*n2 > 500) return bad(`That's ${n1*n2} holes. The tool stops at 500.`);
     if ((n1 > 1 && d1 <= 0) || (n2 > 1 && d2 <= 0)) return bad("The distance between holes has to be more than 0.");
-    if (n1 > 1 && n2 > 1 && Math.abs(Math.sin(rad(q2 - q1))) < 1e-6) return bad("The two directions point the same way, so the rows would land on top of each other. Change one of the angles.");
+    if (n1 > 1 && n2 > 1 && Math.abs(Math.sin(rad(q2 - q1))) < 1e-6) {
+      return bad("The two directions point the same way, so the rows would land on top of each other. Change one of the angles.");
+    }
     const u = [Math.cos(rad(q1)), Math.sin(rad(q1))], v = [Math.cos(rad(q2)), Math.sin(rad(q2))], zig = $("hg-ord").value==="zig", pts = [];
     for (let j = 0; j < n2; j++) for (let k = 0; k < n1; k++){
       const i = zig && j % 2 ? n1-1-k : k;
@@ -94,17 +107,17 @@ function points(){
   const sweep = Math.abs(step) * (n-1);
   const warn = ext!=="full" && n > 1 && sweep >= 360 - 1e-6 ? `The holes go all the way around (${fmtEn(sweep)}° from first to last), so some land on top of each other.` : null;
   const spread = ext==="full" ? `${fmtEn(step)}° apart` : `${fmtEn(Math.abs(step))}° apart, ${fmtEn(sweep)}° first to last`;
-  return { pts, center: c, r, warn, sum: `${n} hole${n > 1 ? "s" : ""} on a ${fmtEn(2*r)} ${H.mm ? "mm" : "in"} circle, ${spread}` };
+  return { pts, center: c, r, warn, sum: `${n} hole${n > 1 ? "s" : ""} on a ${fmtEn(2*r)} ${holes.mm ? "mm" : "in"} circle, ${spread}` };
 }
 
 // One row of words per hole. Under G91 each row is the distance from the hole before it.
 function rowsFor(pts){
-  const s1 = scale(H.a1), s2 = scale(H.a2);
-  let prev = [H.pos[0]/s1, H.pos[1]/s2];
+  const s1 = scale(holes.a1), s2 = scale(holes.a2);
+  let prev = [holes.pos[0]/s1, holes.pos[1]/s2];
   return pts.map((p, k) => {
-    const w = H.inc ? [(p[0]-prev[0])*s1, (p[1]-prev[1])*s2] : [p[0]*s1, p[1]*s2];
+    const w = holes.inc ? [(p[0]-prev[0])*s1, (p[1]-prev[1])*s2] : [p[0]*s1, p[1]*s2];
     prev = p;
-    const words = [H.a1 + fmt(w[0]), H.a2 + fmt(w[1])].sort((a, b) => "XYZ".indexOf(a[0]) - "XYZ".indexOf(b[0]));   // X before Y before Z, as programs are written
+    const words = [holes.a1 + fmt(w[0]), holes.a2 + fmt(w[1])].sort((a, b) => "XYZ".indexOf(a[0]) - "XYZ".indexOf(b[0]));   // X before Y before Z, as programs are written
     return { skip: k===0 && $("h-skip").checked, words };
   });
 }
@@ -112,45 +125,54 @@ function rowsFor(pts){
 function nNumbers(k){
   if (!autoN) return { ns: [] };
   let cur = null, next = null;
-  for (let i = H.li; i >= 0 && cur===null; i--) cur = nOf(doc[i]);
-  for (let i = H.li+1; i < doc.length && next===null; i++) next = nOf(doc[i]);
+  for (let i = holes.li; i >= 0 && cur===null; i--) cur = nOf(doc[i]);
+  for (let i = holes.li+1; i < doc.length && next===null; i++) next = nOf(doc[i]);
   const base = cur ?? 0; let step = N_STEP;
   if (next!=null && base + k*step >= next){
     step = Math.floor((next - base) / (k+1));
-    if (step < 1) return { ns: [], msg: `There's no room for ${k} N numbers between N${cur} and N${next}, so the new lines have none. Program › Renumber makes room.` };
+    if (step < 1) {
+      return { ns: [], msg: `There's no room for ${k} N numbers between N${cur} and N${next}, so the new lines have none. Program › Renumber makes room.` };
+    }
   }
   return { ns: Array.from({ length:k }, (_, i) => base + (i+1)*step) };
 }
 
 function compute(){
   const r = points(); if (r.err) return r;
-  const g = [H.pos[0]/scale(H.a1), H.pos[1]/scale(H.a2)];
-  const at1 = Math.hypot(r.pts[0][0]-g[0], r.pts[0][1]-g[1]) < (H.mm ? 0.0005 : 0.00005);
+  const g = [holes.pos[0]/scale(holes.a1), holes.pos[1]/scale(holes.a2)];
+  const at1 = Math.hypot(r.pts[0][0]-g[0], r.pts[0][1]-g[1]) < (holes.mm ? 0.0005 : 0.00005);
   if (!skipTouched) $("h-skip").checked = at1;
   r.at1 = at1; r.rows = rowsFor(r.pts);
   return r;
 }
 function update(){
-  if (!H) return;
+  if (!holes) return;
   $("h-grid").setAttribute("aria-pressed", kind==="grid"); $("h-circ").setAttribute("aria-pressed", kind==="circ");
   $("h-gridf").hidden = kind!=="grid"; $("h-circf").hidden = kind!=="circ";
   const ext = $("hc-ext").value;
   $("hc-v").disabled = ext==="full";
   $("hc-vl").textContent = ext==="dist" ? "Distance between" : ext==="tot" ? "Total angle" : "Angle between";
-  $("hc-vu").textContent = ext==="dist" ? (H.mm ? "mm, straight line" : "in, straight line") : "°";
-  const r = compute(), lineName = nOf(doc[H.li])!=null ? "N" + nOf(doc[H.li]) : "line " + (H.li+1);
+  $("hc-vu").textContent = ext==="dist" ? (holes.mm ? "mm, straight line" : "in, straight line") : "°";
+  const r = compute(), lineName = nOf(doc[holes.li])!=null ? "N" + nOf(doc[holes.li]) : "line " + (holes.li+1);
   const notes = [];
-  const cyc = H.st.cycleCode, cname = cyc && DIALECT.cycles?.[cyc]?.name;
-  notes.push(H.st.cycle ? `${cyc}${cname ? ` (${cname})` : ""} is active on ${lineName}, so it runs at each new position.`
-                        : `<span class="warn">No canned cycle is active on ${lineName}, so these lines are plain ${H.st.motion || "G00"} moves. To drill them, select the line with the cycle (G81, G83…) first.</span>`);
-  if (H.inc) notes.push("G91 is active, so each line is the distance from the hole before it.");
-  if (H.dia) notes.push("X is written as a diameter, the way this lathe reads it. Distances and the bolt circle size are true lengths.");
+  const cyc = holes.st.cycleCode, cname = cyc && DIALECT.cycles?.[cyc]?.name;
+  notes.push(holes.st.cycle ? `${cyc}${cname ? ` (${cname})` : ""} is active on ${lineName}, so it runs at each new position.`
+                        : `<span class="warn">No canned cycle is active on ${lineName}, so these lines are plain ${holes.st.motion || "G00"} moves. To drill them, select the line with the cycle (G81, G83…) first.</span>`);
+  if (holes.inc) notes.push("G91 is active, so each line is the distance from the hole before it.");
+  if (holes.dia) notes.push("X is written as a diameter, the way this lathe reads it. Distances and the bolt circle size are true lengths.");
   if (r.warn) notes.push(`<span class="warn">${esc(r.warn)}</span>`);
-  if (!r.err && $("h-skip").checked && !r.at1) notes.push(`<span class="warn">${lineName} leaves the tool at ${H.a1}${fmtEn(H.pos[0])} ${H.a2}${fmtEn(H.pos[1])}, not at hole 1, so hole 1 would be missed.</span>`);
+  if (!r.err && $("h-skip").checked && !r.at1) {
+    notes.push(`<span class="warn">${lineName} leaves the tool at ${holes.a1}${fmtEn(holes.pos[0])} ${holes.a2}${fmtEn(holes.pos[1])}, not at hole 1, so hole 1 would be missed.</span>`);
+  }
   $("h-note").innerHTML = notes.join("<br>");
   $("h-skipl").textContent = r.at1 ? `Skip hole 1, ${lineName} already goes there` : `Skip hole 1 (${lineName} doesn't go there)`;
   if (r.err){
-    $("h-msg").innerHTML = `<span class="warn">${esc(r.err)}</span>`; $("h-sum").textContent = ""; $("h-out").textContent = ""; $("h-ok").disabled = true; drawPreview(null); return;
+    $("h-msg").innerHTML = `<span class="warn">${esc(r.err)}</span>`;
+    $("h-sum").textContent = "";
+    $("h-out").textContent = "";
+    $("h-ok").disabled = true;
+    drawPreview(null);
+    return;
   }
   const keep = r.rows.filter(x => !x.skip), nn = nNumbers(keep.length);
   let j = 0;
@@ -168,7 +190,7 @@ function update(){
 function drawPreview(r){
   const svg = $("h-svg"), W = 300, Hh = 250, pad = 26;
   if (!r){ svg.innerHTML = `<text x="150" y="128" text-anchor="middle" font-size="12" fill="#aaa">No preview</text>`; return; }
-  const g = [H.pos[0]/scale(H.a1), H.pos[1]/scale(H.a2)];
+  const g = [holes.pos[0]/scale(holes.a1), holes.pos[1]/scale(holes.a2)];
   const all = [...r.pts, g, [0, 0]];
   if (r.center) all.push([r.center[0]-r.r, r.center[1]-r.r], [r.center[0]+r.r, r.center[1]+r.r]);
   let x0 = Math.min(...all.map(p => p[0])), x1 = Math.max(...all.map(p => p[0])), y0 = Math.min(...all.map(p => p[1])), y1 = Math.max(...all.map(p => p[1]));
@@ -191,7 +213,7 @@ function drawPreview(r){
     if (label) out.push(`<text x="${+X(p)+6}" y="${+Y(p)-6}" font-size="10" fill="#555">${i+1}</text>`);
   });
   out.push(`<path d="M${X(g)} ${+Y(g)-6}l5 6l-5 6l-5 -6z" fill="#e8a33d"/>`);
-  out.push(`<g font-size="10" fill="#777"><path d="M10 238h26M10 238v-26" stroke="#999" fill="none"/><text x="39" y="241">${H.a1}</text><text x="6" y="208">${H.a2}</text></g>`);
+  out.push(`<g font-size="10" fill="#777"><path d="M10 238h26M10 238v-26" stroke="#999" fill="none"/><text x="39" y="241">${holes.a1}</text><text x="6" y="208">${holes.a2}</text></g>`);
   out.push(`<g font-size="10" fill="#777"><path d="M196 236l4 5l-4 5l-4 -5z" fill="#e8a33d" transform="translate(0 -5)"/><text x="204" y="240">tool now</text><circle cx="254" cy="236" r="3.5" fill="#c03d9a"/><text x="260" y="240">hole</text></g>`);
   svg.innerHTML = out.join("");
 }
@@ -199,7 +221,7 @@ function drawPreview(r){
 function insertHoles(){
   const r = compute(); if (r.err) return;
   const keep = r.rows.filter(x => !x.skip); if (!keep.length) return;
-  const nn = nNumbers(keep.length), li = H.li;
+  const nn = nNumbers(keep.length), li = holes.li;
   const rows = keep.map((x, i) => nn.ns[i]!=null ? ["N" + nn.ns[i], ...x.words] : [...x.words]);
   pushUndo();
   doc.splice(li+1, 0, ...rows);
@@ -217,10 +239,11 @@ hdlg.addEventListener("input", e => { if (e.target.id!=="h-skip") update(); });
 $("h-ok").onclick = insertHoles;
 $("h-cancel").onclick = $("h-x").onclick = closeHoles;
 // Keys typed in the dialog stay in the dialog, so Ctrl+Z or arrows don't edit the program underneath.
-hdlg.addEventListener("keydown", e => {
-  e.stopPropagation();
-  if (e.key==="Escape"){ e.preventDefault(); closeHoles(); }
-  else if (e.key==="Enter" && e.target.tagName==="INPUT" && e.target.type!=="checkbox"){ e.preventDefault(); insertHoles(); }
+dialogKeys(hdlg, closeHoles, e => {
+  if (e.key==="Enter" && e.target.tagName==="INPUT" && e.target.type!=="checkbox"){
+    e.preventDefault();
+    insertHoles();
+  }
 });
 
 window.openHoles = openHoles;
