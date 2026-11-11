@@ -22,14 +22,14 @@ function dialogKeys(dlg, onEscape, onKey){
 let VIEWWIN = null, VIEWT = null, boxMode = false;   // toolpath zoom and pan (see viewVisible)
 // Open programs, one per tab (see js/tabs.js). activeTab is -1 on the home page.
 // Each tab is one object holding its program (newTab). The names fileName, machineId, doc, curLine, expanded,
-// undoStack, redoStack, fileEob and docVer read and write the active tab's (on the home page, HOME's), so switching
+// undoStack, redoStack, fileEob, docVer, subPane and backStack (js/subprograms.js) read and write the active tab's (on the home page, HOME's), so switching
 // tabs only changes activeTab. What is worked out from the program (view, lineState, EXEC…) is redone on a switch.
 let TABS = [], activeTab = -1, VER_SEQ = 0;
 const newTab = (o = {}) => ({ name:"", machineId:"haas_vf2", doc:[], curLine:0, expanded:new Set(), undoStack:[], redoStack:[],
-  fileEob:false, docVer:0, ...o });
+  fileEob:false, docVer:0, subPane:[], backStack:[], ...o });
 const HOME = newTab();
 for (const [name, key] of Object.entries({ fileName:"name", machineId:"machineId", doc:"doc", curLine:"curLine", expanded:"expanded",
-    undoStack:"undoStack", redoStack:"redoStack", fileEob:"fileEob", docVer:"docVer" }))
+    undoStack:"undoStack", redoStack:"redoStack", fileEob:"fileEob", docVer:"docVer", subPane:"subPane", backStack:"backStack" }))
   Object.defineProperty(globalThis, name, { get: () => (TABS[activeTab] || HOME)[key], set: v => { (TABS[activeTab] || HOME)[key] = v; } });
 let style = "words", showMode = "both";
 let colorBy = "motion", future = "grey";

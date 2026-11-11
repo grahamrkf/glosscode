@@ -4,7 +4,22 @@ function setShow(m){
   showMode = m;
   render();
 }
-const checkItem = (label, on, fn, sc) => ({ label, check:on, fn, ...(sc ? { sc } : {}) });
+// Menu items: { label, fn, sc } runs fn; R(...) is one of a set of choices (a dot, only one is picked);
+// T(...) is an on/off setting (a tick box); { label, sub:[...] } opens a submenu; "-" a separator; { grp } a heading.
+const R = (label, on, fn, sc) => ({ label, check:on, radio:true, fn, ...(sc ? { sc } : {}) });
+const T = (label, on, fn, sc) => ({ label, check:on, fn, ...(sc ? { sc } : {}) });
+// The toolpath and timeline settings, in Simulate › Toolpath and the toolpath's Show button.
+const TOOLPATH_ITEMS = [
+  T("Rapid moves (G00)", () => simRapids, () => setSimRapids(!simRapids)),
+  T("Cutter comp side (G41/G42)", () => compBand, () => { compBand = !compBand; drawViews(); setMsg(compBand ? "Moves with cutter comp show a grey band on the side the tool's centre is on." : "Cutter comp bands hidden."); }),
+  "-", { grp:"Moves after the selected line" },
+  R("Grey", () => future==="grey", () => setFuture("grey")),
+  R("Hidden", () => future==="hide", () => setFuture("hide")),
+  R("Shown", () => future==="show", () => setFuture("show")),
+  "-", { grp:"Colour moves by" },
+  R("Move type", () => colorBy==="motion", () => { colorBy = "motion"; drawViews(); }),
+  R("Tool", () => colorBy==="tool", () => { colorBy = "tool"; drawViews(); })
+];
 const MENUS = {
   File: [],   // built by the tabs script below, since it lists recent files
   Edit: [
@@ -21,48 +36,36 @@ const MENUS = {
     { label:"Find next", sc:"F3", fn:() => findNext(1), dis:() => !findQ },
     "-",
     { label:"New line below", sc:"Ctrl+Enter", fn:() => newLine(curLine) },
-    { label:"Delete line (or selected lines)", sc:"Ctrl+Shift+K", fn:deleteLine }
+    { label:"Delete lines", sc:"Ctrl+Shift+K", fn:deleteLine }
   ],
   View: [
-    { grp:"Show" },
-    checkItem("Gloss and code", () => showMode==="both", () => setShow("both")),
-    checkItem("Gloss only", () => showMode==="en", () => setShow("en")),
-    checkItem("Code only", () => showMode==="gc", () => setShow("gc")),
-    checkItem("Run order numbers", () => runNums, () => {
-      runNums = !runNums;
-      render();
-      setMsg(runNums ? "Each line shows its run order number (grey, left): the block count as the program runs, counting subprogram lines on every call." : "Run order numbers are hidden.");
-    }),
-    "-", { grp:"Gloss words" },
-    checkItem("Full words (spindle.fwd)", () => style==="words", () => { style = "words"; render(); }),
-    checkItem("Short (SFWD)", () => style==="short", () => { style = "short"; render(); }),
-    "-", { grp:"Toolpath colors" },
-    checkItem("By move type", () => colorBy==="motion", () => { colorBy = "motion"; drawViews(); }),
-    checkItem("By tool", () => colorBy==="tool", () => { colorBy = "tool"; drawViews(); }),
-    "-", { grp:"Moves after the selected line" },
-    checkItem("Grey them out", () => future==="grey", () => setFuture("grey")),
-    checkItem("Hide them", () => future==="hide", () => setFuture("hide")),
-    checkItem("Show normally", () => future==="show", () => setFuture("show")),
-    "-", { grp:"Fold long runs of moves" },
-    { label:"Fold all", fn:() => foldAll(true) },
-    { label:"Unfold all", fn:() => foldAll(false) },
-    checkItem("Fold long sections when a file opens", () => foldAuto, () => {
-      foldAuto = !foldAuto;
-      saveFoldPrefs();
-      setMsg(foldAuto ? "Opening a file folds the moves in sections too long for the window." : "Opening a file shows every line.");
-    }),
-    checkItem("G01 at 10× the cutting feed is a rapid", () => foldFast===10, () => setFoldFast(10)),
-    checkItem("G01 at 5× the cutting feed is a rapid", () => foldFast===5, () => setFoldFast(5)),
-    checkItem("G01 at 3× the cutting feed is a rapid", () => foldFast===3, () => setFoldFast(3)),
-    checkItem("Only G00 is a rapid", () => foldFast===0, () => setFoldFast(0)),
+    R("Gloss and code", () => showMode==="both", () => setShow("both")),
+    R("Gloss only", () => showMode==="en", () => setShow("en")),
+    R("Code only", () => showMode==="gc", () => setShow("gc")),
+    { label:"Gloss words", sub:[
+      R("Full words (spindle.fwd)", () => style==="words", () => { style = "words"; render(); }),
+      R("Short words (SFWD)", () => style==="short", () => { style = "short"; render(); })
+    ] },
     "-",
-    checkItem("Cutter comp side (G41/G42)", () => compBand, () => {
-      compBand = !compBand;
-      drawViews();
-      setMsg(compBand ? "Moves with cutter comp show a grey band on the side the tool's centre is on." : "Cutter comp bands hidden.");
-    }),
+    T("Run order numbers", () => runNums, () => { runNums = !runNums; render(); setMsg(runNums ? "Each line shows its run order number (grey, left): the block count as the program runs, counting subprogram lines on every call." : "Run order numbers are hidden."); }),
+    T("Problems panel", () => probsOpen, () => toggleProblems(), "Ctrl+Shift+M"),
     "-",
-    checkItem("Problems panel", () => probsOpen, () => toggleProblems())
+    { label:"Fold moves", sub:[
+      { label:"Fold all", fn:() => foldAll(true) },
+      { label:"Unfold all", fn:() => foldAll(false) },
+      "-",
+      T("Fold when a file opens", () => foldAuto, () => { foldAuto = !foldAuto; saveFoldPrefs(); setMsg(foldAuto ? "Opening a file folds the moves in sections too long for the window." : "Opening a file shows every line."); }),
+      "-", { grp:"Count G01 as a rapid at" },
+      R("10× the cutting feed", () => foldFast===10, () => setFoldFast(10)),
+      R("5× the cutting feed", () => foldFast===5, () => setFoldFast(5)),
+      R("3× the cutting feed", () => foldFast===3, () => setFoldFast(3)),
+      R("Never (only G00)", () => foldFast===0, () => setFoldFast(0))
+    ] },
+    "-",
+    { label:"Text size…", fn:() => openTextSize() },
+    { label:"Zoom in", sc:"Ctrl+=", fn:() => zoomStep(1) },
+    { label:"Zoom out", sc:"Ctrl+-", fn:() => zoomStep(-1) },
+    { label:"Actual size", sc:"Ctrl+0", fn:() => zoomStep(0) }
   ],
   Insert: [],   // built by the Insert menu script below, since it follows the machine
   Program: [
@@ -73,10 +76,7 @@ const MENUS = {
     { label:"Previous problem", sc:"Shift+F8", fn:() => nextProblem(-1) },
     "-",
     { label:"Renumber", fn:renumber },
-    checkItem("Auto N on new lines", () => autoN, () => {
-      autoN = !autoN;
-      setMsg(autoN ? `New lines get the next free N number, counting by ${N_STEP}.` : "New lines get no N number.");
-    }),
+    T("Auto N on new lines", () => autoN, () => { autoN = !autoN; setMsg(autoN ? `New lines get the next free N number, counting by ${N_STEP}.` : "New lines get no N number."); }),
     "-",
     { label:"Show all subprograms", fn:() => { doc.forEach((t, i) => { if (callTarget(t)!=null || window.libFor?.(t)) expanded.add(i); }); render(); } },
     { label:"Hide all subprograms", fn:() => { expanded.clear(); render(); } }
@@ -86,13 +86,13 @@ const MENUS = {
     { label:"Step forward one line", sc:"Ctrl+→", fn:() => simStep(1) },
     { label:"Step back one line", sc:"Ctrl+←", fn:() => simStep(-1) },
     { label:"Restart", fn:simReset },
+    { label:"Stop simulating", sc:"Esc", fn:() => stopSim(), dis:() => simIdx==null },
     "-",
-    checkItem("Optional stop (M01)", () => simOpt, () => setSimOpt(!simOpt)),
-    checkItem("Block delete (/)", () => simBD, () => setSimBD(!simBD)),
-    checkItem("Show rapid moves (G00)", () => simRapids, () => setSimRapids(!simRapids)),
-    checkItem("Expanded view", () => simX, () => setSimX(!simX), "Ctrl+Shift+E"),
+    T("Optional stop (M01)", () => simOpt, () => setSimOpt(!simOpt)),
+    T("Block delete (/)", () => simBD, () => setSimBD(!simBD)),
+    T("Expanded view", () => simX, () => setSimX(!simX), "Ctrl+Shift+E"),
     "-",
-    { label:"Stop simulating", sc:"Esc", fn:() => stopSim(), dis:() => simIdx==null }
+    { label:"Toolpath", sub:TOOLPATH_ITEMS }
   ],
   Help: [
     { label:"Canned cycle guide…", sc:"F1", fn:() => openCycleHelp(), doc:true },
@@ -105,21 +105,55 @@ let openMenu = null, menuEl = null;
 menubar.innerHTML = Object.keys(MENUS).map(m => `<span class="mi" data-m="${m}">${m}</span>`).join("")
   + `<span class="mchip" id="mchip" role="button" tabindex="0" aria-haspopup="menu" title="Machine profile"></span>`;
 const HOME_MENUS = ["File", "View", "Help"];   // the menus that work on the home page; items marked doc:true need a program
+// The HTML for a list of menu items. Each item's data-p is its path in the list ("3", or "5.2" inside a submenu).
+function menuHTML(list, home, path = ""){
+  return list.map((it, i) => {
+    if (it==="-") return `<div class="sep"></div>`;
+    if (it.grp) return `<div class="grp">${esc(it.grp)}</div>`;
+    const p = path + i, dis = (it.dis && it.dis()) || (home && it.doc);
+    if (it.sub) return `<div class="it sub${dis ? " dis" : ""}" data-p="${p}"><span class="ck"></span><span>${esc(it.label)}</span><span class="sc">▸</span>`
+      + `<div class="menu submenu">${menuHTML(it.sub, home, p + ".")}</div></div>`;
+    const ck = !it.check ? "" : `<i class="${it.radio ? "rd" : "tb"}${it.check() ? " on" : ""}"></i>`;
+    return `<div class="it${dis ? " dis" : ""}" data-p="${p}" role="${it.check ? (it.radio ? "menuitemradio" : "menuitemcheckbox") : "menuitem"}"${it.check ? ` aria-checked="${!!it.check()}"` : ""}>`
+      + `<span class="ck">${ck}</span><span>${esc(it.label)}</span><span class="sc">${it.sc || ""}</span></div>`;
+  }).join("");
+}
+const itemAt = (list, p) => p.split(".").reduce((l, i, k, a) => k < a.length - 1 ? l[+i].sub : l[+i], list);
+// Wires a menu element built from list: a click on an item runs it (submenus open on hover, by CSS).
+function wireMenu(el, list, close){
+  el.addEventListener("mousedown", e => {
+    e.preventDefault();
+    const it = e.target.closest(".it"); if (!it || it.classList.contains("dis") || it.classList.contains("sub")) return;
+    const item = itemAt(list, it.dataset.p); close(); item.fn();
+  });
+}
 function showMenu(name){
   closeMenu();
   const mi = menubar.querySelector(`[data-m="${name}"]`); mi.classList.add("open"); openMenu = name;
   menuEl = document.createElement("div"); menuEl.className = "menu"; menuEl.style.left = mi.offsetLeft + "px";
   const home = activeTab < 0;
   if (home && !HOME_MENUS.includes(name)){ menuEl.innerHTML = `<div class="grp">Open or create a program first</div>`; menubar.appendChild(menuEl); return; }
-  menuEl.innerHTML = MENUS[name].map((it, i) => it==="-" ? `<div class="sep"></div>` : it.grp ? `<div class="grp">${it.grp}</div>`
-    : `<div class="it${(it.dis && it.dis()) || (home && it.doc) ? " dis" : ""}" data-i="${i}"><span class="ck">${it.check ? (it.check() ? "●" : "") : ""}</span><span>${esc(it.label)}</span><span class="sc">${it.sc || ""}</span></div>`).join("");
+  const list = MENUS[name];
+  menuEl.innerHTML = menuHTML(list, home);
   menubar.appendChild(menuEl);
-  menuEl.addEventListener("mousedown", e => {
-    e.preventDefault();
-    const it = e.target.closest(".it"); if (!it || it.classList.contains("dis")) return;
-    const item = MENUS[name][+it.dataset.i]; closeMenu(); item.fn();
-  });
+  wireMenu(menuEl, list, closeMenu);
 }
+// A menu that drops down from a button (the toolpath's Show button). Clicking the button again, or anywhere else, closes it.
+let popEl = null, popBtn = null;
+function popMenu(btn, list){
+  const again = popBtn===btn; closePop(); if (again) return;
+  popEl = document.createElement("div"); popEl.className = "menu pop"; popBtn = btn;
+  popEl.innerHTML = menuHTML(list, false);
+  $("app").appendChild(popEl);
+  const b = btn.getBoundingClientRect(), a = $("app").getBoundingClientRect(), w = popEl.offsetWidth;
+  popEl.style.left = Math.max(4, Math.min(b.right - a.left - w, a.width - w - 4)) + "px";
+  popEl.style.top = (b.bottom - a.top + 2) + "px";
+  btn.setAttribute("aria-expanded", "true");
+  wireMenu(popEl, list, closePop);
+}
+function closePop(){ popEl?.remove(); popEl = null; popBtn?.setAttribute("aria-expanded", "false"); popBtn = null; }
+document.addEventListener("mousedown", e => { if (popEl && !popEl.contains(e.target) && !popBtn.contains(e.target)) closePop(); }, true);
+document.addEventListener("keydown", e => { if (popEl && e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); closePop(); } }, true);
 function closeMenu(){ menuEl?.remove(); menuEl = null; menubar.querySelectorAll(".open").forEach(x => x.classList.remove("open")); openMenu = null; }
 menubar.addEventListener("mousedown", e => {
   const mi = e.target.closest(".mi");

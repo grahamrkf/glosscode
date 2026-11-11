@@ -38,10 +38,7 @@ function drawViews(){
   wrapR.forEach(r => { if (r.turn!=null) pts.push({ x:r.xa, y:r.ya, z:0 }, { x:r.xb, y:r.yb, z:0 }); });
   if (!pts.length){   // nothing moves yet (a new program): clear the toolpath, timeline and position
     v1.innerHTML = ""; $("tleg").innerHTML = ""; $("s-pos").textContent = "No moves yet";
-    $("tlsvg").innerHTML = $("tlgrid").innerHTML = "";
-    document.querySelector("#tlh span").textContent = "";
-    tlSteps = [];
-    return; }
+    $("tlsvg").innerHTML = $("tlgrid").innerHTML = ""; $("tlnow").textContent = ""; tlSteps = []; return; }
   const win = VIEWWIN && VIEWWIN.doc===doc && VIEWWIN.lathe===lathe ? VIEWWIN : null, pad = win ? 0 : 12;
   let x0, x1, y0, y1;
   if (win) ({ x0, x1, y0, y1 } = win);
@@ -276,7 +273,7 @@ let tlSteps = [], tlShift = 0; const SLOT = 18;
    z (Z on a mill, or x: the X radius on a lathe), feed (the feed rate) and speed (the spindle speed while it
    turns). A machine with a process (a plasma torch) also gets a band where the torch is on, and a mark on
    lines that change the process or material: plasma power is set on the power supply, not in the program. */
-const TL_MODES = { z:"Z", x:"X radius", feed:"Feed rate", speed:"Spindle speed" };
+const TL_MODES = { z:"Z by line", x:"X radius by line", feed:"Feed rate by line", speed:"Spindle speed by line" };
 const tlMode = {};   // the chosen value per machine type, kept in settings.json
 window.loadTimelineModes = m => { Object.assign(tlMode, m); if (EXEC?.steps?.length) drawTimeline(EXEC.steps, mtype()==="lathe"); };
 const tlModes = () => RULES.machineTypes?.[mtype()]?.timeline || [mtype()==="lathe" ? "x" : "z"];
@@ -561,7 +558,7 @@ function drawTimeline(steps, lathe){
   const at = st ? ` at ${/^N\d+$/.test(doc[st.li]?.[0]||"") ? doc[st.li][0] : "line "+(st.li+1)}` : "";
   const unit = mode==="feed" ? FEED_UNIT[ls.feed]?.[ls.units] || "" : mode==="speed" ? "rpm" : "";
   const now = !st ? "" : mode==="feed" ? `${word(numWord("F", st.f), ls).e} ${unit}` : mode==="speed" ? `${word(numWord("S", st.s), ls).e} ${unit}` : `${lathe ? "X" : "Z"} ${(lathe ? st.v*2 : st.v).toFixed(3)}` + (mode==="z" && st.dips?.length ? `, drills to Z ${st.dips[0].z.toFixed(3)}` : "");
-  $("tlh").innerHTML = `${TL_MODES[mode]} by line <span>${st ? esc(now.trim() + (processDef ? (st.on ? ", torch on" : ", torch off") : "") + at) : ""}</span>`;
+  $("tlnow").textContent = st ? now.trim() + (processDef ? (st.on ? ", torch on" : ", torch off") : "") + at : "";
 }
 $("tl-mode").addEventListener("change", e => {
   tlMode[mtype()] = e.target.value;
@@ -703,7 +700,7 @@ function setSimBD(on){
   setMsg(on ? "Block delete is on: lines that start with / are skipped." : "Block delete is off: lines that start with / run like any other.");
 }
 function setSimRapids(on){
-  simRapids = on; $("s-rap").setAttribute("aria-pressed", on);
+  simRapids = on; showButtonState();
   drawViews();
   setMsg(on ? "Rapid moves are shown (dashed)." : "Rapid moves are hidden: the toolpath shows the cutting moves only.");
 }
@@ -723,18 +720,20 @@ function setSimX(on){
 }
 $("s-opt").onclick = () => setSimOpt(!simOpt);
 $("s-bd").onclick = () => setSimBD(!simBD);
-$("s-rap").onclick = () => setSimRapids(!simRapids);
 $("s-big").onclick = () => setSimX(!simX);
-// The moves still to come: greyed, hidden or shown like the rest (View menu). The toolpath button hides them, and a
-// second press brings back whichever of grey or shown was picked before.
-let futureShown = "grey";
+// The moves still to come: greyed, hidden or shown like the rest (Simulate › Toolpath, or the toolpath's Show button).
 function setFuture(f){
-  if (f!=="hide") futureShown = f;
-  future = f; $("s-fut").setAttribute("aria-pressed", f==="hide");
+  future = f; showButtonState();
   drawViews();
 }
-$("s-fut").onclick = () => { setFuture(future==="hide" ? futureShown : "hide");
-  setMsg(future==="hide" ? "The toolpath still to come is hidden: only the moves already run are drawn." : "The toolpath still to come is shown again."); };
+// The toolpath's Show button opens the toolpath settings (TOOLPATH_ITEMS in js/menus.js). It's highlighted while
+// something is left out of the drawing (rapids or the moves still to come), so a part-drawn toolpath isn't a surprise.
+function showButtonState(){
+  const b = $("s-show"), off = [!simRapids && "rapid moves", future==="hide" && "moves after the selected line"].filter(Boolean);
+  b.classList.toggle("on", off.length > 0);
+  b.title = "What the toolpath shows" + (off.length ? `. Hidden now: ${off.join(" and ")}` : ": rapid moves, moves after the selected line, cutter comp side, colours");
+}
+$("s-show").onclick = e => popMenu(e.currentTarget, TOOLPATH_ITEMS);
 window.addEventListener("resize", () => { if (simX && activeTab >= 0) drawViews(); });
 
 $("probs-l").addEventListener("mousedown", e => {

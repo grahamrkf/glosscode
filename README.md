@@ -141,6 +141,7 @@ docs/images/            Mockup screenshots
 src/ui/                 The program's screen; also runs in a browser (index.html loads css/ and js/)
 src/ui/data.js          Dictionary, rules, built-in library and version, written from data/ by scripts/make-ui-data.mjs
 src/ui/samples.js       The sample programs, written from examples/ (browser only)
+assets/fonts/           The code and gloss fonts (IBM Plex, SIL Open Font License), embedded by scripts/make-fonts.mjs
 VERSION                 Current version number
 examples/               Sample programs used by the mockup (Haas, Fanuc and Okuma; BRACKET_0MC.nc ends lines with ;). Not built into the program; a separate download
 ```

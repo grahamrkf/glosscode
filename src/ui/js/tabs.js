@@ -26,6 +26,7 @@ async function loadSettings(){
     if (o.timeline && typeof o.timeline==="object") window.loadTimelineModes?.(o.timeline);
     window.loadDraftDismissed?.(o.draftDismissed);
     if (o.folding && typeof o.folding==="object") window.loadFoldPrefs?.(o.folding);
+    if (o.text && typeof o.text==="object") window.loadTextPrefs?.(o.text);
     window.loadMachines?.(o.machines, o.recentMachines);
     SETTINGS.recent = Array.isArray(o.recent) ? o.recent.filter(r => r && typeof r.path==="string" && typeof r.name==="string").slice(0, MAX_RECENT) : [];
     SETTINGS.extDefaults = o.extDefaults && typeof o.extDefaults==="object" && !Array.isArray(o.extDefaults) ? { ...o.extDefaults } : {};
@@ -479,6 +480,7 @@ window.drawTabs = drawTabs;
 window.saveTimelineModes = m => { SETTINGS.timeline = m; saveSettings(); };
 window.saveDraftDismissed = list => { SETTINGS.draftDismissed = list; saveSettings(); };
 window.saveFoldPrefs = p => { SETTINGS.folding = p; saveSettings(); };
+window.saveTextPrefs = p => { SETTINGS.text = p; saveSettings(); };
 window.drawHome = drawHome;
 window.openSample = openSample;
 window.openProgram = openProgram;
