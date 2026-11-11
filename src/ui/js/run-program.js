@@ -4,9 +4,20 @@
 const arcSteps = (sw, full) => Math.max(2, Math.min(full, Math.ceil(Math.abs(sw)/(2*Math.PI)*full - 1e-9)));
 // Runs the program for the toolpath and the Z timeline: { segs (toolpath moves), steps (one per line run), vals,
 // ghosts, boxes, wraps, alarm, notes, vars, tailUsed }. Klartext has its own reader (interpretKlartext).
+// A tool's diameter from its line's comment, in the program's units: "(1/16 BALL)", "(.0625 ENGRAVER)", "(1.5MM CHAMFER)".
+// Only a fraction, a number with a decimal point, or a number with MM counts ("#2 CENTER DRILL" gives nothing).
+function toolDiameter(toks, units){
+  const c = toks.filter(isComment).join(" ").toUpperCase(); if (!c) return null;
+  const mmTo = v => units==="mm" ? v : v/25.4, inTo = v => units==="mm" ? v*25.4 : v;
+  let m = /(?:^|[^\d.\/])(\d+)\/(\d+)(?![\d\/])/.exec(c); if (m && +m[2] > 0) return inTo(+m[1] / +m[2]);
+  m = /(\d*\.\d+|\d+)\s*MM\b/.exec(c); if (m) return mmTo(+m[1]);
+  m = /(?:^|[^\d#])(\d*\.\d+)(?!\d)/.exec(c); if (m && +m[1] > 0) return +m[1];
+  return null;
+}
 function interpret(){
-  if (SYNTAX==="klartext") return interpretKlartext();
-  return new SimRun().run();
+  const ex = SYNTAX==="klartext" ? interpretKlartext() : new SimRun().run();
+  ex.time = timeRun(ex);   // how long each move takes (sim-time.js)
+  return ex;
 }
 
 /* One run of a Fanuc-style program, line by line, as the control would run it. The constructor sets up the run's
@@ -28,11 +39,14 @@ class SimRun {
     // so p is where the tool really is and off is the program zero's shift from where it started.
     this.okL = this.lathe && isOkuma(); this.NV = {}; this.off = { x:0, z:0 };
     this.F = null;   // the feed rate as it runs (an F#111 is only known here)
+    // For the move times (sim-time.js): the spindle speed as it runs, a lathe's speed clamp (G50 S), and the
+    // active canned cycle's dwell (P, in seconds).
+    this.S = null; this.clamp = null; this.cycP = null;
     this.L = labels();
     this.steps = [];
     // The toolpath. Each move is mirrored and turned (xfSeg) as it goes in.
     this.segs = [];
-    this.segs.push = (...a) => { a.forEach(s => this.xfSeg(s)); return Array.prototype.push.apply(this.segs, a); };
+    this.segs.push = (...a) => { a.forEach(s => { this.xfSeg(s); s.F ??= this.F; s.S ??= this.S; s.clamp ??= this.clamp; }); return Array.prototype.push.apply(this.segs, a); };
     this.noCyc = false;   // a Fagor 8055 N0 repeat: the move without the active cycle
     // ,C and ,R corners (Fanuc style): a G01 line with one waits for the next G01 move, then both are cut short and joined by
     // the chamfer or radius. ghosts are the parts of the two moves out to the sharp corner, which the tool doesn't cut.
@@ -70,7 +84,7 @@ class SimRun {
   // Goes through the program from the top: each line runs (step) and becomes a step for the simulation. Stops at the
   // program end or an alarm; follows GOTO, IF, WHILE, subprogram calls (up to 8 deep) and returns.
   run(){
-    const steps = this.steps, segs = this.segs, stack = [];
+    const steps = this.steps, segs = this.segs, stack = [], follow = callFollowDepth();
     let i = 0, guard = 0, entering = false;
     while (i < doc.length && guard++ < 20000){
       const li = i, toks = doc[i]; this.curLi = li;
@@ -93,6 +107,7 @@ class SimRun {
       // Fagor 8055: an N after the first word runs the line that many times (N0: the move without the active cycle)
       const rep = SYNTAX==="fagor8055" ? toks.find((t, k) => refN(toks, k) && /^N\d+$/.test(t)) : null, reps = rep ? parseInt(rep.slice(1), 10) : 1;
       const s0 = segs.length, dips = []; this.turns = 0; this.engZ = null;
+      this.depth = stack.length;
       this.noCyc = reps===0; for (let r = 0; r < Math.max(1, Math.min(reps, 999)); r++) this.step(toks, li, false, dips); this.noCyc = false;
       const stop = toks.some(t => isCode(t, "M00")) ? "M00" : toks.some(t => isCode(t, "M01")) ? "M01" : null;
       const kind = segs.length > s0 ? (this.engZ!=null ? "engrave" : segs.slice(s0).some(sg => sg.kind==="cyc") ? "cyc" : segs[segs.length-1].kind) : null;
@@ -103,12 +118,36 @@ class SimRun {
       const j = this.jumpFrom(toks, i); if (j!=null){ i = j; continue; }
       if (isReturn(toks) && stack.length){ i = stack.pop(); continue; }
       const tgt = callTarget(toks);
-      if (tgt!=null && this.L[tgt]!==undefined && stack.length < 8){ stack.push(i+1); i = this.L[tgt]; entering = true; continue; }
+      if (tgt!=null && this.L[tgt]!==undefined){
+        // Deeper than the control allows: it alarms on the call
+        const over = this.tooDeep(stack.length + 1, 0, li);
+        if (over){ this.alarm = over; steps[steps.length-1].alarm = over.text; over.k = steps.length - 1; break; }
+        if (stack.length < follow){ stack.push(i+1); i = this.L[tgt]; entering = true; continue; }
+        if (!this.deepNote){   // no limit in the manual: the simulation stops following, and says so
+          this.deepNote = { li, k:steps.length - 1, until:steps.length, short:`Calls more than ${follow} deep not followed`,
+            text:`This call would be level ${stack.length + 1}. The manual doesn't give how deep calls can nest on this control, so the simulation follows ${follow} levels and runs on past this call` };
+          this.notes.push(this.deepNote);
+        }
+      }
       i++;
     }
     if (this.wrap) this.wraps.push({ ...this.wrap, s1: segs.length });
     if (this.rotNote) this.rotNote.until = steps.length;
     return { segs, steps, vals: this.vals, ghosts: this.ghosts, boxes: this.boxes, wraps: this.wraps, alarm: this.alarm, notes: this.notes, vars: this.VUSE, tailUsed: steps.some(s => s.tail) };
+  }
+
+  // A call that goes deeper than the control allows (callLimit): subs subprogram levels and macros G65 levels,
+  // counting this call. Returns the alarm, or null.
+  tooDeep(subs, macros, li){
+    const L = callLimit(), c = L.c, name = MACHINES[machineId]?.name || "This control";
+    let code = null, why = "";
+    if (L.sub && subs > L.sub){ code = c.subAlarm; why = `${L.sub} levels of subprogram calls`; }
+    else if (L.macro && macros > L.macro){ code = c.macroAlarm; why = `${L.macro} levels of macro calls (G65)`; }
+    else if (L.total && subs + macros > L.total){ code = c.totalAlarm || c.macroAlarm; why = `${L.total} levels of calls in all` + (L.macro ? `, ${L.macro} of them macro calls` : ""); }
+    if (!why) return null;
+    const lvl = subs + macros, ord = lvl + (lvl % 10===1 && lvl % 100!==11 ? "st" : lvl % 10===2 && lvl % 100!==12 ? "nd" : lvl % 10===3 && lvl % 100!==13 ? "rd" : "th");
+    return { li, nest:true, code: code || "", label:"Nesting too deep", at:this.xfPt({...this.p}),
+      text:`${code ? "Alarm " + code + ": " : ""}${name} allows ${why}, and this call is the ${ord} level. The control stops here.` };
   }
 
   // Mirroring and rotation (mills): where a point goes, and a direction
@@ -194,14 +233,15 @@ class SimRun {
   step(toks, li, inLib, dips){
     // A G65 call to a library subprogram runs its lines, worked out with the values on the call.
     const lib = !inLib && window.libExpandCall?.(toks, li);
+    if (lib){ const over = this.tooDeep(this.depth || 0, 1, li); if (over){ this.alarm = over; return; } }
     if (lib){ lib.forEach(t => this.step(t, li, true, dips)); return; }
     // The tool: a lathe's turret indexes on T, a mill's tool changes on M06
     const tt = toks.find(t => /^T\d/.test(t));
     if (tt) this.pendingT = this.lathe ? "T" + parseInt(tt.slice(1, 3)) : "T" + parseInt(tt.slice(1));
     if (this.lathe && tt) this.tool = this.pendingT;
+    if (tt){ const d = toolDiameter(toks, lineState[li]?.units); if (d) (this.toolDia ||= {})[this.pendingT] = d; }
     if (toks.some(t => isCode(t,"M06"))) this.tool = this.pendingT;
     const { w, skip, unknown, shift } = this.readWords(toks, li, inLib);
-    if ("F" in w && !this.lathe) this.F = w.F;
     if ("D" in w && toks.some(t => isCode(t,"G41") || isCode(t,"G42"))) this.compD = w.D;
     // A code for an option this machine doesn't have: the control alarms. Its words move the option (G152 W the
     // tailstock), never the tool, so with the option nothing moves either.
@@ -298,7 +338,7 @@ class SimRun {
         if (v===80) this.cyc = null;
         if (v===40) this.comp = null; if (v===41) this.comp = "L"; if (v===42) this.comp = "R";
         if ((!this.lathe || this.latheDrill(pad2(t))) && DIALECT.cycles?.[pad2(t)]){
-          if (this.cyc==null){ this.cycZ = this.p.z; this.cycR = this.cycD = this.cycQ = null; }
+          if (this.cyc==null){ this.cycZ = this.p.z; this.cycR = this.cycD = this.cycQ = this.cycP = null; }
           this.cyc = pad2(t);
         }
         if (this.lathe && pad2(t)===coordSetCode()){ shift = true; return; }   // a spindle clamp (G50 S, or G92 S in systems B and C), or with X/Z a zero shift
@@ -306,6 +346,8 @@ class SimRun {
       else if (k==="M" && (v===97 || v===98)) skip = true;
       else if (!isNaN(v)) w[k] = v;
     });
+    if (!skip && "F" in w) this.F = w.F;
+    if ("S" in w){ if (this.lathe && toks.some(t => isCode(t, clampCode()))) this.clamp = w.S; else this.S = w.S; }
     return { w, skip, unknown, shift };
   }
 
@@ -446,7 +488,10 @@ class SimRun {
     go(at(0, 0, z), false, "engrave", { sweep });
     const n = Math.max(4, Math.min(60, [...text].length * 2));
     for (let k = 1; k <= n; k++) go(at(len*k/n, 0, z), false, "engrave", { sweep });
-    this.boxes.push({ li, text, exact, s0, s1: this.segs.length, pts: [[0, 0], [len, 0], [len, h], [0, h]].map(([u, v]) => this.xfPt(at(u, v, z))) });
+    // J is the tool centre's path, so the letters are cut half the tool's diameter further out all round
+    const td = this.toolDia?.[T], rr = td ? td/2 : 0;
+    this.boxes.push({ li, text, exact, s0, s1: this.segs.length, h, tool: td || null, pts: [[0, 0], [len, 0], [len, h], [0, h]].map(([u, v]) => this.xfPt(at(u, v, z))),
+      ...(rr ? { outer: [[-rr, -rr], [len + rr, -rr], [len + rr, h + rr], [-rr, h + rr]].map(([u, v]) => this.xfPt(at(u, v, z))) } : {}) });
     go(at(len, 0, r), true, "rapid");
     this.engZ = z;
   }
@@ -477,6 +522,10 @@ class SimRun {
       if ("Z" in w) this.cycD = n.z;
       if ("Q" in w) this.cycQ = Math.abs(w.Q);
     }
+    // A dwell at the bottom (G82, G89…: P, in milliseconds when it has no decimal point on Haas and Fanuc)
+    const def = DIALECT.cycles?.[this.cyc], pt = (doc[this.curLi] || []).find(t => /^P[-+]?(\d+\.?\d*|\.\d+)$/.test(t));
+    if (pt && def && [...(def.requires || []), ...(def.optional || [])].includes("P") && DIALECT.cycleRefZ==null)
+      this.cycP = !pt.includes(".") && DIALECT.dwellNoDecimal==="ms" ? parseFloat(pt.slice(1))/1000 : parseFloat(pt.slice(1));
   }
   // A hole: over to X Y at the current height (rapid, or along via), rapid down to R, feed to the bottom, back up to R or the start.
   hole(n, li, T, dips, via){
@@ -487,7 +536,7 @@ class SimRun {
     }
     else this.segs.push({a:{...this.p}, b:{x:n.x, y:n.y, z:this.p.z}, rapid:true, kind:"rapid", li, tool:T});
     if (this.p.z > r) this.segs.push({a:{x:n.x, y:n.y, z:this.p.z}, b:{x:n.x, y:n.y, z:r}, rapid:true, kind:"rapid", li, tool:T});
-    this.segs.push({a:{x:n.x, y:n.y, z:r}, b:{x:n.x, y:n.y, z}, rapid:false, kind:"cyc", li, tool:T, hole:true});
+    this.segs.push({a:{x:n.x, y:n.y, z:r}, b:{x:n.x, y:n.y, z}, rapid:false, kind:"cyc", li, tool:T, hole:true, cyc:this.cyc, q:this.cycQ, dw:this.cycP});
     this.segs.push({a:{x:n.x, y:n.y, z}, b:{x:n.x, y:n.y, z:back}, rapid:true, kind:"rapid", li, tool:T});
     const pr = DIALECT.peckRetract?.[this.cyc];
     dips.push({ top: Math.max(this.p.z, r), r, z, back, cyc: this.cyc, q:this.cycQ, ...(pr ? { ret: pr[lineState[li]?.units==="mm" ? "mm" : "inch"] } : {}) });
@@ -507,6 +556,10 @@ class SimRun {
     for (const q of pts){
       if (this.cyc && !this.noCyc) this.hole({ x:q.x, y:q.y, z:this.p.z }, li, T, dips);
       else { const b = { x:q.x, y:q.y, z:this.p.z }; this.segs.push({ a:{...this.p}, b, rapid:true, kind:"rapid", li, tool:T }); this.p = b; }
+    }
+    // The pattern ends back at its center (#72): the next G70 with no X Y uses the same center, not the last hole.
+    if (pts.length && Math.hypot(this.p.x - c.x, this.p.y - c.y) > 1e-9){
+      const b = { x:c.x, y:c.y, z:this.p.z }; this.segs.push({ a:{...this.p}, b, rapid:true, kind:"rapid", li, tool:T }); this.p = b;
     }
   }
   // Haas G12 (clockwise) / G13 (counterclockwise) circular pocket about the current position: down to Z, then a full circle

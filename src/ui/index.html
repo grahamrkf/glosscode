@@ -54,7 +54,7 @@
             <div class="h" id="v1h">Toolpath XY <span>top view</span></div>
             <div class="simbar">
               <button id="s-reset" title="Restart">⏮</button><button id="s-back" title="Step back one line (Ctrl+←)">|◀</button><button id="s-play" title="Play or pause (F5)">▶</button><button id="s-fwd" title="Step forward one line (Ctrl+→)">▶|</button>
-              <select id="s-speed" aria-label="Simulation speed" title="Moves per step of the simulation: 1× runs about 16 moves a second, whatever their length"><option value="0.25">¼×</option><option value="0.5">½×</option><option value="1">1×</option><option value="3" selected>3×</option><option value="8">8×</option><option value="16">16×</option><option value="32">32×</option><option value="64">64×</option><option value="1024" title="As fast as the screen can draw">Max</option></select>
+              <select id="s-speed" aria-label="Simulation speed" title="How fast the program runs: 1× is the estimated real time, 10× runs ten seconds of the program each second, Max as fast as the screen can draw"><option value="0.25">¼×</option><option value="0.5">½×</option><option value="1">1×</option><option value="2">2×</option><option value="5">5×</option><option value="10" selected>10×</option><option value="30">30×</option><option value="100">100×</option><option value="300">300×</option><option value="1000">1000×</option><option value="max" title="As fast as the screen can draw">Max</option></select>
               <button id="s-opt" class="tgl" aria-pressed="false" title="Optional stop: when on, the simulation also pauses at M01">M01</button><button id="s-bd" class="tgl" aria-pressed="false" title="Block delete: when on, lines that start with / are skipped">/</button>
             </div>
             <div class="simpos" id="s-pos"></div>
@@ -99,6 +99,7 @@
                 <label>Travel (in)</label><span class="trio"><span>X</span><input id="pf-x" inputmode="decimal"><span>Y</span><input id="pf-y" inputmode="decimal"><span>Z</span><input id="pf-z" inputmode="decimal"></span>
                 <label for="pf-rpm" class="spinrow">Max spindle</label><span class="unit spinrow"><input id="pf-rpm" inputmode="numeric"><small>rpm</small></span>
                 <label for="pf-feed">Max feed</label><span class="unit"><input id="pf-feed" inputmode="decimal"><small>in/min</small></span>
+                <label for="pf-rapid">Rapid</label><span class="unit"><input id="pf-rapid" inputmode="decimal" placeholder="1000" title="The fastest axis's rapid rate, for the simulation's run time. Empty: 1000 in/min is assumed."><small>in/min</small></span>
                 <label for="pf-tools" class="spinrow">Tool pockets</label><input id="pf-tools" class="spinrow" inputmode="numeric">
                 <label for="pf-eob">End of block</label><label class="chk"><input type="checkbox" id="pf-eob"> Every line ends with <b>;</b> (most older controls need this)</label>
                 <label for="pf-macro">Macro option</label><label class="chk"><input type="checkbox" id="pf-macro"> Custom macro (G65 calls, #variables)</label>
@@ -345,6 +346,7 @@
 <script src="js/editor.js"></script>
 <script src="js/cycle-guide.js"></script>
 <script src="js/run-program.js"></script>
+<script src="js/sim-time.js"></script>
 <script src="js/control-klartext.js"></script>
 <script src="js/control-fagor.js"></script>
 <script src="js/control-okuma.js"></script>

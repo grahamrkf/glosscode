@@ -47,7 +47,9 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] XY toolpath preview that follows subprogram calls
 - [ ] Toolpath colors by move type or by tool
 - [ ] Moves after the selected line greyed out, hidden, or shown normally
-- [ ] Simulation playback: restart, step back, play/pause, step forward, speed (¼× to 64×, and Max)
+- [ ] Simulation playback: restart, step back, play/pause, step forward, speed in program time (¼× to 1000× of real time, and Max)
+- [ ] Run time: each move timed from the programmed feeds and speeds (G94/G95/G96 with the clamp), rapids at the profile's rapid rate, dwells and peck retracts; time so far and total in the position line. Not yet: acceleration, tool change and spindle start times
+- [ ] Call nesting limits per control: a call past the limit alarms in the simulation
 - [ ] Playback pauses at M00, and at M01 when optional stop is on; block delete skips lines that start with /
 - [ ] Hide rapid moves (the G00 button on the toolpath), to compare with the control's graphics screen; it only changes the drawing
 - [ ] Hide the toolpath still to come (a button on the toolpath, beside G00)

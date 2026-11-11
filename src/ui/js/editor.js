@@ -17,8 +17,9 @@ function render(){
   }
   // The simulation's alarm (the machine would stop there) is an error too; the lines after it never run.
   if (EXEC.alarm){
-    PROBLEMS.push({ li:EXEC.alarm.li, id:"machine-alarm", sev:"error", title:"Machine alarm", msg:"Alarm: " + EXEC.alarm.text,
-      why:"The machine profile doesn't have this option, so the control stops the program on this line. Turn the option on in File › Machine profiles… if the machine has it." });
+    PROBLEMS.push({ li:EXEC.alarm.li, id:"machine-alarm", sev:"error", title:"Machine alarm", msg: EXEC.alarm.nest ? EXEC.alarm.text : "Alarm: " + EXEC.alarm.text,
+      why: EXEC.alarm.nest ? `Each call inside a subprogram is one level deeper. ${DIALECT.callDepth?.source ? "From " + DIALECT.callDepth.source + "." : ""}`
+        : "The machine profile doesn't have this option, so the control stops the program on this line. Turn the option on in File › Machine profiles… if the machine has it." });
     PROBLEMS.sort((a, b) => a.li - b.li || SEV_RANK[b.sev] - SEV_RANK[a.sev]);
   }
   PROBLEMS.forEach(p => (PBYLINE[p.li] ||= []).push(p));
@@ -585,6 +586,16 @@ function callTarget(toks){
   if (c >= 0){ const o = toks.slice(c+1).find(t => /^O\d+$/.test(t)); return o ? "O" + parseInt(o.slice(1)) : null; }
   if (!toks.some(t => isCode(t,"M97"))) return null; const p = toks.find(t => /^P\d/.test(t)); return p ? "N" + parseInt(p.slice(1)) : null;
 }
+// How deep calls can nest on this control (DIALECT.callDepth, from the manuals: sub for subprogram calls, macro for
+// G65 macro calls, total where the two share one count). The calls GlossCode follows in the file (M97, CALL, Fagor
+// subroutines) count as subprogram levels and a G65 to a library subprogram as a macro level. Fanuc Series 0 allows
+// more subprogram levels with the macro option (subWithMacro).
+function callLimit(){
+  const c = DIALECT.callDepth || {};
+  return { sub: MACHINES[machineId]?.macro && c.subWithMacro ? c.subWithMacro : c.sub, macro:c.macro, total:c.total, c };
+}
+// How many levels of calls the gloss, the checks and the simulation follow: the control's limit, and at least 8
+function callFollowDepth(){ const L = callLimit(); return Math.max(8, L.sub || 0, L.total || 0); }
 // Okuma subprograms end with RTS (on an Okuma lathe M99 is tailstock thrust high)
 const isReturn = toks => SYNTAX==="klartext" ? toks.includes("LBL 0") : toks.some(t => (isCode(t,"M99") && !isOkuma()) || t==="RTS" || (SYNTAX==="fagor8060" && (isCode(t,"M17") || isCode(t,"M29") || t==="#RET")) || (SYNTAX==="fagor8055" && t==="(RET)"));
 const isEnd = toks => toks.some(t => isCode(t,"M30") || isCode(t,"M02") || (SYNTAX==="klartext" && t.startsWith("END PGM")));
@@ -952,9 +963,9 @@ function foldScan(){
       ok = false;   // M, T, S, comments, P, L, macro words, anything else
     }
     // Lines are read in file order, not run order: a subprogram's lines come after the main program's M30, so at a
-    // label that's called, an M99 or an M30 the position is forgotten and G90 assumed (a "G28 G91 Z0." before M30
+    // label that's called, a subprogram end (M99, or RTS on Okuma, where M99 is tailstock thrust) or an M30 the position is forgotten and G90 assumed (a "G28 G91 Z0." before M30
     // would otherwise make the subprogram's moves incremental).
-    if (t.some(w => isCode(w, "M30") || isCode(w, "M99") || isCode(w, "M02") || /^N\d+$/.test(w) && refs.has(parseInt(w.slice(1))))){
+    if (isReturn(t) || t.some(w => isCode(w, "M30") || isCode(w, "M02") || /^N\d+$/.test(w) && refs.has(parseInt(w.slice(1))))){
       abs = true;
       pos = null;
       mode = null;

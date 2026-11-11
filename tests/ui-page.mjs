@@ -19,7 +19,7 @@ export function loadPage(page = "src/ui/index.html"){
   ctx.window = ctx; vm.createContext(ctx);
   vm.runInContext(scripts.join("\n;\n").replace(/^(const|let) /gm, "var ") + `
 ;globalThis.__api = { set doc(v){ doc = v; }, get view(){ return view; }, get lineState(){ return lineState; }, translateAll, checkProgram,
-  splitBlocks, tokenize, interpret, set blockDelete(v){ simBD = v; }, use(id, s){ machineId = id; style = s; setDialect(); }, get syntax(){ return SYNTAX; }, MACHINES };`, ctx);
+  splitBlocks, tokenize, interpret, toolDiameter, set blockDelete(v){ simBD = v; }, use(id, s){ machineId = id; style = s; setDialect(); }, get syntax(){ return SYNTAX; }, MACHINES };`, ctx);
   const A = ctx.__api;
   // Reads a program's text the way the UI does and runs the gloss and checks on it.
   A.run = (text, machine, style = "long") => {

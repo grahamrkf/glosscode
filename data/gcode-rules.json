@@ -250,6 +250,7 @@
       "verified": true,
       "source": { "manual": "Haas Mill and Lathe Operator's Manuals (NGC)", "revision": "Mill 96-8210 Rev V (2025) and Rev N (2020), Lathe 96-8910 Rev N (2020)", "section": "Programming: G codes, M codes, subprograms, settings" },
       "mill": {
+        "callDepth": {"macro": 9, "source": "Haas NGC mill manual 2025 PDF 345; the M97/M98 limit isn't stated", "verified": false},
         "modalGroups": { "work offset": ["G54", "G55", "G56", "G57", "G58", "G59", "G110", "G111", "G112", "G113", "G114", "G115", "G116", "G117", "G118", "G119", "G120", "G121", "G122", "G123", "G124", "G125", "G126", "G127", "G128", "G129", "G154"] },
         "mPerBlock": 1,
         "dwellNoDecimal": "ms",
@@ -269,8 +270,8 @@
           "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
         },
         "foreign": { "M97": null, "M88": null, "M89": null },
-        "engrave": { "code": "G47", "charWidth": 1.0, "charHeight": 1.25, "verified": false,
-                     "note": "G47 P0/P1 text engraving: J is the character height and X Y the start. Letter widths vary and aren't given, so the simulation draws each line of text as one rectangle charHeight x J tall and an estimated charWidth x J per character long, open on the right. A shop note in proven programs says J.120 text comes out .150 high and .120 wide per character (1.25 x J tall, 1.0 x J wide). A P1 serial number that carries on along the same baseline sets where the text before it ends." },
+        "engrave": { "code": "G47", "charWidth": 1.0, "charHeight": 1.0, "verified": false,
+                     "note": "G47 P0/P1 text engraving: J is the character height and X Y the start. Letter widths vary and aren't given, so the simulation draws each line of text as one rectangle charHeight x J tall and an estimated charWidth x J per character long, open on the right. J is the height of the path the tool centre follows, so the cut letters are taller by the tool width: around the rectangle a lighter edge half the tool diameter wide shows what is cut, when the tool line's comment gives the diameter (1/16, .0625, 1.5MM). A shop note in proven programs says J.120 text comes out .150 high (J plus a .030 tool) and .120 wide per character. A P1 serial number that carries on along the same baseline sets where the text before it ends." },
         "rotate": { "center": ["A", "B"], "setting": "Setting 72",
                     "note": "Haas G68 A B R: A and B are the center (the current position when they're left out), R the angle in degrees. With no R the angle comes from Setting 72: the simulation leaves the toolpath unturned and says so." },
         "mirror": { "on": "G101", "off": "G100", "about": "zero",
@@ -297,6 +298,7 @@
         }
       },
       "lathe": {
+        "callDepth": {"macro": 9, "source": "Haas NGC lathe manual 2025 PDF 342; the M97/M98 limit isn't stated", "verified": false},
         "modalGroups": { "work offset": ["G54", "G55", "G56", "G57", "G58", "G59", "G110", "G111", "G114", "G115", "G116", "G117", "G118", "G119", "G120", "G121", "G122", "G123", "G124", "G125", "G126", "G127", "G128", "G129", "G154"],
                          "x mode": ["G170", "G171", "G172"], "position mode": ["G390", "G391"], "rotation": ["G68", "G69"], "scaling": ["G250", "G251"], "feature coordinates": ["G268", "G269"] },
         "mPerBlock": 1,
@@ -341,6 +343,7 @@
       "verified": true,
       "source": { "manual": "Haas VF-Series Operator's Manual 96-8000", "revision": "June 1995", "section": "Programming: address codes, G codes, canned cycles, M codes, subroutines" },
       "mill": {
+        "callDepth": {"sub": 9, "macro": 4, "subAlarm": "307 Subroutine nesting too deep", "macroAlarm": "531 Macro nesting too deep", "source": "Haas VF 1995 manual PDF 209 (alarm 307), PDF 216 (alarm 531), PDF 132", "verified": false},
         "modalGroups": {
           "work offset": ["G54", "G55", "G56", "G57", "G58", "G59", "G110", "G111", "G112", "G113", "G114", "G115", "G116", "G117", "G118", "G119", "G120", "G121", "G122", "G123", "G124", "G125", "G126", "G127", "G128", "G129"],
           "scaling": ["G50", "G51"],
@@ -376,6 +379,7 @@
       "source": { "manual": "LinuxCNC Documentation V2.9.7", "revision": "22 Oct. 2025", "section": "Chapter 11 G-code Programming (11.4 to 11.8)" },
       "router": {},
       "mill": {
+        "callDepth": {"total": 10, "source": "LinuxCNC: 10 levels", "verified": false},
         "numbers": { "noDecimal": "asWritten" },
         "modalGroups": {
           "motion":       ["G00", "G01", "G02", "G03", "G33", "G73", "G74", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"],
@@ -423,6 +427,7 @@
         }
       },
       "lathe": {
+        "callDepth": {"total": 10, "source": "LinuxCNC: 10 levels", "verified": false},
         "numbers": { "noDecimal": "asWritten" },
         "modalGroups": {
           "motion":       ["G00", "G01", "G02", "G03", "G33", "G70", "G71", "G72", "G76", "G80"],
@@ -508,6 +513,7 @@
       "source": { "manual": "Centroid CNC12 Mill, Lathe and Router Operator's Manuals", "revision": "v5.42 and later (lathe also checked against v3.16, v4.14 and v4.20)", "section": "Program codes, G codes and M codes chapters" },
       "router": {},
       "mill": {
+        "callDepth": {"total": 20, "totalAlarm": "508 Macro nesting too deep", "source": "Centroid CNC12: 20 levels (alarm 508)", "verified": false},
         "modalGroups": {
           "feed mode":   ["G93", "G94"],
           "canned cycle":["G73", "G74", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G89"],
@@ -539,6 +545,7 @@
         }
       },
       "lathe": {
+        "callDepth": {"total": 20, "totalAlarm": "508 Macro nesting too deep", "source": "Centroid CNC12: 20 levels (alarm 508)", "verified": false},
         "programEnds": ["M02", "M99"],
         "dwellNoDecimal": null,
         "cycles": {
@@ -565,6 +572,7 @@
       "inheritWords": true,
       "verified": false,
       "lathe": {
+        "callDepth": {"total": 15, "macro": 4, "source": "Mazak C734 lathe manual: 15 levels in all, at most 4 of them macro calls", "verified": false},
         "source": { "manual": "Mazak EIA/ISO Programming Manual C734PBT018E (Mazatrol T-Plus, Fusion 640T Nexus and other Mazatrol turning)", "section": "Chapters 3, 5, 8, 9 and 13: G code lists, numbers, dwell, M codes, fixed cycles, subprograms. Tables are G code system A, standard mode" },
         "mPerBlock": 4,
         "cycles": {
@@ -578,6 +586,7 @@
         }
       },
       "mill": {
+        "callDepth": {"total": 8, "macro": 4, "totalAlarm": "842", "macroAlarm": "842", "source": "Mazak C735 mill manual: 8 levels in all, at most 4 of them macro calls (alarm 842)", "verified": false},
         "source": { "manual": "Mazak EIA/ISO Programming Manual C735PBT019E (Mazatrol M1, M2, M32, M Plus, Fusion 640M 5X/Nexus)", "revision": "2001", "section": "Chapters 3, 5, 8 and 13: G and M code lists, units, dwell, fixed cycles, subprograms" },
         "modalGroups": {
           "canned cycle":["G73", "G74", "G75", "G76", "G77", "G78", "G79", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"]
@@ -610,6 +619,7 @@
       "verified": true,
       "source": { "manual": "Hurco WinMax Mill NC Programming 704-0116-310 Rev B and WinMax Mill Programming 704-0116-501 Rev D", "revision": "2010 (v8) and 2015 (v9.1/10.1)", "section": "NC programming: G code groups, canned cycles, subprograms, M codes (ISNC)" },
       "lathe": {
+        "callDepth": {"total": 15, "source": "Hurco WinMax: 15 levels, calls and macros together", "verified": false},
         "source": { "manual": "Hurco WinMax Lathe NC Programming v546NC", "revision": "Jan. 2018", "section": "Chapters 1 to 3: numbers, G code table 2-4 to 2-5, cycles 2-46 to 2-82, subprograms, M codes (ISNC only)" },
         "numbers": { "noDecimal": "asWritten" },
         "modalGroups": {
@@ -629,6 +639,7 @@
         }
       },
       "mill": {
+        "callDepth": {"total": 15, "source": "Hurco WinMax: 15 levels, calls and macros together", "verified": false},
         "numbers": { "noDecimal": "asWritten" },
         "modalGroups": {
           "feed mode":  ["G93", "G94"],
@@ -662,6 +673,7 @@
       "inheritWords": true,
       "verified": false,
       "lathe": {
+        "callDepth": {"total": 10, "macro": 4, "totalAlarm": "P230", "macroAlarm": "P230", "source": "Mitsubishi M800/M80: 10 levels in all, at most 4 macro (P230)", "verified": false},
         "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Lathe System IB-1501275-U", "section": "G code lists 2, 4 and 6 (pp. 23-26), close to Fanuc system A; see docs/manual-reviews/mitsubishi-m800-m700.md" },
         "modalGroups": {
           "distance":  ["G190", "G191"]
@@ -671,6 +683,7 @@
         }
       },
       "mill": {
+        "callDepth": {"total": 10, "macro": 4, "totalAlarm": "P230", "macroAlarm": "P230", "source": "Mitsubishi M800/M80: 10 levels in all, at most 4 macro (P230)", "verified": false},
         "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Machining Center System IB-1501277", "revision": "P", "section": "G code list, dwell, fixed cycles, subprograms" },
         "modalGroups": {
           "canned cycle":["G73", "G74", "G75", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"]
@@ -739,6 +752,7 @@
       "inheritWords": true,
       "verified": false,
       "lathe": {
+        "callDepth": {"total": 16, "source": "Siemens ISO mode: 16 levels (probably shared)", "verified": false},
         "source": { "manual": "SINUMERIK 840D sl/828D ISO Turning Programming Manual PGT", "revision": "02/2012, CNC software 4.5", "section": "G code system, dwell, M functions, subprograms, cycles G70 to G76, appendix B G code list. Tables are G code system B, the default (MD10881 = 0)" },
         "mPerBlock": 5,
         "modalGroups": {
@@ -763,6 +777,7 @@
         }
       },
       "mill": {
+        "callDepth": {"total": 16, "source": "Siemens ISO mode: 16 levels (probably shared)", "verified": false},
         "source": { "manual": "SINUMERIK ONE / 840D sl / 828D ISO Milling Programming Manual", "revision": "07/2021, CNC 4.95/6.15", "section": "3 Programming principles, 5 Auxiliary functions, 6 Cycles and subprograms, appendix B G code groups" },
         "mPerBlock": 5,
         "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": { "word": "P", "target": "program" } }
@@ -812,6 +827,7 @@
       "verified": true,
       "keywords": ["CALL", "RTS", "GOTO", "IF", "NAT", "MODIN", "MODOUT"],
       "mill": {
+        "callDepth": {"sub": 16, "source": "Okuma OSP-P300M manual: 16 CALL levels", "verified": false},
         "source": { "manual": "Okuma OSP-P300S/P300M Programming Manual 6087-E-R1 (ME33-022-R2)", "revision": "2nd edition, Aug. 2014", "section": "Program format, coordinates, offsets, fixed cycles, User Task, G and M code tables" },
         "numbers": { "noDecimal": "asWritten" },
         "dwellNoDecimal": null,
@@ -1129,6 +1145,7 @@
       "inheritWords": true,
       "verified": false,
       "mill": {
+        "callDepth": {"sub": 2, "subWithMacro": 4, "macro": 4, "subAlarm": "077", "macroAlarm": "077", "source": "Fanuc Series 0-M: 2 subprogram levels, 4 with the macro option, 4 macro levels", "verified": false},
         "source": { "manual": "FANUC Series 0/00/0-Mate Operator's Manual, Machining Center B-61404E/08", "section": "G code list (pp. 28-31), dwell (p. 63), subprograms (p. 129); see docs/manual-reviews/fanuc-lathe-and-series-0.md" },
         "modalGroups": {
           "feed mode": ["G94", "G95"]
@@ -1171,6 +1188,7 @@
       "inherits": "fanuc",
       "verified": false,
       "mill": {
+        "callDepth": {"total": 20, "source": "Fagor 8060/8065: 20 levels, calls and macros together", "verified": false},
         "source": { "manual": "Fagor CNC 8060/8065 Programming manual Ref. 2008 and Canned cycles (M model) Ref. 1807", "section": "G and M lists (pp. 48-51), block format and comments (pp. 41-56), parameters (p. 58), subroutines (ch. 15), dwell (p. 245), cycles (pp. 31-72); see docs/manual-reviews/fagor-8055.md" },
         "blockSyntax": "fagor8060",
         "cycleRefZ": true,
@@ -1223,6 +1241,7 @@
         }
       },
       "lathe": {
+        "callDepth": {"total": 20, "source": "Fagor 8060/8065: 20 levels, calls and macros together", "verified": false},
         "source": { "manual": "Fagor CNC 8060/8065 Programming manual Ref. 2008, the CNC 8065 ·T· Canned cycles manual Ref. 1209 (V04.24) and the 8060/8065 T quick reference Ref. 1402", "section": "G list and block format from the programming manual; the lathe cycle words from the canned cycles manual, which names only the 8065. See docs/manual-reviews/fagor-8055.md" },
         "verified": false,
         "blockSyntax": "fagor8060",
@@ -1296,6 +1315,7 @@
       "inherits": "fagor8060",
       "verified": false,
       "mill": {
+        "callDepth": {"total": 15, "source": "Fagor 8055: 15 levels, calls and macros together", "verified": false},
         "source": { "manual": "Fagor CNC 8055 / 8055i M Programming manual Ref. 1501, Soft V01.6x", "section": "Block format (pp. 33-36), G list (pp. 62-64 and 437-438), dwell (p. 108), cycles (pp. 144-199), high-level language (pp. 333-400); see docs/manual-reviews/fagor-8055.md" },
         "blockSyntax": "fagor8055",
         "dwellHundredths": true,
@@ -1372,6 +1392,7 @@
         }
       },
       "lathe": {
+        "callDepth": {"total": 15, "source": "Fagor 8055: 15 levels, calls and macros together", "verified": false},
         "source": { "manual": "Fagor CNC 8055 / 8055i T Programming manual Ref. 1110, Soft V01.3x", "section": "Block format (pp. 30-41), G list (pp. 60-61), dwell (p. 107), threading (pp. 92-97), cycles (pp. 147-217); see docs/manual-reviews/fagor-8055.md" },
         "blockSyntax": "fagor8055",
         "numbers": { "noDecimal": "asWritten" },

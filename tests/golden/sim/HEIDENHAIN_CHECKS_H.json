@@ -2,18 +2,27 @@
 "runs": [
  {"machine": "gen.mill.heidenhain", "result": {
  "segs": [
-  {"a":{"x":0,"y":0,"z":0},"b":{"x":10,"y":5,"z":0},"rapid":false,"kind":"feed","li":3,"tool":"T1"},
-  {"a":{"x":10,"y":5,"z":0},"b":{"x":20,"y":5,"z":0},"rapid":false,"kind":"feed","li":6,"tool":"T1"},
-  {"a":{"x":20,"y":5,"z":0},"b":{"x":5,"y":5,"z":0},"rapid":false,"kind":"feed","li":7,"tool":"T1"}],
+  {"a":{"x":0,"y":0,"z":0},"b":{"x":10,"y":5,"z":0},"rapid":false,"kind":"feed","li":3,"tool":"T1","t":0},
+  {"a":{"x":10,"y":5,"z":0},"b":{"x":20,"y":5,"z":0},"rapid":false,"kind":"feed","li":6,"tool":"T1","t":0},
+  {"a":{"x":20,"y":5,"z":0},"b":{"x":5,"y":5,"z":0},"rapid":false,"kind":"feed","li":7,"tool":"T1","t":9}],
  "steps": [
-  {"li":0,"v":0,"s0":0,"s1":0,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null},
-  {"li":1,"v":0,"s0":0,"s1":0,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null},
-  {"li":2,"v":0,"s0":0,"s1":0,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null},
-  {"li":3,"v":0,"s0":0,"s1":1,"kind":"feed","stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null},
-  {"li":4,"v":0,"s0":1,"s1":1,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null},
-  {"li":5,"v":0,"s0":1,"s1":1,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null},
-  {"li":6,"v":0,"s0":1,"s1":2,"kind":"feed","stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null},
-  {"li":7,"v":0,"s0":2,"s1":3,"kind":"feed","stop":null,"dips":[],"calls":[],"tail":null,"f":100,"s":0,"on":false,"mark":null},
-  {"li":8,"v":0,"s0":3,"s1":3,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":100,"s":0,"on":false,"mark":null}],
+  {"li":0,"v":0,"s0":0,"s1":0,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null,"t":0,"dw":0},
+  {"li":1,"v":0,"s0":0,"s1":0,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null,"t":0,"dw":0},
+  {"li":2,"v":0,"s0":0,"s1":0,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null,"t":0,"dw":0},
+  {"li":3,"v":0,"s0":0,"s1":1,"kind":"feed","stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null,"t":0,"dw":0},
+  {"li":4,"v":0,"s0":1,"s1":1,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null,"t":0,"dw":0},
+  {"li":5,"v":0,"s0":1,"s1":1,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null,"t":0,"dw":0},
+  {"li":6,"v":0,"s0":1,"s1":2,"kind":"feed","stop":null,"dips":[],"calls":[],"tail":null,"f":0,"s":0,"on":false,"mark":null,"t":0,"dw":0},
+  {"li":7,"v":0,"s0":2,"s1":3,"kind":"feed","stop":null,"dips":[],"calls":[],"tail":null,"f":100,"s":0,"on":false,"mark":null,"t":9,"dw":0},
+  {"li":8,"v":0,"s0":3,"s1":3,"kind":null,"stop":null,"dips":[],"calls":[],"tail":null,"f":100,"s":0,"on":false,"mark":null,"t":0,"dw":0}],
  "vals": {},
- "tailUsed": false}}]}
+ "tailUsed": false,
+ "time": {
+  "total": 9,
+  "feed": 9,
+  "rapid": 0,
+  "dwell": 0,
+  "noFeed": 2,
+  "noSpeed": 0,
+  "assumedRapid": true,
+  "byTool": {"T1":9}}}}]}
