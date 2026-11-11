@@ -2,7 +2,7 @@
 
 What changed in each GlossCode release. The newest release is at the top. Versions follow `MAJOR.MINOR.PATCH` (see [docs/releasing.md](docs/releasing.md)); while the version starts with `0.`, file formats may still change between releases.
 
-## [Unreleased]
+## [0.3.0] - 2026-11-11
 
 ### Editor
 - Code with gloss above is now the only layout. The two older layouts (words in program order, and columns by word type with modal values in empty cells) are gone, and so is typing gloss to write code (View › Edit in) with its autocomplete. View › Layout and Edit in are removed from the menu, and Edit › Break line after the selected word and Delete selected word with them: Enter breaks the line being edited, and Delete and Backspace edit the line.
