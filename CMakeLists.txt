@@ -41,10 +41,6 @@ add_library(glosscode_core STATIC
     src/core/gc_util.c
     src/core/gc_json.c
     src/core/gc_doc.c
-    src/core/gc_data.c
-    src/core/gc_translate.c
-    src/core/gc_checks.c
-    src/core/gc_analyze.c
     src/core/gc_api.c)
 target_include_directories(glosscode_core PUBLIC src/core)
 target_compile_options(glosscode_core PRIVATE ${GC_WARNINGS})
@@ -54,11 +50,11 @@ endif()
 
 if(GLOSSCODE_TESTS)
     enable_testing()
-    foreach(t test_core test_golden)
+    foreach(t test_core)
         add_executable(${t} tests/${t}.c)
         target_link_libraries(${t} PRIVATE glosscode_core)
         target_compile_options(${t} PRIVATE ${GC_WARNINGS})
-        add_test(NAME ${t} COMMAND ${t} "${CMAKE_CURRENT_SOURCE_DIR}")
+        add_test(NAME ${t} COMMAND ${t})
     endforeach()
 endif()
 
@@ -97,7 +93,8 @@ FetchContent_Declare(nfd
     GIT_SUBMODULES "") # only needed for Wayland parent windows, which are off
 FetchContent_MakeAvailable(webview nfd)
 
-# The UI without the sample programs (a separate download), built-in data and bridge script, compiled in.
+# The UI without the sample programs (a separate download) and the bridge script, compiled in. The UI page
+# carries its own copy of the dictionary, rules and built-in library (scripts/sync-mockup-data.mjs).
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/ui/index.html"
     COMMAND ${CMAKE_COMMAND} "-DIN=${CMAKE_CURRENT_SOURCE_DIR}/src/ui/index.html"
@@ -107,17 +104,8 @@ add_custom_command(
     VERBATIM)
 set(GC_EMBED "ui/index.html=${CMAKE_CURRENT_BINARY_DIR}/ui/index.html")
 list(APPEND GC_EMBED "app/bridge.js=${CMAKE_CURRENT_SOURCE_DIR}/src/app/bridge.js")
-list(APPEND GC_EMBED "data/gcode-words.json=${CMAKE_CURRENT_SOURCE_DIR}/data/gcode-words.json")
-list(APPEND GC_EMBED "data/gcode-rules.json=${CMAKE_CURRENT_SOURCE_DIR}/data/gcode-rules.json")
-file(GLOB GC_LIBRARY CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/data/library/*.json")
-list(SORT GC_LIBRARY)
 set(GC_EMBED_DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/ui/index.html" "${CMAKE_CURRENT_SOURCE_DIR}/src/app/bridge.js"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/gcode-words.json" "${CMAKE_CURRENT_SOURCE_DIR}/data/gcode-rules.json" "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
-foreach(f IN LISTS GC_LIBRARY)
-    get_filename_component(n "${f}" NAME)
-    list(APPEND GC_EMBED "data/library/${n}=${f}")
-    list(APPEND GC_EMBED_DEPENDS "${f}")
-endforeach()
+    "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
 string(REPLACE ";" "|" GC_EMBED_ARG "${GC_EMBED}")
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/resources.c"
@@ -125,7 +113,7 @@ add_custom_command(
             "-DVERSION_FILE=${CMAKE_CURRENT_SOURCE_DIR}/VERSION" "-DFILES=${GC_EMBED_ARG}"
             -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/embed.cmake"
     DEPENDS ${GC_EMBED_DEPENDS} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/embed.cmake"
-    COMMENT "Embedding the UI and built-in data"
+    COMMENT "Embedding the UI"
     VERBATIM)
 
 set(GC_APP_SOURCES src/app/main.c "${CMAKE_CURRENT_BINARY_DIR}/resources.c")

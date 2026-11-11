@@ -7,12 +7,12 @@ GlossCode targets Windows first. Everything is arranged so that a native Linux b
 ```
 +--------------------------------------------------------------+
 |  UI (HTML/CSS/JS in a native webview)                        |
-|  editor grid, tabs, autocomplete, previews, modes panel   |
+|  editor, gloss, checks, simulation, tabs, modes panel        |
 +------------------------------^-------------------------------+
                                |  JSON messages (webview bind)
 +------------------------------v-------------------------------+
 |  Core (portable C, standard library only)                    |
-|  parser · translator · mode tracker · checks · dictionary    |
+|  reading and writing files (parser · writer)                 |
 +------------------------------^-------------------------------+
                                |  ~8 functions
 +------------------------------v-------------------------------+
@@ -22,15 +22,16 @@ GlossCode targets Windows first. Everything is arranged so that a native Linux b
 
 ### Core (portable C)
 
-- **Parser**: splits each line into words (`N40`, `M03`, `G97`, `S6000`) and keeps comments whole. Remembers each file's line endings, since G-code is often CRLF.
-- **Mode tracker**: walks the program in execution order, following subprogram calls, and records the modal state after every line: motion, units, G90/G91, plane, feed mode and rate, spindle, coolant, tool, offsets and compensation.
-- **Translator**: turns each word into its gloss word using the dictionary and the active modes. Values take a unit prefix (`RPM600` under G97, `SFM600` under G96, `IPM25` under G94 and G20).
-- **Checks**: one pass in execution order that carries the machine state and reports problems such as a canned cycle missing a word, a feed move with no F or with the spindle off, a word repeated in a line, or a code that means something else on this control. Rule text and per-control tables come from `gcode-rules.json`; see [checks.md](checks.md).
-- **Dictionary loader**: reads `gcode-words.json` and merges machine definition overrides on top.
+The core reads and writes G-code files:
+
+- **Parser**: splits each line into words (`N40`, `M03`, `G97`, `S6000`) and keeps comments whole, with each control's own block syntax (Fagor 8055 and 8060, Heidenhain Klartext). Remembers each file's line endings, since G-code is often CRLF.
+- **Writer**: writes every line that wasn't changed exactly as it was read, and changed lines from their words.
 
 Rules for the core: C standard library only (`stdio`, `stdlib`, `string`), no `windows.h`, UTF-8 everywhere, `/` in paths, and no compiler-specific extensions.
 
-The core lives in `src/core/`: `gc_doc.c` (reading and writing files), `gc_data.c` (data files, dialect chain, dictionary lookups), `gc_translate.c` (mode tracker and translator), `gc_checks.c` (checks), and `gc_api.c` (the JSON methods the UI calls). It follows the mockup's JavaScript line for line, and `tests/test_golden.c` checks that both give the same English and the same problems for every sample program; see [building.md](building.md#tests). A file that isn't valid UTF-8 is read as Latin-1, as older controls and DNC software write, and saved back as Latin-1.
+The core lives in `src/core/`: `gc_doc.c` (reading and writing files), `gc_json.c` (the JSON reader and writer), `gc_util.c` (strings and numbers), and `gc_api.c` (the JSON methods the UI calls). A file that isn't valid UTF-8 is read as Latin-1, as older controls and DNC software write, and saved back as Latin-1.
+
+The gloss, the mode tracking, the checks and the simulation are done by the UI's JavaScript, the same code in the program and in a browser. `tests/golden/` records what it shows for every sample program; see [building.md](building.md#tests).
 
 ### Platform file
 
@@ -60,10 +61,10 @@ The UI is plain HTML, CSS and JavaScript loaded into the webview. It talks to th
 GlossCode ships as **one executable**. Nothing it needs to start sits beside it.
 
 - **The UI is embedded.** The HTML, CSS and JavaScript are compiled into the program (a generated C array, or a Windows resource) and served to the webview from memory.
-- **The built-in data is embedded.** `gcode-words.json`, `gcode-rules.json`, the built-in machine definitions and the built-in subprogram library are compiled in the same way. They are read-only and are replaced by each release.
+- **The built-in data is embedded.** `gcode-words.json`, `gcode-rules.json`, the built-in machine definitions and the built-in subprogram library are part of the UI page (`scripts/sync-mockup-data.mjs` copies them in). They are read-only and are replaced by each release.
 - **Windows**: build with `-static` so the MinGW runtime is inside the .exe, and use the webview library's built-in WebView2 loader so `WebView2Loader.dll` isn't needed. The WebView2 runtime itself comes with Windows 10 and 11.
 - **Linux**: the same single executable, linked against the system's GTK and WebKitGTK packages, which are listed as dependencies rather than bundled. An AppImage or distribution package can come later if needed.
-- A development flag (`--data <folder>`) loads the built-in files from a folder on disk instead, so tables can be edited without a rebuild.
+- A development flag (`--ui <file>`) loads the UI page from disk instead, so the page and its tables can be edited without a rebuild.
 
 ### Where user files go
 

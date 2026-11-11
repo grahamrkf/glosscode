@@ -32,20 +32,6 @@ gc_json *gc_json_new(gc_jtype type)
     return v;
 }
 
-gc_json *gc_json_new_str(const char *s)
-{
-    gc_json *v = gc_json_new(GC_JSTR);
-    v->str = gc_strdup(s);
-    return v;
-}
-
-gc_json *gc_json_new_num(double n)
-{
-    gc_json *v = gc_json_new(GC_JNUM);
-    v->num = n;
-    return v;
-}
-
 static void put_utf8(gc_buf *b, unsigned long cp)
 {
     char t[4];
@@ -337,17 +323,6 @@ void gc_json_set(gc_json *obj, const char *key, gc_json *v)
     obj->items[obj->n++] = v;
 }
 
-void gc_json_del(gc_json *obj, const char *key)
-{
-    long i = find_key(obj, key);
-    if (i < 0) return;
-    gc_json_free(obj->items[i]);
-    free(obj->keys[i]);
-    memmove(obj->items + i, obj->items + i + 1, (obj->n - (size_t)i - 1) * sizeof *obj->items);
-    memmove(obj->keys + i, obj->keys + i + 1, (obj->n - (size_t)i - 1) * sizeof *obj->keys);
-    obj->n--;
-}
-
 gc_json *gc_json_get(const gc_json *obj, const char *key)
 {
     long i = find_key(obj, key);
@@ -390,14 +365,6 @@ int gc_json_truthy(const gc_json *v)
     case GC_JSTR: return v->str[0] != '\0';
     default: return 1;
     }
-}
-
-int gc_json_has_str(const gc_json *arr, const char *s)
-{
-    if (!arr || arr->type != GC_JARR) return 0;
-    for (size_t i = 0; i < arr->n; i++)
-        if (arr->items[i]->type == GC_JSTR && strcmp(arr->items[i]->str, s) == 0) return 1;
-    return 0;
 }
 
 size_t gc_json_len(const gc_json *v)

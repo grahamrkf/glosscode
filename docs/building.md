@@ -2,9 +2,9 @@
 
 GlossCode is one program built from three parts:
 
-- **The core** (`src/core/`): portable C99, standard library only. It reads G-code, tracks modes in the order the control runs the lines, gives each word its gloss word, and runs the checks. Everything it knows about codes and controls comes from `data/`.
+- **The core** (`src/core/`): portable C99, standard library only. It reads G-code files into blocks and words and writes them back, keeping every unchanged line byte for byte.
 - **The platform file** (`src/platform/`): `platform_win32.c` on Windows, `platform_posix.c` on Linux. Reading and writing files, the settings and cache folders, portable mode, opening links.
-- **The shell** (`src/app/`): opens a [webview](https://github.com/webview/webview) window, shows the UI (`src/ui/index.html`, compiled in), and connects it to the core and the system file dialogs ([nativefiledialog-extended](https://github.com/btzy/nativefiledialog-extended)).
+- **The shell** (`src/app/`): opens a [webview](https://github.com/webview/webview) window, shows the UI (`src/ui/index.html`, compiled in, which does the gloss, checks and simulation in JavaScript), and connects it to the core and the system file dialogs ([nativefiledialog-extended](https://github.com/btzy/nativefiledialog-extended)).
 
 CMake downloads webview 0.12.0 and nativefiledialog-extended 1.4.1 (pinned to their release commits) the first time it configures, so the build needs network access once.
 
@@ -24,7 +24,7 @@ cmake --build build
 ctest --test-dir build
 ```
 
-The result is `build/GlossCode.exe`: one file with the UI, the dictionary, the rules and the built-in library inside, linked statically so it needs no MinGW DLLs. The WebView2 runtime it uses comes with Windows 10 and 11. The webview library's build also downloads the WebView2 SDK headers from NuGet.
+The result is `build/GlossCode.exe`: one file with the UI (and the dictionary, rules and built-in library it carries) inside, linked statically so it needs no MinGW DLLs. The WebView2 runtime it uses comes with Windows 10 and 11. The webview library's build also downloads the WebView2 SDK headers from NuGet.
 
 ## Linux
 
@@ -50,20 +50,21 @@ ctest --test-dir build
 
 | Test | What it checks |
 |---|---|
-| `test_core` | Number formatting, the JSON reader, splitting lines into words, reading and writing files (line endings, `;`, Latin-1), machine profile overrides, the JSON interface, and 300 random programs that must not crash the core |
-| `test_golden` | The core against the mockup: every word's gloss, unit and description, and every problem, for each sample program on each machine |
-| `app_smoke` | The program itself: opens a sample through the app's functions, runs the core, saves a copy with one line changed, and checks that nothing else in the file changed |
+| `test_core` | Number formatting, the JSON reader, splitting lines into words, reading and writing files (line endings, `;`, Latin-1), the JSON interface, and 300 random programs that must not crash the reader or writer |
+| `app_smoke` | The program itself: opens a sample through the app's functions, runs a core method, saves a copy with one line changed, and checks that nothing else in the file changed |
 
-`test_golden` compares against files in `tests/golden/`, which `node scripts/make-core-goldens.mjs` writes by running the mockup's own JavaScript on every program in `examples/` and `tests/cases/`. After changing the mockup's translation or checks, or the data files, run it again; CI fails if the files are out of date. If the core and the mockup disagree, the test prints the word or problem that differs.
+Two more checks run the UI's JavaScript in Node (no browser needed); CI runs both:
+
+- `node scripts/make-goldens.mjs --check`: the files in `tests/golden/` record every word's gloss, unit and description, and every problem, for each program in `examples/` and `tests/cases/` on each machine. After changing the gloss, the checks or the data files, run `node scripts/make-goldens.mjs` and look over the diff: it shows exactly what changed on screen.
+- `node tests/test_ui.mjs`: a few gloss and check cases on controls the samples don't cover.
 
 ## Options when running
 
 ```
-GlossCode.exe [--data <folder>] [--ui <file.html>] [--debug] [file]
+GlossCode.exe [--ui <file.html>] [--debug] [file]
 ```
 
-- `--data <folder>` loads `gcode-words.json`, `gcode-rules.json` and `library/` from a folder instead of the copies inside the program, so the tables can be edited without rebuilding (`--data data`).
-- `--ui <file.html>` loads the UI from a file instead (`--ui src/ui/index.html`).
+- `--ui <file.html>` loads the UI from a file instead (`--ui src/ui/index.html`), so the page and its tables can be edited without rebuilding.
 - `--debug` turns on the webview's developer tools.
 - A file name opens that file at start-up.
 
@@ -75,7 +76,7 @@ In the program, `window.GlossCodeNative` is set before the page loads (`src/app/
 |---|---|
 | `GlossCodeNative.open(fromPath)` | Shows the Open dialog and reads the file; resolves with `{ path, name, latin1, doc }` or `null` |
 | `GlossCodeNative.save({ path, name, latin1, doc })` | Writes the file (with the Save dialog when `path` is `null`); resolves with `{ path, name, bytes }` |
-| `GlossCodeNative.core(method, params)` | Runs a core method: `parse`, `serialize`, `analyze` or `tokenize` (see `src/core/gc_api.c`) |
+| `GlossCodeNative.core(method, params)` | Runs a core method: `parse`, `serialize` or `tokenize` (see `src/core/gc_api.c`) |
 | `GlossCodeNative.startup()` | The file named on the command line, read like `open()` |
 | `GlossCodeNative.openPath(path)` | Reads a file from the recent list, like `open()` without the dialog |
 | `GlossCodeNative.exists(path)` | Whether a file is still there, so a recent program that was moved or deleted can ask to be located or removed |
@@ -83,8 +84,6 @@ In the program, `window.GlossCodeNative` is set before the page loads (`src/app/
 | `GlossCodeNative.openUrl(url)`, `setTitle(text)`, `quit()` | Open a link in the browser, set the window title, close the window |
 
 Saving keeps every line that wasn't changed exactly as it was read (spacing, `%`, block delete `/`, macro text), writes changed lines from their words, keeps the file's line endings, and writes a Latin-1 file back as Latin-1. The file is written to a temporary file first and then swapped in, so a failed save never leaves half a file.
-
-The UI still draws its gloss words and problems with its own JavaScript, which `test_golden` keeps identical to the core. Moving the drawing over to `GlossCodeNative.core("analyze", …)` is the next step.
 
 The sample programs aren't built into the program. In `src/ui/index.html` they sit between `/* samples */` and `/* end samples */` markers, and `cmake/strip-samples.cmake` replaces everything between them with `null` in the copy that gets embedded, so the program starts on its home page with no samples. `scripts/package-examples.sh` puts `examples/` and the example library files in their own download, `GlossCode-<version>-examples.zip`.
 

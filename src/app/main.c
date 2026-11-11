@@ -14,25 +14,13 @@
 #include "resources.h"
 
 static webview_t W;
-static gc_data *DATA;
 static char *STARTUP_FILE;
 
 static const nfdu8filteritem_t FILTERS[] = {
     { "CNC programs", "nc,ngc,tap,gcode,cnc,min,ssb,eia,mpf,spf,h,txt" },
 };
 
-/* ---------- Data ---------- */
-
-static void add_lib_file(const char *path, const char *name, void *arg)
-{
-    size_t n;
-    char *text = plat_read_file(path, &n);
-    char err[200];
-    (void)name;
-    if (text && !gc_data_add_library(DATA, text, n, (const char *)arg, err, sizeof err))
-        fprintf(stderr, "Skipped library file %s: %s\n", path, err);
-    free(text);
-}
+/* ---------- Helpers for the bindings ---------- */
 
 static char *path_join(const char *a, const char *b)
 {
@@ -43,42 +31,6 @@ static char *path_join(const char *a, const char *b)
     memcpy(p + la + 1, b, lb + 1);
     return p;
 }
-
-/* Built-in data comes from inside the program, or from a folder with --data while editing tables. */
-static int load_data(const char *data_dir, char *err, size_t errsz)
-{
-    if (data_dir) {
-        char *wp = path_join(data_dir, "gcode-words.json"), *rp = path_join(data_dir, "gcode-rules.json");
-        size_t wl = 0, rl = 0;
-        char *w = plat_read_file(wp, &wl), *r = plat_read_file(rp, &rl);
-        if (!w || !r) snprintf(err, errsz, "Couldn't read %s and %s.", wp, rp);
-        else DATA = gc_data_load(w, wl, r, rl, err, errsz);
-        free(w);
-        free(r);
-        free(wp);
-        free(rp);
-        if (!DATA) return 0;
-        char *lib = path_join(data_dir, "library");
-        plat_list_dir(lib, ".json", add_lib_file, "builtin");
-        free(lib);
-    } else {
-        const gc_resource *w = gc_find_resource("data/gcode-words.json"), *r = gc_find_resource("data/gcode-rules.json");
-        DATA = gc_data_load((const char *)w->data, w->len, (const char *)r->data, r->len, err, errsz);
-        if (!DATA) return 0;
-        for (size_t i = 0; i < gc_resource_count; i++) {
-            const gc_resource *res = &gc_resources[i];
-            if (strncmp(res->name, "data/library/", 13) == 0 && !gc_data_add_library(DATA, (const char *)res->data, res->len, "builtin", err, errsz))
-                fprintf(stderr, "Built-in library %s: %s\n", res->name, err);
-        }
-    }
-    /* The user's own library files. */
-    char *mine = path_join(plat_get_dirs()->config, "library");
-    plat_list_dir(mine, ".json", add_lib_file, "personal");
-    free(mine);
-    return 1;
-}
-
-/* ---------- Helpers for the bindings ---------- */
 
 static void reply(const char *id, int ok, const char *json)
 {
@@ -154,7 +106,7 @@ static char *open_json(const char *path, char *err, size_t errsz)
     gc_buf_puts(&p, "{\"text\":");
     gc_buf_json_str(&p, bytes);
     gc_buf_putc(&p, '}');
-    char *doc = gc_api_call(DATA, "parse", gc_buf_str(&p), p.len);
+    char *doc = gc_api_call("parse", gc_buf_str(&p), p.len);
     gc_buf_free(&p);
     gc_buf b;
     gc_buf_init(&b);
@@ -187,7 +139,7 @@ static void bind_core(const char *id, const char *req, void *arg)
     gc_buf p;
     gc_buf_init(&p);
     gc_json_write(&p, gc_json_at(a, 1));
-    char *out = gc_api_call(DATA, method, gc_buf_str(&p), p.len);
+    char *out = gc_api_call(method, gc_buf_str(&p), p.len);
     gc_buf_free(&p);
     gc_json_free(a);
     reply(id, 1, out);
@@ -267,7 +219,7 @@ static void bind_save(const char *id, const char *req, void *arg)
     gc_buf p;
     gc_buf_init(&p);
     gc_json_write(&p, gc_json_get(o, "doc"));
-    char *res = gc_api_call(DATA, "serialize", gc_buf_str(&p), p.len);
+    char *res = gc_api_call("serialize", gc_buf_str(&p), p.len);
     gc_buf_free(&p);
     char err[600];
     gc_json *rj = gc_json_parse(res, strlen(res), err, sizeof err);
@@ -487,8 +439,6 @@ static void usage(void)
 {
     printf("GlossCode %s\n\n"
            "Usage: glosscode [options] [file]\n\n"
-           "  --data <folder>   load gcode-words.json, gcode-rules.json and library/ from a folder\n"
-           "                    instead of the copies built into the program\n"
            "  --ui <file>       load the UI from an HTML file instead of the built-in one\n"
            "  --debug           allow the webview's developer tools\n"
            "  --version         print the version and exit\n",
@@ -497,11 +447,10 @@ static void usage(void)
 
 int gc_main(int argc, char **argv)
 {
-    const char *data_dir = NULL, *ui_file = NULL;
+    const char *ui_file = NULL;
     int debug = 0;
     for (int i = 1; i < argc; i++) {
-        if (!strcmp(argv[i], "--data") && i + 1 < argc) data_dir = argv[++i];
-        else if (!strcmp(argv[i], "--ui") && i + 1 < argc) ui_file = argv[++i];
+        if (!strcmp(argv[i], "--ui") && i + 1 < argc) ui_file = argv[++i];
         else if (!strcmp(argv[i], "--debug")) debug = 1;
         else if (!strcmp(argv[i], "--version")) {
             printf("GlossCode %s\n", GC_VERSION);
@@ -514,10 +463,6 @@ int gc_main(int argc, char **argv)
 
     const plat_dirs *dirs = plat_get_dirs();
     char err[600];
-    if (!load_data(data_dir, err, sizeof err)) {
-        plat_error_box("GlossCode can't start", err);
-        return 1;
-    }
     char *html = NULL;
     if (ui_file) {
         html = plat_read_file(ui_file, NULL);
@@ -559,7 +504,6 @@ int gc_main(int argc, char **argv)
     webview_run(W);
     webview_destroy(W);
     NFD_Quit();
-    gc_data_free(DATA);
     free(STARTUP_FILE);
     return 0;
 }

@@ -1,4 +1,4 @@
-/* Tiny test helpers shared by the core tests. */
+/* Tiny test helpers for the core tests. */
 #ifndef TEST_UTIL_H
 #define TEST_UTIL_H
 
@@ -30,33 +30,6 @@ static int t_failures = 0, t_checks = 0;
             fprintf(stderr, "\n    got:  %s\n    want: %s\n", g_ ? g_ : "(null)", w_ ? w_ : "(null)"); \
         }                                                                             \
     } while (0)
-
-static char *read_file(const char *path, size_t *len)
-{
-    FILE *f = fopen(path, "rb");
-    if (!f) return NULL;
-    size_t cap = 1 << 16, n = 0;
-    char *buf = malloc(cap);
-    size_t got;
-    while ((got = fread(buf + n, 1, cap - n, f)) > 0) {
-        n += got;
-        if (n == cap) buf = realloc(buf, cap *= 2);
-    }
-    fclose(f);
-    buf[n] = '\0';
-    if (len) *len = n;
-    return buf;
-}
-
-static char *join_path(const char *root, const char *rel)
-{
-    size_t a = strlen(root), b = strlen(rel);
-    char *p = malloc(a + b + 2);
-    memcpy(p, root, a);
-    p[a] = '/';
-    memcpy(p + a + 1, rel, b + 1);
-    return p;
-}
 
 static int t_summary(const char *name)
 {

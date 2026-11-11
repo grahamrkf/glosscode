@@ -11,7 +11,7 @@
     platform: info.platform,
     portable: info.portable,
     configDir: info.configDir,
-    // Runs a core method (parse, serialize, analyze, tokenize) and resolves with its JSON result.
+    // Runs a core method (parse, serialize, tokenize) and resolves with its JSON result.
     core: function (method, params) { return call("gcCore", [method, params || {}]); },
     // Shows the system Open dialog; resolves with { path, name, latin1, doc, text } or null when cancelled.
     open: function (fromPath) { return call("gcOpen", [fromPath || null]); },

@@ -6,19 +6,12 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 
 **Editor**
 - [ ] Interleaved view: a gloss line (plain English) above every code line
-- [ ] Fixed-width columns (at least 12 characters for full words, 8 for short) so words line up down the whole file
 - [ ] Full words (`run.feed`, `set.inch`, `cycle.peck`, `machine.tailstock.in`: one of a fixed set of groups, then the action, with a third part for less common codes; control-specific codes are underlined with dots) and short words (View › Gloss words)
-- [ ] Type code or type gloss (View › Edit in; the older layouts only)
-- [ ] Autocomplete for gloss and code words
-- [ ] Keyboard editing by word: ← → move between words, ↑ ↓ between lines, Enter edits and Enter again finishes (the word stays selected), Delete removes the word, typing replaces it
-- [ ] While editing, Space starts a new word to the right; in code, typing a letter after a number does too (`G01X` becomes `G01` and `X`)
-- [ ] Shift+Enter breaks the line after the selected word, moving the rest to a new numbered line
-- [ ] Paste (Ctrl+V or Edit › Paste) splits the text the way opening a file does. One line goes into the current line with each word in its own cell (`G01X1.Y2.` becomes three words). Several lines, or a whole program, go in as their own lines below the current one, or replace it when it's blank
+- [ ] Paste (Ctrl+V or Edit › Paste) splits the text the way opening a file does. One line goes in at the caret of the line being edited, or at the end of the current line. Several lines, or a whole program, go in as their own lines below the current one, or replace it when it's blank
 - [ ] Select whole lines by dragging the mouse across them, Shift+↑↓ or Shift+click (Ctrl+A selects all). Right-click, or Ctrl+C / Ctrl+X, copies or cuts them as code text, the same as Save writes it, with no gloss. Ctrl+D duplicates them below; Ctrl+V pastes over them; Delete removes them
-- [ ] View › Edit in picks the line typing goes to: code (the default) or gloss
-- [ ] Code with gloss above (the default layout): each line as plain text with its N number in its own column and the gloss above in small grey italics, not selectable; N numbers and comments aren't repeated in the gloss. Click to place the caret; Enter breaks the line, Backspace/Delete at the ends join lines, Esc undoes the line's changes
+- [ ] Code with gloss above: each line as plain text with its N number in its own column and the gloss above in small grey italics, not selectable; N numbers and comments aren't repeated in the gloss. Click to place the caret; Enter breaks the line, Backspace/Delete at the ends join lines, Esc undoes the line's changes
 - [ ] Problem lines tinted yellow (warning), orange (error) or red (machine alarm) with the word at fault underlined; one dismissable banner for controls whose rules are a first draft
-- [ ] Hint text after codes for the words they still need (`G02` shows `R## or I## J##`, `G83` shows `Z## R## Q##`). Clicking R## types the R and hides I and J; clicking I## hides R but keeps J
+- [ ] Grey hints in the gloss for the words a code still needs (`G83` shows `movz:? rplane:? peck:?`). Typing R hides I and J; typing I hides R but keeps J
 - [ ] Mode-clash warnings in the status bar
 - [ ] Auto N numbering on new lines (step 10, midpoint when there's no room)
 - [ ] Renumber that leaves subprogram labels alone
@@ -41,10 +34,6 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Inline expansion of subprogram calls, marked with purple N numbers; edits change the subprogram
 - [ ] Library calls read by name (`G65 P9101` reads call.macro sub.slotmill, `Z-0.15` reads DEP-0.15) and expand to show the lines they run, in green; the toolpath preview follows them
 - [ ] View › Show: both lines, gloss only, or code only
-- [ ] View › Layout: words in program order, or columns by word type, most used first (motion and cycle codes, X Y Z, F, S, spindle M-codes…) with rare words at the end. The order is set in the machine's rules
-- [ ] In columns, several words in one cell stack, so that line gets taller instead of the column getting wider
-- [ ] In columns, lines that don't move the machine (program number, safety line, M00, M01, M30, tool change, dwell, reference return, subprogram calls and returns) keep their words in program order from the left
-- [ ] In columns, an empty cell on a motion line shows the modal value still in effect from an earlier line (motion, position, feed, speed, spindle, tool, coolant, cycle R and Q) in grey. View › Modal values in empty cells turns it off
 - [ ] Active-modes panel for the selected line, with a mark on modes set on that line
 - [ ] Line colors: rapid (amber), feed (blue), arc (teal), cycle (magenta)
 - [ ] Canned cycle guide (F1, Help menu, or "How G76 works…" in the side panel): a sketch of how the cycle moves, an example line with every word it takes (gloss above), and what each word does and whether it's required. A button starts a new line with that cycle
