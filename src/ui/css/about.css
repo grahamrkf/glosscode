@@ -1,0 +1,25 @@
+/* About window (Help › About GlossCode). */
+.adlg{width:520px;height:auto;max-height:96%}
+.abody{background:#fff;padding:18px 20px 14px;display:flex;flex-direction:column;gap:12px}
+.ahead{display:flex;gap:16px;align-items:center}
+.ahead img{width:64px;height:64px;flex:none}
+.ahead h2{margin:0;font:600 20px var(--w-ui);color:#1b1b1b}
+.ahead .aver{font-size:12.5px;color:#555;margin-top:3px}
+.ahead .aver b{font-weight:600;color:#1b1b1b}
+.adesc{font-size:12.5px;color:#333;line-height:1.45;margin:0}
+.alinks{display:grid;grid-template-columns:118px 1fr;gap:4px 10px;font-size:12.5px;color:#555}
+.alinks a{color:#0f6cbd;text-decoration:none}
+.alinks a:hover{text-decoration:underline}
+.aupd{border:1px solid #e5e5e5;border-radius:6px;background:#fafafa;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.aupd .arow{display:flex;align-items:center;gap:10px}
+.aupd .astat{flex:1;font-size:12.5px;color:#333;line-height:1.4}
+.aupd .astat.ok{color:#107c10}
+.aupd .astat.err{color:#a4262c}
+.aupd .astat.new{color:#1b1b1b;font-weight:600}
+.aupd .anotes{font-size:11.5px;color:#555;max-height:84px;overflow:auto;white-space:pre-wrap;border-top:1px solid #eee;padding-top:6px}
+.aupd .adl{display:flex;gap:8px;flex-wrap:wrap}
+.aupd .btn:disabled{opacity:.5;cursor:default}
+.aupd [hidden]{display:none}
+.ack{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
+.acopy{font-size:11px;color:#888}
+.dlg .afoot{display:flex;justify-content:flex-end}

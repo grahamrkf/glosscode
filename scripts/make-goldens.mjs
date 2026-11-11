@@ -1,4 +1,4 @@
-// Runs the UI's own JavaScript (src/ui/index.html) on every sample program in examples/ and every edge case
+// Runs the UI's own JavaScript (src/ui/js/, as src/ui/index.html loads it) on every sample program in examples/ and every edge case
 // in tests/cases/, and writes what it shows to tests/golden/*.json: the gloss word, unit and description for
 // every word, and every problem the checks report. They are a record of what the UI does: a change to the
 // gloss, the checks or the data files that changes any of them shows up in the diff. Run from the repo root:

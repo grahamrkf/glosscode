@@ -1,6 +1,7 @@
-/* GlossCode: the program. Opens a webview window showing the UI (src/ui/index.html, compiled in),
+/* GlossCode: the program. Opens a webview window showing the UI (src/ui/, joined into one page and compiled in),
    and connects it to the core and the platform file through a handful of bound functions. Portable:
    the only OS-specific code is in src/platform/. */
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -435,11 +436,29 @@ static char *bridge_script(const plat_dirs *dirs)
     return gc_buf_take(&out);
 }
 
+/* A file:// URL for a path on disk, so a page loaded with --ui finds its css/ and js/ files beside it. Letters,
+   digits and -._~/: stay as they are; Windows backslashes become slashes; anything else is %-encoded. */
+static char *file_url(const char *path)
+{
+    char *full = plat_full_path(path);
+    if (!full) return NULL;
+    gc_buf b;
+    gc_buf_init(&b);
+    gc_buf_puts(&b, full[0] == '/' ? "file://" : "file:///");
+    for (const unsigned char *p = (const unsigned char *)full; *p; p++) {
+        if (*p == '\\') gc_buf_putc(&b, '/');
+        else if (isalnum(*p) || strchr("-._~/:", *p)) gc_buf_putc(&b, (char)*p);
+        else gc_buf_printf(&b, "%%%02X", *p);
+    }
+    free(full);
+    return gc_buf_take(&b);
+}
+
 static void usage(void)
 {
     printf("GlossCode %s\n\n"
            "Usage: glosscode [options] [file]\n\n"
-           "  --ui <file>       load the UI from an HTML file instead of the built-in one\n"
+           "  --ui <file>       load the UI from a page on disk (src/ui/index.html) instead of the built-in one\n"
            "  --debug           allow the webview's developer tools\n"
            "  --version         print the version and exit\n",
            GC_VERSION);
@@ -463,10 +482,12 @@ int gc_main(int argc, char **argv)
 
     const plat_dirs *dirs = plat_get_dirs();
     char err[600];
-    char *html = NULL;
+    char *ui_url = NULL;
     if (ui_file) {
-        html = plat_read_file(ui_file, NULL);
-        if (!html) {
+        char *page = plat_read_file(ui_file, NULL);
+        ui_url = page ? file_url(ui_file) : NULL;
+        free(page);
+        if (!ui_url) {
             snprintf(err, sizeof err, "Couldn't read %s.", ui_file);
             plat_error_box("GlossCode can't start", err);
             return 1;
@@ -499,8 +520,9 @@ int gc_main(int argc, char **argv)
     webview_bind(W, "gcSetTitle", bind_set_title, NULL);
     webview_bind(W, "gcClipboard", bind_clipboard, NULL);
     webview_bind(W, "gcQuit", bind_quit, NULL);
-    webview_set_html(W, html ? html : (const char *)gc_find_resource("ui/index.html")->data);
-    free(html);
+    if (ui_url) webview_navigate(W, ui_url);
+    else webview_set_html(W, (const char *)gc_find_resource("ui/index.html")->data);
+    free(ui_url);
     webview_run(W);
     webview_destroy(W);
     NFD_Quit();

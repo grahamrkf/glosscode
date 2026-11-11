@@ -4,7 +4,7 @@ GlossCode is one program built from three parts:
 
 - **The core** (`src/core/`): portable C99, standard library only. It reads G-code files into blocks and words and writes them back, keeping every unchanged line byte for byte.
 - **The platform file** (`src/platform/`): `platform_win32.c` on Windows, `platform_posix.c` on Linux. Reading and writing files, the settings and cache folders, portable mode, opening links.
-- **The shell** (`src/app/`): opens a [webview](https://github.com/webview/webview) window, shows the UI (`src/ui/index.html`, compiled in, which does the gloss, checks and simulation in JavaScript), and connects it to the core and the system file dialogs ([nativefiledialog-extended](https://github.com/btzy/nativefiledialog-extended)).
+- **The shell** (`src/app/`): opens a [webview](https://github.com/webview/webview) window, shows the UI (`src/ui/`, joined into one page and compiled in, which does the gloss, checks and simulation in JavaScript), and connects it to the core and the system file dialogs ([nativefiledialog-extended](https://github.com/btzy/nativefiledialog-extended)).
 
 CMake downloads webview 0.12.0 and nativefiledialog-extended 1.4.1 (pinned to their release commits) the first time it configures, so the build needs network access once.
 
@@ -55,7 +55,7 @@ ctest --test-dir build
 
 Two more checks run the UI's JavaScript in Node (no browser needed); CI runs both:
 
-- `node scripts/make-goldens.mjs --check`: the files in `tests/golden/` record every word's gloss, unit and description, and every problem, for each program in `examples/` and `tests/cases/` on each machine. After changing the gloss, the checks or the data files, run `node scripts/make-goldens.mjs` and look over the diff: it shows exactly what changed on screen.
+- `node scripts/make-goldens.mjs --check`: the files in `tests/golden/` record every word's gloss, unit and description, and every problem, for each program in `examples/` and `tests/cases/` on each machine. After changing the gloss, the checks or the data files, run `node scripts/make-ui-data.mjs` (for data files) and then `node scripts/make-goldens.mjs` and look over the diff: it shows exactly what changed on screen.
 - `node tests/test_ui.mjs`: a few gloss and check cases on controls the samples don't cover.
 
 ## Options when running
@@ -64,7 +64,7 @@ Two more checks run the UI's JavaScript in Node (no browser needed); CI runs bot
 GlossCode.exe [--ui <file.html>] [--debug] [file]
 ```
 
-- `--ui <file.html>` loads the UI from a file instead (`--ui src/ui/index.html`), so the page and its tables can be edited without rebuilding.
+- `--ui <file.html>` loads the UI from disk instead (`--ui src/ui/index.html`, which finds its `css/` and `js/` files beside it), so the page can be edited without rebuilding.
 - `--debug` turns on the webview's developer tools.
 - A file name opens that file at start-up.
 
@@ -85,7 +85,7 @@ In the program, `window.GlossCodeNative` is set before the page loads (`src/app/
 
 Saving keeps every line that wasn't changed exactly as it was read (spacing, `%`, block delete `/`, macro text), writes changed lines from their words, keeps the file's line endings, and writes a Latin-1 file back as Latin-1. The file is written to a temporary file first and then swapped in, so a failed save never leaves half a file.
 
-The sample programs aren't built into the program. In `src/ui/index.html` they sit between `/* samples */` and `/* end samples */` markers, and `cmake/strip-samples.cmake` replaces everything between them with `null` in the copy that gets embedded, so the program starts on its home page with no samples. `scripts/package-examples.sh` puts `examples/` and the example library files in their own download, `GlossCode-<version>-examples.zip`.
+The UI's data comes from two files that `node scripts/make-ui-data.mjs` writes (run it after changing `data/`, `examples/`, the example library or `VERSION`): `src/ui/data.js` (dictionary, rules, built-in library, version) and `src/ui/samples.js` (the sample programs and a shop's example library). `cmake/bundle-ui.cmake` joins `index.html` and its `css/` and `js/` files into the one page that gets embedded, leaving out `samples.js` and the example user's machines (between `/* samples */` and `/* end samples */` in `js/machines.js`), so the program starts on its home page with no samples. `scripts/package-examples.sh` puts `examples/` and the example library files in their own download, `GlossCode-<version>-examples.zip`.
 
 ## Packages
 

@@ -37,10 +37,10 @@ jobs:
         run: node scripts/make-goldens.mjs --check
       - name: UI checks
         run: node tests/test_ui.mjs
-      - name: Mockup data is in sync
+      - name: UI data files are up to date
         run: |
-          node scripts/sync-mockup-data.mjs
-          git diff --exit-code src/ui/index.html
+          node scripts/make-ui-data.mjs
+          git diff --exit-code src/ui
       - name: Configure
         run: >
           cmake -S . -B build -G Ninja -DGLOSSCODE_APP=OFF -DCMAKE_BUILD_TYPE=Debug

@@ -10,6 +10,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 
 ### Code
 - The C core now only reads and writes files. Its copy of the gloss and checks (kept identical to the UI's JavaScript, but never used by the program) is gone, and so is the `--data` option, which only affected that copy. The golden files in `tests/golden/` stay, as a record of what the UI shows.
+- The UI page is split into files: `src/ui/index.html` holds the page itself and loads its styles from `src/ui/css/` and its scripts from `src/ui/js/` (one per part of the screen and one per dialog). The build joins them back into one page, so the program is unchanged. `--ui src/ui/index.html` loads the page from its folder.
+- The dictionary, rules, built-in library and version are no longer copied into the page. `node scripts/make-ui-data.mjs` writes them to `src/ui/data.js`, and the sample programs from `examples/` to `src/ui/samples.js`, which the program's build leaves out. It replaces `scripts/sync-mockup-data.mjs`.
 
 ## [0.2.0] - 2026-11-07
 

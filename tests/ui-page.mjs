@@ -1,12 +1,14 @@
-// Loads the UI's scripts (src/ui/index.html) into Node without a browser, for the golden files and tests/test_ui.mjs.
+// Loads the UI's scripts (the <script src> files of src/ui/index.html, in order) into Node without a browser, for the golden files and tests/test_ui.mjs.
 // Every DOM call returns another stand-in, so the page's start-up code runs without drawing anything; only the
 // pure functions (reading lines into words, gloss, checks) are used afterwards.
 import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import vm from "node:vm";
 
 export function loadPage(page = "src/ui/index.html"){
   const html = readFileSync(page, "utf8");
-  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
+  const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map(m => readFileSync(join(dirname(page), m[1]), "utf8"));
+  if (!scripts.length) throw new Error(`No <script src> tags in ${page}`);
   const stub = new Proxy(function(){}, {
     get(t, k){ if (k===Symbol.iterator) return function*(){}; if (k===Symbol.toPrimitive) return () => 0; if (k==="length") return 0; if (k==="then") return undefined; return stub; },
     set(){ return true; }, apply(){ return stub; }, construct(){ return stub; }, has(){ return true; }
