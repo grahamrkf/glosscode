@@ -4,6 +4,16 @@
 const arcSteps = (sw, full) => Math.max(2, Math.min(full, Math.ceil(Math.abs(sw)/(2*Math.PI)*full - 1e-9)));
 // Runs the program for the toolpath and the Z timeline: { segs (toolpath moves), steps (one per line run), vals,
 // ghosts, boxes, wraps, alarm, notes, vars, tailUsed }. Klartext has its own reader (interpretKlartext).
+// A tool's diameter from its line's comment, in the program's units: "(1/16 BALL)", "(.0625 ENGRAVER)", "(1.5MM CHAMFER)".
+// Only a fraction, a number with a decimal point, or a number with MM counts ("#2 CENTER DRILL" gives nothing).
+function toolDiameter(toks, units){
+  const c = toks.filter(isComment).join(" ").toUpperCase(); if (!c) return null;
+  const mmTo = v => units==="mm" ? v : v/25.4, inTo = v => units==="mm" ? v*25.4 : v;
+  let m = /(?:^|[^\d.\/])(\d+)\/(\d+)(?![\d\/])/.exec(c); if (m && +m[2] > 0) return inTo(+m[1] / +m[2]);
+  m = /(\d*\.\d+|\d+)\s*MM\b/.exec(c); if (m) return mmTo(+m[1]);
+  m = /(?:^|[^\d#])(\d*\.\d+)(?!\d)/.exec(c); if (m && +m[1] > 0) return +m[1];
+  return null;
+}
 function interpret(){
   const ex = SYNTAX==="klartext" ? interpretKlartext() : new SimRun().run();
   ex.time = timeRun(ex);   // how long each move takes (sim-time.js)
@@ -229,6 +239,7 @@ class SimRun {
     const tt = toks.find(t => /^T\d/.test(t));
     if (tt) this.pendingT = this.lathe ? "T" + parseInt(tt.slice(1, 3)) : "T" + parseInt(tt.slice(1));
     if (this.lathe && tt) this.tool = this.pendingT;
+    if (tt){ const d = toolDiameter(toks, lineState[li]?.units); if (d) (this.toolDia ||= {})[this.pendingT] = d; }
     if (toks.some(t => isCode(t,"M06"))) this.tool = this.pendingT;
     const { w, skip, unknown, shift } = this.readWords(toks, li, inLib);
     if ("D" in w && toks.some(t => isCode(t,"G41") || isCode(t,"G42"))) this.compD = w.D;
@@ -477,7 +488,10 @@ class SimRun {
     go(at(0, 0, z), false, "engrave", { sweep });
     const n = Math.max(4, Math.min(60, [...text].length * 2));
     for (let k = 1; k <= n; k++) go(at(len*k/n, 0, z), false, "engrave", { sweep });
-    this.boxes.push({ li, text, exact, s0, s1: this.segs.length, pts: [[0, 0], [len, 0], [len, h], [0, h]].map(([u, v]) => this.xfPt(at(u, v, z))) });
+    // J is the tool centre's path, so the letters are cut half the tool's diameter further out all round
+    const td = this.toolDia?.[T], rr = td ? td/2 : 0;
+    this.boxes.push({ li, text, exact, s0, s1: this.segs.length, h, tool: td || null, pts: [[0, 0], [len, 0], [len, h], [0, h]].map(([u, v]) => this.xfPt(at(u, v, z))),
+      ...(rr ? { outer: [[-rr, -rr], [len + rr, -rr], [len + rr, h + rr], [-rr, h + rr]].map(([u, v]) => this.xfPt(at(u, v, z))) } : {}) });
     go(at(len, 0, r), true, "rapid");
     this.engZ = z;
   }

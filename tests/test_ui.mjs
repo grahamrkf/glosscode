@@ -52,5 +52,12 @@ eq([e.alarm?.code, e.steps[e.steps.length-1].alarm!=null], ["307 Subroutine nest
 A.run(nest(10), "gen.mill.haas"); e = A.interpret();
 eq([e.alarm, e.notes.length], [null, 1], "no known limit: a note, no alarm");
 
+// G47: J is the tool centre's path; the tool line's comment gives the tool's diameter for the edge around it.
+A.run("G20 G90\nT8 M06 (1/16 BALL)\nG00 X0 Y0 Z1.\nG47 P0 X0 Y0 I0. J0.1 R0.05 Z-0.005 F15. E10. (AB)\nM30", "gen.mill.haas");
+e = A.interpret();
+eq([e.boxes[0].h, e.boxes[0].tool], [0.1, 0.0625], "a G47 box is J tall, with the 1/16 tool's edge");
+A.use("gen.mill.haas", "words");
+eq(["(1/4 END MILL)", "(.0625 ENGRAVER)", "(10MM DRILL)", "(#2 CENTER DRILL)"].map(c => A.toolDiameter([c], "inch")?.toFixed(4) ?? null), ["0.2500", "0.0625", "0.3937", null], "tool diameters from comments");
+
 if (failed){ console.error(`test_ui: ${failed} failed`); process.exit(1); }
 console.log("test_ui: all passed");

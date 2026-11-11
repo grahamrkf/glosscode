@@ -2,6 +2,18 @@
 
 What changed in each GlossCode release. The newest release is at the top. Versions follow `MAJOR.MINOR.PATCH` (see [docs/releasing.md](docs/releasing.md)); while the version starts with `0.`, file formats may still change between releases.
 
+## [Unreleased]
+
+### Simulation
+- Run time. Each move now takes as long as it would on the machine, worked out from its length and the programmed feed: G94 per minute, G95 per rev times the spindle speed (and threading's lead), G96 surface speed turned into rpm at each move's diameter and capped by the G50 clamp or the machine's max spindle, and a feed above the machine's max feed capped to it. Rapids take the longest axis's distance at the rapid rate; G04 dwells, dwells at the bottom of G82/G89 holes, the extra rapids of G83/G73 pecks and the feed back out of taps and bores count too. Acceleration, tool changes and spindle start aren't counted yet, so a real run takes a bit longer.
+- The position line shows the time so far and the whole program's time (Time 3:10 / 12:34), with cutting, rapid, dwell and per-tool times in its tip. With no line simulated it shows the time up to the selected line.
+- Playback follows the program's clock: 1× is real time, and the speeds go from ¼× to 1000×, plus Max (as fast as the screen draws). A long move is drawn as far as the tool has got along it.
+- Machine profiles have a Rapid rate (in/min) for the run time. Until it's filled in, 1000 in/min is assumed, and the time's tip says so.
+- A call nested deeper than the control allows stops the simulation with an alarm, such as 307 on the 1995 Haas control (9 levels of M97/M98, 4 of G65). The limits are per control (callDepth in gcode-rules.json, from the manuals). Where the manual gives no limit (Okuma lathes, Haas NGC subprograms), calls are still followed 8 deep and a simulation note says so.
+- G70, G71 and G72 bolt hole patterns end back at the pattern's center, so a second pattern with no X Y is drawn about the same center, not the last hole (#72).
+- G47 engraving: the rectangle is now J tall, since J is the path the tool's centre follows, with a lighter edge half the tool's diameter wide around it showing what's cut. The diameter comes from the tool line's comment (1/16, .0625, 1.5MM). The old 1.25 × J height was the shop note's J plus the tool.
+- Move folding no longer treats an Okuma M99 (tailstock thrust) as a subprogram end.
+
 ## [0.3.0] - 2026-11-11
 
 ### Editor

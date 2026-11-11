@@ -123,8 +123,10 @@ function drawViews(){
     const sp = b.pts.map(q => [toX(fx(q)), toY(fy(q))]), mid = (a, c) => [((+a[0] + +c[0])/2).toFixed(1), ((+a[1] + +c[1])/2).toFixed(1)];
     const [lx, ly] = mid(sp[0], sp[3]), [rx, ry] = mid(sp[1], sp[2]);
     const grad = b.exact ? "" : `<linearGradient id="eg${n}" gradientUnits="userSpaceOnUse" x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}"><stop offset=".6" stop-color="${fill}"/><stop offset="1" stop-color="${fill}" stop-opacity="0"/></linearGradient>`;
-    const tip = b.tip || `Engraving: ${b.text}` + (b.exact ? " (ends where the serial number starts)" : " (length estimated: the control doesn't give letter widths)");
-    return `<g>${grad}<title>${esc(tip)}</title><polygon points="${sp.map(q => q.join(",")).join(" ")}" fill="${b.exact ? fill : `url(#eg${n})`}" fill-opacity=".8"/>`
+    const tip = (b.tip || `Engraving: ${b.text}` + (b.exact ? " (ends where the serial number starts)" : " (length estimated: the control doesn't give letter widths)"))
+      + (b.tool ? `. The tool centre follows J ${fmt4(b.h)}; with a ${fmt4(b.tool)} tool the letters come out about ${fmt4(b.h + b.tool)} tall (the lighter edge)` : ". J is the tool centre's path: the letters come out taller by the tool's diameter, which the tool line's comment doesn't give");
+    const outer = b.outer ? `<polygon points="${b.outer.map(q => [toX(fx(q)), toY(fy(q))].join(",")).join(" ")}" fill="${b.exact ? fill : `url(#eg${n})`}" fill-opacity=".35"/>` : "";
+    return `<g>${grad}<title>${esc(tip)}</title>${outer}<polygon points="${sp.map(q => q.join(",")).join(" ")}" fill="${b.exact ? fill : `url(#eg${n})`}" fill-opacity=".8"/>`
       + `<path d="M${sp[1].join(",")} L${sp[0].join(",")} L${sp[3].join(",")} L${sp[2].join(",")}" fill="none" stroke="${edge}" stroke-width="${state==="cur" ? 1.8 : 1.1}" stroke-linejoin="round"/></g>`;
   }).join("");
   svg += wr + band.join("") + gh + bx + layers.flat().join("");
