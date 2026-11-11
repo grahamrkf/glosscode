@@ -9,12 +9,14 @@
      The styles (css/) and scripts (js/) load in this order and share one global scope, so a script can use
      what an earlier one defines. cmake/bundle-ui.cmake joins them back into one page for the program and
      leaves samples.js out. data.js and samples.js are written by scripts/make-ui-data.mjs. -->
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/convert.css">
 <link rel="stylesheet" href="css/hole-pattern.css">
 <link rel="stylesheet" href="css/insert.css">
 <link rel="stylesheet" href="css/library.css">
 <link rel="stylesheet" href="css/about.css">
+<link rel="stylesheet" href="css/text-size.css">
 </head>
 <body>
     <div class="app" id="app">
@@ -303,9 +305,22 @@
               <div class="anotes" id="a-notes" hidden></div>
               <label class="ack"><input type="checkbox" id="a-auto" checked> Check for updates when GlossCode starts</label>
             </div>
-            <div class="acopy">© 2026 Graham Fluet. MIT License. Uses the webview and nativefiledialog-extended libraries.</div>
+            <div class="acopy">© 2026 Graham Fluet. MIT License. Uses the webview and nativefiledialog-extended libraries, and the IBM Plex fonts (SIL Open Font License).</div>
           </div>
           <div class="foot afoot"><button class="btn pri" id="a-close">Close</button></div>
+        </div>
+      </div>
+
+      <div class="dim" id="tdlg" hidden>
+        <div class="dlg tdlg" role="dialog" aria-label="Text size">
+          <div class="tbar"><span class="ttl" style="padding-left:2px">Text size</span><span class="cap"><span id="t-x">&#x2715;</span></span></div>
+          <div class="tsbody">
+            <label for="t-code">Code text</label><select id="t-code"></select>
+            <label for="t-gloss">Gloss text</label><select id="t-gloss"></select>
+            <label for="t-zoom">Zoom (whole window)</label><select id="t-zoom"></select>
+            <p class="tsnote">Ctrl+= and Ctrl+- (or Ctrl+wheel) zoom in and out. Ctrl+0 goes back to 100%.</p>
+          </div>
+          <div class="foot tsfoot"><button class="btn" id="t-reset">Reset</button><span></span><button class="btn pri" id="t-close">Close</button></div>
         </div>
       </div>
     </div>
@@ -332,5 +347,6 @@
 <script src="js/tabs.js"></script>
 <script src="js/convert.js"></script>
 <script src="js/about.js"></script>
+<script src="js/text-size.js"></script>
 </body>
 </html>

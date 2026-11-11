@@ -34,6 +34,7 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Inline expansion of subprogram calls, marked with purple N numbers; edits change the subprogram
 - [ ] Library calls read by name (`G65 P9101` reads call.macro sub.slotmill, `Z-0.15` reads DEP-0.15) and expand to show the lines they run, in green; the toolpath preview follows them
 - [ ] View › Show: both lines, gloss only, or code only
+- [ ] View › Text size…: code and gloss text sizes and a zoom for the whole window (Ctrl+= / Ctrl+- / Ctrl+0); code and gloss in the fonts GlossCode ships (IBM Plex Mono and IBM Plex Sans)
 - [ ] Active-modes panel for the selected line, with a mark on modes set on that line
 - [ ] Line colors: rapid (amber), feed (blue), arc (teal), cycle (magenta)
 - [ ] Canned cycle guide (F1, Help menu, or "How G76 works…" in the side panel): a sketch of how the cycle moves, an example line with every word it takes (gloss above), and what each word does and whether it's required. A button starts a new line with that cycle

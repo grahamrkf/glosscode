@@ -40,6 +40,7 @@ jobs:
       - name: UI data files are up to date
         run: |
           node scripts/make-ui-data.mjs
+          node scripts/make-fonts.mjs
           git diff --exit-code src/ui
       - name: Configure
         run: >

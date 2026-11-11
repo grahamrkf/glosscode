@@ -7,6 +7,8 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 ### Editor
 - Code with gloss above is now the only layout. The two older layouts (words in program order, and columns by word type with modal values in empty cells) are gone, and so is typing gloss to write code (View › Edit in) with its autocomplete. View › Layout and Edit in are removed from the menu, and Edit › Break line after the selected word and Delete selected word with them: Enter breaks the line being edited, and Delete and Backspace edit the line.
 - Pasting one line of words while a line is being edited puts them in at the caret; with no line being edited, they go at the end of the current line, before its comment.
+- The code and gloss now use fonts that come with GlossCode, so they read the same on every computer: IBM Plex Mono for the code and IBM Plex Sans for the gloss. Menus and dialogs keep the system font. The gloss is no longer italic, is a little larger (11 px) and a darker grey, and comments are the same colour as the code (#73).
+- View › Text size… sets the code and gloss text sizes and a zoom for the whole window. Ctrl+= and Ctrl+- (or Ctrl+wheel) zoom in and out, and Ctrl+0 goes back to 100%. The sizes and zoom are remembered in settings.json.
 
 ### Code
 - The C core now only reads and writes files. Its copy of the gloss and checks (kept identical to the UI's JavaScript, but never used by the program) is gone, and so is the `--data` option, which only affected that copy. The golden files in `tests/golden/` stay, as a record of what the UI shows.
@@ -16,6 +18,7 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - The simulation's 660-line `interpret()` is now a `SimRun` class (`js/run-program.js`): setup, the line-by-line run, one line's step, and one method per cycle or pattern. `checkProgram()`'s line checks are one function per group (grammar, modes, tool change, spindle, tool length, cutter comp, cycles, the move).
 - Code only one control family uses has its own file: `js/control-klartext.js`, `js/control-fagor.js`, `js/control-okuma.js`.
 - Each tab keeps its program in its own object, so switching tabs no longer copies the editor's state in and out.
+- The fonts are embedded in `src/ui/css/fonts.css`, which `node scripts/make-fonts.mjs` writes from `assets/fonts/` (CI checks it's up to date).
 
 ## [0.2.0] - 2026-11-07
 

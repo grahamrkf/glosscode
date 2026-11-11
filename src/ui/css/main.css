@@ -1,7 +1,10 @@
 /* The editor, panels, menus and dialogs shared by the whole screen. */
 :root{
   --w-ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
-  --w-mono:"Cascadia Mono","JetBrains Mono",Consolas,monospace;
+  --w-mono:"GlossCode Mono","Cascadia Mono",Consolas,monospace;   /* IBM Plex Mono, shipped in css/fonts.css */
+  --w-gloss:"GlossCode Gloss","Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;   /* IBM Plex Sans */
+  --code-size:13px;   /* the code and gloss text sizes, set in View › Text size… (js/text-size.js) */
+  --gloss-size:11px;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -44,7 +47,7 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .toggle.sm button{padding:2px 9px;font-size:12px}
 .show-en .r.gc,.show-gc .r.en{display:none}
 .r.en .cmx{display:none}
-.show-en .r.en .cmx{display:inline;color:#8a8a8a;font-style:italic;font-weight:400}
+.show-en .r.en .cmx{display:inline;color:#8a8a8a;font-weight:400}
 .show-en .ln,.show-gc .ln{padding:1px 0}
 .r .gut{border-left:4px solid transparent}
 .ln.k-rapid .gut{border-left-color:#e8a33d}
@@ -80,19 +83,19 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .mt .chg .lb,.mt .chg.cd,.mt .chg.ew{}
 .mt .new{color:#d13438;font-weight:700}
 .tab{padding:6px 14px;font-size:12.5px;color:#1b1b1b;background:#fff;border-right:1px solid #e5e5e5;box-shadow:inset 0 2px #0f6cbd}
-.ed{flex:1;min-height:0;overflow:auto;position:relative;padding:4px 0 40px;font:13px var(--w-mono)}
+.ed{flex:1;min-height:0;overflow:auto;position:relative;padding:4px 0 40px;font:var(--code-size) var(--w-mono)}
 /* Rows out of view aren't laid out (a long program has thousands); the height (inside the padding) is what one row takes until it's drawn */
 .ln{display:flex;flex-direction:column;padding:1px 0 4px;content-visibility:auto;contain-intrinsic-height:auto 38px}
 .show-en .ln,.show-gc .ln{contain-intrinsic-height:auto 19px}
 .ln.lib{content-visibility:visible}   /* library rows are few and of other heights: always laid out */
 .r{display:flex;height:19px;align-items:center;white-space:pre}
-.gut{width:5ch;flex:none;text-align:right;padding-right:1.4ch;color:#a0a0a0;font-size:12px}
+.gut{width:5ch;flex:none;text-align:right;padding-right:1.4ch;color:#a0a0a0;font-size:calc(var(--code-size) - 1px)}
 .ed.runnums .gut{width:10ch}
 .gut .rn{float:left;padding-left:.6ch;color:#b4b9c1;font-size:10.5px;user-select:none;-webkit-user-select:none;pointer-events:none}
 .xpbar{display:inline-block;vertical-align:middle;margin-left:.8ch;width:9ch;height:6px;border-radius:3px;background:#ece2fd;overflow:hidden}
 .xpbar i{display:block;height:100%;background:#8a3ffc}
 .cell{flex:none;height:19px;line-height:19px;overflow:hidden;text-overflow:ellipsis;cursor:text;border-left:1px dotted #eaeaea;padding-left:.5ch}
-.cell.cm{width:auto!important;color:#8a8a8a;font-style:italic;border-left-color:transparent}
+.cell.cm{width:auto!important;border-left-color:transparent}
 .cell.unk{color:#b35c00}
 .r .cell.n{color:#5d6b7c;font-weight:400}
 .ln.ins{background:#f7f3fe;box-shadow:inset 3px 0 #8a3ffc}
@@ -223,16 +226,17 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .draftbar span{flex:1}
 .draftbar .btn{padding:2px 9px;font-size:12px}
 /* ---------- The editor: code with gloss above ----------
-   Code is black text, the gloss small grey italics above it that can't be selected. A line with a problem is tinted:
+   Code (comments too) is black text, the gloss smaller grey text above it that can't be selected. The row heights
+   follow the code and gloss text sizes. A line with a problem is tinted:
    yellow for a warning, orange for an error, red for a machine alarm; the word the problem names is underlined. */
-.layout-text .ln{padding:0;contain-intrinsic-height:auto 31px}
-.layout-text .ln:has(> .r.en.none){contain-intrinsic-height:auto 18px}
+.layout-text .ln{padding:0;contain-intrinsic-height:auto calc(var(--code-size) + var(--gloss-size) + 8px)}
+.layout-text .ln:has(> .r.en.none){contain-intrinsic-height:auto calc(var(--code-size) + 5px)}
 .layout-text .r{height:auto}
-.layout-text .r.en{height:13px;padding-top:1px;font:italic 400 10.5px/13px var(--w-ui);color:#7c7c7c;background:none;opacity:1;user-select:none;-webkit-user-select:none;cursor:text}
+.layout-text .r.en{height:calc(var(--gloss-size) + 3px);padding-top:1px;font:400 var(--gloss-size)/calc(var(--gloss-size) + 2px) var(--w-gloss);color:#555;background:none;opacity:1;user-select:none;-webkit-user-select:none;cursor:text}
 .layout-text .r.en.none{display:none}
-.layout-text .r.en .gut,.layout-text .r.en .tn{font:normal 400 12px var(--w-mono)}   /* the same widths as on the code row below */
-.layout-text .r.en .tn{font-size:13px}
-.layout-text .r.gc{height:18px;line-height:18px;font-weight:400;color:#1b1b1b;background:none}
+.layout-text .r.en .gut,.layout-text .r.en .tn{font:400 calc(var(--code-size) - 1px) var(--w-mono)}   /* the same widths as on the code row below */
+.layout-text .r.en .tn{font-size:var(--code-size)}
+.layout-text .r.gc{height:calc(var(--code-size) + 5px);line-height:calc(var(--code-size) + 5px);font-weight:400;color:#1b1b1b;background:none}
 .layout-text .r .gut{width:6.5ch}
 .layout-text .ed.runnums .gut{width:11ch}
 .layout-text .r.gc .gut .pm{float:left;margin:1px 0 0 2px;width:14px;height:14px;font-size:9.5px;line-height:14px}
@@ -248,7 +252,7 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .layout-text .hot{background:#fff3c4;border-radius:2px}
 .layout-text .fhit{background:#ffe599}
 .layout-text .ln.fcur .fhit{background:#ffbf47}
-.layout-text .cw.cm{color:#5f6b78}
+.layout-text .cw.cm{color:inherit}
 .layout-text .eob{color:#b0b0b0}
 .layout-text .ln.k-rapid:not(.ins){background:none}
 .layout-text .ln.cur:not(.ins){outline:none;background:#eef5fc}

@@ -5,7 +5,7 @@
 .ln.lib .r.gc{background:transparent;color:#24413a}
 .ln.lib + .ln:not(.lib){border-top:1px dashed #9fd8c4}
 .lc{flex:none;height:19px;line-height:19px;overflow:hidden;text-overflow:ellipsis;border-left:1px dotted #d5ece3;padding-left:.5ch}
-.lc.cm{width:auto!important;color:#7d9a90;font-style:italic;border-left-color:transparent}
+.lc.cm{width:auto!important;border-left-color:transparent}
 .lc.err{width:auto!important;color:#a4262c;font-family:var(--w-ui);font-size:12px}
 .r.en .lc.cm{display:none}
 .lc small.u,.cex small.u{font-size:9.5px;font-weight:400;margin-left:1px}

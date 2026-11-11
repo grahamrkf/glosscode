@@ -145,7 +145,7 @@ function renderCursor(){
 }
 /* ---------- Code with gloss above (View › Layout, the default) ----------
    Each line is drawn as text: its N number in a column of its own on the left, the code beside it, and the gloss above
-   the code in small grey italics. The gloss leaves out the N number and comments, which read the same either way, and
+   the code in smaller grey text. The gloss leaves out the N number and comments, which read the same either way, and
    a line with nothing else (a comment, a lone N) has no gloss line. The gloss can't be selected or edited: the code is
    edited as plain text, one line at a time, like any text editor. Clicking a line puts the caret where it was clicked;
    Enter breaks the line at the caret, Backspace at its start joins it to the line above, and Delete at its end joins
