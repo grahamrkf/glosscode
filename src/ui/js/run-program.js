@@ -74,7 +74,7 @@ class SimRun {
   // Goes through the program from the top: each line runs (step) and becomes a step for the simulation. Stops at the
   // program end or an alarm; follows GOTO, IF, WHILE, subprogram calls (up to 8 deep) and returns.
   run(){
-    const steps = this.steps, segs = this.segs, stack = [];
+    const steps = this.steps, segs = this.segs, stack = [], follow = callFollowDepth();
     let i = 0, guard = 0, entering = false;
     while (i < doc.length && guard++ < 20000){
       const li = i, toks = doc[i]; this.curLi = li;
@@ -97,6 +97,7 @@ class SimRun {
       // Fagor 8055: an N after the first word runs the line that many times (N0: the move without the active cycle)
       const rep = SYNTAX==="fagor8055" ? toks.find((t, k) => refN(toks, k) && /^N\d+$/.test(t)) : null, reps = rep ? parseInt(rep.slice(1), 10) : 1;
       const s0 = segs.length, dips = []; this.turns = 0; this.engZ = null;
+      this.depth = stack.length;
       this.noCyc = reps===0; for (let r = 0; r < Math.max(1, Math.min(reps, 999)); r++) this.step(toks, li, false, dips); this.noCyc = false;
       const stop = toks.some(t => isCode(t, "M00")) ? "M00" : toks.some(t => isCode(t, "M01")) ? "M01" : null;
       const kind = segs.length > s0 ? (this.engZ!=null ? "engrave" : segs.slice(s0).some(sg => sg.kind==="cyc") ? "cyc" : segs[segs.length-1].kind) : null;
@@ -107,12 +108,36 @@ class SimRun {
       const j = this.jumpFrom(toks, i); if (j!=null){ i = j; continue; }
       if (isReturn(toks) && stack.length){ i = stack.pop(); continue; }
       const tgt = callTarget(toks);
-      if (tgt!=null && this.L[tgt]!==undefined && stack.length < 8){ stack.push(i+1); i = this.L[tgt]; entering = true; continue; }
+      if (tgt!=null && this.L[tgt]!==undefined){
+        // Deeper than the control allows: it alarms on the call
+        const over = this.tooDeep(stack.length + 1, 0, li);
+        if (over){ this.alarm = over; steps[steps.length-1].alarm = over.text; over.k = steps.length - 1; break; }
+        if (stack.length < follow){ stack.push(i+1); i = this.L[tgt]; entering = true; continue; }
+        if (!this.deepNote){   // no limit in the manual: the simulation stops following, and says so
+          this.deepNote = { li, k:steps.length - 1, until:steps.length, short:`Calls more than ${follow} deep not followed`,
+            text:`This call would be level ${stack.length + 1}. The manual doesn't give how deep calls can nest on this control, so the simulation follows ${follow} levels and runs on past this call` };
+          this.notes.push(this.deepNote);
+        }
+      }
       i++;
     }
     if (this.wrap) this.wraps.push({ ...this.wrap, s1: segs.length });
     if (this.rotNote) this.rotNote.until = steps.length;
     return { segs, steps, vals: this.vals, ghosts: this.ghosts, boxes: this.boxes, wraps: this.wraps, alarm: this.alarm, notes: this.notes, vars: this.VUSE, tailUsed: steps.some(s => s.tail) };
+  }
+
+  // A call that goes deeper than the control allows (callLimit): subs subprogram levels and macros G65 levels,
+  // counting this call. Returns the alarm, or null.
+  tooDeep(subs, macros, li){
+    const L = callLimit(), c = L.c, name = MACHINES[machineId]?.name || "This control";
+    let code = null, why = "";
+    if (L.sub && subs > L.sub){ code = c.subAlarm; why = `${L.sub} levels of subprogram calls`; }
+    else if (L.macro && macros > L.macro){ code = c.macroAlarm; why = `${L.macro} levels of macro calls (G65)`; }
+    else if (L.total && subs + macros > L.total){ code = c.totalAlarm || c.macroAlarm; why = `${L.total} levels of calls in all` + (L.macro ? `, ${L.macro} of them macro calls` : ""); }
+    if (!why) return null;
+    const lvl = subs + macros, ord = lvl + (lvl % 10===1 && lvl % 100!==11 ? "st" : lvl % 10===2 && lvl % 100!==12 ? "nd" : lvl % 10===3 && lvl % 100!==13 ? "rd" : "th");
+    return { li, nest:true, code: code || "", label:"Nesting too deep", at:this.xfPt({...this.p}),
+      text:`${code ? "Alarm " + code + ": " : ""}${name} allows ${why}, and this call is the ${ord} level. The control stops here.` };
   }
 
   // Mirroring and rotation (mills): where a point goes, and a direction
@@ -198,6 +223,7 @@ class SimRun {
   step(toks, li, inLib, dips){
     // A G65 call to a library subprogram runs its lines, worked out with the values on the call.
     const lib = !inLib && window.libExpandCall?.(toks, li);
+    if (lib){ const over = this.tooDeep(this.depth || 0, 1, li); if (over){ this.alarm = over; return; } }
     if (lib){ lib.forEach(t => this.step(t, li, true, dips)); return; }
     // The tool: a lathe's turret indexes on T, a mill's tool changes on M06
     const tt = toks.find(t => /^T\d/.test(t));

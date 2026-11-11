@@ -102,13 +102,13 @@ function checkProgram(full){
     p2.set(li, rec);
   };
   // Walk in execution order, following local subprogram calls, then check lines never reached.
-  { const stack = []; let i = 0, guard = 0;
+  { const stack = [], follow = callFollowDepth(); let i = 0, guard = 0;
     while (i < doc.length && guard++ < 5000 + 20 * doc.length){
       const toks = doc[i]; visit(i);
       if (isEnd(toks)) break;
       if (isReturn(toks) && stack.length){ i = stack.pop(); continue; }
       const tgt = callTarget(toks);
-      if (tgt!=null && labelMap[tgt]!==undefined && stack.length < 8){ stack.push(i+1); i = labelMap[tgt]; continue; }
+      if (tgt!=null && labelMap[tgt]!==undefined && stack.length < follow){ stack.push(i+1); i = labelMap[tgt]; continue; }
       i++;
     }
     doc.forEach((_, li) => { if (!seen.has(li)) visit2(li); });

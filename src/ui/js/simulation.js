@@ -275,7 +275,7 @@ function drawSimPos(at, lathe){
       const k = simIdx!=null && simK!=null ? simK : stepIndexFor(curLine), nt = (EXEC.notes || []).find(x => k >= x.k && (x.until==null || k < x.until));
       return nt && !alarmReached() ? `<span class="snote" title="${esc(nt.text)}.">${esc(nt.short || nt.text)}</span>` : "";
     })()
-    + (alarmReached() ? `<span class="alarm" title="${esc(EXEC.alarm.text)} The lines after it don't run.">Alarm: ${esc(EXEC.alarm.code)} ${esc((EXEC.alarm.label || "").toLowerCase())} not on this machine</span>` : "");
+    + (alarmReached() ? `<span class="alarm" title="${esc(EXEC.alarm.text)} The lines after it don't run.">${EXEC.alarm.nest ? `Alarm${EXEC.alarm.code ? " " + esc(EXEC.alarm.code.split(" ")[0]) : ""}: calls nested too deep` : `Alarm: ${esc(EXEC.alarm.code)} ${esc((EXEC.alarm.label || "").toLowerCase())} not on this machine`}</span>` : "");
 }
 let tlSteps = [], tlShift = 0; const SLOT = 18;
 /* What the timeline plots, per machine type (RULES.machineTypes[type].timeline, the first is the default):

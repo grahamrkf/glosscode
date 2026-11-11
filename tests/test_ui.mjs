@@ -43,5 +43,14 @@ A.run("G20\nG99\nG50 S1000\nG96 S500 M03\nG00 X1. Z0.1\nG01 Z-1.9 F0.01\nM30", "
 e = A.interpret();
 eq(Math.round(e.steps[5].t*100)/100, 12, "G96 at Ø1.0 is 1910 rpm, clamped to 1000: 2 in at 10 in/min");
 
+// Call nesting: the Haas 1995 control allows 9 levels of M97/M98 and alarms (307) on the 10th.
+const nest = n => { let t = "G20 G90\nG00 X0 Y0 Z1.\nM97 P1000\nM30\n"; for (let k = 0; k < n; k++) t += `N${1000 + k*10} G00 X${k + 1}.\n` + (k < n - 1 ? `M97 P${1010 + k*10}\n` : "") + "M99\n"; return t; };
+A.run(nest(9), "gen.mill.haas1995"); eq(A.interpret().alarm, null, "9 levels run on a Haas 1995 control");
+A.run(nest(10), "gen.mill.haas1995"); e = A.interpret();
+eq([e.alarm?.code, e.steps[e.steps.length-1].alarm!=null], ["307 Subroutine nesting too deep", true], "the 10th level alarms on a Haas 1995 control");
+// No limit in the manual (Haas NGC subprograms): followed 8 deep, with a note
+A.run(nest(10), "gen.mill.haas"); e = A.interpret();
+eq([e.alarm, e.notes.length], [null, 1], "no known limit: a note, no alarm");
+
 if (failed){ console.error(`test_ui: ${failed} failed`); process.exit(1); }
 console.log("test_ui: all passed");

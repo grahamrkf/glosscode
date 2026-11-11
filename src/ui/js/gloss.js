@@ -420,13 +420,13 @@ function translateAll(full){
     else { rec = read(li, st); prevK = ok!==undefined && sameSt(rec.post, P.seq[ok].post) ? ok : null; }
     seq.push(rec); seqLi.push(li); first(li, st, rec);
   };
-  const st = newState(), L = labels(), stack = []; let i = 0, guard = 0;
+  const st = newState(), L = labels(), stack = [], follow = callFollowDepth(); let i = 0, guard = 0;
   while (i < doc.length && guard++ < 5000 + 20 * doc.length){
     const toks = doc[i]; visit(i, st);
     if (isEnd(toks)) break;
     if (isReturn(toks) && stack.length){ i = stack.pop(); continue; }
     const tgt = callTarget(toks);
-    if (tgt!=null && L[tgt]!==undefined && stack.length < 8){ stack.push(i+1); i = L[tgt]; continue; }
+    if (tgt!=null && L[tgt]!==undefined && stack.length < follow){ stack.push(i+1); i = L[tgt]; continue; }
     i++;
   }
   // Lines the walk never reaches are read in file order, each from the line above it.
