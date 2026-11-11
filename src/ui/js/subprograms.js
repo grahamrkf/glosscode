@@ -10,7 +10,6 @@
    - A G65 library subprogram opens in the pane read only, with the values of the call that opened it.
    Each tab keeps its own pane trail and go-to history (subPane and backStack in js/state.js). */
 (() => {
-const $ = id => document.getElementById(id);
 const pane = $("subpane"), body = $("sp-body"), trail = $("sp-trail"), backbar = $("backbar");
 const MAX_BACK = 50;
 
@@ -144,7 +143,7 @@ grip.addEventListener("mousedown", e => {
 });
 
 // Keys: F12 go to, Alt+F12 open beside, Alt+← back.
-document.getElementById("app").addEventListener("keydown", e => {
+$("app").addEventListener("keydown", e => {
   if (activeTab < 0) return;
   if (e.key==="F12"){ e.preventDefault(); if (editing && !commit()) return; e.altKey ? openBeside(curLine, true) : goToSub(curLine); }
   else if (e.altKey && e.key==="ArrowLeft" && !e.ctrlKey && !e.shiftKey){ e.preventDefault(); if (editing && !commit()) return; goBack(); }

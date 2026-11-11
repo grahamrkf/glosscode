@@ -7,7 +7,6 @@
    the values (any control, no macro option needed). A G65 line that calls a library subprogram reads its
    arguments by name, shows the lines it runs inline in green, and the toolpath preview follows it. */
 (() => {
-const $ = id => document.getElementById(id);
 // The built-in library (data/library/*.json, in data.js) and, in the page opened in a browser, a shop's example
 // library (docs/subprogram-library/examples/*.json, in samples.js).
 const LIBRARY = BUILTIN_LIBRARY.concat(typeof SAMPLES !== "undefined" ? SAMPLES.library : []);
@@ -16,11 +15,17 @@ const LIB = LIBRARY.map(e => ({ ...e }));
 // Fanuc custom macro argument letters (G65 argument specification I). G, L, N, O and P can't be passed.
 const ARG_VAR = { A:1, B:2, C:3, I:4, J:5, K:6, D:7, E:8, F:9, H:11, M:13, Q:17, R:18, S:19, T:20, U:21, V:22, W:23, X:24, Y:25, Z:26 };
 const VAR_ARG = Object.fromEntries(Object.entries(ARG_VAR).map(([L, n]) => [n, L]));
+// In the program, the user's own subprograms are files in the library folder inside the settings folder, read
+// at startup and written by Save and Delete (src/app/main.c). The page opened in a browser keeps them in memory
+// and shows the folders a Windows install would use. The program has no shop folder yet.
+const NATIVE = window.GlossCodeNative;
+const SEP = NATIVE && NATIVE.platform!=="windows" ? "/" : "\\";
 const SOURCES = {
-  builtin: { label:"Built-in", dir:"C:\\Program Files\\GlossCode\\library" },
+  builtin: { label:"Built-in", dir:NATIVE ? "(built into GlossCode)" : "C:\\Program Files\\GlossCode\\library" },
   shop:    { label:"Shop",     dir:"S:\\CNC\\GlossCode\\library" },
-  mine:    { label:"Mine",     dir:"%APPDATA%\\GlossCode\\library" }
+  mine:    { label:"Mine",     dir:NATIVE ? NATIVE.configDir + SEP + "library" : "%APPDATA%\\GlossCode\\library" }
 };
+const fileOf = e => e.file || SOURCES[e.source].dir + SEP + e.id + ".json";
 const KINDS = { distance:"Distance", feed:"Feed", speed:"Speed", count:"Count", angle:"Angle", time:"Seconds" };
 // Which definition ids a mockup machine counts as. Haas mills extend Fanuc mills (docs/machine-definitions.md), so a
 // subprogram written for fanuc.mill also works on haas.mill. Okuma is its own family.
@@ -100,8 +105,20 @@ function evalExpr(src, V){
     }
     throw `can't read "${t ?? "the end of the line"}"`;
   };
-  const mul = () => { let a = prim(); while (peek()==="*" || peek()==="/"){ const op = next(), b = prim() ?? 0; if (op==="/" && b===0) throw "division by zero"; a = op==="*" ? (a ?? 0)*b : (a ?? 0)/b; } return a; };
-  const add = () => { let a = mul(); while (peek()==="+" || peek()==="-"){ const op = next(), b = mul() ?? 0; a = op==="+" ? (a ?? 0)+b : (a ?? 0)-b; } return a; };
+  const mul = () => {
+    let a = prim();
+    while (peek()==="*" || peek()==="/"){
+      const op = next(), b = prim() ?? 0;
+      if (op==="/" && b===0) throw "division by zero";
+      a = op==="*" ? (a ?? 0)*b : (a ?? 0)/b;
+    }
+    return a;
+  };
+  const add = () => {
+    let a = mul();
+    while (peek()==="+" || peek()==="-"){ const op = next(), b = mul() ?? 0; a = op==="+" ? (a ?? 0)+b : (a ?? 0)-b; }
+    return a;
+  };
   const cmp = () => { const a = add(); if (CMP[peek()]){ const op = next(); return CMP[op](a, add()) ? 1 : 0; } return a; };
   // AND, OR and XOR work bit by bit, so [#1 GT 0] AND [#2 LT 5] (each 1 or 0) is true when both are
   const and = () => { let a = cmp(); while (peek()==="AND"){ next(); a = bits("AND", a, cmp()); } return a; };
@@ -132,10 +149,10 @@ function splitWords(s){
   return out;
 }
 // Runs the body with the values given. Returns { lines:[[tokens]...] } or { error }.
-function expand(e, vals, units){
-  const V = {};
-  for (const [L, v] of Object.entries(vals)) if (v!=="" && v!=null && ARG_VAR[L]) V[ARG_VAR[L]] = parseFloat(v);
-  const body = e.body.map(l => l.toUpperCase());
+function expand(entry, vals, units){
+  const vars = {};
+  for (const [L, v] of Object.entries(vals)) if (v!=="" && v!=null && ARG_VAR[L]) vars[ARG_VAR[L]] = parseFloat(v);
+  const body = entry.body.map(l => l.toUpperCase());
   const labels = {}, loopEnd = {}, stack = [];
   let unmatched = false;
   body.forEach((l, i) => {
@@ -146,12 +163,12 @@ function expand(e, vals, units){
     if ((m = w.match(/^WHILE\s*\[.*\]\s*DO(\d)$/))) stack.push([m[1], i]);
     else if ((m = w.match(/^END(\d)$/))){ const top = stack.pop(); if (!top || top[0]!==m[1]) unmatched = true; else loopEnd[top[1]] = i; }
   });
-  if (unmatched || stack.length) return { error:`O${e.program} has a WHILE and an END that don't match.` };
+  if (unmatched || stack.length) return { error:`O${entry.program} has a WHILE and an END that don't match.` };
   const lines = []; let pc = 0, steps = 0;
-  const err = (i, msg) => ({ error:`O${e.program} line ${i+1}: ${msg}.` });
+  const err = (i, msg) => ({ error:`O${entry.program} line ${i+1}: ${msg}.` });
   {
     while (pc < body.length){
-      if (++steps > 20000) return { error:`O${e.program} ran more than 20,000 lines. Is a loop missing its step?` };
+      if (++steps > 20000) return { error:`O${entry.program} ran more than 20,000 lines. Is a loop missing its step?` };
       const raw = body[pc], cm = (raw.match(/\([^)]*\)/g) || []).join(" ");
       let s = raw.replace(/\([^)]*\)/g, "").trim().replace(/^N\d+\s*/, "");
       const at = pc; pc++;
@@ -160,27 +177,37 @@ function expand(e, vals, units){
       let m;
       try {
         if ((m = s.match(/^#(\d+)\s*=(.+)$/))){
-          const n = +m[1], v = evalExpr(m[2], V);
-          if (n===3000) return { error:`O${e.program} stopped with alarm ${v}${cm ? " " + cm : ""}.` , alarm:true };
-          V[n] = v; continue;
+          const n = +m[1], v = evalExpr(m[2], vars);
+          if (n===3000) return { error:`O${entry.program} stopped with alarm ${v}${cm ? " " + cm : ""}.` , alarm:true };
+          vars[n] = v; continue;
         }
         if (/^IF\s*\[/.test(s)){
-          const [cond, rest] = bracket(s.replace(/^IF\s*/, "")), ok = evalExpr(cond, V);
-          if ((m = rest.match(/^THEN\s*#(\d+)\s*=(.+)$/))){ if (ok){ const n = +m[1], v = evalExpr(m[2], V); if (n===3000) return { error:`O${e.program} stopped with alarm ${v}${cm ? " " + cm : ""}.`, alarm:true }; V[n] = v; } continue; }
-          if ((m = rest.match(/^GOTO\s*(\d+)$/))){ if (ok){ if (labels[+m[1]]===undefined) throw `GOTO ${m[1]} has no N${m[1]}`; pc = labels[+m[1]]; } continue; }
+          const [cond, rest] = bracket(s.replace(/^IF\s*/, "")), ok = evalExpr(cond, vars);
+          if ((m = rest.match(/^THEN\s*#(\d+)\s*=(.+)$/))){
+            if (ok){
+              const n = +m[1], v = evalExpr(m[2], vars);
+              if (n===3000) return { error:`O${entry.program} stopped with alarm ${v}${cm ? " " + cm : ""}.`, alarm:true };
+              vars[n] = v;
+            }
+            continue;
+          }
+          if ((m = rest.match(/^GOTO\s*(\d+)$/))){
+            if (ok){ if (labels[+m[1]]===undefined) throw `GOTO ${m[1]} has no N${m[1]}`; pc = labels[+m[1]]; }
+            continue;
+          }
           throw "after IF [..] only THEN #n=... or GOTO n can be written in";
         }
         if ((m = s.match(/^GOTO\s*(\d+)$/))){ if (labels[+m[1]]===undefined) throw `GOTO ${m[1]} has no N${m[1]}`; pc = labels[+m[1]]; continue; }
-        if (/^WHILE/.test(s)){ const [cond] = bracket(s.replace(/^WHILE\s*/, "")); if (!evalExpr(cond, V)) pc = loopEnd[at] + 1; continue; }
+        if (/^WHILE/.test(s)){ const [cond] = bracket(s.replace(/^WHILE\s*/, "")); if (!evalExpr(cond, vars)) pc = loopEnd[at] + 1; continue; }
         if (/^END\d$/.test(s)){ pc = +Object.keys(loopEnd).find(k => loopEnd[k]===at); continue; }
         const toks = [];
         for (const [L, v] of splitWords(s)){
-          if (/[#\[]/.test(v)){ const n = evalExpr(v, V); if (n==null) continue; toks.push(fmtVal(L, n, units)); }
+          if (/[#\[]/.test(v)){ const n = evalExpr(v, vars); if (n==null) continue; toks.push(fmtVal(L, n, units)); }
           else toks.push(L + v);
         }
         if (cm) toks.push(cm);
         if (toks.length) lines.push(toks);
-        if (lines.length > 2000) return { error:`O${e.program} writes more than 2,000 lines. Call it instead.` };
+        if (lines.length > 2000) return { error:`O${entry.program} writes more than 2,000 lines. Call it instead.` };
       } catch (x){ return err(at, typeof x==="string" ? x : "can't be read"); }
     }
   }
@@ -199,7 +226,10 @@ function expandCall(toks, li){
 /* ---------- Showing a call's lines inline ---------- */
 function rowCells(toks, st){
   const W = COLW();
-  return toks.map(t => { const c = word(t, st); return { g:t, e:c.e || "", u:c.u || "", cm:!!c.cm, w:Math.max(W, t.length + 1, (c.e || "").length + (c.u ? 3 : 1)) }; });
+  return toks.map(t => {
+    const c = word(t, st);
+    return { g:t, e:c.e || "", u:c.u || "", cm:!!c.cm, w:Math.max(W, t.length + 1, (c.e || "").length + (c.u ? 3 : 1)) };
+  });
 }
 function rowsFor(lines, st0){
   const st = { ...st0, chg:[] };
@@ -221,9 +251,13 @@ function libRows(li){
 function libRowHTML(row, li){
   const e = libFor(doc[li]), from = doc[li][0];
   const title = `Run by the call on ${from}: ${e.name} (O${e.program}) with these values. Change the values on the call line, or the subprogram in Insert › Subprogram library.`;
-  if (row.error) return `<div class="ln lib" data-li="${li}" title="${esc(title)}"><div class="r gc"><span class="gut">⤷</span><span class="lc err">${esc(row.error)} The preview and checks skip it.</span></div></div>`;
+  if (row.error) {
+    return `<div class="ln lib" data-li="${li}" title="${esc(title)}"><div class="r gc"><span class="gut">⤷</span><span class="lc err">${esc(row.error)} The preview and checks skip it.</span></div></div>`;
+  }
   // The subprogram's code as text, its gloss above
-  const nc = /^N\d/.test(row.cells[0]?.g || ""), cs = nc ? row.cells.slice(1) : row.cells, gl = cs.filter(c => !c.cm && c.e && c.e!==c.g).map(c => `<span class="gw">${esc(c.e)}</span>`).join(" ");
+  const nc = /^N\d/.test(row.cells[0]?.g || "");
+  const cs = nc ? row.cells.slice(1) : row.cells;
+  const gl = cs.filter(c => !c.cm && c.e && c.e!==c.g).map(c => `<span class="gw">${esc(c.e)}</span>`).join(" ");
   return `<div class="ln lib${row.kind ? " k-" + row.kind : ""}" data-li="${li}" title="${esc(title)}"><div class="r en${gl ? "" : " none"}"><span class="gut"></span><span class="tn"></span><span class="tg">${gl}</span></div>`
     + `<div class="r gc"><span class="gut">⤷</span><span class="tn">${nc ? esc(row.cells[0].g) : ""}</span><span class="tc">${esc(cs.map(c => c.g).join(" "))}</span></div></div>`;
 }
@@ -231,10 +265,15 @@ function libButton(li){
   const toks = doc[li]; if (!isG65(toks)) return "";
   const n = progOf(toks); if (n==null) return "";
   const e = byProgram(n);
-  if (!e) return `<span class="xp bad" title="Not in any library folder. That's fine if O${n} is already on the control; GlossCode just can't show what it does.">O${n} isn't in the library</span>`;
+  if (!e) {
+    return `<span class="xp bad" title="Not in any library folder. That's fine if O${n} is already on the control; GlossCode just can't show what it does.">O${n} isn't in the library</span>`;
+  }
   return `<button class="xp lib" data-x="${li}" title="${esc(e.name)} · ${SOURCES[e.source].label} library">${expanded.has(li) ? "▾ hide" : "▸ show"} O${n} ${esc(sty(e.word) || "")}</button>`;
 }
-Object.assign(window, { evalMacro:evalExpr, libFor, libWord, libRows, libRowHTML, libButton, libExpandCall:(toks, li) => { const r = expandCall(toks, li); return r && !r.error ? r.lines : null; } });
+Object.assign(window, { evalMacro:evalExpr, libFor, libWord, libRows, libRowHTML, libButton, libExpandCall:(toks, li) => {
+  const r = expandCall(toks, li);
+  return r && !r.error ? r.lines : null;
+} });
 
 /* ---------- Insert › Subprogram library… ---------- */
 const ldlg = $("ldlg");
@@ -257,10 +296,10 @@ function openLibrary(id){
   const pick = id ? LIB.find(e => e.id===id) : null;
   lScope = pick && fits(pick)!=="yes" ? "all" : "machine";
   lSel = pick?.id || listed()[0]?.id || null;
-  drawLibrary(); ldlg.hidden = false;
-  $("l-q").focus();
+  drawLibrary();
+  showDialog(ldlg, $("l-q"));
 }
-function closeLibrary(){ ldlg.hidden = true; ed.focus({ preventScroll:true }); }
+const closeLibrary = () => hideDialog(ldlg);
 const srcChip = e => `<i class="src ${e.source}">${SOURCES[e.source].label}</i>${e.private ? `<i class="src priv">Private</i>` : ""}`;
 function machinesText(e){ return (e.machines || []).map(id => MACHINE_IDS.find(x => x[0]===id)?.[1] || id).join(", "); }
 
@@ -283,7 +322,12 @@ function drawLibrary(){
   const e = LIB.find(x => x.id===lSel);
   $("l-edit").disabled = !e;
   $("l-edit").textContent = e?.source==="builtin" ? "View…" : "Edit…";
-  if (!e){ $("lmain").innerHTML = `<div class="lempty">Pick a subprogram, or make one with <b>New…</b>. A subprogram from this program (an M97 block like N1000…M99) can be saved with <b>Insert › Save N1000 to the library…</b> while the cursor is in it.</div>`; $("l-ok").disabled = true; $("l-msg").textContent = ""; return; }
+  if (!e){
+    $("lmain").innerHTML = `<div class="lempty">Pick a subprogram, or make one with <b>New…</b>. A subprogram from this program (an M97 block like N1000…M99) can be saved with <b>Insert › Save N1000 to the library…</b> while the cursor is in it.</div>`;
+    $("l-ok").disabled = true;
+    $("l-msg").textContent = "";
+    return;
+  }
   const st = lineState[curLine] || newState(), units = st.units, v = lVals[e.id] ||= {};
   const f = fits(e), call = canCall(e, m);
   if (!lMode[e.id] || (lMode[e.id]==="call" && !call)) lMode[e.id] = call ? "call" : "inline";
@@ -292,8 +336,9 @@ function drawLibrary(){
     const chip = a.required && !def ? `<span class="need req">Required</span>` : def ? `<span class="need opt">Default ${esc(def)}</span>` : `<span class="need opt">Optional</span>`;
     return `<span class="w">${a.letter}</span><span class="e">${esc(en)}</span><input data-l="${a.letter}" value="${esc(v[a.letter] || "")}" placeholder="${esc(def)}" inputmode="decimal" autocomplete="off"><span>${chip}</span><span class="what">${esc(a.desc)}${a.kind==="feed" ? ` <small>(${FEED_UNIT[st.feed]?.[units] || ""})</small>` : ""}</span>`;
   }).join("");
-  const n = callsIn(e), file = `${SOURCES[e.source].dir}\\${e.id}.json`;
-  const callWhy = f!=="yes" ? `Written for ${machinesText(e)}, not ${m.name}.` : !m.macro ? `${m.name} has no macro option (G65). Machine profiles… can turn it on.` : `O${e.program} has to be loaded on the control. Export… in Edit saves it as O${e.program}.nc.`;
+  const n = callsIn(e), file = fileOf(e);
+  const loadIt = NATIVE ? `O${e.program} has to be loaded on the control.` : `O${e.program} has to be loaded on the control. Export… in Edit saves it as O${e.program}.nc.`;
+  const callWhy = f!=="yes" ? `Written for ${machinesText(e)}, not ${m.name}.` : !m.macro ? `${m.name} has no macro option (G65). Machine profiles… can turn it on.` : loadIt;
   $("lmain").innerHTML = `<h4><code>O${e.program}</code>${esc(e.name)}<small>${esc(e.word?.words || e.word?.long || "")} ${srcChip(e)}${e.verified===false ? `<i class="src unv">Not proven on a machine</i>` : ""}</small></h4>`
     + `<p class="about" style="margin:0">${esc(e.about || "")}</p>`
     + `<div class="lmeta"><span>Works on ${esc(machinesText(e))}</span><span>Saved in <code>${esc(file)}</code></span>${e.author ? `<span>By ${esc(e.author)}</span>` : ""}${n ? `<span>Called ${n} time${n > 1 ? "s" : ""} in this file</span>` : ""}</div>`
@@ -325,7 +370,10 @@ function nNumbersFor(k){
   for (let i = curLine; i >= 0 && cur===null; i--) cur = nOf(doc[i]);
   for (let i = curLine+1; i < doc.length && next===null; i++) next = nOf(doc[i]);
   const base = cur ?? 0; let step = N_STEP;
-  if (next!=null && base + k*step >= next){ step = Math.floor((next - base) / (k+1)); if (step < 1) return { ns:[], msg:`No room for ${k} N numbers before N${next}, so the new lines have none. Program › Renumber makes room.` }; }
+  if (next!=null && base + k*step >= next){
+    step = Math.floor((next - base) / (k+1));
+    if (step < 1) return { ns:[], msg:`No room for ${k} N numbers before N${next}, so the new lines have none. Program › Renumber makes room.` };
+  }
   return { ns:Array.from({ length:k }, (_, i) => base + (i+1)*step) };
 }
 function libLines(e){
@@ -356,7 +404,9 @@ function updateLibrary(){
   else if (r.b.missing.length) notes.push(`Fill in ${r.b.missing.join(", ")} to insert.`);
   if (r.error) notes.push(`<span class="warn">${esc(r.error)}</span>`);
   if (fits(e)==="process") notes.push(`<span class="warn">Written for ${esc(machinesText(e))}. Check the lines suit this control.</span>`);
-  if (e.units && e.units!==r.b.units && e.args.some(a => a.default!=null && typeof a.default!=="object")) notes.push(`Defaults are in ${e.units==="mm" ? "mm" : "inches"}.`);
+  if (e.units && e.units!==r.b.units && e.args.some(a => a.default!=null && typeof a.default!=="object")) {
+    notes.push(`Defaults are in ${e.units==="mm" ? "mm" : "inches"}.`);
+  }
   if (r.note) notes.push(`<span class="warn">${esc(r.note)}</span>`);
   $("l-msg").innerHTML = notes.join(" ");
   $("l-ok").disabled = !r.ok;
@@ -382,10 +432,11 @@ $("l-ok").onclick = insertLib;
 $("l-cancel").onclick = $("l-x").onclick = closeLibrary;
 $("l-new").onclick = () => openEditor(null);
 $("l-edit").onclick = () => lSel && openEditor(lSel);
-ldlg.addEventListener("keydown", ev => {
-  ev.stopPropagation();
-  if (ev.key==="Escape"){ ev.preventDefault(); closeLibrary(); }
-  else if (ev.key==="Enter" && ev.target.tagName==="INPUT" && ev.target.type!=="radio" && !$("l-ok").disabled){ ev.preventDefault(); insertLib(); }
+dialogKeys(ldlg, closeLibrary, ev => {
+  if (ev.key==="Enter" && ev.target.tagName==="INPUT" && ev.target.type!=="radio" && !$("l-ok").disabled){
+    ev.preventDefault();
+    insertLib();
+  }
 });
 
 /* ---------- New / Edit a library subprogram ---------- */
@@ -401,14 +452,21 @@ function openEditor(id, seed){
     source:"mine", args:[], body:[`O${freeProgram()}`, "", "M99"], about:""
   };
   editId = id; readOnly = src?.source==="builtin"; delArmed = false;
-  drawEditor(); sdlg.hidden = false;
-  (readOnly ? $("s-copy") : $("s-name")).focus();
+  drawEditor();
+  showDialog(sdlg, readOnly ? $("s-copy") : $("s-name"));
 }
-function closeEditor(){ sdlg.hidden = true; if (!ldlg.hidden) drawLibrary(); else ed.focus({ preventScroll:true }); }
+// Back to the library window when it's open underneath, otherwise to the editor.
+function closeEditor(){
+  if (ldlg.hidden) return hideDialog(sdlg);
+  sdlg.hidden = true;
+  drawLibrary();
+}
 function drawEditor(){
   const d = draft, ro = readOnly;
   $("s-title").textContent = editId ? (ro ? `${d.name} · built in, read-only` : `Edit ${d.name}`) : "New library subprogram";
-  $("s-name").value = d.name; $("s-long").value = d.word?.words || (d.word?.long ? "sub." + d.word.long.toLowerCase() : ""); $("s-short").value = d.word?.short || "";
+  $("s-name").value = d.name;
+  $("s-long").value = d.word?.words || (d.word?.long ? "sub." + d.word.long.toLowerCase() : "");
+  $("s-short").value = d.word?.short || "";
   $("s-prog").value = d.program || ""; $("s-cat").value = d.category || ""; $("s-tags").value = (d.tags || []).join(", ");
   $("s-units").value = d.units || "inch"; $("s-about").value = d.about || ""; $("s-notes").value = d.notes || "";
   $("s-where").value = d.source==="shop" ? "shop" : "mine"; $("s-priv").checked = !!d.private;
@@ -454,7 +512,9 @@ function problems(){
   if (!d.name) out.push(["e", "Give it a name."]);
   if (!d.program) out.push(["e", "It needs a program number (the O number it has on the control)."]);
   const clash = LIB.find(e => e.program===d.program && e.id!==editId);
-  if (d.program && clash) out.push(["w", `O${d.program} is also ${clash.name} (${SOURCES[clash.source].label}). A call would find whichever is on the control.`]);
+  if (d.program && clash) {
+    out.push(["w", `O${d.program} is also ${clash.name} (${SOURCES[clash.source].label}). A call would find whichever is on the control.`]);
+  }
   if (!d.word.words) out.push(["e", "Give it a full gloss word, such as sub.slotmill (it's what P reads as on the call line)."]);
   if (d.word.words.length > 28 || d.word.short.length > 8) out.push(["e", "Gloss words are 28 characters (full) and 8 (short) at most."]);
   else if (d.word.words && !/^[a-z][a-z0-9]*(\.[a-z0-9]+){0,2}$/.test(d.word.words)) out.push(["w", "Full words are lower case, in up to three parts separated by periods, like sub.slotmill."]);
@@ -466,7 +526,9 @@ function problems(){
   });
   const body = d.body.join("\n"), refs = new Set([...body.matchAll(/#(\d+)/g)].map(m => +m[1]));
   const undeclared = [...refs].filter(n => VAR_ARG[n] && !d.args.some(a => ARG_VAR[a.letter]===n));
-  if (undeclared.length) out.push(["w", `The body reads ${undeclared.map(n => `#${n} (${VAR_ARG[n]})`).join(", ")} but ${undeclared.length > 1 ? "they aren't variables" : "it isn't a variable"}, so ${undeclared.length > 1 ? "they're" : "it's"} always empty.`]);
+  if (undeclared.length) {
+    out.push(["w", `The body reads ${undeclared.map(n => `#${n} (${VAR_ARG[n]})`).join(", ")} but ${undeclared.length > 1 ? "they aren't variables" : "it isn't a variable"}, so ${undeclared.length > 1 ? "they're" : "it's"} always empty.`]);
+  }
   const unused = d.args.filter(a => !refs.has(ARG_VAR[a.letter]));
   if (unused.length) out.push(["w", `${unused.map(a => a.name || a.letter).join(", ")} ${unused.length > 1 ? "aren't" : "isn't"} used in the body.`]);
   if (!/^O\d+/.test((d.body.find(l => l.trim()) || "").trim())) out.push(["i", "The body usually starts with its O number."]);
@@ -484,7 +546,7 @@ function checkDraft(){
   const p = problems();
   $("s-checks").innerHTML = p.map(([k, t]) => `<span class="${k}">${k==="e" ? "✕" : k==="w" ? "⚠" : "i"} ${esc(t)}</span>`).join("");
   $("s-save").disabled = p.some(x => x[0]==="e");
-  const file = `${SOURCES[draft.source].dir}\\${draft.id || slug(draft.name)}.json`;
+  const file = fileOf({ ...draft, id:draft.id || slug(draft.name) });
   $("s-file").innerHTML = readOnly ? `Ships with GlossCode in <code>${esc(file)}</code>. <b>Make my own copy</b> to change it.`
     : `Saved as <code>${esc(file)}</code>.${draft.source==="shop" ? " Everyone who points GlossCode at the shop folder sees it." : " Nobody else sees it unless you export it."}`;
 }
@@ -498,7 +560,13 @@ $("s-vars").addEventListener("input", ev => {
   if (f==="letter") drawVars();
   checkDraft();
 });
-$("s-vars").addEventListener("click", ev => { const b = ev.target.closest("[data-del]"); if (!b) return; draft.args.splice(+b.dataset.del, 1); drawVars(); checkDraft(); });
+$("s-vars").addEventListener("click", ev => {
+  const b = ev.target.closest("[data-del]");
+  if (!b) return;
+  draft.args.splice(+b.dataset.del, 1);
+  drawVars();
+  checkDraft();
+});
 $("s-add").onclick = () => {
   readEditor();
   const L = Object.keys(ARG_VAR).find(l => !draft.args.some(a => a.letter===l));
@@ -508,24 +576,45 @@ $("s-add").onclick = () => {
 $("s-scan").onclick = () => {
   readEditor();
   const refs = [...new Set([...draft.body.join("\n").matchAll(/#(\d+)/g)].map(m => +m[1]))].filter(n => VAR_ARG[n] && !draft.args.some(a => ARG_VAR[a.letter]===n)).sort((a, b) => a - b);
-  refs.forEach(n => { const L = VAR_ARG[n]; draft.args.push({ letter:L, name:L==="F" ? "FEED" : "", kind:L==="F" ? "feed" : "distance", required:true, desc:"" }); });
+  refs.forEach(n => {
+    const L = VAR_ARG[n];
+    draft.args.push({ letter:L, name:L==="F" ? "FEED" : "", kind:L==="F" ? "feed" : "distance", required:true, desc:"" });
+  });
   drawVars(); checkDraft();
   $("s-msg").textContent = refs.length ? `Added ${refs.map(n => VAR_ARG[n]).join(", ")}. Give each a gloss name and say what it is.` : "Every # the body reads is already a variable.";
 };
 sdlg.addEventListener("input", ev => { if (ev.target.closest("#s-vars")) return; delArmed = false; $("s-del").textContent = "Delete"; checkDraft(); });
 sdlg.addEventListener("change", ev => { if (ev.target.id==="s-units") drawVars(); if (!ev.target.closest("#s-vars")) checkDraft(); });
-$("s-save").onclick = () => {
-  readEditor(); if (problems().some(x => x[0]==="e")) return;
+// The file a subprogram is saved as: everything but where GlossCode found it.
+function fileText(e){
+  const { source, file, ...rest } = e;
+  return JSON.stringify(rest, null, 2) + "\n";
+}
+$("s-save").onclick = async () => {
+  readEditor();
+  if (problems().some(x => x[0]==="e")) return;
   const d = draft;
-  if (!d.id) { let id = slug(d.name), n = 2; while (LIB.some(e => e.id===id)) id = slug(d.name) + "-" + n++; d.id = id; }
+  if (!d.id) {
+    let id = slug(d.name), n = 2;
+    while (LIB.some(e => e.id===id)) id = slug(d.name) + "-" + n++;
+    d.id = id;
+  }
+  if (NATIVE) {
+    try {
+      d.file = await NATIVE.saveLibrary(d.id, fileText(d));
+    } catch (err) {
+      $("s-msg").textContent = `Couldn't save: ${err}`;
+      return;
+    }
+  }
   const i = LIB.findIndex(e => e.id===editId);
-  if (i >= 0) LIB[i] = d; else LIB.push(d);
+  if (i >= 0) LIB[i] = d;
+  else LIB.push(d);
   cache.clear();
   lSel = d.id;
-  sdlg.hidden = true;
-  if (!ldlg.hidden) drawLibrary(); else ed.focus({ preventScroll:true });
+  closeEditor();
   render();
-  setMsg(`Saved ${SOURCES[d.source].dir}\\${d.id}.json.`);
+  setMsg(`Saved ${fileOf(d)}.`);
 };
 $("s-copy").onclick = () => {
   const src = draft, copy = JSON.parse(JSON.stringify(src));
@@ -534,20 +623,43 @@ $("s-copy").onclick = () => {
   draft = copy; editId = null; readOnly = false; drawEditor();
   $("s-msg").textContent = `A copy in your library as O${copy.program}. The built-in one stays as it is.`;
 };
-$("s-del").onclick = () => {
-  if (!delArmed){ delArmed = true; $("s-del").textContent = "Click again to delete"; $("s-msg").textContent = callsIn(draft) ? `This file still calls O${draft.program} ${callsIn(draft)} time${callsIn(draft) > 1 ? "s" : ""}; the calls stay but can't be shown.` : ""; return; }
-  const i = LIB.findIndex(e => e.id===editId); if (i >= 0) LIB.splice(i, 1);
-  cache.clear(); sdlg.hidden = true; lSel = null; if (!ldlg.hidden) drawLibrary(); render();
-  setMsg(`Deleted ${draft.name}. It's in the Recycle Bin if you need it back.`);
+$("s-del").onclick = async () => {
+  if (!delArmed){
+    delArmed = true;
+    $("s-del").textContent = "Click again to delete";
+    $("s-msg").textContent = callsIn(draft) ? `This file still calls O${draft.program} ${callsIn(draft)} time${callsIn(draft) > 1 ? "s" : ""}; the calls stay but can't be shown.` : "";
+    return;
+  }
+  if (NATIVE && draft.source==="mine") {
+    try {
+      await NATIVE.deleteLibrary(editId);
+    } catch (err) {
+      $("s-msg").textContent = `Couldn't delete: ${err}`;
+      return;
+    }
+  }
+  const i = LIB.findIndex(e => e.id===editId);
+  // A file that replaced a built-in subprogram brings the built-in one back.
+  const builtin = LIBRARY.find(e => e.id===editId && e.source==="builtin");
+  if (i >= 0) {
+    if (builtin) LIB[i] = { ...builtin };
+    else LIB.splice(i, 1);
+  }
+  cache.clear();
+  lSel = null;
+  closeEditor();
+  render();
+  setMsg(`Deleted ${draft.name}${builtin ? ". The built-in one is back" : ""}.`);
 };
 $("s-export").onclick = () => {
   readEditor();
   const d = draft;
   $("s-msg").innerHTML = (d.private ? `<b>${esc(d.name)} is marked private.</b> Export asks before writing it and leaves out the notes. ` : "")
-    + `Export writes <code>${esc(d.id || slug(d.name))}.json</code> for other GlossCode users, or <code>O${d.program}.nc</code> (just the body) to load on the control.`;
+    + (NATIVE ? `Export isn't built into the program yet. To share it, copy <code>${esc(fileOf({ ...d, id:d.id || slug(d.name) }))}</code>.`
+      : `Export writes <code>${esc(d.id || slug(d.name))}.json</code> for other GlossCode users, or <code>O${d.program}.nc</code> (just the body) to load on the control.`);
 };
 $("s-cancel").onclick = $("s-x").onclick = closeEditor;
-sdlg.addEventListener("keydown", ev => { ev.stopPropagation(); if (ev.key==="Escape"){ ev.preventDefault(); closeEditor(); } });
+dialogKeys(sdlg, closeEditor);
 
 // Insert › Save N1000 to the library…: the M97 block the cursor is in (or the one the selected line calls).
 function localSubAt(li){
@@ -590,5 +702,30 @@ Object.defineProperty(MENUS, "Insert", { enumerable:true, configurable:true, get
   return [...items.slice(0, at), ...lib, ...items.slice(at)];
 }});
 window.openLibrary = openLibrary; window.openLibEditor = openEditor;
+// The program has no shop folder yet, so its editor only saves to the user's own library.
+if (NATIVE) $("s-where").querySelector('option[value="shop"]').remove();
 render();
+
+// Reads the user's own library folder. A file with a built-in subprogram's id replaces it.
+async function loadMine(){
+  let files;
+  try {
+    files = await NATIVE.library();
+  } catch (err) {
+    setMsg(`Couldn't read your subprogram library: ${err}`);
+    return;
+  }
+  for (const { path, entry } of files) {
+    if (!entry.id || !entry.program || !Array.isArray(entry.body) || !Array.isArray(entry.args)) continue;
+    const e = { ...entry, source:"mine", file:path };
+    const i = LIB.findIndex(x => x.id===e.id);
+    if (i >= 0) LIB[i] = e;
+    else LIB.push(e);
+  }
+  if (files.length) {
+    cache.clear();
+    render();
+  }
+}
+if (NATIVE) loadMine();
 })();

@@ -100,7 +100,7 @@ const MENUS = {
     { label:"About the dictionary", fn:() => setMsg("Words come from gcode-words.json plus the selected machine's file.") }
   ]
 };
-const menubar = document.getElementById("menubar");
+const menubar = $("menubar");
 let openMenu = null, menuEl = null;
 menubar.innerHTML = Object.keys(MENUS).map(m => `<span class="mi" data-m="${m}">${m}</span>`).join("")
   + `<span class="mchip" id="mchip" role="button" tabindex="0" aria-haspopup="menu" title="Machine profile"></span>`;
@@ -144,8 +144,8 @@ function popMenu(btn, list){
   const again = popBtn===btn; closePop(); if (again) return;
   popEl = document.createElement("div"); popEl.className = "menu pop"; popBtn = btn;
   popEl.innerHTML = menuHTML(list, false);
-  document.getElementById("app").appendChild(popEl);
-  const b = btn.getBoundingClientRect(), a = document.getElementById("app").getBoundingClientRect(), w = popEl.offsetWidth;
+  $("app").appendChild(popEl);
+  const b = btn.getBoundingClientRect(), a = $("app").getBoundingClientRect(), w = popEl.offsetWidth;
   popEl.style.left = Math.max(4, Math.min(b.right - a.left - w, a.width - w - 4)) + "px";
   popEl.style.top = (b.bottom - a.top + 2) + "px";
   btn.setAttribute("aria-expanded", "true");
@@ -155,7 +155,12 @@ function closePop(){ popEl?.remove(); popEl = null; popBtn?.setAttribute("aria-e
 document.addEventListener("mousedown", e => { if (popEl && !popEl.contains(e.target) && !popBtn.contains(e.target)) closePop(); }, true);
 document.addEventListener("keydown", e => { if (popEl && e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); closePop(); } }, true);
 function closeMenu(){ menuEl?.remove(); menuEl = null; menubar.querySelectorAll(".open").forEach(x => x.classList.remove("open")); openMenu = null; }
-menubar.addEventListener("mousedown", e => { const mi = e.target.closest(".mi"); if (!mi) return; e.preventDefault(); openMenu===mi.dataset.m ? closeMenu() : showMenu(mi.dataset.m); });
+menubar.addEventListener("mousedown", e => {
+  const mi = e.target.closest(".mi");
+  if (!mi) return;
+  e.preventDefault();
+  openMenu===mi.dataset.m ? closeMenu() : showMenu(mi.dataset.m);
+});
 menubar.addEventListener("mouseover", e => { const mi = e.target.closest(".mi"); if (mi && openMenu && openMenu!==mi.dataset.m) showMenu(mi.dataset.m); });
 document.addEventListener("mousedown", e => { if (openMenu && !menubar.contains(e.target)) closeMenu(); });
 
@@ -167,10 +172,16 @@ document.addEventListener("keydown", e => {
   const c = new KeyboardEvent("keydown", { key:e.key, code:e.code, ctrlKey:e.ctrlKey, shiftKey:e.shiftKey, altKey:e.altKey, metaKey:e.metaKey, repeat:e.repeat, bubbles:true, cancelable:true });
   if (!ed.dispatchEvent(c)) e.preventDefault();
 });
-document.getElementById("app").addEventListener("keydown", e => {
+$("app").addEventListener("keydown", e => {
   const k = e.key.toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
   if (activeTab < 0 && !(ctrl && (k==="o" || k==="n"))) return;   // the home page has no program
-  if (!cdlg.hidden){ if (e.key==="Escape" || e.key==="F1"){ e.preventDefault(); cdlg.hidden = true; ed.focus({preventScroll:true}); } return; }
+  if (!cdlg.hidden){
+    if (e.key==="Escape" || e.key==="F1"){
+      e.preventDefault();
+      hideDialog(cdlg);
+    }
+    return;
+  }
   if (e.key==="F1"){ e.preventDefault(); openCycleHelp(); return; }
   if (e.key==="F5"){ e.preventDefault(); if (editing && !commit()) return; togglePlay(); return; }
   if (ctrl && k==="f"){ e.preventDefault(); openFind(); return; }
@@ -197,7 +208,10 @@ document.getElementById("app").addEventListener("keydown", e => {
   else if (e.shiftKey && e.key==="ArrowUp"){ e.preventDefault(); extendSel(Math.max(0, curLine-1)); }
   else if (e.key==="ArrowDown"){ e.preventDefault(); moveLine(1); }
   else if (e.key==="ArrowUp"){ e.preventDefault(); moveLine(-1); }
-  else if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)){ e.preventDefault(); startLineEdit(curLine, null, e.key==="ArrowLeft" || e.key==="Home" ? 0 : null); }
+  else if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)){
+    e.preventDefault();
+    startLineEdit(curLine, null, e.key==="ArrowLeft" || e.key==="Home" ? 0 : null);
+  }
   else if (e.key==="Enter" && e.shiftKey){ e.preventDefault(); newLine(curLine); }
   else if (e.key==="Enter" || e.key===" "){ e.preventDefault(); editLineEnd(); }
   else if ((e.key==="Delete" || e.key==="Backspace") && selRange()){ e.preventDefault(); deleteLine(); }

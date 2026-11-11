@@ -21,6 +21,8 @@ int plat_write_file(const char *path, const char *data, size_t len, char *err, s
 /* Creates a folder and any missing parents. Returns 0 when it exists afterwards. */
 int plat_make_dirs(const char *path);
 int plat_file_exists(const char *path);
+/* Deletes a file. Returns 0 on success, or -1 with a message in err. */
+int plat_remove_file(const char *path, char *err, size_t errsz);
 /* The absolute form of a path (relative paths are taken from the current folder). Returns a malloc'd string. */
 char *plat_full_path(const char *path);
 

@@ -356,6 +356,120 @@ static void bind_save_settings(const char *id, const char *req, void *arg)
     free(path);
 }
 
+/* The personal subprogram library: one JSON file per subprogram in the library folder inside the settings folder
+   (docs/subprogram-library.md). The UI owns the contents; these list, write and delete the files. */
+static char *library_dir(void)
+{
+    return path_join(plat_get_dirs()->config, "library");
+}
+
+/* A library id is also its file name, so it may only hold lower-case letters, digits and dashes. */
+static int library_id_ok(const char *s)
+{
+    if (!s || !*s || strlen(s) > 80) return 0;
+    for (; *s; s++)
+        if (!(islower((unsigned char)*s) || isdigit((unsigned char)*s) || *s == '-')) return 0;
+    return 1;
+}
+
+static void add_library_file(const char *path, const char *name, void *arg)
+{
+    gc_buf *b = arg;
+    size_t n = 0;
+    char *text = plat_read_file(path, &n);
+    char err[200];
+    gc_json *j = text ? gc_json_parse(text, n, err, sizeof err) : NULL;
+    if (!j || !gc_json_is_obj(j)) {
+        fprintf(stderr, "Ignoring %s: %s\n", path, j ? "not a JSON object" : text ? err : "can't read it");
+    } else {
+        if (b->len > 1) gc_buf_putc(b, ',');
+        gc_buf_puts(b, "{\"path\":");
+        gc_buf_json_str(b, path);
+        gc_buf_puts(b, ",\"name\":");
+        gc_buf_json_str(b, name);
+        gc_buf_puts(b, ",\"entry\":");
+        gc_json_write(b, j);
+        gc_buf_putc(b, '}');
+    }
+    gc_json_free(j);
+    free(text);
+}
+
+/* gcLibrary(): [{ path, name, entry }] for each *.json in the personal library folder, in name order. */
+static void bind_library(const char *id, const char *req, void *arg)
+{
+    (void)req;
+    (void)arg;
+    char *dir = library_dir();
+    gc_buf b;
+    gc_buf_init(&b);
+    gc_buf_putc(&b, '[');
+    plat_list_dir(dir, ".json", add_library_file, &b);
+    gc_buf_putc(&b, ']');
+    reply(id, 1, gc_buf_str(&b));
+    gc_buf_free(&b);
+    free(dir);
+}
+
+/* gcSaveLibrary(id, text): writes <id>.json (text must be a JSON object) and resolves with its path. */
+static void bind_save_library(const char *id, const char *req, void *arg)
+{
+    (void)arg;
+    gc_json *a = args_of(req);
+    const char *lid = gc_json_str(gc_json_at(a, 0)), *text = gc_json_str(gc_json_at(a, 1));
+    char err[600];
+    gc_json *j = text ? gc_json_parse(text, strlen(text), err, sizeof err) : NULL;
+    char *dir = library_dir(), *file = NULL, *path = NULL;
+    if (!library_id_ok(lid)) {
+        reply_error(id, "gcSaveLibrary(id, text) needs an id of lower-case letters, digits and dashes");
+    } else if (!j || !gc_json_is_obj(j)) {
+        reply_error(id, "gcSaveLibrary(id, text) needs the text of a JSON object");
+    } else if (plat_make_dirs(dir) != 0) {
+        snprintf(err, sizeof err, "Couldn't create the library folder %s.", dir);
+        reply_error(id, err);
+    } else {
+        file = gc_xmalloc(strlen(lid) + 6);
+        sprintf(file, "%s.json", lid);
+        path = path_join(dir, file);
+        if (plat_write_file(path, text, strlen(text), err, sizeof err) != 0) {
+            reply_error(id, err);
+        } else {
+            gc_buf b;
+            gc_buf_init(&b);
+            gc_buf_json_str(&b, path);
+            reply(id, 1, gc_buf_str(&b));
+            gc_buf_free(&b);
+        }
+    }
+    free(path);
+    free(file);
+    free(dir);
+    gc_json_free(j);
+    gc_json_free(a);
+}
+
+/* gcDeleteLibrary(id): deletes <id>.json from the personal library folder. */
+static void bind_delete_library(const char *id, const char *req, void *arg)
+{
+    (void)arg;
+    gc_json *a = args_of(req);
+    const char *lid = gc_json_str(gc_json_at(a, 0));
+    if (!library_id_ok(lid)) {
+        gc_json_free(a);
+        reply_error(id, "gcDeleteLibrary(id) needs an id of lower-case letters, digits and dashes");
+        return;
+    }
+    char *dir = library_dir(), *file = gc_xmalloc(strlen(lid) + 6), err[600];
+    sprintf(file, "%s.json", lid);
+    char *path = path_join(dir, file);
+    if (plat_remove_file(path, err, sizeof err) != 0) reply_error(id, err);
+    else reply(id, 1, "null");
+    free(path);
+    free(file);
+    free(dir);
+    gc_json_free(a);
+}
+
 /* gcOpenUrl(url) */
 static void bind_open_url(const char *id, const char *req, void *arg)
 {
@@ -516,6 +630,9 @@ int gc_main(int argc, char **argv)
     webview_bind(W, "gcExists", bind_exists, NULL);
     webview_bind(W, "gcSettings", bind_settings, NULL);
     webview_bind(W, "gcSaveSettings", bind_save_settings, NULL);
+    webview_bind(W, "gcLibrary", bind_library, NULL);
+    webview_bind(W, "gcSaveLibrary", bind_save_library, NULL);
+    webview_bind(W, "gcDeleteLibrary", bind_delete_library, NULL);
     webview_bind(W, "gcOpenUrl", bind_open_url, NULL);
     webview_bind(W, "gcSetTitle", bind_set_title, NULL);
     webview_bind(W, "gcClipboard", bind_clipboard, NULL);

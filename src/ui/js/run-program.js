@@ -76,10 +76,20 @@ class SimRun {
       const li = i, toks = doc[i]; this.curLi = li;
       if (simBD && isBlockDel(toks)){ i++; continue; }   // Block delete is on: the control skips "/" lines
       // A Fagor local subroutine (%L NAME … M17) only runs when it's called
-      if ((/^%L /.test(toks[0] || "") || (SYNTAX==="fagor8055" && toks.some(t => /^\(SUB ?\d+\)$/.test(t)))) && !entering){ let k = i+1; while (k < doc.length && !isReturn(doc[k])) k++; i = k+1; continue; }
+      if ((/^%L /.test(toks[0] || "") || (SYNTAX==="fagor8055" && toks.some(t => /^\(SUB ?\d+\)$/.test(t)))) && !entering){
+        let k = i+1;
+        while (k < doc.length && !isReturn(doc[k])) k++;
+        i = k+1;
+        continue;
+      }
       entering = false;
       // An Okuma lathe's LAP contour (G81/G82/G83 … G80) only runs from a G85/G87 line: in order, it's passed over.
-      if (this.okL && toks.some(t => isCode(t,"G81") || isCode(t,"G82") || isCode(t,"G83"))){ let k = i+1; while (k < doc.length && !doc[k].some(t => isCode(t,"G80"))) k++; i = k+1; continue; }
+      if (this.okL && toks.some(t => isCode(t,"G81") || isCode(t,"G82") || isCode(t,"G83"))){
+        let k = i+1;
+        while (k < doc.length && !doc[k].some(t => isCode(t,"G80"))) k++;
+        i = k+1;
+        continue;
+      }
       // Fagor 8055: an N after the first word runs the line that many times (N0: the move without the active cycle)
       const rep = SYNTAX==="fagor8055" ? toks.find((t, k) => refN(toks, k) && /^N\d+$/.test(t)) : null, reps = rep ? parseInt(rep.slice(1), 10) : 1;
       const s0 = segs.length, dips = []; this.turns = 0; this.engZ = null;
@@ -107,7 +117,11 @@ class SimRun {
     if (this.lathe || (!this.rot && this.mir.x==null && this.mir.y==null)) return q;
     let x = q.x, y = q.y;
     if (this.mir.x!=null) x = 2*this.mir.x - x; if (this.mir.y!=null) y = 2*this.mir.y - y;
-    if (this.rot){ const dx = x - this.rot.cx, dy = y - this.rot.cy, c = Math.cos(this.rot.a), s = Math.sin(this.rot.a); x = this.rot.cx + dx*c - dy*s; y = this.rot.cy + dx*s + dy*c; }
+    if (this.rot){
+      const dx = x - this.rot.cx, dy = y - this.rot.cy, c = Math.cos(this.rot.a), s = Math.sin(this.rot.a);
+      x = this.rot.cx + dx*c - dy*s;
+      y = this.rot.cy + dx*s + dy*c;
+    }
     return { ...q, x, y };
   }
   xfVec(v){ const o = this.xfPt({ x:v.x, y:v.y }), z = this.xfPt({ x:0, y:0 }); return { x:o.x - z.x, y:o.y - z.y }; }
@@ -200,7 +214,10 @@ class SimRun {
     if (skip || unknown) return;
     const inc = this.dist==="inc";
     if (shift){   // G50 X Z: the tool's position becomes X Z. With G91 (or U W), the zero moves by the amounts.
-      for (const [a, A, I] of [["x","X","U"], ["z","Z","W"]]){ if (A in w) this.off[a] = inc ? this.off[a] - w[A] : this.p[a] - w[A]; if (I in w) this.off[a] -= w[I]; }
+      for (const [a, A, I] of [["x","X","U"], ["z","Z","W"]]){
+        if (A in w) this.off[a] = inc ? this.off[a] - w[A] : this.p[a] - w[A];
+        if (I in w) this.off[a] -= w[I];
+      }
       return;
     }
     const T = this.tool || "T?", has = c => toks.some(t => isCode(t, c));
@@ -221,12 +238,22 @@ class SimRun {
     if (this.okL && has("G74")){ this.groove(n, w, li, T); return; }
     if (this.okL && has("G73")){ this.grooveX(n, w, li, T); return; }
     if (this.okL && (has("G77") || has("G78"))){ this.tapZ(n, w, li, T); return; }
-    if (this.okL && has("G71") && "H" in w){ this.threadPasses(n, this.okumaThreadDepths(w, toks), 2*(w.I || 0), li, T, this.okumaThreadFlank(w, toks)); return; }
-    if (this.lathe && !SYNTAX && has("G76") && DIALECT.cycles?.G76?.requires?.includes("K") && "K" in w){ this.threadPasses(n, this.haasThreadDepths(w), 2*(w.I || 0), li, T, null); return; }
+    if (this.okL && has("G71") && "H" in w){
+      this.threadPasses(n, this.okumaThreadDepths(w, toks), 2*(w.I || 0), li, T, this.okumaThreadFlank(w, toks));
+      return;
+    }
+    if (this.lathe && !SYNTAX && has("G76") && DIALECT.cycles?.G76?.requires?.includes("K") && "K" in w){
+      this.threadPasses(n, this.haasThreadDepths(w), 2*(w.I || 0), li, T, null);
+      return;
+    }
     if (this.cyc && !this.noCyc){
       this.cycWords(w, n);
       if (w.L===0){   // stored for the holes that follow, nothing drilled here; the tool goes over to X Y (a bolt circle's center)
-        if (!this.lathe && Math.hypot(n.x - this.p.x, n.y - this.p.y) > 1e-9){ const b = { x:n.x, y:n.y, z:this.p.z }; this.segs.push({ a:{...this.p}, b, rapid:true, kind:"rapid", li, tool:T }); this.p = b; }
+        if (!this.lathe && Math.hypot(n.x - this.p.x, n.y - this.p.y) > 1e-9){
+          const b = { x:n.x, y:n.y, z:this.p.z };
+          this.segs.push({ a:{...this.p}, b, rapid:true, kind:"rapid", li, tool:T });
+          this.p = b;
+        }
         return;
       }
       this.hole(n, li, T, dips); return;
@@ -242,7 +269,11 @@ class SimRun {
     let skip = false, unknown = false, shift = false;
     toks.forEach((t, idx) => {
       if (isComment(t) || skip) return;
-      if (t[0]==="#"){ const m = /^#(\d+)=(.+)$/.exec(t); if (m){ const v = this.calc(m[2]); this.V[+m[1]] = v; if (+m[1] > 0 && +m[1] < 1000) this.noteSet("#" + m[1], v); } return; }
+      if (t[0]==="#"){
+        const m = /^#(\d+)=(.+)$/.exec(t);
+        if (m){ const v = this.calc(m[2]); this.V[+m[1]] = v; if (+m[1] > 0 && +m[1] < 1000) this.noteSet("#" + m[1], v); }
+        return;
+      }
       const nm = /^([A-Z][A-Z0-9]+)=(.+)$/.exec(t); if (nm){ const v = this.calc(nm[2]); this.NV[nm[1]] = v; if (this.okVars) this.noteSet(nm[1], v); return; }
       if (SYNTAX==="fagor8055" && t[0]==="("){ this.fagorParams(t); return; }   // (P1 = 2, P2 = P1*3)
       if (isMacroTok(t)) return;
@@ -254,13 +285,22 @@ class SimRun {
         v *= nums.increment[lineState[li]?.units || "inch"];
       if (isVarVal(t)){
         v = this.calc(t.slice(1).replace(/^=/, ""));
-        if (!inLib){ const key = li + ":" + idx, list = (this.vals[key] ||= []); if (!list.some(x => x===v || (x!=null && v!=null && Math.abs(x - v) < 1e-9))) list.push(v); }
+        if (!inLib){
+          const key = li + ":" + idx, list = (this.vals[key] ||= []);
+          if (!list.some(x => x===v || (x!=null && v!=null && Math.abs(x - v) < 1e-9))) list.push(v);
+        }
         if (v==null){ if ("XYZUWIJKR".includes(k)) unknown = true; return; }
       }
-      if (k==="G"){ if ([0,1,2,3].includes(v)){ this.mode = v; this.cyc = null; } if ((DIALECT.modalGroups?.distance || []).includes(pad2(t))) this.dist = isIncCode(pad2(t)) ? "inc" : "abs"; if (!this.lathe && (v===98 || v===99)) this.ret = "G"+v;
+      if (k==="G"){ if ([0,1,2,3].includes(v)){
+        this.mode = v;
+        this.cyc = null;
+      } if ((DIALECT.modalGroups?.distance || []).includes(pad2(t))) this.dist = isIncCode(pad2(t)) ? "inc" : "abs"; if (!this.lathe && (v===98 || v===99)) this.ret = "G"+v;
         if (v===80) this.cyc = null;
         if (v===40) this.comp = null; if (v===41) this.comp = "L"; if (v===42) this.comp = "R";
-        if ((!this.lathe || this.latheDrill(pad2(t))) && DIALECT.cycles?.[pad2(t)]){ if (this.cyc==null){ this.cycZ = this.p.z; this.cycR = this.cycD = this.cycQ = null; } this.cyc = pad2(t); }
+        if ((!this.lathe || this.latheDrill(pad2(t))) && DIALECT.cycles?.[pad2(t)]){
+          if (this.cyc==null){ this.cycZ = this.p.z; this.cycR = this.cycD = this.cycQ = null; }
+          this.cyc = pad2(t);
+        }
         if (this.lathe && pad2(t)===coordSetCode()){ shift = true; return; }   // a spindle clamp (G50 S, or G92 S in systems B and C), or with X/Z a zero shift
         if (v===28||v===53||v===50||v===4||(v===65 && !DIALECT.codeWords?.G65)){ skip = true; return; } }
       else if (k==="M" && (v===97 || v===98)) skip = true;
@@ -274,13 +314,20 @@ class SimRun {
   millSetting(w, has, li, T, dips){
     const M = DIALECT.mirror, R = DIALECT.rotate, C = DIALECT.cylMap, gs = o => Object.keys(o || {}).find(c => /^G\d/.test(c) && has(c));
     if (M?.on && has(M.on)){ for (const a of ["x", "y"]) if (a.toUpperCase() in w) this.mir[a] = M.about==="value" ? w[a.toUpperCase()] : 0; return true; }
-    if (M?.off && has(M.off)){ const ax = ["x", "y"].filter(a => a.toUpperCase() in w); (ax.length ? ax : ["x", "y"]).forEach(a => this.mir[a] = null); return true; }
+    if (M?.off && has(M.off)){
+      const ax = ["x", "y"].filter(a => a.toUpperCase() in w);
+      (ax.length ? ax : ["x", "y"]).forEach(a => this.mir[a] = null);
+      return true;
+    }
     if (R?.on && has(R.on)){
       const [ca, cb] = R.center || ["X", "Y"], an = R.angle || "R";
       this.rot = { cx: ca in w ? w[ca] : this.p.x, cy: cb in w ? w[cb] : this.p.y, a: (w[an] || 0)*Math.PI/180 };
       if (this.rotNote) this.rotNote.until = this.steps.length;
       this.rotNote = null;
-      if (!(an in w)){ this.rotNote = { li, k:this.steps.length, until:null, short:`${R.on}: no ${an}, not turned`, text:`${R.on} has no ${an}: the angle isn't in the program${DIALECT.rotate?.setting ? ` (it comes from ${DIALECT.rotate.setting})` : ""}, so the toolpath isn't turned` }; this.notes.push(this.rotNote); }
+      if (!(an in w)){
+        this.rotNote = { li, k:this.steps.length, until:null, short:`${R.on}: no ${an}, not turned`, text:`${R.on} has no ${an}: the angle isn't in the program${DIALECT.rotate?.setting ? ` (it comes from ${DIALECT.rotate.setting})` : ""}, so the toolpath isn't turned` };
+        this.notes.push(this.rotNote);
+      }
       return true;
     }
     if (R?.off && has(R.off)){ this.rot = null; if (this.rotNote){ this.rotNote.until = this.steps.length + 1; this.rotNote = null; } }
@@ -302,7 +349,11 @@ class SimRun {
     if (!this.lathe && (this.mode===2 || this.mode===3)){
       let cx = this.p.x + (w.I||0), cy = this.p.y + (w.J||0);
       if (!("I" in w) && !("J" in w) && w.R){   // by radius: the center is R from both ends (minus R: the longer way round)
-        const dx = n.x - this.p.x, dy = n.y - this.p.y, ch = Math.hypot(dx, dy), d = Math.sqrt(Math.max(0, w.R*w.R - ch*ch/4)), s = (this.mode===2 ? -1 : 1)*(w.R < 0 ? -1 : 1);
+        const dx = n.x - this.p.x;
+        const dy = n.y - this.p.y;
+        const ch = Math.hypot(dx, dy);
+        const d = Math.sqrt(Math.max(0, w.R*w.R - ch*ch/4));
+        const s = (this.mode===2 ? -1 : 1)*(w.R < 0 ? -1 : 1);
         if (ch > 1e-9){ cx = (this.p.x + n.x)/2 - s*d*dy/ch; cy = (this.p.y + n.y)/2 + s*d*dx/ch; }
       }
       const rr = Math.hypot(this.p.x-cx, this.p.y-cy);
@@ -311,8 +362,16 @@ class SimRun {
       this.turns += Math.abs(sw)/(2*Math.PI);
       let q = {...this.p};
       const ns = arcSteps(sw, 36);
-      for (let s = 1; s <= ns; s++){ const a = a0 + sw*s/ns; const nn = {x:cx+rr*Math.cos(a), y:cy+rr*Math.sin(a), z:this.p.z+(n.z-this.p.z)*s/ns}; this.segs.push({a:q, b:nn, rapid:false, kind:"arc", li, tool:T}); q = nn; }
-    } else if (this.lathe && (this.mode===2 || this.mode===3)){ let q = this.p; for (const pt of this.arcPts(this.p, n, w, this.mode)){ this.segs.push({a:{...q}, b:pt, rapid:false, kind, li, tool:T}); q = pt; } }
+      for (let s = 1; s <= ns; s++){
+        const a = a0 + sw*s/ns;
+        const nn = {x:cx+rr*Math.cos(a), y:cy+rr*Math.sin(a), z:this.p.z+(n.z-this.p.z)*s/ns};
+        this.segs.push({a:q, b:nn, rapid:false, kind:"arc", li, tool:T});
+        q = nn;
+      }
+    } else if (this.lathe && (this.mode===2 || this.mode===3)){
+      let q = this.p;
+      for (const pt of this.arcPts(this.p, n, w, this.mode)){ this.segs.push({a:{...q}, b:pt, rapid:false, kind, li, tool:T}); q = pt; }
+    }
     else {
       const sg = {a:{...this.p}, b:n, rapid: this.mode===0, kind, li, tool:T};
       if (this.corner && this.mode===1 && this.corner.seg===this.segs.length-1) this.cornerTo(sg);
@@ -367,7 +426,11 @@ class SimRun {
     const text = cm ? cm.slice(1).replace(/\)$/, "") : "", h = w.J*(DIALECT.engrave.charHeight ?? 1);
     const x0 = "X" in w ? (inc ? this.p.x + w.X : w.X) : this.p.x, y0 = "Y" in w ? (inc ? this.p.y + w.Y : w.Y) : this.p.y;
     const r = "R" in w ? w.R : this.p.z, z = "Z" in w ? w.Z : r;
-    const go = (b, rapid, kind, extra) => { if (Math.hypot(b.x - this.p.x, b.y - this.p.y, b.z - this.p.z) < 1e-9) return; this.segs.push({ a:{...this.p}, b, rapid, kind, li, tool:T, ...extra }); this.p = b; };
+    const go = (b, rapid, kind, extra) => {
+      if (Math.hypot(b.x - this.p.x, b.y - this.p.y, b.z - this.p.z) < 1e-9) return;
+      this.segs.push({ a:{...this.p}, b, rapid, kind, li, tool:T, ...extra });
+      this.p = b;
+    };
     if (!(w.J > 0) || !text.trim()){ go({ x:x0, y:y0, z:this.p.z }, true, "rapid"); return; }
     const an = (w.I || 0)*Math.PI/180, c = Math.cos(an), sn = Math.sin(an);
     const at = (u, v, zz) => ({ x:x0 + u*c - v*sn, y:y0 + u*sn + v*c, z:zz });
@@ -394,7 +457,10 @@ class SimRun {
       if (!t.length) continue;
       if (!t.some(x => isCode(x, DIALECT.engrave.code))) return null;
       const o = {};
-      for (const x of t){ const m = /^([XYJIP])([-+]?(?:\d+\.?\d*|\.\d+))$/.exec(x); if (m) o[m[1]] = parseFloat(m[2]); else if (/^[XYJIP]/.test(x)) return null; }
+      for (const x of t){
+        const m = /^([XYJIP])([-+]?(?:\d+\.?\d*|\.\d+))$/.exec(x);
+        if (m) o[m[1]] = parseFloat(m[2]); else if (/^[XYJIP]/.test(x)) return null;
+      }
       return o.J > 0 ? o : null;
     }
     return null;
@@ -415,7 +481,10 @@ class SimRun {
   // A hole: over to X Y at the current height (rapid, or along via), rapid down to R, feed to the bottom, back up to R or the start.
   hole(n, li, T, dips, via){
     const r = this.cycR ?? 0.1, z = this.cycD ?? n.z, back = this.ret==="G99" ? r : Math.max(this.cycZ ?? r, r);
-    if (via){ let q = {...this.p}; for (const v of via){ const b = { x:v.x, y:v.y, z:this.p.z }; this.segs.push({a:q, b, rapid:false, kind:"feed", li, tool:T}); q = b; } }
+    if (via){
+      let q = {...this.p};
+      for (const v of via){ const b = { x:v.x, y:v.y, z:this.p.z }; this.segs.push({a:q, b, rapid:false, kind:"feed", li, tool:T}); q = b; }
+    }
     else this.segs.push({a:{...this.p}, b:{x:n.x, y:n.y, z:this.p.z}, rapid:true, kind:"rapid", li, tool:T});
     if (this.p.z > r) this.segs.push({a:{x:n.x, y:n.y, z:this.p.z}, b:{x:n.x, y:n.y, z:r}, rapid:true, kind:"rapid", li, tool:T});
     this.segs.push({a:{x:n.x, y:n.y, z:r}, b:{x:n.x, y:n.y, z}, rapid:false, kind:"cyc", li, tool:T, hole:true});
@@ -477,7 +546,11 @@ class SimRun {
     } else C = { u:A.u + (w.K || 0), v:A.v + (w.I || 0) };
     const rr = Math.hypot(A.u - C.u, A.v - C.v), a0 = Math.atan2(A.v - C.v, A.u - C.u), a1 = Math.atan2(B.v - C.v, B.u - C.u);
     let sw = a1 - a0; if (m===3){ if (sw <= 0) sw += 2*Math.PI; } else { if (sw >= 0) sw -= 2*Math.PI; }
-    const ns = arcSteps(sw, 24), out = []; for (let s = 1; s < ns; s++){ const an = a0 + sw*s/ns; out.push({ x:2*(C.v + rr*Math.sin(an)), y:0, z:C.u + rr*Math.cos(an), arc:true }); }
+    const ns = arcSteps(sw, 24), out = [];
+    for (let s = 1; s < ns; s++){
+      const an = a0 + sw*s/ns;
+      out.push({ x:2*(C.v + rr*Math.sin(an)), y:0, z:C.u + rr*Math.cos(an), arc:true });
+    }
     out.push({ ...b, arc:true }); return out;
   }
   // Haas one-line G76: K thread height and D first pass (radius). P3/P4 cut D each pass; P1/P2 (the default) keep the

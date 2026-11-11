@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Smoke test for the program: run as
        glosscode --ui tests/app_smoke.html <a G-code file>
-     It opens the file through the app, runs a core method, saves a copy beside it as <file>.smoke.nc with one
+     It opens the file through the app, runs a core method, writes, lists and deletes a personal library file, saves a copy beside it as <file>.smoke.nc with one
      line changed, and closes the window. tests/app_smoke.cmake checks the copy. -->
 <html><head><meta charset="utf-8"><title>GlossCode smoke test</title></head>
 <body>
@@ -16,6 +16,14 @@
     const t = await N.core("tokenize", { text:"g1x1." });
     if (t.tok.join(" ") !== "G1 X1.") throw new Error("tokenize gave " + JSON.stringify(t));
     log(f.doc.lines.length + " lines");
+    // The personal library folder: write one, find it, refuse an id that isn't a plain file name, delete it.
+    const path = await N.saveLibrary("smoke-test", JSON.stringify({ id:"smoke-test", program:9999, args:[], body:["O9999", "M99"] }));
+    const listed = await N.library();
+    if (!listed.some(x => x.path === path && x.entry.program === 9999)) throw new Error("library() gave " + JSON.stringify(listed));
+    if (await N.saveLibrary("../x", "{}").then(() => true, () => false)) throw new Error("saveLibrary took ../x");
+    await N.deleteLibrary("smoke-test");
+    if ((await N.library()).length) throw new Error("deleteLibrary left the file");
+    log("library ok");
     // Change the second block's words; every other block keeps its raw text.
     const lines = f.doc.lines.map((l, i) => i === 1 ? { tok:[...l.tok, "(SMOKE)"] } : l);
     const r = await N.save({ path:f.path + ".smoke.nc", name:f.name, latin1:f.latin1, doc:{ ...f.doc, lines } });

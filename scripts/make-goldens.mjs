@@ -14,24 +14,12 @@ const check = process.argv.includes("--check");
 const A = loadPage();
 mkdirSync("tests/golden/sim", { recursive:true });
 
-const MILLS = ["haas_vf2", "fanuc_0imf", "fanuc_0mc", "okuma_m560"], LATHES = ["haas_st10", "okuma_lb3000"];
-const PLASMAS = ["hyp_plasma", "acorn_plasma", "tormach_plasma"];
-const LATHE_FILES = ["LATHE_CHECKS.nc", "SHAFT_OD.nc", "LATHE_EDGE.nc", "CORNERS_LATHE.nc"], PLASMA_FILES = ["PLASMA_BRACKET.nc", "PLASMA_HYPERTHERM.nc", "PLASMA_ACORN.nc"];
-const OKUMA_FILES = ["OKUMA_PLATE.MIN", "OKUMA_CALLS.MIN"], OKUMA_LATHE_FILES = ["OKUMA_LATHE.MIN", "OKUMA_GRAPHIC.MIN"];
-// Lathes set to G code system B or C (generic machines on those controls), with a system A lathe for contrast.
-const SYSTEM_FILES = { "LATHE_SYSTEM_B.nc": ["gen.lathe.fanuclb", "gen.lathe.mazaklb", "gen.lathe.mitsubishilb", "gen.lathe.fanuc"],
-                       "LATHE_SYSTEM_C.nc": ["gen.lathe.fanuclc", "gen.lathe.mazaklc", "gen.lathe.fanuc"],
-                       "MITSU_M2.nc": ["gen.mill.mitsubishim2", "gen.mill.mitsubishi"],
-                       "FAGOR_8060.nc": ["gen.mill.fagor8060", "gen.mill.fanuc"],
-                       "FAGOR_8055.nc": ["gen.mill.fagor8055", "gen.mill.fagor8060"],
-                       "FAGOR_8055_PATTERNS.nc": ["gen.mill.fagor8055"],
-                       "FAGOR_8055_LATHE.nc": ["gen.lathe.fagor8055", "gen.lathe.fanuc"],
-                       "FAGOR_8060_LATHE.nc": ["gen.lathe.fagor8060", "gen.lathe.fagor8055"],
-                       "FAGOR_8060_LATHE_CHECKS.nc": ["gen.lathe.fagor8060"],
-                       "HEIDENHAIN.H": ["gen.mill.heidenhain"],
-                       "HEIDENHAIN_CHECKS.H": ["gen.mill.heidenhain"],
-                       "HAAS_PATTERNS.nc": ["haas_vf2", "gen.mill.fanuc"],
-                       "OKUMA_CYCLES.MIN": ["gen.lathe.okumau10l", "okuma_lb3000"] };
+// Which machines each program runs on: tests/machines.json.
+const SETUP = JSON.parse(readFileSync("tests/machines.json", "utf8"));
+const machinesFor = name => {
+  const m = SETUP.files[name] ?? SETUP.default;
+  return typeof m==="string" ? SETUP.groups[m] : m;
+};
 // The simulation's result as text: one line per step, segment and other entry, so a change shows as a short diff.
 const round = (k, v) => k==="xf" ? undefined : typeof v==="number" ? Math.round(v*1e6)/1e6 + 0 : v;
 const one = v => JSON.stringify(v, round);
@@ -57,10 +45,13 @@ const write = (file, out) => {
   if (check) console.error("Out of date:", file); else { writeFileSync(file, out); console.log("Wrote", file); }
 };
 const sources = ["examples", "tests/cases"].flatMap(dir => readdirSync(dir).sort().map(name => ({ dir, name })));
+const stale = Object.keys(SETUP.files).filter(f => !sources.some(s => s.name===f));
+if (stale.length) throw new Error(`tests/machines.json lists ${stale.join(", ")}, which isn't in examples/ or tests/cases/`);
+for (const [f, m] of Object.entries(SETUP.files)) if (typeof m==="string" && !SETUP.groups[m]) throw new Error(`tests/machines.json: ${f} names no group "${m}"`);
 for (const { dir, name } of sources){
   const text = readFileSync(dir + "/" + name, "latin1");
   const lines = text.split(/\r\n|\n|\r/); if (lines.length > 1 && lines[lines.length-1]==="") lines.pop();
-  const machines = SYSTEM_FILES[name] || (LATHE_FILES.includes(name) ? LATHES : OKUMA_LATHE_FILES.includes(name) ? ["okuma_lb3000", "haas_st10"] : PLASMA_FILES.includes(name) ? PLASMAS : OKUMA_FILES.includes(name) ? ["okuma_m560", ...MILLS.filter(m => m!=="okuma_m560")] : MILLS);
+  const machines = machinesFor(name);
   // The words are split the way the first machine's control does (Fagor 8060 has its own block syntax)
   A.use(machines[0], "words"); const syntax = A.syntax;
   const doc = []; for (const line of lines) A.splitBlocks(line).blocks.forEach(b => doc.push(A.tokenize(b)));

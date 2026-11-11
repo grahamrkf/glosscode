@@ -1,6 +1,6 @@
 # Subprogram library
 
-> **Status: in the mockup.** Insert › Subprogram library… works in [the UI](../src/ui/index.html). Try it on **SLOTS_PLATE.nc**.
+> **Status: works in the program for your own library.** Insert › Subprogram library… works in the program and in [the UI page](../src/ui/index.html) (try it on **SLOTS_PLATE.nc**). The program reads and saves your own library folder; the shop folder and **Export…** work only in the page opened in a browser so far, where nothing is written to disk.
 
 Some operations get reused across many programs, and only a few numbers change between parts. A slotting routine is a good example: the moves are the same every time, and only the slot's position, depth and feed change. The subprogram library keeps routines like that in one place. Each one has named variables. You can find it from the Insert menu, fill in the values for this part, and put it in the program.
 
@@ -132,6 +132,7 @@ The same three folders as machine definition files, each with a `library` folder
 | `<shop folder>\library` (the shop folder set in Settings, often a network path) | The shop | With everyone who points at that folder |
 | `%APPDATA%\GlossCode\library` (`~/.config/glosscode/library` on Linux) | The user | No |
 
+- In the program, the personal folder is read when GlossCode starts. **Save** writes `<id>.json` there (the id is the file name, so it's lower-case letters, digits and dashes), and **Delete** removes the file. The program doesn't have a shop folder setting yet.
 - Nothing in the shop or personal folder leaves the computer or network unless someone exports it.
 - Ids are unique across the three folders. A shop or personal file with a built-in file's id replaces it, and the window marks it **modified built-in**. **Make my own copy** gives the copy a new id, so the built-in one stays available.
 - **O numbers** should be unique too, since the control only has one O9101. The editor warns when two library subprograms share one, and the window picks the one written for the selected machine. Many shops keep reusable macros in the O9000s; on Fanuc a parameter can protect that range from editing. Check the control's manual before relying on that.
@@ -153,6 +154,7 @@ This reader is also the start of the "macro programs checked by running them" it
 
 ## Not done yet
 
+- **Shop folder and Export in the program.** The program reads and writes only the personal folder. It needs a shop folder setting, and Export needs a Save dialog for the `.json` and `O9101.nc` files.
 - **Checks inside a call.** The checks don't yet walk into a library subprogram's lines with the modes active at the call, the way they do for M97 subprograms. The reader already produces those lines, so this is mostly plumbing in `checkProgram()`.
 - **Save with the program.** When a program calls library subprograms, Save could list them and offer to write each `O9101.nc` next to the program, so they go to the control together.
 - **Re-insert written-in lines.** The comment line written first holds the values. Selecting it could reopen the window with those values and replace the lines.

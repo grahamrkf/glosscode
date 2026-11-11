@@ -4,7 +4,6 @@
    css/main.css (the editor's row heights follow them); the zoom is CSS zoom on the page. They're kept in
    settings.json as "text": { code, gloss, zoom } (see loadSettings in js/tabs.js). */
 (() => {
-const $ = id => document.getElementById(id);
 const DEF = { code:13, gloss:11, zoom:100 };
 const SIZES = { code:[11, 12, 13, 14, 15, 16, 18, 20], gloss:[9, 10, 11, 12, 13, 14, 16], zoom:[67, 75, 80, 90, 100, 110, 125, 150, 175, 200] };
 const T = { ...DEF };
@@ -43,9 +42,10 @@ window.openTextSize = () => {
   closeMenu?.();
   for (const k of Object.keys(DEF))
     $("t-" + k).innerHTML = SIZES[k].map(v => `<option value="${v}">${v}${k==="zoom" ? "%" : " px"}${v===DEF[k] ? " (default)" : ""}</option>`).join("");
-  fill(); tdlg.hidden = false; $("t-code").focus();
+  fill();
+  showDialog(tdlg, $("t-code"));
 };
-function closeTextSize(){ tdlg.hidden = true; $("ed")?.focus({ preventScroll:true }); }
+const closeTextSize = () => hideDialog(tdlg);
 for (const k of Object.keys(DEF)) $("t-" + k).addEventListener("change", e => set(k, +e.target.value, true));
 $("t-reset").addEventListener("click", () => { Object.assign(T, DEF); apply(); save(); fill(); });
 $("t-close").addEventListener("click", closeTextSize);

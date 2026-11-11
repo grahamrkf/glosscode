@@ -10,15 +10,18 @@ function stepIndexFor(li){
   return k < 0 ? st.length-1 : k;
 }
 function drawViews(){
-  const lathe = mtype()==="lathe", segs = EXEC.segs, v1 = document.getElementById("v1");
-  if (simX){ const r = v1.getBoundingClientRect(); v1.setAttribute("viewBox", `0 0 ${Math.max(120, Math.round(r.width))} ${Math.max(80, Math.round(r.height))}`); }
-  document.getElementById("v1h").innerHTML = lathe ? "Toolpath XZ <span>side profile, X as radius</span>" : "Toolpath XY <span>top view</span>";
+  const lathe = mtype()==="lathe", segs = EXEC.segs, v1 = $("v1");
+  if (simX){
+    const r = v1.getBoundingClientRect();
+    v1.setAttribute("viewBox", `0 0 ${Math.max(120, Math.round(r.width))} ${Math.max(80, Math.round(r.height))}`);
+  }
+  $("v1h").innerHTML = lathe ? "Toolpath XZ <span>side profile, X as radius</span>" : "Toolpath XY <span>top view</span>";
   const fx = lathe ? (p => p.z) : (p => p.x), fy = lathe ? (p => p.x/2) : (p => p.y);
   // which moves are done, current, or still to come
   let doneTo, curFrom;
   if (simIdx!=null){ doneTo = simIdx; const st = EXEC.steps.find(s => s.s0 <= simIdx-1 && simIdx-1 < s.s1); curFrom = st ? st.s0 : simIdx; }
   else { const st = EXEC.steps[stepIndexFor(curLine)]; curFrom = st ? st.s0 : 0; doneTo = st ? st.s1 : 0; }
-  const [ , , W, H] = v1.getAttribute("viewBox").split(" ").map(Number);
+  const [ , , width, height] = v1.getAttribute("viewBox").split(" ").map(Number);
   // The view fits the cutting moves: rapids far from the part (a home return to X20. Z20.) would shrink it to a dot,
   // so they're drawn but left out of the fit and run off the edge. Zoom and pan (VIEWWIN) replace the fit.
   const cut = segs.filter(s => !s.rapid);
@@ -34,8 +37,8 @@ function drawViews(){
   }).filter(Boolean);
   wrapR.forEach(r => { if (r.turn!=null) pts.push({ x:r.xa, y:r.ya, z:0 }, { x:r.xb, y:r.yb, z:0 }); });
   if (!pts.length){   // nothing moves yet (a new program): clear the toolpath, timeline and position
-    v1.innerHTML = ""; document.getElementById("tleg").innerHTML = ""; document.getElementById("s-pos").textContent = "No moves yet";
-    document.getElementById("tlsvg").innerHTML = document.getElementById("tlgrid").innerHTML = ""; document.getElementById("tlnow").textContent = ""; tlSteps = []; return; }
+    v1.innerHTML = ""; $("tleg").innerHTML = ""; $("s-pos").textContent = "No moves yet";
+    $("tlsvg").innerHTML = $("tlgrid").innerHTML = ""; $("tlnow").textContent = ""; tlSteps = []; return; }
   const win = VIEWWIN && VIEWWIN.doc===doc && VIEWWIN.lathe===lathe ? VIEWWIN : null, pad = win ? 0 : 12;
   let x0, x1, y0, y1;
   if (win) ({ x0, x1, y0, y1 } = win);
@@ -43,18 +46,26 @@ function drawViews(){
     x0 = minOf(pts, fx); x1 = maxOf(pts, fx); y0 = minOf(pts, fy); y1 = maxOf(pts, fy);
     if (x1-x0 < 1e-6){ x0 -= .5; x1 += .5; } if (y1-y0 < 1e-6){ y0 -= .5; y1 += .5; }
   }
-  document.getElementById("vz-fit").classList.toggle("on", !!win);
-  const k = Math.min((W-2*pad)/(x1-x0), (H-2*pad)/(y1-y0));
-  const ox = (W - (x1-x0)*k)/2, oy = (H - (y1-y0)*k)/2;
-  const X = v => (ox + (v-x0)*k).toFixed(1), Y = v => (H - oy - (v-y0)*k).toFixed(1);
-  VIEWT = { x0, y0, k, ox, oy, W, H, lathe };
-  let g = "";
-  if (lathe && 0 >= y0 && 0 <= y1) g += `<line x1="4" x2="${W-4}" y1="${Y(0)}" y2="${Y(0)}" stroke="#b9c2cf" stroke-dasharray="2 3" stroke-width=".8"/>`;
+  $("vz-fit").classList.toggle("on", !!win);
+  const k = Math.min((width-2*pad)/(x1-x0), (height-2*pad)/(y1-y0));
+  const ox = (width - (x1-x0)*k)/2, oy = (height - (y1-y0)*k)/2;
+  const toX = v => (ox + (v-x0)*k).toFixed(1), toY = v => (height - oy - (v-y0)*k).toFixed(1);
+  VIEWT = { x0, y0, k, ox, oy, W:width, H:height, lathe };
+  let svg = "";
+  if (lathe && 0 >= y0 && 0 <= y1) {
+    svg += `<line x1="4" x2="${width-4}" y1="${toY(0)}" y2="${toY(0)}" stroke="#b9c2cf" stroke-dasharray="2 3" stroke-width=".8"/>`;
+  }
   const layers = [[], [], []], band = [];
   // Moves one after another drawn the same way go into one <path>: a long program has tens of thousands of moves,
   // and one <line> each made every redraw (each step of the simulation) slow.
   const runs = [null, null, null];
-  const flush = n => { const r = runs[n]; if (r){ layers[n].push(`<path d="${r.d}" fill="none" stroke="${r.col}" stroke-width="${r.wdt}"${r.dash} stroke-linecap="round" stroke-linejoin="round"/>`); runs[n] = null; } };
+  const flush = n => {
+    const r = runs[n];
+    if (r){
+      layers[n].push(`<path d="${r.d}" fill="none" stroke="${r.col}" stroke-width="${r.wdt}"${r.dash} stroke-linecap="round" stroke-linejoin="round"/>`);
+      runs[n] = null;
+    }
+  };
   const addLine = (n, x1, y1, x2, y2, col, wdt, dash) => {
     let r = runs[n];
     if (r && (r.col!==col || r.wdt!==wdt || r.dash!==dash || r.parts > 4000)){ flush(n); r = null; }
@@ -65,14 +76,14 @@ function drawViews(){
     // Cutter comp: a grey band beside the move, on the side the tool's centre is on. Its width is fixed on screen,
     // since the cutter's radius is in the offset table, not the program.
     if (s.comp && compBand && !(i >= doneTo && future==="hide")){
-      const ax = +X(fx(s.a)), ay = +Y(fy(s.a)), bx = +X(fx(s.b)), by = +Y(fy(s.b)), L = Math.hypot(bx - ax, by - ay);
+      const ax = +toX(fx(s.a)), ay = +toY(fy(s.a)), bx = +toX(fx(s.b)), by = +toY(fy(s.b)), L = Math.hypot(bx - ax, by - ay);
       if (L > 0.01){ const o = (s.comp==="L" ? 1 : -1)*3.5, nx = (by - ay)/L*o, ny = -(bx - ax)/L*o;
         band.push(`<line x1="${(ax+nx).toFixed(1)}" y1="${(ay+ny).toFixed(1)}" x2="${(bx+nx).toFixed(1)}" y2="${(by+ny).toFixed(1)}" stroke="#8a939e" stroke-opacity="${i >= doneTo && future==="grey" ? .14 : .32}" stroke-width="6"/>`); }
     }
     if (Math.abs(fx(s.a)-fx(s.b)) < 1e-6 && Math.abs(fy(s.a)-fy(s.b)) < 1e-6){
       if (s.kind==="cyc") flush(i < doneTo ? 1 : 0);
-      if (s.kind==="cyc" && i < doneTo) layers[1].push(`<circle cx="${X(fx(s.b))}" cy="${Y(fy(s.b))}" r="2.6" fill="none" stroke="${colorBy==="tool" ? toolColor(s.tool) : KCOL.cyc}" stroke-width="1.4"/>`);
-      else if (s.kind==="cyc" && future!=="hide") layers[0].push(`<circle cx="${X(fx(s.b))}" cy="${Y(fy(s.b))}" r="2.6" fill="none" stroke="${future==="grey" ? "#d3d8de" : KCOL.cyc}" stroke-width="1.2"/>`);
+      if (s.kind==="cyc" && i < doneTo) layers[1].push(`<circle cx="${toX(fx(s.b))}" cy="${toY(fy(s.b))}" r="2.6" fill="none" stroke="${colorBy==="tool" ? toolColor(s.tool) : KCOL.cyc}" stroke-width="1.4"/>`);
+      else if (s.kind==="cyc" && future!=="hide") layers[0].push(`<circle cx="${toX(fx(s.b))}" cy="${toY(fy(s.b))}" r="2.6" fill="none" stroke="${future==="grey" ? "#d3d8de" : KCOL.cyc}" stroke-width="1.2"/>`);
       return;
     }
     if (s.rapid && !simRapids) return;
@@ -84,20 +95,24 @@ function drawViews(){
     if (state==="future" && future==="grey"){ col = "#d3d8de"; wdt = s.rapid ? .8 : 1.1; }
     if (state==="cur"){ col = "#d13438"; wdt = 2.4; }
     const ly = state==="future" ? 0 : state==="cur" ? 2 : 1;
-    addLine(ly, X(fx(s.a)), Y(fy(s.a)), X(fx(s.b)), Y(fy(s.b)), col, wdt, dash);
+    addLine(ly, toX(fx(s.a)), toY(fy(s.a)), toX(fx(s.b)), toY(fy(s.b)), col, wdt, dash);
     // a hole drilled along the view (a lathe's drill or tap on center): a small circle at the bottom
-    if (s.hole){ const hl = state==="future" ? 0 : 1; flush(hl); layers[hl].push(`<circle cx="${X(fx(s.b))}" cy="${Y(fy(s.b))}" r="2.6" fill="#fff" stroke="${state==="future" && future==="grey" ? "#d3d8de" : colorBy==="tool" ? toolColor(s.tool) : KCOL.cyc}" stroke-width="1.3"/>`); }
+    if (s.hole){
+      const hl = state==="future" ? 0 : 1;
+      flush(hl);
+      layers[hl].push(`<circle cx="${toX(fx(s.b))}" cy="${toY(fy(s.b))}" r="2.6" fill="#fff" stroke="${state==="future" && future==="grey" ? "#d3d8de" : colorBy==="tool" ? toolColor(s.tool) : KCOL.cyc}" stroke-width="1.3"/>`);
+    }
   });
   flush(0); flush(1); flush(2);
   const wr = wrapR.map(r => {
-    const [a, b, c, d] = [[r.xa, r.ya], [r.xb, r.ya], [r.xb, r.yb], [r.xa, r.yb]].map(([x, y]) => [X(x), Y(y)]);
+    const [a, b, c, d] = [[r.xa, r.ya], [r.xb, r.ya], [r.xb, r.yb], [r.xa, r.yb]].map(([x, y]) => [toX(x), toY(y)]);
     const lab = r.turn!=null ? `Unrolled (G107): Ø${fmt4(r.d)}, one turn ${fmt4(r.turn)}` : `Unrolled (G107): diameter unknown (Q0: ${DIALECT.cylMap?.setting || "a setting"})`;
     const sides = r.turn!=null ? `<polygon points="${[a, b, c, d].map(q => q.join(",")).join(" ")}" fill="#eef1f5" stroke="#8a939e" stroke-width="1" stroke-dasharray="5 3"/>`
       : `<path d="M${d.join(",")} L${a.join(",")} L${b.join(",")} L${c.join(",")}" fill="none" stroke="#8a939e" stroke-width="1" stroke-dasharray="5 3"/>`;
     return `<g><title>${esc(lab + ". Y is the distance round the part; the A axis turns it.")}</title>${sides}<text x="${(+a[0] + 4).toFixed(1)}" y="${(+a[1] - 5).toFixed(1)}" font-size="10" fill="#5b6470" font-family="Segoe UI,sans-serif">${esc(lab)}</text></g>`;
   }).join("");
   // The parts of the moves out to a sharp corner that a ,C or ,R cuts off: grey and dashed, under the path
-  const gh = (EXEC.ghosts || []).map(s => `<line x1="${X(fx(s.a))}" y1="${Y(fy(s.a))}" x2="${X(fx(s.b))}" y2="${Y(fy(s.b))}" stroke="#a9b1bc" stroke-width="1" stroke-dasharray="3 2" stroke-linecap="round"/>`).join("");
+  const gh = (EXEC.ghosts || []).map(s => `<line x1="${toX(fx(s.a))}" y1="${toY(fy(s.a))}" x2="${toX(fx(s.b))}" y2="${toY(fy(s.b))}" stroke="#a9b1bc" stroke-width="1" stroke-dasharray="3 2" stroke-linecap="round"/>`).join("");
   // Engraving: one grey rectangle per G47 line (the letters aren't drawn), cut on the left, top and bottom. Its right end
   // is an estimate, so it fades out, unless the next line's start sets it. Cut: darker; to come: lighter; current: red edges.
   const bx = (EXEC.boxes || []).map((b, n) => {
@@ -105,44 +120,44 @@ function drawViews(){
     if (state==="future" && future==="hide") return "";
     const fill = state==="future" ? (future==="grey" ? "#e6e9ed" : "#d3d8de") : "#b4bcc6";
     const edge = state==="cur" ? "#d13438" : state==="future" && future==="grey" ? "#d3d8de" : KCOL.engrave;
-    const sp = b.pts.map(q => [X(fx(q)), Y(fy(q))]), mid = (a, c) => [((+a[0] + +c[0])/2).toFixed(1), ((+a[1] + +c[1])/2).toFixed(1)];
+    const sp = b.pts.map(q => [toX(fx(q)), toY(fy(q))]), mid = (a, c) => [((+a[0] + +c[0])/2).toFixed(1), ((+a[1] + +c[1])/2).toFixed(1)];
     const [lx, ly] = mid(sp[0], sp[3]), [rx, ry] = mid(sp[1], sp[2]);
     const grad = b.exact ? "" : `<linearGradient id="eg${n}" gradientUnits="userSpaceOnUse" x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}"><stop offset=".6" stop-color="${fill}"/><stop offset="1" stop-color="${fill}" stop-opacity="0"/></linearGradient>`;
     const tip = b.tip || `Engraving: ${b.text}` + (b.exact ? " (ends where the serial number starts)" : " (length estimated: the control doesn't give letter widths)");
     return `<g>${grad}<title>${esc(tip)}</title><polygon points="${sp.map(q => q.join(",")).join(" ")}" fill="${b.exact ? fill : `url(#eg${n})`}" fill-opacity=".8"/>`
       + `<path d="M${sp[1].join(",")} L${sp[0].join(",")} L${sp[3].join(",")} L${sp[2].join(",")}" fill="none" stroke="${edge}" stroke-width="${state==="cur" ? 1.8 : 1.1}" stroke-linejoin="round"/></g>`;
   }).join("");
-  g += wr + band.join("") + gh + bx + layers.flat().join("");
+  svg += wr + band.join("") + gh + bx + layers.flat().join("");
   const at = segs[Math.max(0, Math.min(doneTo, segs.length) - 1)];
   // Lathe tailstock, when the program uses it: a center pointing at the part, with ← (in), → (out) or ? (not set yet).
   if (lathe && EXEC.tailUsed){
     const tk = simIdx!=null && simK!=null ? simK : stepIndexFor(curLine), ts = EXEC.steps[tk]?.tail || null;
-    const cy = Math.min(H - 16, Math.max(16, +Y(0))), x1 = W - 6, x0 = x1 - 26;
+    const cy = Math.min(height - 16, Math.max(16, +toY(0))), x1 = width - 6, x0 = x1 - 26;
     const sym = ts==="in" ? `<path d="M${x1-6} ${cy} h-12 m5 -5 l-5 5 l5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`
       : ts==="out" ? `<path d="M${x1-18} ${cy} h12 m-5 -5 l5 5 l-5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`
       : `<text x="${x1-11}" y="${cy+4}" font-size="12" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">?</text>`;
-    g += `<g class="tailst"><title>Tailstock ${ts==="in" ? "in (advanced)" : ts==="out" ? "out (retracted)" : "not set yet: no tailstock code has run"}</title><path d="M${x0} ${cy} L${x1} ${cy-15} L${x1} ${cy+15} Z" fill="#1f2328" stroke="#1f2328" stroke-width="3" stroke-linejoin="round"/>${sym}</g>`;
+    svg += `<g class="tailst"><title>Tailstock ${ts==="in" ? "in (advanced)" : ts==="out" ? "out (retracted)" : "not set yet: no tailstock code has run"}</title><path d="M${x0} ${cy} L${x1} ${cy-15} L${x1} ${cy+15} Z" fill="#1f2328" stroke="#1f2328" stroke-width="3" stroke-linejoin="round"/>${sym}</g>`;
   }
   if (at && doneTo > 0 && at.sweep){   // engraving and threading: the tool is a line across the box, sweeping along it
     const qx = fx(at.b), qy = fy(at.b), tx = qx + at.sweep.ux*at.sweep.h, ty = qy + at.sweep.uy*at.sweep.h;
-    g += `<line x1="${X(qx)}" y1="${Y(qy)}" x2="${X(tx)}" y2="${Y(ty)}" stroke="#d13438" stroke-width="3" stroke-linecap="round"/>`;
+    svg += `<line x1="${toX(qx)}" y1="${toY(qy)}" x2="${toX(tx)}" y2="${toY(ty)}" stroke="#d13438" stroke-width="3" stroke-linecap="round"/>`;
   }
-  else if (at && doneTo > 0) g += `<circle cx="${X(fx(at.b))}" cy="${Y(fy(at.b))}" r="4.5" fill="${colorBy==="tool" ? toolColor(at.tool) : "#d13438"}" stroke="#fff" stroke-width="1.5"/>`;
+  else if (at && doneTo > 0) svg += `<circle cx="${toX(fx(at.b))}" cy="${toY(fy(at.b))}" r="4.5" fill="${colorBy==="tool" ? toolColor(at.tool) : "#d13438"}" stroke="#fff" stroke-width="1.5"/>`;
   // An alarm (a code for an option the machine doesn't have): the machine stops there, so the simulation ends on a red ✕
   if (alarmReached()){
-    const q = EXEC.alarm.at, cx = +X(fx(q)), cy = +Y(fy(q)), r = 7;
-    g += `<g><title>${esc("Alarm: " + EXEC.alarm.text)}</title><path d="M${cx-r} ${cy-r} L${cx+r} ${cy+r} M${cx+r} ${cy-r} L${cx-r} ${cy+r}" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M${cx-r} ${cy-r} L${cx+r} ${cy+r} M${cx+r} ${cy-r} L${cx-r} ${cy+r}" stroke="#d13438" stroke-width="3.2" stroke-linecap="round"/></g>`;
+    const q = EXEC.alarm.at, cx = +toX(fx(q)), cy = +toY(fy(q)), r = 7;
+    svg += `<g><title>${esc("Alarm: " + EXEC.alarm.text)}</title><path d="M${cx-r} ${cy-r} L${cx+r} ${cy+r} M${cx+r} ${cy-r} L${cx-r} ${cy+r}" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M${cx-r} ${cy-r} L${cx+r} ${cy+r} M${cx+r} ${cy-r} L${cx-r} ${cy+r}" stroke="#d13438" stroke-width="3.2" stroke-linecap="round"/></g>`;
   }
-  v1.innerHTML = g;
+  v1.innerHTML = svg;
   const tools = [...new Set(segs.map(s => s.tool))];
-  document.getElementById("tleg").innerHTML = colorBy==="tool"
+  $("tleg").innerHTML = colorBy==="tool"
     ? tools.map(t => `<span><i style="background:${toolColor(t)}"></i>${t}</span>`).join("") + `<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`
     : (simRapids ? `<span><i style="background:${KCOL.rapid}"></i>Rapid</span>` : "") + `<span><i style="background:${KCOL.feed}"></i>Feed</span><span><i style="background:${KCOL.arc}"></i>Arc</span><span><i style="background:${KCOL.cyc}"></i>Cycle</span>${EXEC.boxes?.length ? `<span><i style="background:#b4bcc6"></i>Engraving</span>` : ""}${compBand && segs.some(s => s.comp) ? `<span><i style="background:rgba(138,147,158,.45);height:6px"></i>Cutter comp side</span>` : ""}<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`;
   drawSimPos(doneTo > 0 ? at : null, lathe);
   // Only when it changes: WebKitGTK (Linux) drops a click whose text was replaced between the press and the release,
   // and this runs on every step of the simulation, so ⏸ couldn't be clicked while playing.
-  const pb = document.getElementById("s-play"), pt = simTimer ? "⏸" : "▶"; if (pb.textContent!==pt) pb.textContent = pt;
-  document.getElementById("s-play").classList.toggle("on", !!simTimer);
+  const pb = $("s-play"), pt = simTimer ? "⏸" : "▶"; if (pb.textContent!==pt) pb.textContent = pt;
+  $("s-play").classList.toggle("on", !!simTimer);
   drawTimeline(EXEC.steps, lathe);
 }
 
@@ -161,10 +176,19 @@ function zoomView(f, at){   // f > 1 zooms in, about the point "at" (program uni
   const span = Math.max(v.x1-v.x0, v.y1-v.y0)/f; if (span < 1e-4 || span > 1e5) return;
   setViewWin({ x0:cx - (cx-v.x0)/f, x1:cx + (v.x1-cx)/f, y0:cy - (cy-v.y0)/f, y1:cy + (v.y1-cy)/f });
 }
-function setBoxMode(on){ boxMode = on; document.getElementById("vz-box").setAttribute("aria-pressed", on); document.getElementById("vbox").classList.toggle("boxing", on); }
+function setBoxMode(on){
+  boxMode = on;
+  $("vz-box").setAttribute("aria-pressed", on);
+  $("vbox").classList.toggle("boxing", on);
+}
 {
-  const v1 = document.getElementById("v1");
-  const svgPt = e => { const m = v1.getScreenCTM(); if (!m) return null; const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse()); return { sx:p.x, sy:p.y }; };
+  const v1 = $("v1");
+  const svgPt = e => {
+    const m = v1.getScreenCTM();
+    if (!m) return null;
+    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
+    return { sx:p.x, sy:p.y };
+  };
   const world = q => { const t = VIEWT; return { x: t.x0 + (q.sx - t.ox)/t.k, y: t.y0 + (t.H - t.oy - q.sy)/t.k }; };
   let drag = null;
   v1.addEventListener("wheel", e => {
@@ -186,7 +210,14 @@ function setBoxMode(on){ boxMode = on; document.getElementById("vz-box").setAttr
     if (!drag.moved) return;
     if (drag.box){
       let r = v1.querySelector("rect.zbox");
-      if (!r){ r = document.createElementNS("http://www.w3.org/2000/svg", "rect"); r.setAttribute("class", "zbox"); r.setAttribute("fill", "rgba(15,108,189,.08)"); r.setAttribute("stroke", "#0f6cbd"); r.setAttribute("stroke-dasharray", "3 2"); v1.appendChild(r); }
+      if (!r){
+        r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        r.setAttribute("class", "zbox");
+        r.setAttribute("fill", "rgba(15,108,189,.08)");
+        r.setAttribute("stroke", "#0f6cbd");
+        r.setAttribute("stroke-dasharray", "3 2");
+        v1.appendChild(r);
+      }
       r.setAttribute("x", Math.min(q.sx, drag.q0.sx)); r.setAttribute("y", Math.min(q.sy, drag.q0.sy));
       r.setAttribute("width", Math.abs(dx)); r.setAttribute("height", Math.abs(dy));
     } else {
@@ -211,10 +242,10 @@ function setBoxMode(on){ boxMode = on; document.getElementById("vz-box").setAttr
   v1.addEventListener("pointerup", end);
   v1.addEventListener("pointercancel", end);
   v1.addEventListener("dblclick", () => setViewWin(null));
-  document.getElementById("vz-in").onclick = () => zoomView(1.5);
-  document.getElementById("vz-out").onclick = () => zoomView(1/1.5);
-  document.getElementById("vz-box").onclick = () => setBoxMode(!boxMode);
-  document.getElementById("vz-fit").onclick = () => setViewWin(null);
+  $("vz-in").onclick = () => zoomView(1.5);
+  $("vz-out").onclick = () => zoomView(1/1.5);
+  $("vz-box").onclick = () => setBoxMode(!boxMode);
+  $("vz-fit").onclick = () => setViewWin(null);
 }
 // The line between the simulation buttons and the toolpath: where the tool is, the line and its N number,
 // and the stop the simulation is paused at.
@@ -228,10 +259,13 @@ function drawSimPos(at, lathe){
   const d = (lineState[curLine]?.units==="mm") ? 3 : 4, f = v => v==null ? "—" : (v < 0 ? "-" : "") + Math.abs(v).toFixed(d);
   const p = at?.b, n = nWordOf(curLine), stop = simStopAt!=null ? EXEC.steps[simStopAt]?.stop : null;
   const ax = lathe ? [["X", p?.x], ["Z", p?.z]] : [["X", p?.x], ["Y", p?.y]];
-  document.getElementById("s-pos").innerHTML = ax.map(([a, v]) => `<span><b>${a}</b>${f(v)}</span>`).join("")
+  $("s-pos").innerHTML = ax.map(([a, v]) => `<span><b>${a}</b>${f(v)}</span>`).join("")
     + `<span><b>Line</b>${curLine+1}</span>` + (n ? `<span><b>N</b>${n.slice(1)}</span>` : "")
     + (stop ? `<span class="stop" title="${stop==="M00" ? "Program stop" : "Optional stop"}. ▶ continues.">${stop}</span>` : "")
-    + (() => { const k = simIdx!=null && simK!=null ? simK : stepIndexFor(curLine), nt = (EXEC.notes || []).find(x => k >= x.k && (x.until==null || k < x.until)); return nt && !alarmReached() ? `<span class="snote" title="${esc(nt.text)}.">${esc(nt.short || nt.text)}</span>` : ""; })()
+    + (() => {
+      const k = simIdx!=null && simK!=null ? simK : stepIndexFor(curLine), nt = (EXEC.notes || []).find(x => k >= x.k && (x.until==null || k < x.until));
+      return nt && !alarmReached() ? `<span class="snote" title="${esc(nt.text)}.">${esc(nt.short || nt.text)}</span>` : "";
+    })()
     + (alarmReached() ? `<span class="alarm" title="${esc(EXEC.alarm.text)} The lines after it don't run.">Alarm: ${esc(EXEC.alarm.code)} ${esc((EXEC.alarm.label || "").toLowerCase())} not on this machine</span>` : "");
 }
 let tlSteps = [], tlShift = 0; const SLOT = 18;
@@ -262,32 +296,61 @@ function timelineValues(li, toks){
 const TL_HOLE = { G73:"Peck drilling, chip break", G74:"Tapping, left hand", G76:"Fine boring", G81:"Drilling", G82:"Drilling with a dwell at the bottom",
   G83:"Peck drilling, full retract", G84:"Tapping", G85:"Boring, feed out", G86:"Boring, spindle stops at the bottom", G89:"Boring with a dwell, feed out" };
 function tlHole(a, b, Y, h, clip){
-  const C = KCOL, w = b - a, xl = a + w*0.28, xr = a + w*0.72, yt = Y(Math.min(h.top, clip)), yr = Y(Math.min(h.r, clip)), yz = Y(h.z), yb = Y(Math.min(h.back, clip));
+  const colors = KCOL;
+  const w = b - a;
+  const xl = a + w*0.28;
+  const xr = a + w*0.72;
+  const yt = Y(Math.min(h.top, clip));
+  const yr = Y(Math.min(h.r, clip));
+  const yz = Y(h.z);
+  const yb = Y(Math.min(h.back, clip));
   const L = (x1, y1, x2, y2, col, wd, dash) => `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${col}" stroke-width="${wd}" stroke-linecap="round"${dash ? ' stroke-dasharray="3 2"' : ""}/>`;
   const cyc = h.cyc, feedOut = ["G84", "G74", "G85", "G89"].includes(cyc);
-  let g = L(a, yt, xl, yt, C.rapid, 1.2, 1);
-  if (yr > yt + 0.5) g += L(xl, yt, xl, yr, C.rapid, 1.4, 1);
-  g += L(xl, yr, xl, yz, C.cyc, 1.6) + L(xl, yz, xr, yz, C.cyc, 1.6);
+  let g = L(a, yt, xl, yt, colors.rapid, 1.2, 1);
+  if (yr > yt + 0.5) g += L(xl, yt, xl, yr, colors.rapid, 1.4, 1);
+  g += L(xl, yr, xl, yz, colors.cyc, 1.6) + L(xl, yz, xr, yz, colors.cyc, 1.6);
   if ((cyc==="G83" || cyc==="G73") && h.q > 0){
     const depths = []; for (let d = h.r - h.q; d > h.z + 1e-6 && depths.length < 40; d -= h.q) depths.push(d);
     const lw = (xr - xl)*0.62;
     // The retract amounts are machine settings (h.ret): the moves they set get a wide grey band, as their height is uncertain.
     // G73 backs off h.ret after each peck; G83 rapids back down to h.ret above the last peck.
-    const ub = (x, ya, yb) => { const y0 = Math.min(ya, yb) - 2.5, y1 = Math.max(ya, yb) + 2.5; return `<rect x="${(x-3.5).toFixed(1)}" y="${y0.toFixed(1)}" width="7" height="${(y1-y0).toFixed(1)}" rx="2" fill="#8a939e" fill-opacity=".45"/>`; };
+    const ub = (x, ya, yb) => {
+      const y0 = Math.min(ya, yb) - 2.5, y1 = Math.max(ya, yb) + 2.5;
+      return `<rect x="${(x-3.5).toFixed(1)}" y="${y0.toFixed(1)}" width="7" height="${(y1-y0).toFixed(1)}" rx="2" fill="#8a939e" fill-opacity=".45"/>`;
+    };
     if (h.ret > 0){
       if (cyc==="G73") depths.forEach(d => { g += ub(xl + (xr-xl)*0.8, Y(d), Y(d + h.ret)); });
       else depths.forEach(d => { g += ub(xl + lw, Y(d), Y(d + h.ret)); });
     }
-    if (cyc==="G83"){ let y0 = yr; [...depths, h.z].forEach(d => { const y1 = Y(d); g += `<path d="M${xl.toFixed(1)},${y0.toFixed(1)} H${(xl+lw).toFixed(1)} V${y1.toFixed(1)} H${xl.toFixed(1)}" fill="none" stroke="${C.cyc}" stroke-width="1"/>`; y0 = y1; }); }
-    else depths.forEach(d => { g += L(xl, Y(d), xl + (xr-xl)*0.8, Y(d), C.cyc, 1) + (h.ret > 0 ? L(xl + (xr-xl)*0.8, Y(d), xl + (xr-xl)*0.8, Y(d + h.ret), C.cyc, 1) : ""); });
+    if (cyc==="G83"){
+      let y0 = yr;
+      [...depths, h.z].forEach(d => {
+        const y1 = Y(d);
+        g += `<path d="M${xl.toFixed(1)},${y0.toFixed(1)} H${(xl+lw).toFixed(1)} V${y1.toFixed(1)} H${xl.toFixed(1)}" fill="none" stroke="${colors.cyc}" stroke-width="1"/>`;
+        y0 = y1;
+      });
+    }
+    else depths.forEach(d => {
+      g += L(xl, Y(d), xl + (xr-xl)*0.8, Y(d), colors.cyc, 1) + (h.ret > 0 ? L(xl + (xr-xl)*0.8, Y(d), xl + (xr-xl)*0.8, Y(d + h.ret), colors.cyc, 1) : "");
+    });
   }
-  if (cyc==="G82" || cyc==="G89") g += `<circle cx="${((xl+xr)/2).toFixed(1)}" cy="${yz.toFixed(1)}" r="2.6" fill="#fff" stroke="${C.cyc}" stroke-width="1.1"/>`;
-  if (cyc==="G84" || cyc==="G74"){ const cx = (xl+xr)/2, cy = yz - 3.6; g += `<path d="M${(cx-2.4).toFixed(1)},${(cy+1.2).toFixed(1)} A2.4 2.4 0 1 1 ${(cx+2.4).toFixed(1)},${(cy+1.2).toFixed(1)}" fill="none" stroke="${C.cyc}" stroke-width="1"/>`; }
-  if (feedOut){ g += L(xr, yz, xr, yr, C.cyc, 1.6); if (yb < yr - 0.5) g += L(xr, yr, xr, yb, C.rapid, 1.4, 1); }
-  else if (cyc==="G86"){ g += `<rect x="${(xr-2.6).toFixed(1)}" y="${(yz-2.6).toFixed(1)}" width="5.2" height="5.2" fill="#2b2f36" transform="rotate(45 ${xr.toFixed(1)} ${yz.toFixed(1)})"/>` + L(xr, yz-3, xr, yb, C.rapid, 1.4, 1); }
-  else if (cyc==="G76"){ const sh = Math.min(3, (b - xr)*0.7); return g + L(xr, yz, xr+sh, yz, "#2b2f36", 1.6) + L(xr+sh, yz, xr+sh, yb, C.rapid, 1.4, 1) + L(xr+sh, yb, b, yb, C.rapid, 1.2, 1); }
-  else g += L(xr, yz, xr, yb, C.rapid, 1.4, 1);
-  return g + L(xr, yb, b, yb, C.rapid, 1.2, 1);
+  if (cyc==="G82" || cyc==="G89") {
+    g += `<circle cx="${((xl+xr)/2).toFixed(1)}" cy="${yz.toFixed(1)}" r="2.6" fill="#fff" stroke="${colors.cyc}" stroke-width="1.1"/>`;
+  }
+  if (cyc==="G84" || cyc==="G74"){
+    const cx = (xl+xr)/2, cy = yz - 3.6;
+    g += `<path d="M${(cx-2.4).toFixed(1)},${(cy+1.2).toFixed(1)} A2.4 2.4 0 1 1 ${(cx+2.4).toFixed(1)},${(cy+1.2).toFixed(1)}" fill="none" stroke="${colors.cyc}" stroke-width="1"/>`;
+  }
+  if (feedOut){ g += L(xr, yz, xr, yr, colors.cyc, 1.6); if (yb < yr - 0.5) g += L(xr, yr, xr, yb, colors.rapid, 1.4, 1); }
+  else if (cyc==="G86"){
+    g += `<rect x="${(xr-2.6).toFixed(1)}" y="${(yz-2.6).toFixed(1)}" width="5.2" height="5.2" fill="#2b2f36" transform="rotate(45 ${xr.toFixed(1)} ${yz.toFixed(1)})"/>` + L(xr, yz-3, xr, yb, colors.rapid, 1.4, 1);
+  }
+  else if (cyc==="G76"){
+    const sh = Math.min(3, (b - xr)*0.7);
+    return g + L(xr, yz, xr+sh, yz, "#2b2f36", 1.6) + L(xr+sh, yz, xr+sh, yb, colors.rapid, 1.4, 1) + L(xr+sh, yb, b, yb, colors.rapid, 1.2, 1);
+  }
+  else g += L(xr, yz, xr, yb, colors.rapid, 1.4, 1);
+  return g + L(xr, yb, b, yb, colors.rapid, 1.2, 1);
 }
 // What a line's mark is on the mill timeline, and its tooltip: null for a plain line.
 function tlMark(s){
@@ -349,22 +412,29 @@ function tlGrid(lo, hi, Y, ph, lathe, idx, W){
     const zero = Math.abs(v) < 1e-9;
     lines += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="${big ? "#b9c3cf" : "#dbe1e8"}" stroke-width="1"/>`;
     // The origin: a circle with a cross through it, on the zero line at the left edge
-    if (zero) labels += `<g><title>${lathe ? "Centerline (X0)" : "Part zero (Z0)"}</title><circle cx="7" cy="${y}" r="4" fill="#fff" stroke="#3b4350" stroke-width="1.1"/><path d="M1.5 ${y} H12.5 M7 ${(+y - 5.5).toFixed(1)} V${(+y + 5.5).toFixed(1)}" stroke="#3b4350" stroke-width="1.1"/></g>`;
-    if (big || labelMinor) labels += `<text x="${zero ? 15 : 3}" y="${(+y - 2).toFixed(1)}" font-size="${big ? 7.5 : 6.5}" fill="${big ? "#5b6470" : "#8f97a1"}" font-family="Consolas,monospace" stroke="#fff" stroke-width="2.5" paint-order="stroke">${txt(v, big ? major : minor)}</text>`;
+    if (zero) {
+      labels += `<g><title>${lathe ? "Centerline (X0)" : "Part zero (Z0)"}</title><circle cx="7" cy="${y}" r="4" fill="#fff" stroke="#3b4350" stroke-width="1.1"/><path d="M1.5 ${y} H12.5 M7 ${(+y - 5.5).toFixed(1)} V${(+y + 5.5).toFixed(1)}" stroke="#3b4350" stroke-width="1.1"/></g>`;
+    }
+    if (big || labelMinor) {
+      labels += `<text x="${zero ? 15 : 3}" y="${(+y - 2).toFixed(1)}" font-size="${big ? 7.5 : 6.5}" fill="${big ? "#5b6470" : "#8f97a1"}" font-family="Consolas,monospace" stroke="#fff" stroke-width="2.5" paint-order="stroke">${txt(v, big ? major : minor)}</text>`;
+    }
   });
   return { lines, labels };
 }
 function drawTimeline(steps, lathe){
   tlSteps = steps;
-  const box = document.getElementById("tl"), svg = document.getElementById("tlsvg"), sel = document.getElementById("tl-mode");
-  const mode = tlModeNow(), modes = tlModes(), P = DIALECT.process?.on?.length ? DIALECT.process : null;
+  const box = $("tl"), svg = $("tlsvg"), sel = $("tl-mode");
+  const mode = tlModeNow(), modes = tlModes(), processDef = DIALECT.process?.on?.length ? DIALECT.process : null;
   // Rebuilt only when the machine type's list changes, so a redraw while the list is open doesn't undo a pick.
-  if (sel.dataset.modes!==modes.join()){ sel.innerHTML = modes.map(m => `<option value="${m}">${TL_MODES[m]}</option>`).join(""); sel.dataset.modes = modes.join(); }
+  if (sel.dataset.modes!==modes.join()){
+    sel.innerHTML = modes.map(m => `<option value="${m}">${TL_MODES[m]}</option>`).join("");
+    sel.dataset.modes = modes.join();
+  }
   if (document.activeElement!==sel) sel.value = mode;
   sel.hidden = modes.length < 2;
-  const BW = box.clientWidth || 278, H = 104, top = P ? 18 : 12, bot = 20, half = BW/2;
+  const BW = box.clientWidth || 278, height = 104, top = processDef ? 18 : 12, bot = 20, half = BW/2;
   const W = steps.length*SLOT + BW;
-  svg.setAttribute("width", W); svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W); svg.setAttribute("viewBox", `0 0 ${W} ${height}`);
   const pos = mode==="z" || mode==="x";
   // Values above CLIP are drawn at CLIP with a ↑: on a mill, Z more than 0.3 above Z0; on a lathe, X beyond the cutting
   // moves (a rapid to a tool change position far from the part would squash the cutting into a flat line near CL).
@@ -377,8 +447,8 @@ function drawTimeline(steps, lathe){
   const vals = steps.map(s => mode==="feed" ? s.f : mode==="speed" ? s.s : Math.min(s.v, CLIP));
   const dipZ = mode==="z" && !lathe ? steps.flatMap(s => [...(s.dips || []).map(d => d.z), ...(s.engZ!=null ? [s.engZ] : [])]) : [];
   const lo = pos ? Math.min(minOf(vals), minOf(dipZ), 0) : 0, hi = pos ? Math.max(maxOf(vals), lathe ? 0.1 : 0.05) : Math.max(maxOf(vals), 1) * 1.1;
-  const Y = v => top + (hi - v) / (hi - lo || 1) * (H - top - bot);
-  const X = i => half + i*SLOT;
+  const toY = v => top + (hi - v) / (hi - lo || 1) * (height - top - bot);
+  const toX = i => half + i*SLOT;
   // While simulating, the step being run; otherwise the first run of the selected line (its other runs are tinted too).
   const sim = simIdx!=null && simK!=null, idx = sim ? simK : stepIndexFor(curLine);
   const isCur = (s, i) => sim ? i===idx : s.li===curLine;
@@ -387,97 +457,121 @@ function drawTimeline(steps, lathe){
   const span = Math.ceil(BW/SLOT) + 8, lo0 = Math.max(0, idx - span), hi0 = Math.min(steps.length, idx + span + 1);
   const near = (s, i) => i >= lo0 && i < hi0;
   let g = `<defs><pattern id="tlbd" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#d8dde4" stroke-width="1.4"/></pattern></defs>`;
-  steps.forEach((s, i) => { if (near(s, i) && isCur(s, i)) g += `<rect x="${X(i)}" y="0" width="${SLOT}" height="${H-bot+4}" fill="#fde7e8"/>`; });
-  const grid = pos ? tlGrid(lo, hi, Y, H - top - bot, lathe, idx, W) : { lines:"", labels:"" };
+  steps.forEach((s, i) => { if (near(s, i) && isCur(s, i)) g += `<rect x="${toX(i)}" y="0" width="${SLOT}" height="${height-bot+4}" fill="#fde7e8"/>`; });
+  const grid = pos ? tlGrid(lo, hi, toY, height - top - bot, lathe, idx, W) : { lines:"", labels:"" };
   g += grid.lines;
-  g += `<line x1="${half-8}" x2="${W-half+8}" y1="${Y(0)}" y2="${Y(0)}" stroke="#b9c2cf" stroke-dasharray="2 3" stroke-width=".8"/>`;
-  if (P){   // the torch band along the top, and the lines that change the process or material
+  g += `<line x1="${half-8}" x2="${W-half+8}" y1="${toY(0)}" y2="${toY(0)}" stroke="#b9c2cf" stroke-dasharray="2 3" stroke-width=".8"/>`;
+  if (processDef){   // the torch band along the top, and the lines that change the process or material
     g += `<rect x="${half-8}" y="3" width="${steps.length*SLOT+16}" height="6" rx="2" fill="#eef0f3"/>`;
     steps.forEach((s, i) => {
       if (!near(s, i)) return;
-      if (s.on) g += `<rect x="${X(i)}" y="3" width="${SLOT}" height="6" fill="#e8590c"/>`;
-      if (s.mark) g += `<line x1="${X(i)+1}" x2="${X(i)+1}" y1="1" y2="${H-bot}" stroke="#7a5bc0" stroke-width="1" stroke-dasharray="1.5 2"/><text x="${X(i)+3}" y="${top+6}" font-size="6.5" fill="#7a5bc0" font-family="Consolas,monospace">${s.mark}</text>`;
+      if (s.on) g += `<rect x="${toX(i)}" y="3" width="${SLOT}" height="6" fill="#e8590c"/>`;
+      if (s.mark) {
+        g += `<line x1="${toX(i)+1}" x2="${toX(i)+1}" y1="1" y2="${height-bot}" stroke="#7a5bc0" stroke-width="1" stroke-dasharray="1.5 2"/><text x="${toX(i)+3}" y="${top+6}" font-size="6.5" fill="#7a5bc0" font-family="Consolas,monospace">${s.mark}</text>`;
+      }
     });
   }
   const sym = mode==="z" && !lathe, ends = [];
   const endOf = (s, i) => sym && s.dips?.length && s.dips.length <= 3 ? Math.min(s.dips[s.dips.length-1].back, CLIP) : vals[i];
   let prev = lo0 > 0 ? endOf(steps[lo0-1], lo0-1) : null;
   if (lo0 > 0) ends[lo0-1] = prev;
-  steps.forEach((s, i) => {
-    if (!near(s, i)) return;
-    const v = vals[i], col = s.kind ? KCOL[s.kind] : "#a9b1bc", dash = s.kind==="rapid" ? ' stroke-dasharray="3 2"' : "";
-    const x0 = X(i), xm = x0 + SLOT/2, yv = Y(v), dips = s.dips || [];
-    const mk = sym && !dips.length ? tlMark(s) : null, m = mk?.[0];
+  steps.forEach((step, i) => {
+    if (!near(step, i)) return;
+    const value = vals[i], col = step.kind ? KCOL[step.kind] : "#a9b1bc", dash = step.kind==="rapid" ? ' stroke-dasharray="3 2"' : "";
+    const x0 = toX(i), xm = x0 + SLOT/2, yv = toY(value), dips = step.dips || [];
+    const mk = sym && !dips.length ? tlMark(step) : null, mark = mk?.[0];
     let tip = mk?.[1] || "";
     g += "<g>";
-    if (sym && isBlockDel(doc[s.li] || [])){ g += `<rect x="${x0}" y="1" width="${SLOT}" height="${H-bot-1}" fill="url(#tlbd)"/>`; tip = "Block delete: skipped when / is on"; }
+    if (sym && isBlockDel(doc[step.li] || [])){
+      g += `<rect x="${x0}" y="1" width="${SLOT}" height="${height-bot-1}" fill="url(#tlbd)"/>`;
+      tip = "Block delete: skipped when / is on";
+    }
     if (sym && dips.length && dips.length <= 3){
       // A drilling cycle's holes, each in its share of the column: in at the start height, down on the left, up on the right
-      const yt = Y(Math.min(dips[0].top, CLIP));
-      if (prev!==null && Math.abs(Y(prev) - yt) > 0.5) g += `<line x1="${x0}" x2="${x0}" y1="${Y(prev)}" y2="${yt}" stroke="${KCOL.rapid}" stroke-width="1.4" stroke-dasharray="3 2"/>`;
-      dips.forEach((d, k) => { g += tlHole(x0 + SLOT*k/dips.length, x0 + SLOT*(k+1)/dips.length, Y, d, CLIP); });
+      const yt = toY(Math.min(dips[0].top, CLIP));
+      if (prev!==null && Math.abs(toY(prev) - yt) > 0.5) {
+        g += `<line x1="${x0}" x2="${x0}" y1="${toY(prev)}" y2="${yt}" stroke="${KCOL.rapid}" stroke-width="1.4" stroke-dasharray="3 2"/>`;
+      }
+      dips.forEach((d, k) => { g += tlHole(x0 + SLOT*k/dips.length, x0 + SLOT*(k+1)/dips.length, toY, d, CLIP); });
       tip = (TL_HOLE[dips[0].cyc] || "Drilling") + (dips[0].cyc ? ` (${dips[0].cyc})` : "") + `, to Z ${dips[0].z.toFixed(3)}`
         + (dips[0].ret > 0 && dips[0].q > 0 ? (dips[0].cyc==="G73" ? `. Backs off about ${dips[0].ret} after each peck` : `. Rapids back down to about ${dips[0].ret} above the last peck`) + " (a machine setting, so shown with a grey band)" : "");
-    } else if (m==="ramp" || m==="helix"){
-      g += `<line x1="${x0}" x2="${x0+SLOT}" y1="${Y(prev ?? v)}" y2="${yv}" stroke="${col}" stroke-width="2"/>`;
-      if (m==="helix"){   // one flat loop per circuit, centered on the ramp; past three, a count
-        const n = Math.max(1, Math.min(3, Math.round(s.turns))), rx = Math.max(2.2, SLOT/n*0.34);
-        for (let k = 0; k < n; k++){ const t = (k + 0.5)/n; g += `<ellipse cx="${(x0 + SLOT*t).toFixed(1)}" cy="${(Y(prev ?? v) + (yv - Y(prev ?? v))*t).toFixed(1)}" rx="${rx.toFixed(1)}" ry="2.4" fill="#fff" stroke="${col}" stroke-width="1.2"/>`; }
-        if (Math.round(s.turns) > 3) g += `<text x="${xm}" y="${Math.min(Y(prev ?? v), yv) - 4}" font-size="6.5" text-anchor="middle" fill="${col}" font-family="Consolas,monospace">×${Math.round(s.turns)}</text>`;
+    } else if (mark==="ramp" || mark==="helix"){
+      g += `<line x1="${x0}" x2="${x0+SLOT}" y1="${toY(prev ?? value)}" y2="${yv}" stroke="${col}" stroke-width="2"/>`;
+      if (mark==="helix"){   // one flat loop per circuit, centered on the ramp; past three, a count
+        const n = Math.max(1, Math.min(3, Math.round(step.turns))), rx = Math.max(2.2, SLOT/n*0.34);
+        for (let k = 0; k < n; k++){
+          const t = (k + 0.5)/n;
+          g += `<ellipse cx="${(x0 + SLOT*t).toFixed(1)}" cy="${(toY(prev ?? value) + (yv - toY(prev ?? value))*t).toFixed(1)}" rx="${rx.toFixed(1)}" ry="2.4" fill="#fff" stroke="${col}" stroke-width="1.2"/>`;
+        }
+        if (Math.round(step.turns) > 3) {
+          g += `<text x="${xm}" y="${Math.min(toY(prev ?? value), yv) - 4}" font-size="6.5" text-anchor="middle" fill="${col}" font-family="Consolas,monospace">×${Math.round(step.turns)}</text>`;
+        }
       }
     } else {
-      if (prev!==null && Math.abs(prev - v) > 1e-9) g += `<line x1="${x0}" x2="${x0}" y1="${Y(prev)}" y2="${yv}" stroke="${col}" stroke-width="1.6"${dash}/>`;
-      g += `<line x1="${x0}" x2="${x0+SLOT}" y1="${yv}" y2="${yv}" stroke="${col}" stroke-width="${s.kind?2.2:1.2}"${dash}/>`;
+      if (prev!==null && Math.abs(prev - value) > 1e-9) {
+        g += `<line x1="${x0}" x2="${x0}" y1="${toY(prev)}" y2="${yv}" stroke="${col}" stroke-width="1.6"${dash}/>`;
+      }
+      g += `<line x1="${x0}" x2="${x0+SLOT}" y1="${yv}" y2="${yv}" stroke="${col}" stroke-width="${step.kind?2.2:1.2}"${dash}/>`;
       // A drilling cycle with many holes on one line (a pattern): a plunge per hole
       if (mode==="z" && !lathe) dips.forEach((d, k, all) => { const x = (x0 + SLOT*(k+1)/(all.length+1)).toFixed(1);
-        g += `<line x1="${x}" x2="${x}" y1="${Y(Math.min(d.top, CLIP))}" y2="${Y(d.z)}" stroke="${KCOL.cyc}" stroke-width="1.6" stroke-linecap="round"/>`; });
+        g += `<line x1="${x}" x2="${x}" y1="${toY(Math.min(d.top, CLIP))}" y2="${toY(d.z)}" stroke="${KCOL.cyc}" stroke-width="1.6" stroke-linecap="round"/>`; });
     }
-    if (m==="M00" || m==="M01") g += `<rect x="${xm-3.5}" y="${yv-3.5}" width="7" height="7" fill="${m==="M00" ? "#2b2f36" : "#fff"}" stroke="#2b2f36" stroke-width="1.3"/>`;
-    if (m==="engrave"){   // a grey box from R down to the depth
-      const yz = Y(Math.min(s.engZ, CLIP)), y0 = Math.min(yv, yz), hh = Math.max(2, Math.abs(yz - yv));
+    if (mark==="M00" || mark==="M01") {
+      g += `<rect x="${xm-3.5}" y="${yv-3.5}" width="7" height="7" fill="${mark==="M00" ? "#2b2f36" : "#fff"}" stroke="#2b2f36" stroke-width="1.3"/>`;
+    }
+    if (mark==="engrave"){   // a grey box from R down to the depth
+      const yz = toY(Math.min(step.engZ, CLIP)), y0 = Math.min(yv, yz), hh = Math.max(2, Math.abs(yz - yv));
       g += `<rect x="${(x0+SLOT*0.2).toFixed(1)}" y="${y0.toFixed(1)}" width="${(SLOT*0.6).toFixed(1)}" height="${hh.toFixed(1)}" fill="#b4bcc6" stroke="${KCOL.engrave}" stroke-width="1"/>`;
     }
-    if (m==="dwell") g += `<circle cx="${xm}" cy="${yv}" r="3.4" fill="#fff" stroke="#2b2f36" stroke-width="1.3"/>`;
-    if (m==="spindle") g += `<rect x="${xm-2.4}" y="${yv-2.4}" width="4.8" height="4.8" fill="#2b2f36" transform="rotate(45 ${xm} ${yv})"/>`;
-    if (m==="tool"){
-      const tw = (doc[s.li] || []).find(w => /^T\d/.test(w)), tn = tw ? "T" + parseInt(tw.slice(1)) : "T";
+    if (mark==="dwell") g += `<circle cx="${xm}" cy="${yv}" r="3.4" fill="#fff" stroke="#2b2f36" stroke-width="1.3"/>`;
+    if (mark==="spindle") g += `<rect x="${xm-2.4}" y="${yv-2.4}" width="4.8" height="4.8" fill="#2b2f36" transform="rotate(45 ${xm} ${yv})"/>`;
+    if (mark==="tool"){
+      const tw = (doc[step.li] || []).find(w => /^T\d/.test(w)), tn = tw ? "T" + parseInt(tw.slice(1)) : "T";
       g += `<line x1="${xm}" x2="${xm}" y1="${yv}" y2="11" stroke="#5b6b82" stroke-width="1.1"/><rect x="${xm-8}" y="1" width="16" height="9" rx="2" fill="#5b6b82"/><text x="${xm}" y="8" font-size="6.5" text-anchor="middle" fill="#fff" font-weight="700" font-family="Consolas,monospace">${tn}</text>`;
     }
-    if (m==="home") g += `<line x1="${xm}" x2="${xm}" y1="${yv}" y2="6" stroke="${KCOL.rapid}" stroke-width="1.3" stroke-dasharray="3 2"/><path d="M${xm-4},7 L${xm},3 L${xm+4},7 M${xm-4},1.5 H${xm+4}" fill="none" stroke="#2b2f36" stroke-width="1.3"/>`;
-    if (m==="end") g += `<line x1="${x0+SLOT-5}" x2="${x0+SLOT-5}" y1="3" y2="${H-bot}" stroke="#2b2f36" stroke-width="1"/><line x1="${x0+SLOT-2}" x2="${x0+SLOT-2}" y1="3" y2="${H-bot}" stroke="#2b2f36" stroke-width="2.4"/>`;
+    if (mark==="home") {
+      g += `<line x1="${xm}" x2="${xm}" y1="${yv}" y2="6" stroke="${KCOL.rapid}" stroke-width="1.3" stroke-dasharray="3 2"/><path d="M${xm-4},7 L${xm},3 L${xm+4},7 M${xm-4},1.5 H${xm+4}" fill="none" stroke="#2b2f36" stroke-width="1.3"/>`;
+    }
+    if (mark==="end") {
+      g += `<line x1="${x0+SLOT-5}" x2="${x0+SLOT-5}" y1="3" y2="${height-bot}" stroke="#2b2f36" stroke-width="1"/><line x1="${x0+SLOT-2}" x2="${x0+SLOT-2}" y1="3" y2="${height-bot}" stroke="#2b2f36" stroke-width="2.4"/>`;
+    }
     if (tip) g += `<title>${esc(tip)}</title>`;
     g += "</g>";
-    if (pos && s.v > CLIP + 1e-9 && m!=="tool" && m!=="home") g += `<text x="${X(i)+SLOT/2}" y="${Y(v)-3}" font-size="7" text-anchor="middle" fill="#9a9a9a">↑</text>`;
-    const nw = doc[s.li]?.[isBlockDel(doc[s.li]) ? 1 : 0]; const lab = /^N\d+$/.test(nw||"") ? nw : "L" + (s.li+1);
-    const cur = isCur(s, i);
-    if (cur || i % 2 === 0) g += `<text x="${X(i)+SLOT/2}" y="${H-6}" font-size="${cur?8:6.5}" text-anchor="middle" fill="${cur?"#d13438":"#9a9a9a"}" font-weight="${cur?700:400}" font-family="Consolas,monospace">${lab}</text>`;
-    prev = endOf(s, i);
+    if (pos && step.v > CLIP + 1e-9 && mark!=="tool" && mark!=="home") {
+      g += `<text x="${toX(i)+SLOT/2}" y="${toY(value)-3}" font-size="7" text-anchor="middle" fill="#9a9a9a">↑</text>`;
+    }
+    const nw = doc[step.li]?.[isBlockDel(doc[step.li]) ? 1 : 0]; const lab = /^N\d+$/.test(nw||"") ? nw : "L" + (step.li+1);
+    const cur = isCur(step, i);
+    if (cur || i % 2 === 0) {
+      g += `<text x="${toX(i)+SLOT/2}" y="${height-6}" font-size="${cur?8:6.5}" text-anchor="middle" fill="${cur?"#d13438":"#9a9a9a"}" font-weight="${cur?700:400}" font-family="Consolas,monospace">${lab}</text>`;
+    }
+    prev = endOf(step, i);
     ends[i] = prev;
   });
-  g += tlDot(steps, idx, sim, X, Y, mode, lathe, CLIP, vals, ends);
-  if (!pos) g += `<text x="${half-6}" y="${Y(0)-3}" font-size="7.5" text-anchor="end" fill="#8a8a8a" font-family="Consolas,monospace">0</text>`;
+  g += tlDot(steps, idx, sim, toX, toY, mode, lathe, CLIP, vals, ends);
+  if (!pos) g += `<text x="${half-6}" y="${toY(0)-3}" font-size="7.5" text-anchor="end" fill="#8a8a8a" font-family="Consolas,monospace">0</text>`;
   svg.innerHTML = g;
-  document.getElementById("tlgrid").innerHTML = grid.labels;
+  $("tlgrid").innerHTML = grid.labels;
   tlShift = -(idx*SLOT + SLOT/2);
   svg.style.transform = `translateX(${tlShift}px)`;
   const st = steps[idx], ls = st ? lineState[st.li] || {} : {};
   const at = st ? ` at ${/^N\d+$/.test(doc[st.li]?.[0]||"") ? doc[st.li][0] : "line "+(st.li+1)}` : "";
   const unit = mode==="feed" ? FEED_UNIT[ls.feed]?.[ls.units] || "" : mode==="speed" ? "rpm" : "";
   const now = !st ? "" : mode==="feed" ? `${word(numWord("F", st.f), ls).e} ${unit}` : mode==="speed" ? `${word(numWord("S", st.s), ls).e} ${unit}` : `${lathe ? "X" : "Z"} ${(lathe ? st.v*2 : st.v).toFixed(3)}` + (mode==="z" && st.dips?.length ? `, drills to Z ${st.dips[0].z.toFixed(3)}` : "");
-  document.getElementById("tlnow").textContent = st ? now.trim() + (P ? (st.on ? ", torch on" : ", torch off") : "") + at : "";
+  $("tlnow").textContent = st ? now.trim() + (processDef ? (st.on ? ", torch on" : ", torch off") : "") + at : "";
 }
-document.getElementById("tl-mode").addEventListener("change", e => {
+$("tl-mode").addEventListener("change", e => {
   tlMode[mtype()] = e.target.value;
   window.saveTimelineModes?.({ ...tlMode });
   drawTimeline(tlSteps, mtype()==="lathe");
 });
-document.getElementById("tl").addEventListener("click", e => {
+$("tl").addEventListener("click", e => {
   const box = e.currentTarget.getBoundingClientRect();
   const i = Math.floor((e.clientX - box.left - tlShift - box.width/2) / SLOT);
   if (tlSteps[i]) selectLine(tlSteps[i].li);
 });
 
-function simSpeed(){ return +document.getElementById("s-speed").value; }
+function simSpeed(){ return +$("s-speed").value; }
 function simLineFollow(){ simFollow(stepAtSeg(simIdx)); }
 // The step that made move idx-1 (the last move drawn), or the first step before any move.
 function stepAtSeg(idx){
@@ -565,7 +659,13 @@ function pauseSim(){ clearInterval(simTimer); simTimer = null; drawViews(); setM
 // After stepping by hand, stops before the tool count as passed and stops after it come up again.
 function resetStops(){ simStopAt = null; simStops = new Set(EXEC.steps.flatMap((s, k) => s.stop && s.s0 < simIdx ? [k] : [])); }
 function togglePlay(){ simTimer ? pauseSim() : playSim(); }
-function stopSim(quiet){ clearInterval(simTimer); simTimer = null; simStopAt = null; simK = simKey = null; if (simIdx!=null){ simIdx = null; if (!quiet) { render(); setMsg("Simulation closed"); } else setMsg(""); } }   // quietly: no "Playing…" left behind
+function stopSim(quiet){
+  clearInterval(simTimer);
+  simTimer = null;
+  simStopAt = null;
+  simK = simKey = null;
+  if (simIdx!=null){ simIdx = null; if (!quiet) { render(); setMsg("Simulation closed"); } else setMsg(""); }
+}   // quietly: no "Playing…" left behind
 function simStep(dir){
   if (editing && !commit()) return;
   if (simTimer) pauseSim();
@@ -576,17 +676,25 @@ function simStep(dir){
   else { const ps = st.filter(s => s.s1 > s.s0 && s.s1 < simIdx); simIdx = ps.length ? ps[ps.length-1].s1 : 0; }
   resetStops(); simFollow(last ? st.length-1 : stepAtSeg(simIdx), true);
 }
-function simReset(){ if (simTimer) pauseSim(); simIdx = 0; simStops = new Set(); simStopAt = null; simFollow(0, true); ed.scrollTop = 0; setMsg("Back to the start. ▶ plays."); }
-document.getElementById("s-play").onclick = togglePlay;
-document.getElementById("s-fwd").onclick = () => simStep(1);
-document.getElementById("s-back").onclick = () => simStep(-1);
-document.getElementById("s-reset").onclick = simReset;
+function simReset(){
+  if (simTimer) pauseSim();
+  simIdx = 0;
+  simStops = new Set();
+  simStopAt = null;
+  simFollow(0, true);
+  ed.scrollTop = 0;
+  setMsg("Back to the start. ▶ plays.");
+}
+$("s-play").onclick = togglePlay;
+$("s-fwd").onclick = () => simStep(1);
+$("s-back").onclick = () => simStep(-1);
+$("s-reset").onclick = simReset;
 function setSimOpt(on){
-  simOpt = on; document.getElementById("s-opt").setAttribute("aria-pressed", on);
+  simOpt = on; $("s-opt").setAttribute("aria-pressed", on);
   setMsg(on ? "Optional stop is on: the simulation pauses at M01 as well as M00." : "Optional stop is off: the simulation runs past M01 and pauses only at M00.");
 }
 function setSimBD(on){
-  simBD = on; document.getElementById("s-bd").setAttribute("aria-pressed", on);
+  simBD = on; $("s-bd").setAttribute("aria-pressed", on);
   if (simIdx!=null){ const li = curLine; EXEC = interpret(); const k = stepIndexFor(li); simIdx = EXEC.steps[k]?.s0 ?? 0; simK = k; resetStops(); }
   render();
   setMsg(on ? "Block delete is on: lines that start with / are skipped." : "Block delete is off: lines that start with / run like any other.");
@@ -599,20 +707,20 @@ function setSimRapids(on){
 // Expanded view: the toolpath panel moves to the big area at the top left and back to the side panel.
 function setSimX(on){
   simX = on;
-  const panel = document.getElementById("simpanel"), v1 = document.getElementById("v1");
-  document.getElementById("main").classList.toggle("simx", on);
-  if (on) document.getElementById("simbig").appendChild(panel);
-  else { document.getElementById("side").prepend(panel); v1.setAttribute("viewBox", "0 0 278 128"); v1.setAttribute("height", "128"); }
+  const panel = $("simpanel"), v1 = $("v1");
+  $("main").classList.toggle("simx", on);
+  if (on) $("simbig").appendChild(panel);
+  else { $("side").prepend(panel); v1.setAttribute("viewBox", "0 0 278 128"); v1.setAttribute("height", "128"); }
   if (on) v1.removeAttribute("height");
-  document.getElementById("s-big").setAttribute("aria-pressed", on);
-  document.getElementById("s-big").textContent = on ? "⤡" : "⤢";
-  document.getElementById("s-big").title = on ? "Back to the normal view (Ctrl+Shift+E)" : "Expanded view (Ctrl+Shift+E)";
+  $("s-big").setAttribute("aria-pressed", on);
+  $("s-big").textContent = on ? "⤡" : "⤢";
+  $("s-big").title = on ? "Back to the normal view (Ctrl+Shift+E)" : "Expanded view (Ctrl+Shift+E)";
   render(); scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`));
   setMsg(on ? "Expanded view. Ctrl+Shift+E or ⤡ goes back." : "");
 }
-document.getElementById("s-opt").onclick = () => setSimOpt(!simOpt);
-document.getElementById("s-bd").onclick = () => setSimBD(!simBD);
-document.getElementById("s-big").onclick = () => setSimX(!simX);
+$("s-opt").onclick = () => setSimOpt(!simOpt);
+$("s-bd").onclick = () => setSimBD(!simBD);
+$("s-big").onclick = () => setSimX(!simX);
 // The moves still to come: greyed, hidden or shown like the rest (Simulate › Toolpath, or the toolpath's Show button).
 function setFuture(f){
   future = f; showButtonState();
@@ -621,18 +729,30 @@ function setFuture(f){
 // The toolpath's Show button opens the toolpath settings (TOOLPATH_ITEMS in js/menus.js). It's highlighted while
 // something is left out of the drawing (rapids or the moves still to come), so a part-drawn toolpath isn't a surprise.
 function showButtonState(){
-  const b = document.getElementById("s-show"), off = [!simRapids && "rapid moves", future==="hide" && "moves after the selected line"].filter(Boolean);
+  const b = $("s-show"), off = [!simRapids && "rapid moves", future==="hide" && "moves after the selected line"].filter(Boolean);
   b.classList.toggle("on", off.length > 0);
   b.title = "What the toolpath shows" + (off.length ? `. Hidden now: ${off.join(" and ")}` : ": rapid moves, moves after the selected line, cutter comp side, colours");
 }
-document.getElementById("s-show").onclick = e => popMenu(e.currentTarget, TOOLPATH_ITEMS);
+$("s-show").onclick = e => popMenu(e.currentTarget, TOOLPATH_ITEMS);
 window.addEventListener("resize", () => { if (simX && activeTab >= 0) drawViews(); });
 
-document.getElementById("probs-l").addEventListener("mousedown", e => { const r = e.target.closest(".pr"); if (!r) return; e.preventDefault(); selectLine(+r.dataset.li); });
-document.getElementById("probs-c").addEventListener("mousedown", e => { const b = e.target.closest(".pf"); if (!b) return; e.preventDefault(); probFilter[b.dataset.f] = !probFilter[b.dataset.f]; probsOpen = true; drawProblems(); });
+$("probs-l").addEventListener("mousedown", e => {
+  const r = e.target.closest(".pr");
+  if (!r) return;
+  e.preventDefault();
+  selectLine(+r.dataset.li);
+});
+$("probs-c").addEventListener("mousedown", e => {
+  const b = e.target.closest(".pf");
+  if (!b) return;
+  e.preventDefault();
+  probFilter[b.dataset.f] = !probFilter[b.dataset.f];
+  probsOpen = true;
+  drawProblems();
+});
 function toggleProblems(open){ probsOpen = open ?? !probsOpen; drawProblems(); }
-document.getElementById("probs-tg").onclick = () => toggleProblems();
-document.getElementById("st-warn").onclick = () => toggleProblems(true);
+$("probs-tg").onclick = () => toggleProblems();
+$("st-warn").onclick = () => toggleProblems(true);
 function nextProblem(dir){
   const lines = [...new Set(PROBLEMS.filter(p => probFilter[p.sev]).map(p => p.li))];
   if (!lines.length){ setMsg("No problems in this file"); return; }

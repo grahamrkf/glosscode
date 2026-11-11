@@ -12,7 +12,6 @@
    Answers to red lines are remembered per pair of controls. The lifted program can be copied as the GlossCode
    middle format: one line per block, codes as full words, values as real numbers. */
 (() => {
-const $ = id => document.getElementById(id);
 const cvdlg = $("cvdlg");
 let CV = null;   // the conversion being reviewed
 
@@ -54,7 +53,9 @@ function liftProgram(){
       const m = /^([A-Z])(.*)$/.exec(t);
       if (!m || isKw(t)) return { kind:"raw", t, kw:isKw(t) };
       const L = m[1], raw = m[2], cy = st.cycleCode && D.cycles?.[st.cycleCode];
-      if (cy?.labels?.includes(L) || (st.subWord && L===st.subWord) || (L==="P" && (st.sub || st.local))) return { kind:"text", t };   // a line or program number, not a value
+      if (cy?.labels?.includes(L) || (st.subWord && L===st.subWord) || (L==="P" && (st.sub || st.local))) {
+        return { kind:"text", t };
+      }   // a line or program number, not a value
       // A dwell, in seconds whatever the source's rule (Haas and Fanuc P without a decimal is milliseconds)
       if (st.dwell && (D.dwellWords || []).includes(L) && /^[-+]?\d*\.?\d+\.?$/.test(raw)){
         const n = parseFloat(raw), dec = raw.includes(".");
@@ -96,12 +97,12 @@ function codesByMeaning(){
   for (const c of codeWords()) if (c.words && isCodeTok(c.k)) (by[c.words] ||= []).push(c);
   return by;
 }
-function writeBlock(b, by, ans, lifted, depth = 0){
+function writeBlock(block, by, ans, lifted, depth = 0){
   const T = DIALECT, out = [], why = [], notes = [];
   let level = "green", red = null;
   const missing = [];   // codes with no match on the target
   const amber = r => { if (level==="green") level = "amber"; why.push(r); };
-  for (const x of b.items){
+  for (const x of block.items){
     if (x.kind==="text") { out.push(x.t); continue; }
     if (x.kind==="raw"){
       out.push(x.t);
@@ -142,29 +143,35 @@ function writeBlock(b, by, ans, lifted, depth = 0){
       continue;
     }
     // An address. A distance written without a decimal point is written as the value the source read.
-    if (x.implied){ const w = x.L + fmtVal(parseFloat(x.v)); out.push(w); notes.push(`${x.t} was read as ${x.v} ${b.units==="inch" ? "in" : "mm"}, so it's written ${w}. If ${x.intended} was meant, fix the source too.`); }
+    if (x.implied){
+      const w = x.L + fmtVal(parseFloat(x.v));
+      out.push(w);
+      notes.push(`${x.t} was read as ${x.v} ${block.units==="inch" ? "in" : "mm"}, so it's written ${w}. If ${x.intended} was meant, fix the source too.`);
+    }
     else out.push(x.t);
   }
   if (red?.drop){
     red.what = missing.map(x => `${x.code} (${x.words || "unknown"}: ${x.desc || "no description"})`).join(" and ") + ` ${missing.length > 1 ? "have" : "has"} no code with the same meaning on the target.`;
     red.codes = missing.map(x => x.code).join(" ");
     // Only an M code or a mode setting (set.*) can be left out on its own: other G codes give the line's other words their meaning.
-    if (!missing.every(x => /^M/.test(x.code) || (!x.cycle && x.words?.startsWith("set."))) || missing.length===out.filter(t => !isComment(t) && !/^[NO]\d/.test(t)).length) red.drop = false;
+    if (!missing.every(x => /^M/.test(x.code) || (!x.cycle && x.words?.startsWith("set."))) || missing.length===out.filter(t => !isComment(t) && !/^[NO]\d/.test(t)).length) {
+      red.drop = false;
+    }
   }
   if (red){
-    if (red.key==="call.local" && b.sub) red.inline = true;
+    if (red.key==="call.local" && block.sub) red.inline = true;
     const choice = ans[red.key] || (red.inline ? "inline" : red.drop ? "drop" : "comment");
-    const src = b.items.map(x => x.t).join(" ").replace(/[()]/g, "");
+    const src = block.items.map(x => x.t).join(" ").replace(/[()]/g, "");
     if (choice==="inline" && red.inline && depth < 4){
       // Written in: the subprogram's lines (without their N numbers) take the call's place, once per repeat
       const lines = [[`(${src} WRITTEN IN)`]], sub = [];
       let lv = "green";
-      for (let k = 0; k < b.reps; k++) for (const j of b.sub){
+      for (let k = 0; k < block.reps; k++) for (const j of block.sub){
         const w = writeBlock({ ...lifted[j], items:lifted[j].items.filter(x => !/^N\d/.test(x.t)) }, by, ans, lifted, depth + 1);
         lines.push(...w.lines.filter(l => l.length)); if (k===0) sub.push(...w.why);
         if (w.level==="red" || (w.level==="amber" && lv==="green")) lv = w.level;
       }
-      return { lines, level: lv==="red" ? "red" : "amber", why:[`${b.items.find(x => x.words==="call.local").code} has no match on the target, so the ${b.sub.length} lines it runs are written in${b.reps > 1 ? `, ${b.reps} times` : ""}.`, ...new Set(sub)], red, choice, notes, inlined:b.subStart };
+      return { lines, level: lv==="red" ? "red" : "amber", why:[`${block.items.find(x => x.words==="call.local").code} has no match on the target, so the ${block.sub.length} lines it runs are written in${block.reps > 1 ? `, ${block.reps} times` : ""}.`, ...new Set(sub)], red, choice, notes, inlined:block.subStart };
     }
     if (choice==="drop" && red.drop){
       const keep = out.filter(t => !missing.some(x => x.t===t));
@@ -208,7 +215,12 @@ function convert(tgt){
   // Check the result as the target reads it: unknown words, its own problems, its cycles, and its toolpath
   withProgram(tgt, outDoc, () => {
     view.forEach((cells, k) => { const r = res[rowOf(k)]; if (!r || r.level==="red") return;
-      cells.forEach(c => { if (c.unk){ r.level = "red"; r.red ||= { key:"unknown-target:" + c.g, what:`The target doesn't read ${c.g}.` }; r.why.unshift(`The target doesn't read ${c.g}.`); r.choice ||= "keep"; } }); });
+      cells.forEach(c => { if (c.unk){
+        r.level = "red";
+        r.red ||= { key:"unknown-target:" + c.g, what:`The target doesn't read ${c.g}.` };
+        r.why.unshift(`The target doesn't read ${c.g}.`);
+        r.choice ||= "keep";
+      } }); });
     const probs = checkProgram(true).filter(p => p.sev!=="info");
     for (const p of probs){
       const k = p.li, si = rowOf(k), r = si==null ? null : res[si]; if (!r || r.level==="red") continue;
@@ -221,7 +233,10 @@ function convert(tgt){
       const cy = DIALECT.cycles?.[st.cycleCode]; if (!cy || !toks.some(t => isCode(t, st.cycleCode))) return;
       const ok = new Set([...(cy.requires || []), ...(cy.optional || []), ...(cy.choices || []).flat(), ...(cy.labels || []), "N", "G", "M", "F", "S", "T", "X", "Y", "Z", "R", "L", "K"]);
       const extra = toks.filter(t => /^[A-Z][-+.\d#[]/.test(t) && !ok.has(t[0])).map(t => t[0]);
-      if (extra.length){ if (r.level==="green") r.level = "amber"; r.why.push(`${st.cycleCode} on the target doesn't list ${[...new Set(extra)].join(", ")} as one of its words.`); }
+      if (extra.length){
+        if (r.level==="green") r.level = "amber";
+        r.why.push(`${st.cycleCode} on the target doesn't list ${[...new Set(extra)].join(", ")} as one of its words.`);
+      }
     });
     // Move by move: the first place the toolpaths part ways
     const tseg = moves(EXEC.segs), tol = 0.00051;
@@ -257,13 +272,18 @@ function defaultTarget(){
 function openConvert(){
   if (editing && !commit()) return;
   closeMenu?.();
-  if (!convertible(machineId)){ setMsg(`Converting from ${MACHINES[machineId].name} isn't supported yet: only controls with Fanuc-style blocks can be converted so far.`, true); return; }
+  if (!convertible(machineId)){
+    setMsg(`Converting from ${MACHINES[machineId].name} isn't supported yet: only controls with Fanuc-style blocks can be converted so far.`, true);
+    return;
+  }
   const sel = $("cv-tgt");
   sel.innerHTML = targets().map(([k, m]) => `<option value="${esc(k)}">${esc(m.name)}${verifiedOf(k) ? "" : " (draft rules)"}</option>`).join("");
   sel.value = defaultTarget();
   $("cv-from").textContent = MACHINES[machineId].name;
   $("cv-only").checked = false; $("cv-view").value = "lines";
-  cvdlg.hidden = false; run(); sel.focus();
+  showDialog(cvdlg);
+  run();
+  sel.focus();
 }
 function run(){ CV = convert($("cv-tgt").value); draw(); }
 const DOT = { green:"Converted directly", amber:"Converted, worth a look", red:"Needs your decision" };
@@ -298,7 +318,10 @@ function finish(){
   const red = c.rows.filter(r => r.level==="red").length;
   setMsg(`Converted to ${MACHINES[c.tgt].name}. ${red ? `${red} line${red===1 ? "" : "s"} need finishing by hand (CONVERT BY HAND). ` : ""}Save it with File › Save As, and dry run it before cutting.`);
 }
-function closeConvert(){ cvdlg.hidden = true; CV = null; ed.focus({ preventScroll:true }); }
+function closeConvert(){
+  CV = null;
+  hideDialog(cvdlg);
+}
 
 $("cv-tgt").addEventListener("change", run);
 $("cv-only").addEventListener("change", draw);

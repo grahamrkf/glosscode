@@ -56,7 +56,11 @@ Object.assign(SimRun.prototype, {
     const S = {...this.p}, I = Math.abs(w.I || 0), dx = Math.sign(n.x - S.x), xs = [];
     if (I > 0 && dx) for (let x = S.x; dx*(n.x - x) > 1e-9 && xs.length < 500; x += dx*I) xs.push(x);
     xs.push(n.x);
-    let at = S; const go = (b, rapid, extra) => { this.segs.push({ a:{...at}, b:{...b}, rapid, kind: rapid ? "rapid" : "cyc", li, tool:T, ...extra }); at = b; };
+    let at = S;
+    const go = (b, rapid, extra) => {
+      this.segs.push({ a:{...at}, b:{...b}, rapid, kind: rapid ? "rapid" : "cyc", li, tool:T, ...extra });
+      at = b;
+    };
     // at X0 it's a drilled hole: marked with a circle at the bottom
     for (const x of xs){ go({ x, y:0, z:S.z }, true); go({ x, y:0, z:n.z }, false, Math.abs(x) < 1e-6 ? { hole:true } : null); go({ x, y:0, z:S.z }, true); }
     go(S, true); this.p = S;
@@ -75,7 +79,12 @@ Object.assign(SimRun.prototype, {
   // feed back out with the spindle reversed, then rapid back to the start Z.
   tapZ(n, w, li, T){
     const S = {...this.p}, dz = Math.sign(n.z - S.z) || -1, z1 = S.z + dz*Math.abs(w.K || 0);
-    let at = S; const go = (b, rapid, extra) => { if (Math.hypot(b.x - at.x, b.z - at.z) < 1e-9) return; this.segs.push({ a:{...at}, b:{...b}, rapid, kind: rapid ? "rapid" : "cyc", li, tool:T, ...extra }); at = b; };
+    let at = S;
+    const go = (b, rapid, extra) => {
+      if (Math.hypot(b.x - at.x, b.z - at.z) < 1e-9) return;
+      this.segs.push({ a:{...at}, b:{...b}, rapid, kind: rapid ? "rapid" : "cyc", li, tool:T, ...extra });
+      at = b;
+    };
     go({ x:n.x, y:0, z:S.z }, true); go({ x:n.x, y:0, z:z1 }, true);
     go({ x:n.x, y:0, z:n.z }, false, { hole:true }); go({ x:n.x, y:0, z:z1 }, false); go({ x:n.x, y:0, z:S.z }, true);
     this.p = { x:n.x, y:0, z:S.z };

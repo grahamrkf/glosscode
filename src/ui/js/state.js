@@ -1,3 +1,24 @@
+// Dialogs. $ finds an element by id. showDialog shows a dialog (a .dim box in index.html) and moves the focus into
+// it; hideDialog hides it and gives the focus back to the editor. dialogKeys keeps a dialog's keys from reaching the
+// editor underneath, closes it on Escape, and passes any other key to onKey.
+const $ = id => document.getElementById(id);
+function showDialog(dlg, focus){
+  dlg.hidden = false;
+  focus?.focus();
+}
+function hideDialog(dlg){
+  dlg.hidden = true;
+  $("ed")?.focus({ preventScroll:true });
+}
+function dialogKeys(dlg, onEscape, onKey){
+  dlg.addEventListener("keydown", e => {
+    e.stopPropagation();
+    if (e.key==="Escape"){
+      e.preventDefault();
+      onEscape();
+    } else onKey?.(e);
+  });
+}
 let VIEWWIN = null, VIEWT = null, boxMode = false;   // toolpath zoom and pan (see viewVisible)
 // Open programs, one per tab (see js/tabs.js). activeTab is -1 on the home page.
 // Each tab is one object holding its program (newTab). The names fileName, machineId, doc, curLine, expanded,

@@ -146,6 +146,15 @@ int plat_file_exists(const char *path)
     return a != INVALID_FILE_ATTRIBUTES;
 }
 
+int plat_remove_file(const char *path, char *err, size_t errsz)
+{
+    wchar_t *w = to_wide(path);
+    BOOL ok = w && DeleteFileW(w);
+    free(w);
+    if (!ok) last_error("delete", path, err, errsz);
+    return ok ? 0 : -1;
+}
+
 char *plat_full_path(const char *path)
 {
     wchar_t *w = to_wide(path);
