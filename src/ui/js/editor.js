@@ -496,8 +496,6 @@ const nStep = () => SYNTAX==="klartext" ? 1 : N_STEP;
 // Labels are "N1000" (Haas M97 P1000) or "O1200" (Okuma CALL O1200, a program block in the same file).
 function labels(){ const m = {}; doc.forEach((t, i) => { const n = nOf(t); if (n!=null && m["N"+n]===undefined) m["N"+n] = i; if (/^N[A-Z]/.test(t[0]||"") && m[t[0]]===undefined) m[t[0]] = i; if (/^O\d+$/.test(t[0]||"")) m["O"+parseInt(t[0].slice(1))] = i; const nm = t.find(w => /^\[\w+\]$/.test(w)); if (nm && m[nm]===undefined) m[nm] = i; if (/^%L /.test(t[0]||"") && m[t[0]]===undefined) m[t[0]] = i; const sb = SYNTAX==="fagor8055" && t.map(w => /^\(SUB ?(\d+)\)$/.exec(w)).find(Boolean); if (sb && m["SUB " + parseInt(sb[1])]===undefined) m["SUB " + parseInt(sb[1])] = i;
   const kl = SYNTAX==="klartext" && t.find(w => /^LBL (?!0$)/.test(w)); if (kl && m[klLabel(kl.slice(4))]===undefined) m[klLabel(kl.slice(4))] = i; }); return m; }
-// A Klartext label's key: "LBL 5" (LBL 05 is the same label) or 'LBL "NAME"'
-const klLabel = x => "LBL " + (/^\d+$/.test(x) ? parseInt(x, 10) : x);
 // "N90" or "NA1" as a key into labels()
 const labelKey = w => /^N\d+:?$/.test(w) ? "N" + parseInt(w.slice(1)) : w;
 function callTarget(toks){

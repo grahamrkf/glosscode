@@ -372,34 +372,6 @@ function checkMove(K, ln){
 }
 
 
-// Klartext checks, in file order: block numbers, the program name, cycle calls with no CYCL DEF, calls and jumps to
-// labels that aren't there, the first feed move with no F or with the spindle stopped, and M codes that contradict.
-function checkKlartext(emit, L){
-  let prev = null, begin = null, def = false, F = false, spin = null, noF = false, spinWarned = false;
-  doc.forEach((toks, li) => {
-    const n = klBlock(toks);
-    if (n!=null){ if (prev!=null && n <= prev) emit(li, "block-number-order", { n, prev }); prev = n; }
-    const all = toks.filter(t => !isComment(t)), codes = [...new Set(all.filter(t => /^M\d+$/.test(t)).map(pad2))];
-    for (const t of all){
-      const k = klKey(t);
-      if (k==="BEGIN PGM") begin = /^BEGIN PGM (\S+)/.exec(t)?.[1] ?? null;
-      if (k==="END PGM"){ const e = /^END PGM (\S+)/.exec(t)?.[1]; if (begin!=null && e!=null && e!==begin) emit(li, "pgm-name-mismatch", { end:e, begin }); }
-      if (k==="CYCL DEF") def = true;
-      if ((/^CYCL CALL/.test(t) || isCode(t, "M99") || isCode(t, "M89")) && !def) emit(li, "cycle-call-no-def", { word:t });
-      const lb = /^CALL LBL ("[^"]*"|\d+)/.exec(t) || (/^FN (?:9|1[0-2]):/.test(t) ? / GOTO LBL ("[^"]*"|\d+)/.exec(t) : null);
-      if (lb && !/^0+$/.test(lb[1]) && L[klLabel(lb[1])]===undefined) emit(li, "missing-label", { word:t, label:klLabel(lb[1]) });
-    }
-    for (const grp of DIALECT.mConflicts || []){ const hit = codes.filter(c => grp.includes(c)); if (hit.length > 1) emit(li, "m-conflict", { codes:hit.join(" and ") }); }
-    if (all.some(t => /^F(?:[-+]?[\d.]|Q|AUTO$)/.test(t))) F = true;
-    for (const c of codes){ if (["M03","M04","M13","M14"].includes(c)) spin = c; if (c==="M05") spin = "M05"; }
-    const h = klHeadOf(all);
-    if (h && KL_MOVE.test(h) && !all.includes("FMAX")){
-      const move = `${h} move`;
-      if (!F && !noF){ noF = true; emit(li, "no-feed-rate", { move }); }
-      if (!["M03","M04","M13","M14"].includes(spin) && !spinWarned){ spinWarned = true; emit(li, "spindle-off-feed", { move, spin: spin ? spin + " is active" : "it was never started" }); }
-    }
-  });
-}
 
 /* A control whose rules are a first draft (not yet checked against its programming manual) gets one banner above the
    program, which can be dismissed. Dismissing it is remembered for that control in settings.json. */

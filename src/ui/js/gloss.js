@@ -93,24 +93,6 @@ function applyModes(toks, st){
   if (SYNTAX==="klartext") klModes(toks, st, set);
   trackCarry(toks, st);
 }
-// Klartext: CYCL DEF's Q parameter lines (the block goes on while a line ends in "~"), units from BEGIN PGM,
-// the tool from TOOL CALL, the move (FMAX a rapid, DR+ a counterclockwise arc) and radius compensation (RL, RR, R0)
-function klModes(toks, st, set){
-  if (!st.klCont) st.klDef = null;
-  const last = toks[toks.length-1] || "";
-  st.klCont = last==="~" || (last[0]===";" && /~\s*$/.test(last));
-  for (const t of toks){
-    const k = klKey(t); if (!k) continue;
-    if (k==="CYCL DEF") st.klDef = /^CYCL DEF (\d+)/.exec(t)[1];
-    if (k==="BEGIN PGM"){ if (/ MM$/.test(t)){ st.units = "mm"; set("unitCode", "G21"); } if (/ INCH$/.test(t)){ st.units = "inch"; set("unitCode", "G20"); } }
-    if (k==="TOOL CALL"){ const n = /^TOOL CALL (\d+)/.exec(t); if (n) set("T", "T" + n[1]); }
-    if (KL_MOVE.test(k)){
-      set("motion", KL_ARC.test(k) ? (toks.includes("DR+") ? "G03" : "G02") : toks.includes("FMAX") ? "G00" : "G01");
-      set("klMove", k + (toks.includes("FMAX") ? " FMAX" : KL_ARC.test(k) && toks.includes("DR+") ? " DR+" : KL_ARC.test(k) && toks.includes("DR-") ? " DR-" : ""));
-    }
-  }
-  for (const [w, g] of [["RL","G41"], ["RR","G42"], ["R0","G40"]]) if (toks.includes(w)){ set("comp", g); set("klComp", w); }
-}
 // Where each axis was last sent (X as written, so a lathe X is a diameter), and the R and Q an active canned
 // cycle keeps using. Column view shows these greyed out on lines that don't write them.
 const AXES = { X:["X","U"], Y:["Y","V"], Z:["Z","W"] };
