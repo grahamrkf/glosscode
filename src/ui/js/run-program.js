@@ -5,8 +5,9 @@ const arcSteps = (sw, full) => Math.max(2, Math.min(full, Math.ceil(Math.abs(sw)
 // Runs the program for the toolpath and the Z timeline: { segs (toolpath moves), steps (one per line run), vals,
 // ghosts, boxes, wraps, alarm, notes, vars, tailUsed }. Klartext has its own reader (interpretKlartext).
 function interpret(){
-  if (SYNTAX==="klartext") return interpretKlartext();
-  return new SimRun().run();
+  const ex = SYNTAX==="klartext" ? interpretKlartext() : new SimRun().run();
+  ex.time = timeRun(ex);   // how long each move takes (sim-time.js)
+  return ex;
 }
 
 /* One run of a Fanuc-style program, line by line, as the control would run it. The constructor sets up the run's
@@ -28,11 +29,14 @@ class SimRun {
     // so p is where the tool really is and off is the program zero's shift from where it started.
     this.okL = this.lathe && isOkuma(); this.NV = {}; this.off = { x:0, z:0 };
     this.F = null;   // the feed rate as it runs (an F#111 is only known here)
+    // For the move times (sim-time.js): the spindle speed as it runs, a lathe's speed clamp (G50 S), and the
+    // active canned cycle's dwell (P, in seconds).
+    this.S = null; this.clamp = null; this.cycP = null;
     this.L = labels();
     this.steps = [];
     // The toolpath. Each move is mirrored and turned (xfSeg) as it goes in.
     this.segs = [];
-    this.segs.push = (...a) => { a.forEach(s => this.xfSeg(s)); return Array.prototype.push.apply(this.segs, a); };
+    this.segs.push = (...a) => { a.forEach(s => { this.xfSeg(s); s.F ??= this.F; s.S ??= this.S; s.clamp ??= this.clamp; }); return Array.prototype.push.apply(this.segs, a); };
     this.noCyc = false;   // a Fagor 8055 N0 repeat: the move without the active cycle
     // ,C and ,R corners (Fanuc style): a G01 line with one waits for the next G01 move, then both are cut short and joined by
     // the chamfer or radius. ghosts are the parts of the two moves out to the sharp corner, which the tool doesn't cut.
@@ -201,7 +205,6 @@ class SimRun {
     if (this.lathe && tt) this.tool = this.pendingT;
     if (toks.some(t => isCode(t,"M06"))) this.tool = this.pendingT;
     const { w, skip, unknown, shift } = this.readWords(toks, li, inLib);
-    if ("F" in w && !this.lathe) this.F = w.F;
     if ("D" in w && toks.some(t => isCode(t,"G41") || isCode(t,"G42"))) this.compD = w.D;
     // A code for an option this machine doesn't have: the control alarms. Its words move the option (G152 W the
     // tailstock), never the tool, so with the option nothing moves either.
@@ -298,7 +301,7 @@ class SimRun {
         if (v===80) this.cyc = null;
         if (v===40) this.comp = null; if (v===41) this.comp = "L"; if (v===42) this.comp = "R";
         if ((!this.lathe || this.latheDrill(pad2(t))) && DIALECT.cycles?.[pad2(t)]){
-          if (this.cyc==null){ this.cycZ = this.p.z; this.cycR = this.cycD = this.cycQ = null; }
+          if (this.cyc==null){ this.cycZ = this.p.z; this.cycR = this.cycD = this.cycQ = this.cycP = null; }
           this.cyc = pad2(t);
         }
         if (this.lathe && pad2(t)===coordSetCode()){ shift = true; return; }   // a spindle clamp (G50 S, or G92 S in systems B and C), or with X/Z a zero shift
@@ -306,6 +309,8 @@ class SimRun {
       else if (k==="M" && (v===97 || v===98)) skip = true;
       else if (!isNaN(v)) w[k] = v;
     });
+    if (!skip && "F" in w) this.F = w.F;
+    if ("S" in w){ if (this.lathe && toks.some(t => isCode(t, clampCode()))) this.clamp = w.S; else this.S = w.S; }
     return { w, skip, unknown, shift };
   }
 
@@ -477,6 +482,10 @@ class SimRun {
       if ("Z" in w) this.cycD = n.z;
       if ("Q" in w) this.cycQ = Math.abs(w.Q);
     }
+    // A dwell at the bottom (G82, G89…: P, in milliseconds when it has no decimal point on Haas and Fanuc)
+    const def = DIALECT.cycles?.[this.cyc], pt = (doc[this.curLi] || []).find(t => /^P[-+]?(\d+\.?\d*|\.\d+)$/.test(t));
+    if (pt && def && [...(def.requires || []), ...(def.optional || [])].includes("P") && DIALECT.cycleRefZ==null)
+      this.cycP = !pt.includes(".") && DIALECT.dwellNoDecimal==="ms" ? parseFloat(pt.slice(1))/1000 : parseFloat(pt.slice(1));
   }
   // A hole: over to X Y at the current height (rapid, or along via), rapid down to R, feed to the bottom, back up to R or the start.
   hole(n, li, T, dips, via){
@@ -487,7 +496,7 @@ class SimRun {
     }
     else this.segs.push({a:{...this.p}, b:{x:n.x, y:n.y, z:this.p.z}, rapid:true, kind:"rapid", li, tool:T});
     if (this.p.z > r) this.segs.push({a:{x:n.x, y:n.y, z:this.p.z}, b:{x:n.x, y:n.y, z:r}, rapid:true, kind:"rapid", li, tool:T});
-    this.segs.push({a:{x:n.x, y:n.y, z:r}, b:{x:n.x, y:n.y, z}, rapid:false, kind:"cyc", li, tool:T, hole:true});
+    this.segs.push({a:{x:n.x, y:n.y, z:r}, b:{x:n.x, y:n.y, z}, rapid:false, kind:"cyc", li, tool:T, hole:true, cyc:this.cyc, q:this.cycQ, dw:this.cycP});
     this.segs.push({a:{x:n.x, y:n.y, z}, b:{x:n.x, y:n.y, z:back}, rapid:true, kind:"rapid", li, tool:T});
     const pr = DIALECT.peckRetract?.[this.cyc];
     dips.push({ top: Math.max(this.p.z, r), r, z, back, cyc: this.cyc, q:this.cycQ, ...(pr ? { ret: pr[lineState[li]?.units==="mm" ? "mm" : "inch"] } : {}) });
@@ -507,6 +516,10 @@ class SimRun {
     for (const q of pts){
       if (this.cyc && !this.noCyc) this.hole({ x:q.x, y:q.y, z:this.p.z }, li, T, dips);
       else { const b = { x:q.x, y:q.y, z:this.p.z }; this.segs.push({ a:{...this.p}, b, rapid:true, kind:"rapid", li, tool:T }); this.p = b; }
+    }
+    // The pattern ends back at its center (#72): the next G70 with no X Y uses the same center, not the last hole.
+    if (pts.length && Math.hypot(this.p.x - c.x, this.p.y - c.y) > 1e-9){
+      const b = { x:c.x, y:c.y, z:this.p.z }; this.segs.push({ a:{...this.p}, b, rapid:true, kind:"rapid", li, tool:T }); this.p = b;
     }
   }
   // Haas G12 (clockwise) / G13 (counterclockwise) circular pocket about the current position: down to Z, then a full circle

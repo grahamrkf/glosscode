@@ -26,14 +26,14 @@ const MACHINES = {};
 const USER_DATA = {};                // the user's own profiles by id, as saved in settings.json
 const USER_MACHINES = new Set();     // their ids
 function machineDefaults(m){
-  return { travel:[null, null, null], rpm:null, feed:null, tools:null, eob:false, macro:false, liveTooling:false, yAxis:false, notes:"", ...m, travel:[...(m.travel || [null, null, null])] };
+  return { travel:[null, null, null], rpm:null, feed:null, rapid:null, tools:null, eob:false, macro:false, liveTooling:false, yAxis:false, notes:"", ...m, travel:[...(m.travel || [null, null, null])] };
 }
 function rebuildMachines(user = USER_DATA){
   for (const k of Object.keys(MACHINES)) delete MACHINES[k];
   USER_MACHINES.clear();
   for (const t of MACHINE_TYPES) for (const c of controlsFor(t))
     MACHINES[genId(t, c)] = { name: c==="generic" ? `Generic ${typeLabel(t).toLowerCase()}` : `Generic ${controlLabel(c)} ${typeLabel(t).toLowerCase()}`, type:t, brand:c,
-      travel:[null, null, null], rpm:null, feed:null, tools:null, eob:false, macro:true, liveTooling:true, yAxis:true, progTailstock:true, generic:true, notes:"" };
+      travel:[null, null, null], rpm:null, feed:null, rapid:null, tools:null, eob:false, macro:true, liveTooling:true, yAxis:true, progTailstock:true, generic:true, notes:"" };
   for (const [id, m] of Object.entries(MACHINE_LIBRARY)) MACHINES[id] = { ...machineDefaults(m), lib:true };
   for (const [id, m] of Object.entries(user)){
     if (!m || typeof m!=="object" || !RULES.machineTypes[m.type] || !RULES.dialects[m.brand]) continue;

@@ -29,5 +29,19 @@ r = A.run("N10 G20 G90\nN20 G00 X1 Y0.\nN30 M30", "gen.mill.haas", "words");
 eq(r.words[1][2], "movx:0.0001", "X1 is 0.0001 in on a Haas");
 eq(r.problems.map(p => p.id), ["missing-decimal"], "X1 is flagged");
 
+// #72: a bolt circle ends back at its center, so the next G70 with no X Y is about the same center.
+A.run("G20 G90\nT1 M06\nG00 X0 Y0 Z1.\nG81 Z-0.66 R0.1 L0 F26.\nG70 I0.5 J90. L2\nG70 I1. J90. L2\nG80\nM30", "gen.mill.haas");
+let e = A.interpret();
+eq(e.segs.filter(s => s.hole).map(s => [Math.round(s.a.x*1e4)/1e4 + 0, Math.round(s.a.y*1e4)/1e4 + 0]), [[0, 0.5], [0, -0.5], [0, 1], [0, -1]], "the second G70 is about the first one's center");
+
+// Move times: feed per minute, a dwell (P without a decimal is milliseconds on Haas), rapids at 1000 in/min.
+A.run("G20 G90 G94\nS1000 M03\nG00 X0 Y0 Z1.\nG01 Z0 F10.\nG01 X10. F20.\nG04 P2000\nG00 Z1.\nM30", "gen.mill.haas");
+e = A.interpret();
+eq(e.steps.map(s => Math.round(s.t*100)/100), [0, 0, 0, 6, 30, 2, 0.06, 0], "move and dwell times on a mill");
+// G96 on a lathe: per rev × the speed worked out at the diameter, capped by G50 S.
+A.run("G20\nG99\nG50 S1000\nG96 S500 M03\nG00 X1. Z0.1\nG01 Z-1.9 F0.01\nM30", "gen.lathe.haas");
+e = A.interpret();
+eq(Math.round(e.steps[5].t*100)/100, 12, "G96 at Ø1.0 is 1910 rpm, clamped to 1000: 2 in at 10 in/min");
+
 if (failed){ console.error(`test_ui: ${failed} failed`); process.exit(1); }
 console.log("test_ui: all passed");

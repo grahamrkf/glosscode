@@ -129,6 +129,7 @@ function drawProfiles(){
   $("pf-ptail").checked = !!m.progTailstock;
   $("pf-rpm").value = v(m.rpm);
   $("pf-feed").value = v(m.feed);
+  $("pf-rapid").value = v(m.rapid);
   $("pf-tools").value = v(m.tools);
   $("pf-eob").checked = !!m.eob;
   $("pf-macro").checked = !!m.macro;
@@ -148,7 +149,7 @@ function readProfileForm(){
     type: $("pf-type").value,
     brand: $("pf-ctrl").value,
     travel: [num("pf-x"), num("pf-y"), num("pf-z")],
-    rpm: num("pf-rpm"), feed: num("pf-feed"), tools: num("pf-tools"),
+    rpm: num("pf-rpm"), feed: num("pf-feed"), rapid: num("pf-rapid"), tools: num("pf-tools"),
     eob: $("pf-eob").checked,
     macro: $("pf-macro").checked,
     liveTooling: $("pf-live").checked,

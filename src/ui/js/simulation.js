@@ -128,7 +128,15 @@ function drawViews(){
       + `<path d="M${sp[1].join(",")} L${sp[0].join(",")} L${sp[3].join(",")} L${sp[2].join(",")}" fill="none" stroke="${edge}" stroke-width="${state==="cur" ? 1.8 : 1.1}" stroke-linejoin="round"/></g>`;
   }).join("");
   svg += wr + band.join("") + gh + bx + layers.flat().join("");
-  const at = segs[Math.max(0, Math.min(doneTo, segs.length) - 1)];
+  let at = segs[Math.max(0, Math.min(doneTo, segs.length) - 1)];
+  // Playing in time: the move under way is drawn as far as the tool has got along it
+  const part = simIdx!=null && simPart && simPart.i===doneTo && doneTo < segs.length && simPart.f > 0 ? segs[doneTo] : null;
+  if (part){
+    const f = simPart.f, q = { x:part.a.x + (part.b.x - part.a.x)*f, y:(part.a.y || 0) + ((part.b.y || 0) - (part.a.y || 0))*f, z:part.a.z + (part.b.z - part.a.z)*f };
+    if (!part.sweep && (!part.rapid || simRapids) && (Math.abs(fx(part.a)-fx(q)) > 1e-9 || Math.abs(fy(part.a)-fy(q)) > 1e-9))
+      svg += `<line x1="${toX(fx(part.a))}" y1="${toY(fy(part.a))}" x2="${toX(fx(q))}" y2="${toY(fy(q))}" stroke="#d13438" stroke-width="2.4" stroke-linecap="round"${part.rapid ? ' stroke-dasharray="3 3"' : ""}/>`;
+    at = { ...part, b:q };
+  }
   // Lathe tailstock, when the program uses it: a center pointing at the part, with ← (in), → (out) or ? (not set yet).
   if (lathe && EXEC.tailUsed){
     const tk = simIdx!=null && simK!=null ? simK : stepIndexFor(curLine), ts = EXEC.steps[tk]?.tail || null;
@@ -138,11 +146,11 @@ function drawViews(){
       : `<text x="${x1-11}" y="${cy+4}" font-size="12" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">?</text>`;
     svg += `<g class="tailst"><title>Tailstock ${ts==="in" ? "in (advanced)" : ts==="out" ? "out (retracted)" : "not set yet: no tailstock code has run"}</title><path d="M${x0} ${cy} L${x1} ${cy-15} L${x1} ${cy+15} Z" fill="#1f2328" stroke="#1f2328" stroke-width="3" stroke-linejoin="round"/>${sym}</g>`;
   }
-  if (at && doneTo > 0 && at.sweep){   // engraving and threading: the tool is a line across the box, sweeping along it
+  if (at && (doneTo > 0 || part) && at.sweep){   // engraving and threading: the tool is a line across the box, sweeping along it
     const qx = fx(at.b), qy = fy(at.b), tx = qx + at.sweep.ux*at.sweep.h, ty = qy + at.sweep.uy*at.sweep.h;
     svg += `<line x1="${toX(qx)}" y1="${toY(qy)}" x2="${toX(tx)}" y2="${toY(ty)}" stroke="#d13438" stroke-width="3" stroke-linecap="round"/>`;
   }
-  else if (at && doneTo > 0) svg += `<circle cx="${toX(fx(at.b))}" cy="${toY(fy(at.b))}" r="4.5" fill="${colorBy==="tool" ? toolColor(at.tool) : "#d13438"}" stroke="#fff" stroke-width="1.5"/>`;
+  else if (at && (doneTo > 0 || part)) svg += `<circle cx="${toX(fx(at.b))}" cy="${toY(fy(at.b))}" r="4.5" fill="${colorBy==="tool" ? toolColor(at.tool) : "#d13438"}" stroke="#fff" stroke-width="1.5"/>`;
   // An alarm (a code for an option the machine doesn't have): the machine stops there, so the simulation ends on a red ✕
   if (alarmReached()){
     const q = EXEC.alarm.at, cx = +toX(fx(q)), cy = +toY(fy(q)), r = 7;
@@ -153,7 +161,7 @@ function drawViews(){
   $("tleg").innerHTML = colorBy==="tool"
     ? tools.map(t => `<span><i style="background:${toolColor(t)}"></i>${t}</span>`).join("") + `<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`
     : (simRapids ? `<span><i style="background:${KCOL.rapid}"></i>Rapid</span>` : "") + `<span><i style="background:${KCOL.feed}"></i>Feed</span><span><i style="background:${KCOL.arc}"></i>Arc</span><span><i style="background:${KCOL.cyc}"></i>Cycle</span>${EXEC.boxes?.length ? `<span><i style="background:#b4bcc6"></i>Engraving</span>` : ""}${compBand && segs.some(s => s.comp) ? `<span><i style="background:rgba(138,147,158,.45);height:6px"></i>Cutter comp side</span>` : ""}<span style="margin-left:auto;color:#888">${future==="grey"?"later moves greyed":future==="hide"?"later moves hidden":"all moves shown"}</span>`;
-  drawSimPos(doneTo > 0 ? at : null, lathe);
+  drawSimPos(doneTo > 0 || part ? at : null, lathe);
   // Only when it changes: WebKitGTK (Linux) drops a click whose text was replaced between the press and the release,
   // and this runs on every step of the simulation, so ⏸ couldn't be clicked while playing.
   const pb = $("s-play"), pt = simTimer ? "⏸" : "▶"; if (pb.textContent!==pt) pb.textContent = pt;
@@ -261,6 +269,7 @@ function drawSimPos(at, lathe){
   const ax = lathe ? [["X", p?.x], ["Z", p?.z]] : [["X", p?.x], ["Y", p?.y]];
   $("s-pos").innerHTML = ax.map(([a, v]) => `<span><b>${a}</b>${f(v)}</span>`).join("")
     + `<span><b>Line</b>${curLine+1}</span>` + (n ? `<span><b>N</b>${n.slice(1)}</span>` : "")
+    + simTimeSpan()
     + (stop ? `<span class="stop" title="${stop==="M00" ? "Program stop" : "Optional stop"}. ▶ continues.">${stop}</span>` : "")
     + (() => {
       const k = simIdx!=null && simK!=null ? simK : stepIndexFor(curLine), nt = (EXEC.notes || []).find(x => k >= x.k && (x.until==null || k < x.until));
@@ -571,7 +580,28 @@ $("tl").addEventListener("click", e => {
   if (tlSteps[i]) selectLine(tlSteps[i].li);
 });
 
-function simSpeed(){ return +$("s-speed").value; }
+// The speed list: how many seconds of the program run in a second, or Max (as fast as the screen draws, by moves)
+function simSpeed(){ return $("s-speed").value==="max" ? Infinity : +$("s-speed").value; }
+// The program time at the tool's position: playing, where it's got to; otherwise the end of the selected line
+let simPart = null;   // the move under way while playing: { i: its index, f: how far along it, 0 to 1 }
+function simTimeNow(){
+  const tm = EXEC.time; if (!tm?.tAt) return null;
+  if (simIdx!=null){
+    const i = Math.min(simIdx, EXEC.segs.length), base = tm.tAt[i];
+    return simPart && simPart.i===i && i < EXEC.segs.length ? base + simPart.f*(EXEC.segs[i].t || 0) : base;
+  }
+  const st = EXEC.steps[stepIndexFor(curLine)]; return st ? tm.tAt[st.s1] : 0;
+}
+function simTimeSpan(){
+  const tm = EXEC.time; if (!tm || !(tm.total > 0)) return "";
+  const why = `Estimated from the moves' lengths and the programmed feeds and speeds, without acceleration, tool changes or spindle start, so a real run takes a bit longer.`
+    + ` Cutting ${fmtTime(tm.feed)}, rapids ${fmtTime(tm.rapid)}, dwells ${fmtTime(tm.dwell)}.`
+    + (Object.keys(tm.byTool).length > 1 ? " By tool: " + Object.entries(tm.byTool).map(([k, v]) => `${k} ${fmtTime(v)}`).join(", ") + "." : "")
+    + (tm.assumedRapid ? ` Rapids are timed at ${RAPID_DEFAULT} in/min: set your machine's rapid rate in its profile (Machines…).` : "")
+    + (tm.noFeed ? ` ${tm.noFeed} feed move${tm.noFeed===1 ? " has" : "s have"} no feed rate and count as no time.` : "")
+    + (tm.noSpeed ? ` ${tm.noSpeed} feed-per-rev move${tm.noSpeed===1 ? " has" : "s have"} no spindle speed and count as no time.` : "");
+  return `<span class="stime" title="${esc(why)}"><b>Time</b>${fmtTime(simTimeNow())} / ${fmtTime(tm.total)}${tm.noFeed || tm.noSpeed ? " ?" : ""}</span>`;
+}
 function simLineFollow(){ simFollow(stepAtSeg(simIdx)); }
 // The step that made move idx-1 (the last move drawn), or the first step before any move.
 function stepAtSeg(idx){
@@ -635,24 +665,35 @@ function simFinish(){
 }
 function playSim(){
   if (editing && !commit()) return;
-  if (simIdx==null || (simIdx >= EXEC.segs.length && nextStop(simIdx, simIdx)==null)){ simIdx = 0; simStops = new Set(); }
+  if (simIdx==null || (simIdx >= EXEC.segs.length && nextStop(simIdx, simIdx)==null)){ simIdx = 0; simStops = new Set(); simPart = null; }
   simStopAt = null;
   clearInterval(simTimer);
-  let owed = 0;   // ½× and ¼×: a move every second or fourth step
+  // The program's own clock (seconds): it runs at the chosen speed, and each move is drawn as far as the clock has
+  // reached along it. A pause keeps the move under way; anything else that moves the tool starts its move afresh.
+  const segs = EXEC.segs, tAt = EXEC.time?.tAt;
+  let clock = tAt ? tAt[simIdx] + (simPart && simPart.i===simIdx && simIdx < segs.length ? simPart.f*(segs[simIdx].t || 0) : 0) : 0;
+  let last = Date.now();
   simTimer = setInterval(() => {
-    owed += simSpeed(); const n = Math.floor(owed + 1e-9); if (!n) return; owed -= n;
-    const to = Math.min(EXEC.segs.length, simIdx + n), k = nextStop(simIdx, to);
+    const now = Date.now(), dt = Math.min(0.25, (now - last)/1000), sp = simSpeed(); last = now;
+    let to;
+    if (!tAt || !isFinite(sp)){ to = Math.min(segs.length, simIdx + 1024); clock = tAt ? tAt[to] : 0; }
+    else {
+      clock += dt*sp; to = simIdx;
+      while (to < segs.length && tAt[to] + (segs[to].t || 0) <= clock) to++;
+    }
+    const k = nextStop(simIdx, to);
     if (k!=null){
-      const st = EXEC.steps[k]; simIdx = st.s0; simStops.add(k); simStopAt = k;
+      const st = EXEC.steps[k]; simIdx = st.s0; simPart = null; simStops.add(k); simStopAt = k;
       clearInterval(simTimer); simTimer = null; simFollow(k, true);
       const at = nWordOf(st.li) || "line " + (st.li+1);
       setMsg(st.stop==="M00" ? `Program stop (M00) at ${at}. ▶ continues.` : `Optional stop (M01) at ${at}. ▶ continues.`);
       return;
     }
     simIdx = to;
-    if (simIdx >= EXEC.segs.length) return simFinish();
+    simPart = to < segs.length && tAt && segs[to].t > 0 ? { i:to, f:Math.max(0, Math.min(1, (clock - tAt[to])/segs[to].t)) } : null;
+    if (simIdx >= segs.length){ simPart = null; return simFinish(); }
     simLineFollow();
-  }, 60);
+  }, 50);
   render(); setMsg("Playing. Space pauses, → steps one line.");
 }
 function pauseSim(){ clearInterval(simTimer); simTimer = null; drawViews(); setMsg("Paused"); }
@@ -672,13 +713,14 @@ function simStep(dir){
   const st = EXEC.steps;
   if (simIdx==null) simIdx = st[stepIndexFor(curLine)]?.s1 ?? 0;
   let last = false;   // stepping past the last move goes to the program end
+  simPart = null;
   if (dir > 0){ const n = st.find(s => s.s1 > s.s0 && s.s0 >= simIdx); if (n) simIdx = n.s1; else last = st.length > 0; }
   else { const ps = st.filter(s => s.s1 > s.s0 && s.s1 < simIdx); simIdx = ps.length ? ps[ps.length-1].s1 : 0; }
   resetStops(); simFollow(last ? st.length-1 : stepAtSeg(simIdx), true);
 }
 function simReset(){
   if (simTimer) pauseSim();
-  simIdx = 0;
+  simIdx = 0; simPart = null;
   simStops = new Set();
   simStopAt = null;
   simFollow(0, true);
@@ -695,7 +737,7 @@ function setSimOpt(on){
 }
 function setSimBD(on){
   simBD = on; $("s-bd").setAttribute("aria-pressed", on);
-  if (simIdx!=null){ const li = curLine; EXEC = interpret(); const k = stepIndexFor(li); simIdx = EXEC.steps[k]?.s0 ?? 0; simK = k; resetStops(); }
+  if (simIdx!=null){ const li = curLine; EXEC = interpret(); const k = stepIndexFor(li); simIdx = EXEC.steps[k]?.s0 ?? 0; simPart = null; simK = k; resetStops(); }
   render();
   setMsg(on ? "Block delete is on: lines that start with / are skipped." : "Block delete is off: lines that start with / run like any other.");
 }

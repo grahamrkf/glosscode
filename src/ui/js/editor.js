@@ -952,9 +952,9 @@ function foldScan(){
       ok = false;   // M, T, S, comments, P, L, macro words, anything else
     }
     // Lines are read in file order, not run order: a subprogram's lines come after the main program's M30, so at a
-    // label that's called, an M99 or an M30 the position is forgotten and G90 assumed (a "G28 G91 Z0." before M30
+    // label that's called, a subprogram end (M99, or RTS on Okuma, where M99 is tailstock thrust) or an M30 the position is forgotten and G90 assumed (a "G28 G91 Z0." before M30
     // would otherwise make the subprogram's moves incremental).
-    if (t.some(w => isCode(w, "M30") || isCode(w, "M99") || isCode(w, "M02") || /^N\d+$/.test(w) && refs.has(parseInt(w.slice(1))))){
+    if (isReturn(t) || t.some(w => isCode(w, "M30") || isCode(w, "M02") || /^N\d+$/.test(w) && refs.has(parseInt(w.slice(1))))){
       abs = true;
       pos = null;
       mode = null;
