@@ -49,14 +49,14 @@ function render(){
     const eob = eobOn() && doc[li].length && doc[li][doc[li].length-1]!==";" && !(doc[li].length===1 && doc[li][0]==="%") ? `<span class="eob" title="End of block. ${esc(MACHINES[machineId].name)} needs ; at the end of every line, so GlossCode writes it for you.">;</span>` : "";
     const tgt = ins ? null : callTarget(doc[li]);
     const bar = simOn && key===simKey && pr!=null && (ins || !expanded.has(li)) ? `<span class="xpbar" title="${barTitle(key)}"><i style="width:${(pr*100).toFixed(1)}%"></i></span>` : "";
-    const xp = fold ? foldButton(fold[0], fold[1]==null ? null : doc[fold[1]], fold[1]) + bar : ins ? bar : tgt==null && !ins && window.libButton ? window.libButton(li) : tgt!=null ? (subRange(tgt) ? `<button class="xp" data-x="${li}">${expanded.has(li) ? "▾ hide" : "▸ show"} ${tgt}</button>${bar}` : `<span class="xp bad">${tgt} not found</span>`) : "";
+    const xp = fold ? foldButton(fold[0], fold[1]==null ? null : doc[fold[1]], fold[1]) + bar : ins ? bar : tgt==null && !ins && window.libButton ? window.libButton(li) + (window.libFor?.(doc[li]) ? callButtons(li, null) : "") : tgt!=null ? (subRange(tgt) ? `<button class="xp" data-x="${li}">${expanded.has(li) ? "▾ hide" : "▸ show"} ${tgt}</button>${bar}${callButtons(li, tgt)}` : `<span class="xp bad">${tgt} not found</span>`) : "";
     const kind = lineKind(li);
     const lp = ins ? null : PBYLINE[li], worst = lp ? lp.reduce((a, p) => SEV_RANK[p.sev] > SEV_RANK[a] ? p.sev : a, "info") : null;
     const pmark = lp ? `<span class="pm ${worst}" title="${esc(lp.map(p => p.msg).join("\n"))}">${SEV_ICON[worst]}</span>` : "";
     const c = `ln${worst?" p-"+worst:""}${lp?.some(p => p.id==="machine-alarm")?" p-alarm":""}${(simOn ? key===simKey : li===curLine && !ins)?" cur":""}${!ins && inSel(li)?" lsel":""}${ins?" ins":""}${kind?" k-"+kind:""}${fhits.includes(li) && li===curLine?" fcur":""}${simOn && key===simKey?" simcur":""}${simBD && isBlockDel(doc[li])?" bdskip":""}${ran && !ins && li > EXEC.alarm.li && !ran.has(li)?" unreach":""}`;
     return textRowHTML({ li, key, ins, from, c, pmark, eob, xp, num: (runNums ? `<span class="rn" title="Run order: block ${runNo[key] ?? "–"} of the program as it runs">${runNo[key] ?? ""}</span>` : "") + (ins ? "↳" : li+1), fh: findQ && fhits.includes(li) });
   }));
-  drawViews(); drawModes(); status(); updateFindCount(fhits); drawProblems(); drawDraftBar();
+  drawViews(); drawModes(); status(); updateFindCount(fhits); drawProblems(); drawDraftBar(); window.drawSubPane?.();
   drawMachineChip(); window.drawTabs?.();
   drawnSig = drawSig();
 }
@@ -141,7 +141,7 @@ function renderCursor(){
     if (sr && pr!=null && (ins || !expanded.has(li))) TOUCHED.add(sr), sr.querySelector(".r.gc").insertAdjacentHTML("beforeend",
       `<span class="xpbar" title="${barTitle(simKey)}"><i style="width:${(pr*100).toFixed(1)}%"></i></span>`);
   }
-  drawViews(); drawModes(); status(); if (fh) updateFindCount([...fh]); drawProblems();
+  drawViews(); drawModes(); status(); if (fh) updateFindCount([...fh]); drawProblems(); window.markSubPane?.();
 }
 /* ---------- Code with gloss above (View › Layout, the default) ----------
    Each line is drawn as text: its N number in a column of its own on the left, the code beside it, and the gloss above
@@ -189,7 +189,7 @@ function textRowHTML({ li, key, ins, from, c, pmark, eob, xp, num, fh }){
     const hit = findQ && toks[i].toUpperCase().includes(findQ), cu = bad.get(i);
     return p.sep + `<span class="cw${w.cm?" cm":""}${cu ? " cu-" + SEV_CLASS[cu] : ""}${hit?" fhit":""}" data-wi="${i}">${esc(p.t)}</span>`; }).join("");
   const gl = textGlossHTML(li);
-  return `<div class="${c}${fh?" fcur":""}" data-key="${key}" data-li="${li}"${ins?` title="Inserted from the subprogram called on ${from}. Edits here change the subprogram itself."`:""}>`
+  return `<div class="${c}${fh?" fcur":""}" data-key="${key}" data-li="${li}"${ins?` title="Subprogram line, shown under the call on ${from} in the order it runs. Read only here: click to edit it in the subprogram pane."`:""}>`
     + `<div class="r en${gl ? "" : " none"}"><span class="gut"></span><span class="tn"></span><span class="tg">${gl}</span></div>`
     + `<div class="r gc"><span class="gut">${pmark}${num}</span><span class="tn${nc && bad.get(0) ? " cu-" + SEV_CLASS[bad.get(0)] : ""}" data-wi="0">${nc ? esc(toks[0]) : ""}</span><span class="tc" data-l="${li}" data-k="${key}">${code}</span>${eob}${xp}</div></div>`;
 }
@@ -204,11 +204,13 @@ function caretAt(row, x, len){
   const tc = row?.querySelector(".r.gc .tc"); if (!tc) return len;
   return Math.max(0, Math.min(len, Math.round((x - tc.getBoundingClientRect().left) / charW())));
 }
+let editRoot = null;   // the subprogram pane's rows, while a line clicked there is being edited (js/subprograms.js)
 function startLineEdit(li, key, caret, sel){
   if (simIdx!=null) stopSim(true);
   key = key || "m"+li; selAnchor = null;
   curLine = li; render();
-  const ln = ed.querySelector(`.ln[data-key="${key}"]`) || ed.querySelector(`.ln[data-key="m${li}"]`); if (!ln) return;
+  const pane = editRoot && editRoot.isConnected ? editRoot : null;   // a line clicked in the subprogram pane is edited there
+  const ln = pane?.querySelector(`.ln[data-key="m${li}"]`) || ed.querySelector(`.ln[data-key="${key}"]`) || ed.querySelector(`.ln[data-key="m${li}"]`); if (!ln) return;
   TOUCHED.add(ln); scrollToLn(ln);
   const tc = ln.querySelector(".r.gc .tc"), toks = doc[li], nc = hasNcol(toks), text = codeText(nc ? toks.slice(1) : toks);
   tc.innerHTML = `<input class="lineinput" id="line-input" aria-label="Edit line ${li+1}" autocomplete="off" spellcheck="false">`;
@@ -466,6 +468,8 @@ ed.addEventListener("mousedown", e => {
   const ln = e.target.closest(".ln[data-li]:not(.lib)"); if (!ln) return;
   e.preventDefault();
   if (editing && !commit()) return;
+  if (ln.classList.contains("ins")){ openBesideAt(+ln.dataset.li, ln.dataset.key); return; }   // read only: edit it in the pane
+  editRoot = null;
   const li = +ln.dataset.li, toks = doc[li], len = codeText(hasNcol(toks) ? toks.slice(1) : toks).length;
   const at = caretAt(ln, e.clientX, len);
   if (lineDragCaret) lineDragCaret.at = at;
@@ -770,10 +774,11 @@ function editLineEnd(typed){
 /* ---------- Selection ---------- */
 function scrollToLn(el){
   if (!el) return;
+  const box = el.closest(".ed") || ed;   // the editor, or the subprogram pane
   const t = el.offsetTop, b = t + el.offsetHeight;
-  if (simX){ ed.scrollTop = t - (ed.clientHeight - el.offsetHeight)/2; return; }   // the expanded view keeps the active line in the middle
-  if (t < ed.scrollTop + 8) ed.scrollTop = t - 8;
-  else if (b > ed.scrollTop + ed.clientHeight - 8) ed.scrollTop = b - ed.clientHeight + 8;
+  if (simX && box===ed){ ed.scrollTop = t - (ed.clientHeight - el.offsetHeight)/2; return; }   // the expanded view keeps the active line in the middle
+  if (t < box.scrollTop + 8) box.scrollTop = t - 8;
+  else if (b > box.scrollTop + box.clientHeight - 8) box.scrollTop = b - box.clientHeight + 8;
 }
 /* ---------- Folding long runs of moves ----------
    A CAM program is mostly plain moves: thousands of lines cutting the same contour at one depth after another. Those

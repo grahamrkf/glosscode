@@ -106,6 +106,32 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .ln.ins + .ln:not(.ins){border-top:1px dashed #cdb8f5}
 .xp{font:11px var(--w-ui);margin-left:1ch;border:1px solid #cdb8f5;background:#f7f3fe;color:#6a2fd6;border-radius:10px;padding:0 8px;height:17px;line-height:15px;cursor:pointer;white-space:nowrap}
 .xp:hover{background:#ece2fd}
+.xp.go{margin-left:4px;border-color:#d6dce4;background:#fff;color:#0f6cbd}.xp.go:hover{background:#eef5fc}
+/* Subprogram lines shown under their call are read only: they're edited in the subprogram pane (js/subprograms.js). */
+.layout-text .ln.ins .tc,.layout-text .ln.ins .tn{cursor:pointer;user-select:none;-webkit-user-select:none}
+/* Go to's way back, above the program */
+.backbar{display:flex;align-items:center;gap:8px;padding:3px 8px 3px 10px;background:#eef5fc;border-bottom:1px solid #cfe0f3;font-size:12px;flex:none}
+.backbar[hidden]{display:none}
+.backbar .bbt{border:0;background:none;color:#0f6cbd;font:12px var(--w-ui);cursor:pointer;padding:0;text-align:left;flex:1}
+.backbar .bbt::before{content:"↩ "}
+.backbar .bbt:hover{text-decoration:underline}
+.backbar .bbk{color:#888;font-size:11px}
+.backbar .iconbtn{min-width:22px;height:20px;font-size:12px}
+/* The program and the subprogram pane side by side */
+.edsplit{flex:1;min-height:0;display:flex}
+.edsplit > .ed{min-width:0}
+.subpane{position:relative;width:45%;min-width:220px;flex:none;display:flex;flex-direction:column;border-left:1px solid #cdb8f5;background:#fcfbff}
+.subpane[hidden]{display:none}
+.sp-grip{position:absolute;left:-3px;top:0;bottom:0;width:6px;cursor:col-resize;z-index:2}
+.sph{display:flex;align-items:center;gap:6px;padding:4px 6px 2px 10px;background:#f7f3fe;border-bottom:1px solid #e4d9fb}
+.sptrail{flex:1;display:flex;flex-wrap:wrap;align-items:center;gap:2px;font:12px var(--w-ui);min-width:0}
+.sptrail .spc{border:0;background:none;font:12px var(--w-ui);color:#6a2fd6;cursor:pointer;padding:1px 4px;border-radius:3px}
+.sptrail .spc:hover{background:#ece2fd}
+.sptrail .spc.on{color:#1b1b1b;font-weight:600;cursor:default;background:none}
+.sptrail .sps{color:#a99bc9}
+.sph .iconbtn{min-width:22px;height:22px;font-size:12px}
+.spnote{font-size:11px;color:#6b6480;padding:2px 10px 3px;background:#f7f3fe;border-bottom:1px solid #e4d9fb}
+#sp-body.ed{padding-bottom:12px}
 .xp.fold{border-color:#c9d3df;background:#f4f6f9;color:#4a5566}.xp.fold:hover{background:#e7ecf2}.xp.fold.warn{border-color:#f7c27a;background:#fff4e5;color:#8a4b00}
 .xp.bad{border-color:#f7c27a;background:#fff4e5;color:#8a4b00;cursor:default}
 .chk{display:inline-flex;align-items:center;gap:5px;color:#1b1b1b;font-size:13px;cursor:pointer}

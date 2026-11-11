@@ -34,7 +34,16 @@
             <button class="iconbtn" id="f-x" aria-label="Close find">✕</button>
           </div>
           <div class="draftbar" id="draftbar" hidden><span id="draftbar-t"></span><button class="btn" id="draftbar-x" title="Hide this until the control's rules change">Dismiss</button></div>
-          <div class="ed" id="ed" tabindex="0" aria-label="Program editor. Up and down arrows move the selected line."></div>
+          <div class="backbar" id="backbar" hidden><button class="bbt" id="bb-t"></button><span class="bbk">Alt+←</span><button class="iconbtn" id="bb-x" aria-label="Forget where to go back to">✕</button></div>
+          <div class="edsplit" id="edsplit">
+            <div class="ed" id="ed" tabindex="0" aria-label="Program editor. Up and down arrows move the selected line."></div>
+            <div class="subpane" id="subpane" hidden aria-label="Subprogram">
+              <div class="sp-grip" id="sp-grip" title="Drag to change the pane's width"></div>
+              <div class="sph"><nav class="sptrail" id="sp-trail" aria-label="Calls"></nav><button class="iconbtn" id="sp-x" aria-label="Close the subprogram pane" title="Close">✕</button></div>
+              <div class="spnote" id="sp-note"></div>
+              <div id="sp-body"></div>
+            </div>
+          </div>
           <div class="probs" id="probs">
             <div class="ph"><button class="tg" id="probs-tg" aria-label="Show or hide problems">▾</button><span>Problems</span><span id="probs-c" style="display:flex;gap:4px"></span><span class="phint">Click a problem to go to its line · Ctrl+Shift+M</span></div>
             <div class="pl" id="probs-l" role="list"></div>
@@ -349,5 +358,6 @@
 <script src="js/convert.js"></script>
 <script src="js/about.js"></script>
 <script src="js/text-size.js"></script>
+<script src="js/subprograms.js"></script>
 </body>
 </html>

@@ -31,9 +31,13 @@ This list tracks what the mockup shows. Nothing is implemented yet.
 - [ ] Lathe options in the machine profile (live tooling, Y axis) that decide which cycles and words are offered
 
 **Reading**
-- [ ] Inline expansion of subprogram calls, marked with purple N numbers; edits change the subprogram
+- [ ] Inline expansion of subprogram calls, marked with purple N numbers, in the order they run; read only (click one to edit it in the subprogram pane) and left out of copy
+- [ ] Go to subprogram (F12, or Go to on the call line) and back (Alt+←, or the bar above the program)
+- [ ] Subprogram pane (Alt+F12, or Beside on the call line): the subprogram beside the program, edited like any other line, with a trail of calls (Program › N1000 › N2000) for subprograms that call others; library (G65) subprograms open read only. Drag its edge to resize
 - [ ] Library calls read by name (`G65 P9101` reads call.macro sub.slotmill, `Z-0.15` reads DEP-0.15) and expand to show the lines they run, in green; the toolpath preview follows them
 - [ ] View › Show: both lines, gloss only, or code only
+- [ ] Menus: choices show a round dot, on/off settings a tick box; longer lists are submenus (View › Gloss words, View › Fold moves, Simulate › Toolpath)
+- [ ] Toolpath Show button: rapid moves, moves after the selected line (grey, hidden, shown), cutter comp side, colour by move type or tool; highlighted while something is hidden
 - [ ] View › Text size…: code and gloss text sizes and a zoom for the whole window (Ctrl+= / Ctrl+- / Ctrl+0); code and gloss in the fonts GlossCode ships (IBM Plex Mono and IBM Plex Sans)
 - [ ] Active-modes panel for the selected line, with a mark on modes set on that line
 - [ ] Line colors: rapid (amber), feed (blue), arc (teal), cycle (magenta)
