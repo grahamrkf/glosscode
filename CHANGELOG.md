@@ -7,6 +7,12 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 ### Editor
 - Code with gloss above is now the only layout. The two older layouts (words in program order, and columns by word type with modal values in empty cells) are gone, and so is typing gloss to write code (View › Edit in) with its autocomplete. View › Layout and Edit in are removed from the menu, and Edit › Break line after the selected word and Delete selected word with them: Enter breaks the line being edited, and Delete and Backspace edit the line.
 - Pasting one line of words while a line is being edited puts them in at the caret; with no line being edited, they go at the end of the current line, before its comment.
+- The code and gloss now use fonts that come with GlossCode, so they read the same on every computer: IBM Plex Mono for the code and IBM Plex Sans for the gloss. Menus and dialogs keep the system font. The gloss is no longer italic, is a little larger (11 px) and a darker grey, and comments are the same colour as the code (#73).
+- View › Text size… sets the code and gloss text sizes and a zoom for the whole window. Ctrl+= and Ctrl+- (or Ctrl+wheel) zoom in and out, and Ctrl+0 goes back to 100%. The sizes and zoom are remembered in settings.json.
+- The menus are tidier (#74). View keeps what the editor shows; the toolpath settings (rapid moves, moves after the selected line, cutter comp side, colours) are in Simulate › Toolpath. Menus can open submenus (View › Gloss words, View › Fold moves). A choice shows a round dot and an on/off setting a tick box, each with an empty outline when it isn't picked.
+- The toolpath's G00 and hide-later-moves icons are one **Show ▾** button with the same settings written out. It's highlighted while something is hidden.
+- The timeline's header is Timeline and its picker (Z by line, X radius by line…), with the value on its own line, so it's no longer cut off.
+- Subprograms (#74): **Go to** on a call line (or F12) moves to the subprogram, and a bar above the program (or Alt+←) goes back to the call. **Beside** (or Alt+F12) opens the subprogram in a pane to the right of the program, where its lines are edited like any other. A call inside the pane opens the next subprogram one level down, with a trail at the top (Program › N1000 › N2000) to go back up. G65 library subprograms open there read only. The subprogram lines shown under a call (▸ show) are now read only and left out of copy: clicking one opens it in the pane.
 
 ### Code
 - The C core now only reads and writes files. Its copy of the gloss and checks (kept identical to the UI's JavaScript, but never used by the program) is gone, and so is the `--data` option, which only affected that copy. The golden files in `tests/golden/` stay, as a record of what the UI shows.
@@ -16,6 +22,7 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - The simulation's 660-line `interpret()` is now a `SimRun` class (`js/run-program.js`): setup, the line-by-line run, one line's step, and one method per cycle or pattern. `checkProgram()`'s line checks are one function per group (grammar, modes, tool change, spindle, tool length, cutter comp, cycles, the move).
 - Code only one control family uses has its own file: `js/control-klartext.js`, `js/control-fagor.js`, `js/control-okuma.js`.
 - Each tab keeps its program in its own object, so switching tabs no longer copies the editor's state in and out.
+- The fonts are embedded in `src/ui/css/fonts.css`, which `node scripts/make-fonts.mjs` writes from `assets/fonts/` (CI checks it's up to date).
 
 ## [0.2.0] - 2026-11-07
 
