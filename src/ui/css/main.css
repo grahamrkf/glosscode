@@ -240,7 +240,7 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .simbar select{font:11px var(--w-ui);height:21px;border:1px solid #d1d1d1;border-radius:4px;background:#fff;color:#1b1b1b}
 .simbar button.tgl{min-width:30px;font-family:var(--w-mono)}
 .simbar button.tgl[aria-pressed="true"]{background:#e8f1fb;border-color:#0f6cbd;color:#0f6cbd;font-weight:700}
-.simpos{display:flex;gap:12px;font:11.5px var(--w-mono);color:#1b1b1b;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;min-height:15px}
+.simpos{display:flex;flex-wrap:wrap;gap:0 12px;font:11.5px var(--w-mono);color:#1b1b1b;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;min-height:15px}
 .simpos b{color:#8a8a8a;font-weight:400;margin-right:3px}
 .simpos .stop{margin-left:auto;font:600 11px var(--w-ui);color:#9a5b00;background:#fff4e0;border:1px solid #f0d29a;border-radius:3px;padding:0 5px}
 .ln.bdskip .r{opacity:.4}
