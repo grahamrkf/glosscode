@@ -118,8 +118,8 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .panel{display:flex;flex-direction:column;border-bottom:1px solid #e5e5e5;padding:8px 10px;gap:6px}
 .panel .h{font-size:11.5px;font-weight:600;color:#444;display:flex;justify-content:space-between}
 .panel .h span{font-weight:400;color:#888}
-.panel .h #tlh{font-weight:600;color:#444;display:flex;gap:6px;min-width:0;white-space:nowrap;overflow:hidden}
-.panel .h #tlh span{overflow:hidden;text-overflow:ellipsis}
+.panel .h #tlh{font-weight:600;color:#444}
+.tlnow{margin:3px 0 4px}
 .tlmode{font:11px var(--w-ui);border:1px solid #d1d1d1;border-radius:3px;padding:0 2px;background:#fff;color:#333;height:18px}
 .panel > svg, .vbox > svg{background:#fff;border:1px solid #e5e5e5;border-radius:4px;display:block;width:100%}
 .vbox{position:relative}
@@ -132,7 +132,6 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .vzoom button:hover{background:#f0f4f9}
 .vzoom .vzsep{width:1px;margin:2px 2px;background:#d0d0d0}
 .vzoom button svg{display:block}
-.vzoom #s-fut[aria-pressed="true"] .fut{display:none}
 .vzoom button[aria-pressed="true"], .vzoom button.on{background:#e6f0fb;border-color:#0f6cbd;color:#0f6cbd}
 .info{font-size:12px;color:#333;display:flex;flex-direction:column;gap:5px}
 .info .k{font:700 12px var(--w-mono);color:#0f6cbd}
@@ -181,6 +180,21 @@ select.wsel{font:13px var(--w-ui);border:1px solid #d1d1d1;border-radius:4px;pad
 .menu .it.dis{color:#aaa}
 .menu .it.dis:hover{background:transparent}
 .menu .it .ck{color:#0f6cbd;text-align:center;font-size:11px}
+/* A choice (one of a set) shows a round dot, an on/off setting a tick box; both show their empty outline when not picked. */
+.menu .it .ck i{display:inline-block;width:12px;height:12px;border:1.5px solid #8a8a8a;vertical-align:middle;position:relative}
+.menu .it .ck i.rd{border-radius:50%}
+.menu .it .ck i.tb{border-radius:3px}
+.menu .it .ck i.rd.on{border-color:#0f6cbd}
+.menu .it .ck i.rd.on::after{content:"";position:absolute;inset:2px;border-radius:50%;background:#0f6cbd}
+.menu .it .ck i.tb.on{border-color:#0f6cbd;background:#0f6cbd}
+.menu .it .ck i.tb.on::after{content:"";position:absolute;left:3px;top:0;width:3px;height:7px;border:solid #fff;border-width:0 1.8px 1.8px 0;transform:rotate(45deg)}
+/* Submenus open to the right on hover. */
+.menu .it.sub{position:relative}
+.menu .it.sub .sc{padding-left:18px;color:#666}
+.menu .submenu{display:none;position:absolute;left:calc(100% - 2px);top:-5px}
+.menu .it.sub:hover > .submenu{display:block}
+.menu .it.sub:hover{background:#e8f1fb}
+.menu.pop{position:absolute;min-width:230px;z-index:20}
 .menu .it .sc{color:#888;font-size:11.5px;padding-left:18px}
 .menu.ctx{position:fixed;top:auto;z-index:50}
 .menu .sep{height:1px;background:#e5e5e5;margin:4px 6px}
