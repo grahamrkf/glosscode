@@ -58,8 +58,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Install GTK and WebKitGTK
-        # The package download has hung on GitHub's runners. Time out each try, retry up to
-        # three times, and skip the slow man-db index rebuild.
+        # The package download has hung on GitHub's runners, and their Ubuntu mirror
+        # (azure.archive.ubuntu.com) has been unreachable. Time out each try, retry up to three
+        # times (from archive.ubuntu.com after the first fails), and skip the slow man-db index rebuild.
         timeout-minutes: 15
         run: |
           echo 'set man-db/auto-update false' | sudo debconf-communicate >/dev/null || true
@@ -70,7 +71,9 @@ jobs:
                timeout 360 sudo apt-get $APT install -y --no-install-recommends ninja-build libgtk-3-dev libwebkit2gtk-4.1-dev xvfb desktop-file-utils; then
               exit 0
             fi
-            echo "apt try $try failed or timed out; retrying"
+            echo "apt try $try failed or timed out; retrying from archive.ubuntu.com"
+            printf 'http://archive.ubuntu.com/ubuntu/\n' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null || true
+            sudo sed -i 's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' /etc/apt/sources.list /etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/*.list 2>/dev/null || true
             sleep 10
             sudo dpkg --configure -a || true
           done
