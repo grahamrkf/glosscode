@@ -55,7 +55,7 @@ ctest --test-dir build
 
 Two more checks run the UI's JavaScript in Node (no browser needed); CI runs both:
 
-- `node scripts/make-goldens.mjs --check`: the files in `tests/golden/` record every word's gloss, unit and description, and every problem, for each program in `examples/` and `tests/cases/` on each machine. After changing the gloss, the checks or the data files, run `node scripts/make-ui-data.mjs` (for data files) and then `node scripts/make-goldens.mjs` and look over the diff: it shows exactly what changed on screen.
+- `node scripts/make-goldens.mjs --check`: the files in `tests/golden/` record every word's gloss, unit and description, and every problem, for each program in `examples/` and `tests/cases/` on each machine; `tests/golden/sim/` records every step and toolpath move the simulation makes of each. After changing the gloss, the checks, the simulation or the data files, run `node scripts/make-ui-data.mjs` (for data files) and then `node scripts/make-goldens.mjs` and look over the diff: it shows exactly what changed on screen.
 - `node tests/test_ui.mjs`: a few gloss and check cases on controls the samples don't cover.
 
 ## Options when running

@@ -31,7 +31,7 @@ Rules for the core: C standard library only (`stdio`, `stdlib`, `string`), no `w
 
 The core lives in `src/core/`: `gc_doc.c` (reading and writing files), `gc_json.c` (the JSON reader and writer), `gc_util.c` (strings and numbers), and `gc_api.c` (the JSON methods the UI calls). A file that isn't valid UTF-8 is read as Latin-1, as older controls and DNC software write, and saved back as Latin-1.
 
-The gloss, the mode tracking, the checks and the simulation are done by the UI's JavaScript, the same code in the program and in a browser. `tests/golden/` records what it shows for every sample program; see [building.md](building.md#tests).
+The gloss, the mode tracking, the checks and the simulation are done by the UI's JavaScript, the same code in the program and in a browser. `tests/golden/` records what it shows for every sample program, and `tests/golden/sim/` what the simulation draws; see [building.md](building.md#tests).
 
 ### Platform file
 
@@ -48,7 +48,7 @@ One file per OS with the same small set of functions:
 
 ### UI
 
-The UI is plain HTML, CSS and JavaScript loaded into the webview. It talks to the core through the webview library's bind calls, passing JSON (`window.GlossCodeNative`, listed in [building.md](building.md#how-the-ui-talks-to-the-program)). The page is [`src/ui/index.html`](../src/ui/index.html), which loads its styles from `src/ui/css/` and its scripts from `src/ui/js/`, one file per part of the screen (reading lines, gloss, checks, editor, simulation, menus, tabs, and each dialog). The scripts load in order and share one global scope, so a file can use what an earlier one defines. The program's build joins them into one page (`cmake/bundle-ui.cmake`), compiles it in (without the sample programs) and shows it filling the window; opened in a browser, it runs the same screen with the sample programs and a pretend Open dialog.
+The UI is plain HTML, CSS and JavaScript loaded into the webview. It talks to the core through the webview library's bind calls, passing JSON (`window.GlossCodeNative`, listed in [building.md](building.md#how-the-ui-talks-to-the-program)). The page is [`src/ui/index.html`](../src/ui/index.html), which loads its styles from `src/ui/css/` and its scripts from `src/ui/js/`, one file per part of the screen (reading lines, gloss, checks, editor, running the program, simulation, menus, tabs, and each dialog). What only one control family uses is in its own file: `control-klartext.js` (Heidenhain), `control-fagor.js` and `control-okuma.js` (their simulation cycles). The scripts load in order and share one global scope, so a file can use what an earlier one defines. Each open tab is one object holding its program (`newTab` in `state.js`); `doc`, `machineId`, `curLine` and the rest are the active tab's. The program's build joins them into one page (`cmake/bundle-ui.cmake`), compiles it in (without the sample programs) and shows it filling the window; opened in a browser, it runs the same screen with the sample programs and a pretend Open dialog.
 
 ## Build
 
