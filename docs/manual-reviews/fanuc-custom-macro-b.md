@@ -5,7 +5,7 @@
 | Manuals | FANUC Series 21i/210i-MB Operator's Manual B-63614EN/01 (2001), chapter 15 Custom Macro · FANUC Series 21i/210i-TB Operator's Manual B-63604EN/01 (2002), chapter 15, for the lathe differences only |
 | Copy reviewed | PDFs with a text layer, read from a text extract. No page images were checked. In chapter 15 the printed page = PDF page − 21 (MB) and − 24 (TB). The MB offset drifts outside chapter 15 (− 15 in the alarm list) |
 | Why these | The common volume of the 0i-F manual (B-64604EN), which holds Custom Macro B for the control GlossCode's `fanuc` dialect follows, isn't available. The 21i chapter is the closest Fanuc source we have. It's an older generation, so anything the 0i-F added (SETVN, for one) isn't in it |
-| Reviewed | 2026-11-05, against the macro reader (`evalExpr` and `expand` in `src/ui/index.html`), which the simulation and the subprogram library share |
+| Reviewed | 2026-11-05, against the macro reader (`evalExpr` and `expand`, now in `src/ui/js/library.js`), which the simulation and the subprogram library share |
 | Result | Six fixes in the expression reader. Everything else matched, or is noted below |
 
 Page numbers below are MB printed pages unless marked TB.

@@ -46,7 +46,7 @@ Resolve the dialect the machine would use (base plus every layer it inherits), t
 6. **The checks.** Go through the rule list in [checks.md](../checks.md) and ask for each one whether this control behaves the way the rule assumes. G28, dwell units and feed modes are the usual surprises.
 7. **Codes the dialect inherits.** Walk the resolved tables (every modal group, foreign entry and dictionary word the dialect inherits from its base), not only the manual's list. A base code can mean something completely different on this control: on Okuma lathes G20/G21 are home returns, G28 is torque limit cancel and M88/M89 are the air blower.
 8. **Words that look like feeds but aren't.** F can be a dwell time (Okuma G04 F), a thread lead (G32, G33, G76) or a pitch; P can be milliseconds. Check every check that reads F, S or P.
-9. **Hard-coded codes in the editor.** Search `src/ui/index.html` for codes written into the logic (`"G20"`, `"G94"`, `"M06"`). If the control uses that code differently, turn it into a dialect key (as `unitCodes` and `leadCodes` were) rather than special-casing the brand.
+9. **Hard-coded codes in the editor.** Search `src/ui/js/` for codes written into the logic (`"G20"`, `"G94"`, `"M06"`). If the control uses that code differently, turn it into a dialect key (as `unitCodes` and `leadCodes` were) rather than special-casing the brand.
 
 Note each difference with its page number. Mark anything the manual doesn't settle as unverified rather than guessing.
 

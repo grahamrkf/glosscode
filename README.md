@@ -138,7 +138,9 @@ docs/features.md        Feature list and open questions
 docs/releasing.md       Version number, release files, update check, and what a first release still needs
 docs/subprogram-library.md  Subprogram library: file format, variables, call or write in, folders
 docs/images/            Mockup screenshots
-src/ui/index.html       The program's screen (HTML, CSS, JavaScript); also runs in a browser
+src/ui/                 The program's screen; also runs in a browser (index.html loads css/ and js/)
+src/ui/data.js          Dictionary, rules, built-in library and version, written from data/ by scripts/make-ui-data.mjs
+src/ui/samples.js       The sample programs, written from examples/ (browser only)
 VERSION                 Current version number
 examples/               Sample programs used by the mockup (Haas, Fanuc and Okuma; BRACKET_0MC.nc ends lines with ;). Not built into the program; a separate download
 ```

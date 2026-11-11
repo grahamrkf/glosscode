@@ -37,10 +37,10 @@ jobs:
         run: node scripts/make-goldens.mjs --check
       - name: UI checks
         run: node tests/test_ui.mjs
-      - name: Mockup data is in sync
+      - name: UI data files are up to date
         run: |
-          node scripts/sync-mockup-data.mjs
-          git diff --exit-code src/ui/index.html
+          node scripts/make-ui-data.mjs
+          git diff --exit-code src/ui
       - name: Configure
         run: >
           cmake -S . -B build -G Ninja -DGLOSSCODE_APP=OFF -DCMAKE_BUILD_TYPE=Debug
@@ -58,8 +58,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Install GTK and WebKitGTK
-        # The package download has hung on GitHub's runners. Time out each try, retry up to
-        # three times, and skip the slow man-db index rebuild.
+        # The package download has hung on GitHub's runners, and their Ubuntu mirror
+        # (azure.archive.ubuntu.com, and archive.ubuntu.com over http) has been unreachable while https
+        # worked. Time out each try, retry up to three times (from an https mirror after the first
+        # fails), and skip the slow man-db index rebuild.
         timeout-minutes: 15
         run: |
           echo 'set man-db/auto-update false' | sudo debconf-communicate >/dev/null || true
@@ -70,7 +72,9 @@ jobs:
                timeout 360 sudo apt-get $APT install -y --no-install-recommends ninja-build libgtk-3-dev libwebkit2gtk-4.1-dev xvfb desktop-file-utils; then
               exit 0
             fi
-            echo "apt try $try failed or timed out; retrying"
+            echo "apt try $try failed or timed out; retrying from https://mirrors.edge.kernel.org"
+            printf 'https://mirrors.edge.kernel.org/ubuntu/\n' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null || true
+            sudo sed -i -E 's#http://(azure\.)?archive\.ubuntu\.com/ubuntu#https://mirrors.edge.kernel.org/ubuntu#g' /etc/apt/sources.list /etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/*.list 2>/dev/null || true
             sleep 10
             sudo dpkg --configure -a || true
           done

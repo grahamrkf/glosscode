@@ -1,0 +1,77 @@
+# Joins the UI page (src/ui/index.html) and its files into one page for the program to compile in:
+# - each <link rel="stylesheet" href="X"> becomes a <style> block holding X, and each <script src="X"></script>
+#   a <script> block holding X, in the same order, so the page runs just as it does from its folder;
+# - the sample programs are left out, since they're a separate download (docs/releasing.md): a script tagged
+#   data-samples (samples.js) is dropped, and anything between "/* samples */" and "/* end samples */" (the
+#   example user's machines in js/machines.js) becomes null. The page opened in a browser keeps them.
+# cmake -DIN=<src/ui/index.html> -DOUT=<file> -P bundle-ui.cmake
+cmake_minimum_required(VERSION 3.21)
+
+get_filename_component(dir "${IN}" DIRECTORY)
+file(READ "${IN}" text)
+
+# Replaces every tag in `text` that starts with <open> and ends with <close> with a <kind> block holding the file
+# named in quotes right after <open>.
+function(inline open close kind)
+    set(out "")
+    while(TRUE)
+        string(FIND "${text}" "${open}" b)
+        if(b EQUAL -1)
+            break()
+        endif()
+        string(SUBSTRING "${text}" 0 ${b} head)
+        string(SUBSTRING "${text}" ${b} -1 text)
+        string(FIND "${text}" "${close}" e)
+        if(e EQUAL -1)
+            message(FATAL_ERROR "${IN}: \"${open}\" without \"${close}\"")
+        endif()
+        string(LENGTH "${close}" close_len)
+        math(EXPR tag_len "${e} + ${close_len}")
+        string(SUBSTRING "${text}" 0 ${tag_len} tag)
+        string(SUBSTRING "${text}" ${tag_len} -1 text)
+        string(LENGTH "${open}" open_len)
+        string(SUBSTRING "${tag}" ${open_len} -1 src)
+        string(FIND "${src}" "\"" q)
+        string(SUBSTRING "${src}" 0 ${q} src)
+        string(APPEND out "${head}")
+        if(NOT tag MATCHES "data-samples")
+            if(NOT EXISTS "${dir}/${src}")
+                message(FATAL_ERROR "${IN}: ${src} not found")
+            endif()
+            file(READ "${dir}/${src}" body)
+            string(APPEND out "<${kind}>\n/* ${src} */\n${body}</${kind}>")
+        endif()
+    endwhile()
+    set(text "${out}${text}" PARENT_SCOPE)
+endfunction()
+inline("<link rel=\"stylesheet\" href=\"" ">" style)
+inline("<script src=\"" "</script>" script)
+
+# The sample markers.
+set(begin_mark "/* samples */")
+set(end_mark "/* end samples */")
+string(LENGTH "${end_mark}" end_len)
+set(out "")
+while(TRUE)
+    string(FIND "${text}" "${begin_mark}" b)
+    if(b EQUAL -1)
+        break()
+    endif()
+    string(FIND "${text}" "${end_mark}" e)
+    if(e LESS b)
+        message(FATAL_ERROR "${IN}: \"${begin_mark}\" without a matching \"${end_mark}\"")
+    endif()
+    string(SUBSTRING "${text}" 0 ${b} head)
+    math(EXPR rest "${e} + ${end_len}")
+    string(SUBSTRING "${text}" ${rest} -1 text)
+    string(APPEND out "${head}null")
+endwhile()
+string(APPEND out "${text}")
+
+if(EXISTS "${OUT}")
+    file(READ "${OUT}" old)
+    if(old STREQUAL out)
+        return()
+    endif()
+endif()
+file(WRITE "${OUT}" "${out}")

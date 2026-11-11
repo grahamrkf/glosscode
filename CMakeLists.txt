@@ -93,14 +93,17 @@ FetchContent_Declare(nfd
     GIT_SUBMODULES "") # only needed for Wayland parent windows, which are off
 FetchContent_MakeAvailable(webview nfd)
 
-# The UI without the sample programs (a separate download) and the bridge script, compiled in. The UI page
-# carries its own copy of the dictionary, rules and built-in library (scripts/sync-mockup-data.mjs).
+# The UI page and its css/ and js/ files joined into one page, without the sample programs (a separate
+# download), compiled in with the bridge script. The data files src/ui/data.js and samples.js are written by
+# scripts/make-ui-data.mjs and committed, so building needs no Node.
+file(GLOB GC_UI_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/ui/*.html" "${CMAKE_CURRENT_SOURCE_DIR}/src/ui/*.js"
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/ui/css/*.css" "${CMAKE_CURRENT_SOURCE_DIR}/src/ui/js/*.js")
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/ui/index.html"
     COMMAND ${CMAKE_COMMAND} "-DIN=${CMAKE_CURRENT_SOURCE_DIR}/src/ui/index.html"
-            "-DOUT=${CMAKE_CURRENT_BINARY_DIR}/ui/index.html" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/strip-samples.cmake"
-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/ui/index.html" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/strip-samples.cmake"
-    COMMENT "Leaving the sample programs out of the UI"
+            "-DOUT=${CMAKE_CURRENT_BINARY_DIR}/ui/index.html" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/bundle-ui.cmake"
+    DEPENDS ${GC_UI_FILES} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/bundle-ui.cmake"
+    COMMENT "Joining the UI into one page"
     VERBATIM)
 set(GC_EMBED "ui/index.html=${CMAKE_CURRENT_BINARY_DIR}/ui/index.html")
 list(APPEND GC_EMBED "app/bridge.js=${CMAKE_CURRENT_SOURCE_DIR}/src/app/bridge.js")

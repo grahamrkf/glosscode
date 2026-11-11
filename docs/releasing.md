@@ -7,7 +7,7 @@ How GlossCode versions are numbered, what each release contains, and how the app
 The version lives in one place: the [`VERSION`](../VERSION) file at the repository root, in `MAJOR.MINOR.PATCH` form (`0.1.0`). A pre-release adds a suffix (`0.2.0-beta.1`).
 
 - The build compiles it into the program, where Help › About shows it and the update check compares against it.
-- `node scripts/sync-mockup-data.mjs` copies it into the mockup's About window.
+- `node scripts/make-ui-data.mjs` copies it into `src/ui/data.js` for the About window.
 - Each release is a Git tag named `v` plus the version (`v0.1.0`), and a GitHub Release made from that tag.
 
 While the version starts with `0.`, file formats (machine definitions, library files, settings) may still change between releases.
@@ -49,7 +49,7 @@ The UI, data, icons, the packaging plan, the core and the program exist. Before 
 
 | | Item | Status |
 |---|---|---|
-| ✓ | UI design (the mockup), dictionary, rules, built-in library, sample programs | Done. The program's build leaves the sample programs out (`cmake/strip-samples.cmake`); they're `GlossCode-<version>-examples.zip` |
+| ✓ | UI design (the mockup), dictionary, rules, built-in library, sample programs | Done. The program's build leaves the sample programs out (`cmake/bundle-ui.cmake`); they're `GlossCode-<version>-examples.zip` |
 | ✓ | App icon (`assets/logo/glosscode.ico`, PNGs) | Done |
 | ✓ | License (MIT) | Done |
 | ✓ | Where user files go, portable mode, single executable plan ([architecture.md](architecture.md#packaging)) | Written down |
@@ -74,7 +74,7 @@ Linux packages are not usually signed for direct downloads; `SHA256SUMS.txt` cov
 
 ## Making a release
 
-1. Update `VERSION` and add the version's section to `CHANGELOG.md` (`## [0.2.0] - <date>`), run `node scripts/sync-mockup-data.mjs`, and merge.
+1. Update `VERSION` and add the version's section to `CHANGELOG.md` (`## [0.2.0] - <date>`), run `node scripts/make-ui-data.mjs`, and merge.
 2. Tag the merge commit: `git tag v0.2.0 && git push origin v0.2.0`.
 3. The release workflow (`.github/workflows/release.yml`) checks that the tag matches `VERSION`, builds and packages everything, writes `SHA256SUMS.txt`, and creates a **draft** release with the files attached and the changelog section as its notes (`scripts/release-notes.sh`). A version with a suffix (`0.2.0-beta.1`) is marked as a pre-release.
 4. Install and run each file on a clean Windows and Linux computer, then publish the draft. Publishing is what makes the update check see it.
