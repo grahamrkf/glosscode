@@ -128,7 +128,7 @@
   "words": {
     "fagor8060.mill": {
       "G05": { "words": "set.corner.round", "short": "CRNRND", "desc": "Controlled corner rounding (modal)" },
-      "G06": { "words": "set.arc.centerabs1", "short": "ARCCAB1", "desc": "Arc center in absolute, this block only" },
+      "G06": { "words": "set.arc.centerabs.once", "short": "ARCCAB1", "desc": "Arc center in absolute, this block only" },
       "G07": { "words": "set.corner.square", "short": "CRNSQ", "desc": "Square corner (modal)" },
       "G08": { "words": "run.arc.tangent", "short": "ARCTAN", "desc": "Arc tangent to the last path" },
       "G09": { "words": "run.arc.3point", "short": "ARC3PT", "desc": "Three-point arc" },
@@ -148,8 +148,8 @@
       "G39": { "words": "run.chamfer", "short": "CHF", "desc": "Chamfer between two paths" },
       "G50": { "words": "set.corner.semiround", "short": "CRNSRND", "desc": "Semi-rounded corner (modal)" },
       "G53": { "words": "work.cancel", "short": "WRKCNCL", "desc": "Zero offset cancel" },
-      "G60": { "words": "set.corner.square1", "short": "CRNSQ1", "desc": "Square corner, this block only" },
-      "G61": { "words": "set.corner.round1", "short": "CRNRND1", "desc": "Controlled corner rounding, this block only" },
+      "G60": { "words": "set.corner.square.once", "short": "CRNSQ1", "desc": "Square corner, this block only" },
+      "G61": { "words": "set.corner.round.once", "short": "CRNRND1", "desc": "Controlled corner rounding, this block only" },
       "G63": { "words": "set.rigidtap", "short": "TAPRIG", "desc": "Rigid tapping" },
       "G70": { "words": "set.inch", "short": "INCH", "desc": "Inch units" },
       "G71": { "words": "set.mm", "short": "MM", "desc": "Millimeter units" },
@@ -240,7 +240,7 @@
 
     "fagor8060.lathe": {
       "G05": { "words": "set.corner.round", "short": "CRNRND", "desc": "Controlled corner rounding (modal)" },
-      "G06": { "words": "set.arc.centerabs1", "short": "ARCCAB1", "desc": "Arc center in absolute, this block only" },
+      "G06": { "words": "set.arc.centerabs.once", "short": "ARCCAB1", "desc": "Arc center in absolute, this block only" },
       "G07": { "words": "set.corner.square", "short": "CRNSQ", "desc": "Square corner (modal)" },
       "G08": { "words": "run.arc.tangent", "short": "ARCTAN", "desc": "Arc tangent to the last path" },
       "G09": { "words": "run.arc.3point", "short": "ARC3PT", "desc": "Three-point arc" },
@@ -308,7 +308,7 @@
       "G261": { "words": "set.arc.centerabs", "short": "ARCCABS", "desc": "Arc center in absolute (modal)" },
       "G262": { "words": "set.arc.centerinc", "short": "ARCCINC", "desc": "Arc center relative to the start" },
       "G263": { "words": "set.arc.radius", "short": "ARCRMD", "desc": "Arc programmed by its radius" },
-      "#CAX": { "words": "axis.c.on", "short": "AXCON", "desc": "Use the spindle as a C axis" },
+      "#CAX": { "words": "live.c.on", "short": "AXCON", "desc": "Use the spindle as a C axis" },
       "#CYL": { "words": "axis.cylinder", "short": "AXCYL", "desc": "Machining on the side (cylinder), with the C axis" },
       "#FACE": { "words": "axis.face", "short": "AXFACE", "desc": "Machining on the face, with the C axis" }
     }

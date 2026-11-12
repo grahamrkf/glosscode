@@ -193,7 +193,7 @@
       "G67": { "words": "call.macro.off", "short": "MACOFF", "desc": "Cancel the modal macro call" },
       "G68": { "words": "set.rotate.on", "short": "ROTON", "desc": "Coordinate rotation on" },
       "G69": { "words": "set.rotate.off", "short": "ROTOFF", "desc": "Coordinate rotation off" },
-      "G87": { "words": "cycle.backbore", "short": "BKBR", "desc": "Back boring cycle" },
+      "G87": { "words": "cycle.bore.back", "short": "BKBR", "desc": "Back boring cycle" },
       "G88": { "words": "cycle.bore.jog", "short": "BOREJOG", "desc": "Boring cycle, dwell, spindle stop, jog out by hand" },
       "G93": { "words": "set.invtime", "short": "INVT", "desc": "Inverse time feed" },
       "M29": { "words": "set.rigidtap", "short": "TAPRIG", "desc": "Rigid tapping mode for the next G84 or G74" }

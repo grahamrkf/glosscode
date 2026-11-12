@@ -8,8 +8,8 @@
   },
   "words": {
     "okuma7000l.lathe": {
-      "M98": { "words": "machine.tailstock.thrustlow", "short": "MTSTHRL", "desc": "Tailstock thrust low (Okuma, OSP700L/7000L; subprograms use CALL)" },
-      "M99": { "words": "machine.tailstock.thrusthigh", "short": "MTSTHRH", "desc": "Tailstock thrust high (Okuma, OSP700L/7000L; subprograms end with RTS)" }
+      "M98": { "words": "machine.tailstock.thrust.low", "short": "MTSTHRL", "desc": "Tailstock thrust low (Okuma, OSP700L/7000L; subprograms use CALL)" },
+      "M99": { "words": "machine.tailstock.thrust.high", "short": "MTSTHRH", "desc": "Tailstock thrust high (Okuma, OSP700L/7000L; subprograms end with RTS)" }
     }
   }
 }

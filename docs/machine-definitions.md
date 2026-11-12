@@ -346,7 +346,7 @@ GlossCode doesn't pick a side quietly. An entry with a contradiction lists each 
                     "source": { "manual": "Haas Mill 96-8210", "revision": "V (2025)", "page": 444 } } },
   "decidedBy": "toolChanger" },       // an option in the profile settles it
 
-"G114": { "words": "work.11", "short": "W11",
+"G114": { "words": "work.p5", "short": "WRKP5",
   "readings": {
     "p5": { "desc": "Work offset 11 (G154 P5)", "source": { "revision": "V (2025)", "page": 397 } },
     "p3": { "desc": "Work offset 11 (G154 P3)", "source": { "revision": "V (2025)", "page": 396 } } },

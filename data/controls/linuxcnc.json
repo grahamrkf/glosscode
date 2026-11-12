@@ -97,7 +97,7 @@
       "G99": { "words": "cycle.return.r", "short": "RETR", "desc": "Cycle returns to R" },
       "G70": { "words": "cycle.finish", "short": "FIN", "desc": "Finish the profile in an O-subroutine" },
       "G71": { "words": "cycle.rough", "short": "RUF", "desc": "Rough the profile along Z" },
-      "G72": { "words": "cycle.facerough", "short": "FRUF", "desc": "Rough the profile on the face" },
+      "G72": { "words": "cycle.rough.face", "short": "FRUF", "desc": "Rough the profile on the face" },
       "G76": { "words": "cycle.thread", "short": "THDCY", "desc": "Threading cycle" }
     },
 

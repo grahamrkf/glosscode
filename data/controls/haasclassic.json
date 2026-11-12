@@ -15,7 +15,7 @@
   "words": {
     "haasclassic.mill": {
       "G87": { "words": "cycle.bore.jog", "short": "BOREJOG", "desc": "Bore, stop the spindle, jog out by hand" },
-      "G88": { "words": "cycle.bore.dwelljog", "short": "BOREDJOG", "desc": "Bore, dwell, stop the spindle, jog out by hand" }
+      "G88": { "words": "cycle.bore.dwell.jog", "short": "BOREDJOG", "desc": "Bore, dwell, stop the spindle, jog out by hand" }
     }
   }
 }

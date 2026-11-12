@@ -79,13 +79,13 @@
       "G99": { "words": "cycle.return.r", "short": "RETR", "desc": "Cycle returns to the retract level" },
       "M12": { "words": "machine.turret.rev", "short": "MTURREV", "desc": "Index the turret in reverse (Hurco default)" },
       "M13": { "words": "machine.turret.fwd", "short": "MTURFWD", "desc": "Index the turret forward (Hurco default)" },
-      "M33": { "words": "spindle.live.fwd", "short": "SLFWD", "desc": "Live tool forward (Hurco default)" },
-      "M34": { "words": "spindle.live.rev", "short": "SLREV", "desc": "Live tool reverse (Hurco default)" },
-      "M35": { "words": "spindle.live.off", "short": "SLOFF", "desc": "Live tool stop (Hurco default)" },
+      "M33": { "words": "live.fwd", "short": "LFWD", "desc": "Live tool forward (Hurco default)" },
+      "M34": { "words": "live.rev", "short": "LREV", "desc": "Live tool reverse (Hurco default)" },
+      "M35": { "words": "live.off", "short": "LOFF", "desc": "Live tool stop (Hurco default)" },
       "M68": { "words": "machine.chuck.clamp", "short": "MCHKCL", "desc": "Close the chuck (Hurco default)" },
       "M69": { "words": "machine.chuck.unclamp", "short": "MCHKUNCL", "desc": "Open the chuck (Hurco default)" },
-      "M78": { "words": "machine.quill.fwd", "short": "MQLFWD", "desc": "Tailstock quill forward (Hurco default)" },
-      "M79": { "words": "machine.quill.back", "short": "MQLBK", "desc": "Tailstock quill back (Hurco default)" },
+      "M78": { "words": "machine.quill.advance", "short": "MQLADV", "desc": "Tailstock quill forward (Hurco default)" },
+      "M79": { "words": "machine.quill.retract", "short": "MQLRET", "desc": "Tailstock quill back (Hurco default)" },
       "M130": { "words": "set.mode.turn", "short": "MDTURN", "desc": "Turning mode (Hurco default)" },
       "M131": { "words": "set.mode.mill", "short": "MDMILL", "desc": "Milling mode (Hurco default)" }
     }

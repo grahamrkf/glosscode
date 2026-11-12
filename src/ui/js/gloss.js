@@ -53,7 +53,7 @@ function ownWords(toks){
   return [];
 }
 function applyModes(toks, st){
-  st.dwell = false; st.sub = false; st.local = false; st.lib = null; st.chg = []; st.subWord = null; st.codeW = null;
+  st.dwell = false; st.sub = false; st.local = false; st.lib = null; st.chg = []; st.subWord = null; st.codeW = null; st.wcsLineP = false;
   st.zeroShift = mtype()==="lathe" && toks.some(t => isCode(t, coordSetCode())) && toks.some(t => /^[XZUW](?:[-+]?[\d.#[]|[-+][A-Z]|=)/.test(t));
   // Okuma automatic chamfer or rounding (G75, G76): L on that line is the corner's size
   st.corner = toks.map(pad2).find(k => /^G\d/.test(k) && entry(k + ".L")) || null;
@@ -108,6 +108,13 @@ function applyModes(toks, st){
     if (["G40","G41","G42"].includes(k)) set("comp", k);
     if ((groups.distance || []).includes(k)){ st.dist = isIncCode(k) ? "inc" : "abs"; set("distCode", k); }
   }
+  // An extra work offset with its number in P (Haas G154 P7) reads as one word, work.p7, and stays active as "G154 P7"
+  const wp = toks.find(t => /^G\d/.test(t) && entry(pad2(t))?.words==="work.p");
+  if (wp){
+    const p = toks.find(t => /^P\d+$/.test(t));
+    st.wcsLineP = !!p; st.wcsPn = p ? String(parseInt(p.slice(1), 10)) : null;
+    set("wcs", pad2(wp) + (p ? " " + p : ""));
+  } else if (st.chg.includes("wcs")) st.wcsPn = null;
   if (SYNTAX==="klartext") klModes(toks, st, set);
   trackCarry(toks, st);
 }
@@ -239,6 +246,7 @@ function word(t, st, ctx){
     const k = pad2(t);
     const e = (k===coordSetCode() && st.zeroShift && entry(k + ".shift")) || entry(k);   // a lathe G50 (G92 in systems B and C) with X or Z sets the coordinates
     if (!e) return { g:t, e:"?"+k, unk:true, d:`${k} isn't in the dictionary or this machine's file.` };
+    if (e.words==="work.p" && st.wcsPn) return { g:t, e:sty(e) + st.wcsPn, d:`Extra work offset P${st.wcsPn}`, code:k, ...(isCs(e) ? { cs:true } : {}) };
     return { g:t, e:sty(e), d:e.desc, code:k, ...(isCs(e) ? { cs:true } : {}) };
   }
   // A subprogram call whose program word isn't P (Mitsubishi M2/M0: G22 L2200 P5, P the repeat count)
@@ -316,6 +324,7 @@ function word(t, st, ctx){
   if (letter==="H" && (ctx==="wcs" || (st.chg?.includes("wcs") && String(st.wcs).startsWith("G15")))) {
     return { g:t, e:vw(style==="short" ? "WOFS" : "woffset", raw), d:`Work offset number ${raw}` };
   }
+  if (letter==="P" && (st.wcsLineP || (ctx==="wcs" && st.wcsPn))) return { g:t, e:"", d:`Extra work offset number ${raw}, shown with ${String(st.wcs).split(" ")[0]}` };
   if (letter==="P" && st.local) return { g:t, e:vw(style==="short" ? "LBL" : "label", value), d:`Jump to the line labeled N${value} and run it until M99` };
   if (letter==="P"){
     const x = st.sub ? address.sub : address.dwell;

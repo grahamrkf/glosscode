@@ -6,7 +6,7 @@ What GlossCode does now, and what may come later.
 
 **Editor**
 - [x] Interleaved view: a gloss line (plain English) above every code line
-- [x] Full words (`run.feed`, `set.inch`, `cycle.peck`, `machine.tailstock.in`: one of a fixed set of groups, then the action, with a third part for less common codes; control-specific codes are underlined with dots) and short words (View › Gloss words)
+- [x] Full words (`run.feed`, `set.inch`, `cycle.peck`, `machine.tailstock.advance`: one of a fixed set of groups, then the action, with a third part for less common codes; control-specific codes are underlined with dots) and short words (View › Gloss words)
 - [x] Paste (Ctrl+V or Edit › Paste) splits the text the way opening a file does. One line goes in at the caret of the line being edited, or at the end of the current line. Several lines, or a whole program, go in as their own lines below the current one, or replace it when it's blank
 - [x] Select whole lines by dragging the mouse across them, Shift+↑↓ or Shift+click (Ctrl+A selects all). Right-click, or Ctrl+C / Ctrl+X, copies or cuts them as code text, the same as Save writes it, with no gloss. Ctrl+D duplicates them below; Ctrl+V pastes over them; Delete removes them
 - [x] Code with gloss above: each line as plain text with its N number in its own column and the gloss above in small grey text, not selectable; N numbers and comments aren't repeated in the gloss. Click to place the caret; Enter breaks the line, Backspace/Delete at the ends join lines, Esc undoes the line's changes
