@@ -273,7 +273,7 @@ function openConvert(){
   if (editing && !commit()) return;
   closeMenu?.();
   if (!convertible(machineId)){
-    setMsg(`Converting from ${MACHINES[machineId].name} isn't supported yet: only controls with Fanuc-style blocks can be converted so far.`, true);
+    setMsg(`Can't convert from ${MACHINES[machineId].name} yet (Fanuc-style controls only).`, true);
     return;
   }
   const sel = $("cv-tgt");

@@ -132,7 +132,7 @@ function foldButton(h, ctx, ctxLi){
 const saveFoldPrefs = () => window.saveFoldPrefs?.({ fast:foldFast, auto:foldAuto });
 window.loadFoldPrefs = p => { if ([0, 3, 5, 10].includes(p.fast)) foldFast = p.fast; if (typeof p.auto==="boolean") foldAuto = p.auto; };
 function setFoldFast(x){ foldFast = x; saveFoldPrefs(); render();
-  setMsg(x ? `A G01 at ${x}× the cutting feed or more counts as a rapid: it ends a fold and stays visible.` : "Only G00 counts as a rapid for folding."); }
+  setMsg(x ? `A G01 at ${x}× the cutting feed or more counts as a rapid: it ends a collapsed run and stays visible.` : "Only G00 counts as a rapid when collapsing."); }
 function selectLine(li, keepSim, keepSel){
   if (editing && !commit()) return;
   if (!keepSel) selAnchor = null;

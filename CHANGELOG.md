@@ -9,6 +9,15 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - View › Text size… is now View › Appearance…: the theme, the code and gloss fonts with their sizes, the zoom, and colours. The font lists start with the built-in IBM Plex, then the easy-to-read fonts that are installed (Cascadia Mono, Consolas, JetBrains Mono, Atkinson Hyperlegible…), then every installed font. A chosen font that's missing a letter falls back to IBM Plex for it.
 - Colours for the code, gloss, comments, N numbers and the rapid, feed, arc and cycle moves (in the editor and the toolpath) can be changed, separately for the light and dark themes, with a button to go back to the theme's colour. All of it is remembered in settings.json.
 
+### Gloss words
+- Full words follow fixed rules (docs/gloss-words.md): one idea per part (G89 `cycle.bore.dwell`, was `cycle.boredwell`), on and off last as their own part (M10 `axis.4.brake.on`), fixed opposite pairs (tailstock and quill `advance`/`retract`), direction and side last (`cycle.tap.left`, `cycle.pocket.circle.ccw`), and `.once` for codes that act on one block (Fagor G61 `set.corner.round.once`). Okuma G178 synchronized tapping reads `cycle.tap.rigid`, G30 `run.home.2nd`, Heidenhain M128 `tool.tcp.on`.
+- Work offsets use the code's own name: G54 to G59 read `work.g54` to `work.g59` (WRK54 to WRK59), and an extra offset reads `work.p7` (WRKP7) whether it's written G154 P7 or as its alias G116. G154's P used to read as a dwell.
+- A new `live` group holds live tooling and the C axis on lathes: `live.fwd`, `live.rev`, `live.off`, `live.brake.on`, the Okuma M-tool cycles (`live.drill`, `live.tap`, `live.thread.face`…) and the C axis (`live.c.on`, `live.c.join`, `live.xc.on`). Short words for the live tool lose the S (LFWD, LREV).
+
+### Wording
+- Status-line messages are one short sentence: "Undone (3 more).", "Pasted 4 lines below line 12. Ctrl+Z undoes.", "Saved PART.nc (2,310 bytes, CRLF)."
+- Menu items use shop terms: View › Block count (was Run order numbers), View › Collapse moves (was Fold moves), Program › Sort addresses, Program › Auto sequence numbers, Help › Gloss words….
+
 ## [0.4.0] - 2026-11-11
 
 ### Simulation

@@ -596,5 +596,5 @@ function sortWords(scope){
   if (!n){ setMsg(scope==="line" ? "This line is already in order." : "Every line is already in order."); return; }
   undoStack.push(before); redoStack = [];
   render();
-  setMsg(`Sorted words on ${n} line${n>1?"s":""}. Ctrl+Z puts them back.`);
+  setMsg(`Sorted addresses on ${n} line${n>1?"s":""}. Ctrl+Z undoes.`);
 }

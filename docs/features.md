@@ -36,7 +36,7 @@ What GlossCode does now, and what may come later.
 - [x] Subprogram pane (Alt+F12, or Beside on the call line): the subprogram beside the program, edited like any other line, with a trail of calls (Program › N1000 › N2000) for subprograms that call others; library (G65) subprograms open read only. Drag its edge to resize
 - [x] Library calls read by name (`G65 P9101` reads call.macro sub.slotmill, `Z-0.15` reads DEP-0.15) and expand to show the lines they run, in green; the toolpath preview follows them
 - [x] View › Show: both lines, gloss only, or code only
-- [x] Menus: choices show a round dot, on/off settings a tick box; longer lists are submenus (View › Gloss words, View › Fold moves, Simulate › Toolpath)
+- [x] Menus: choices show a round dot, on/off settings a tick box; longer lists are submenus (View › Gloss words, View › Collapse moves, Simulate › Toolpath)
 - [x] Toolpath Show button: rapid moves, moves after the selected line (grey, hidden, shown), cutter comp side, colour by move type or tool; highlighted while something is hidden
 - [x] View › Appearance…: light, dark or system theme; code and gloss fonts (IBM Plex built in, then easy-to-read installed fonts, then every installed font) and sizes; a zoom for the whole window (Ctrl+= / Ctrl+- / Ctrl+0); colours for code, gloss, comments, N numbers and the four move types, kept per theme. View › Theme switches the theme. The window's title bar follows the theme
 - [x] Active-modes panel for the selected line, with a mark on modes set on that line

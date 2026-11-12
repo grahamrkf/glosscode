@@ -119,7 +119,7 @@ $("vars").addEventListener("change", e => {
   t.vars ||= {};
   if (s==="") delete t.vars[key];
   else if (!isFinite(v)){
-    setMsg(`${s} isn't a number. A start value is a number, such as 0.25 or -1.`, true);
+    setMsg(`${s} isn't a number (for example 0.25 or -1).`, true);
     e.target.value = key in t.vars ? fmt4(t.vars[key]) : "";
     return;
   }
@@ -135,13 +135,13 @@ $("vars").addEventListener("click", e => {
   }
   if (e.target.id!=="v-save" || !t) return;
   if (!USER_MACHINES.has(id)){
-    setMsg(`${MACHINES[id].name} isn't one of your machine profiles, so it can't keep values. Make a profile in File › Machine profiles…, then save them.`, true);
+    setMsg(`${MACHINES[id].name} isn't a machine profile, so it can't keep values. Make one in File › Machine profiles….`, true);
     return;
   }
   const keys = Object.keys(t.vars || {}).filter(isCommonVar); if (!keys.length) return;
   USER_DATA[id].vars = { ...(USER_DATA[id].vars || {}) };
   for (const key of keys){ USER_DATA[id].vars[key] = t.vars[key]; delete t.vars[key]; }
   rebuildMachines(); persistMachines(); render();
-  setMsg(`Saved ${keys.join(", ")} to ${MACHINES[id].name}. Every program on it now starts with ${keys.length > 1 ? "these values" : "this value"}.`);
+  setMsg(`Saved ${keys.join(", ")} as the start ${keys.length > 1 ? "values" : "value"} on ${MACHINES[id].name}.`);
 });
 

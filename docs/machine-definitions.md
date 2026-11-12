@@ -212,7 +212,7 @@ Help text is plain English and is the same in every layer unless a layer overrid
 
 ### Word order
 
-Program › Sort words puts each line's words in the order of `columns`, from first to last. The built-in order puts the most used words first: motion, canned cycles, cycle cancel and spindle speed mode (G96/G97), then X, Y, Z, the arc and cycle words, F, S, the spindle M-codes, the tool, coolant, then other G-codes, other M-codes, rare words and the comment. A word goes with the first entry that matches it, so a code listed in an earlier entry (M03 under Spindle) never reaches a later catch-all (M).
+Program › Sort addresses puts each line's words in the order of `columns`, from first to last. The built-in order puts the most used words first: motion, canned cycles, cycle cancel and spindle speed mode (G96/G97), then X, Y, Z, the arc and cycle words, F, S, the spindle M-codes, the tool, coolant, then other G-codes, other M-codes, rare words and the comment. A word goes with the first entry that matches it, so a code listed in an earlier entry (M03 under Spindle) never reaches a later catch-all (M).
 
 ```jsonc
 "columns": [
