@@ -50,6 +50,14 @@ void plat_open_url(const char *url);
 char *plat_clipboard_get(void *window);
 int plat_clipboard_set(void *window, const char *text);
 
+/* The installed font family names, for View › Appearance…: a malloc'd string with one name per line (unsorted,
+   possibly with repeats), or NULL when they can't be listed. */
+char *plat_font_families(void);
+
+/* Asks the window's title bar and frame to be drawn dark (dark != 0) or light, to match the app's theme.
+   window is the webview's native window. Does nothing where the system can't. */
+void plat_set_dark_frame(void *window, int dark);
+
 /* Shows a message box for errors that happen before the window exists. */
 void plat_error_box(const char *title, const char *msg);
 

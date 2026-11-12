@@ -189,7 +189,7 @@ function update(){
 
 function drawPreview(r){
   const svg = $("h-svg"), W = 300, Hh = 250, pad = 26;
-  if (!r){ svg.innerHTML = `<text x="150" y="128" text-anchor="middle" font-size="12" fill="#aaa">No preview</text>`; return; }
+  if (!r){ svg.innerHTML = `<text x="150" y="128" text-anchor="middle" font-size="12" fill="var(--c-aaaaaa)">No preview</text>`; return; }
   const g = [holes.pos[0]/scale(holes.a1), holes.pos[1]/scale(holes.a2)];
   const all = [...r.pts, g, [0, 0]];
   if (r.center) all.push([r.center[0]-r.r, r.center[1]-r.r], [r.center[0]+r.r, r.center[1]+r.r]);
@@ -198,23 +198,23 @@ function drawPreview(r){
   const ox = (W - (x1-x0)*k)/2 - x0*k, oy = (Hh + (y1-y0)*k)/2 + y0*k;
   const X = p => (ox + p[0]*k).toFixed(1), Y = p => (oy - p[1]*k).toFixed(1);
   const o = [0, 0], out = [];
-  out.push(`<line x1="0" y1="${Y(o)}" x2="${W}" y2="${Y(o)}" stroke="#eee"/><line x1="${X(o)}" y1="0" x2="${X(o)}" y2="${Hh}" stroke="#eee"/>`);
-  out.push(`<text x="${+X(o)+4}" y="${+Y(o)-4}" font-size="9.5" fill="#bbb">0,0</text>`);
+  out.push(`<line x1="0" y1="${Y(o)}" x2="${W}" y2="${Y(o)}" stroke="var(--c-eeeeee)"/><line x1="${X(o)}" y1="0" x2="${X(o)}" y2="${Hh}" stroke="var(--c-eeeeee)"/>`);
+  out.push(`<text x="${+X(o)+4}" y="${+Y(o)-4}" font-size="9.5" fill="var(--c-bbbbbb)">0,0</text>`);
   if (r.center){
-    out.push(`<circle cx="${X(r.center)}" cy="${Y(r.center)}" r="${(r.r*k).toFixed(1)}" fill="none" stroke="#c9d3df" stroke-dasharray="4 3"/>`);
-    out.push(`<path d="M${+X(r.center)-5} ${Y(r.center)}h10M${X(r.center)} ${+Y(r.center)-5}v10" stroke="#888"/>`);
+    out.push(`<circle cx="${X(r.center)}" cy="${Y(r.center)}" r="${(r.r*k).toFixed(1)}" fill="none" stroke="var(--c-c9d3df)" stroke-dasharray="4 3"/>`);
+    out.push(`<path d="M${+X(r.center)-5} ${Y(r.center)}h10M${X(r.center)} ${+Y(r.center)-5}v10" stroke="var(--c-888888)"/>`);
   }
   const path = [g, ...r.pts].map((p, i) => (i ? "L" : "M") + X(p) + " " + Y(p)).join("");
-  out.push(`<path d="${path}" fill="none" stroke="#e8a33d" stroke-width="1" stroke-dasharray="3 3"/>`);
+  out.push(`<path d="${path}" fill="none" stroke="var(--c-e8a33d)" stroke-width="1" stroke-dasharray="3 3"/>`);
   const label = r.pts.length <= 40;
   r.rows.forEach((x, i) => {
     const p = r.pts[i];
-    out.push(`<circle cx="${X(p)}" cy="${Y(p)}" r="4.5" fill="${x.skip ? "#fff" : "#c03d9a"}" stroke="#c03d9a" stroke-width="1.5"/>`);
-    if (label) out.push(`<text x="${+X(p)+6}" y="${+Y(p)-6}" font-size="10" fill="#555">${i+1}</text>`);
+    out.push(`<circle cx="${X(p)}" cy="${Y(p)}" r="4.5" fill="${x.skip ? "var(--c-ffffff)" : "var(--c-c03d9a)"}" stroke="var(--c-c03d9a)" stroke-width="1.5"/>`);
+    if (label) out.push(`<text x="${+X(p)+6}" y="${+Y(p)-6}" font-size="10" fill="var(--c-555555)">${i+1}</text>`);
   });
-  out.push(`<path d="M${X(g)} ${+Y(g)-6}l5 6l-5 6l-5 -6z" fill="#e8a33d"/>`);
-  out.push(`<g font-size="10" fill="#777"><path d="M10 238h26M10 238v-26" stroke="#999" fill="none"/><text x="39" y="241">${holes.a1}</text><text x="6" y="208">${holes.a2}</text></g>`);
-  out.push(`<g font-size="10" fill="#777"><path d="M196 236l4 5l-4 5l-4 -5z" fill="#e8a33d" transform="translate(0 -5)"/><text x="204" y="240">tool now</text><circle cx="254" cy="236" r="3.5" fill="#c03d9a"/><text x="260" y="240">hole</text></g>`);
+  out.push(`<path d="M${X(g)} ${+Y(g)-6}l5 6l-5 6l-5 -6z" fill="var(--c-e8a33d)"/>`);
+  out.push(`<g font-size="10" fill="var(--c-777777)"><path d="M10 238h26M10 238v-26" stroke="var(--c-999999)" fill="none"/><text x="39" y="241">${holes.a1}</text><text x="6" y="208">${holes.a2}</text></g>`);
+  out.push(`<g font-size="10" fill="var(--c-777777)"><path d="M196 236l4 5l-4 5l-4 -5z" fill="var(--c-e8a33d)" transform="translate(0 -5)"/><text x="204" y="240">tool now</text><circle cx="254" cy="236" r="3.5" fill="var(--c-c03d9a)"/><text x="260" y="240">hole</text></g>`);
   svg.innerHTML = out.join("");
 }
 

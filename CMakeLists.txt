@@ -145,7 +145,7 @@ if(NOT WIN32)
 endif()
 if(WIN32)
     set_target_properties(glosscode PROPERTIES OUTPUT_NAME GlossCode)
-    target_link_libraries(glosscode PRIVATE shell32 ole32 shlwapi version)
+    target_link_libraries(glosscode PRIVATE shell32 ole32 shlwapi version gdi32)
     if(MINGW)
         # One self-contained .exe: the C and C++ runtimes inside, wide entry point.
         target_link_options(glosscode PRIVATE -municode -static -static-libgcc -static-libstdc++)

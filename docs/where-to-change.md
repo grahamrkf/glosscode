@@ -73,8 +73,9 @@ CI fails if `src/ui/data.js` or the golden files are out of date. See [building.
 | Find | [`src/ui/js/editor-find.js`](../src/ui/js/editor-find.js) |
 | Subprogram calls in the editor (show, Go to, Beside) | [`src/ui/js/subprograms.js`](../src/ui/js/subprograms.js) |
 | Tabs, the home page, recent files, Open and Save | [`src/ui/js/tabs.js`](../src/ui/js/tabs.js) |
-| A dialog | its markup is a `.dim` box in `src/ui/index.html`, its code is the matching file in `src/ui/js/` (Insert cycle: `insert-menu.js`, hole pattern: `hole-pattern.js`, library: `library.js`, convert: `convert.js`, about: `about.js`, text size: `text-size.js`), its styles in `src/ui/css/` |
-| Fonts, text size and zoom | `src/ui/css/fonts.css` (made by `scripts/make-fonts.mjs`), `text-size.js` |
+| A dialog | its markup is a `.dim` box in `src/ui/index.html`, its code is the matching file in `src/ui/js/` (Insert cycle: `insert-menu.js`, hole pattern: `hole-pattern.js`, library: `library.js`, convert: `convert.js`, about: `about.js`, appearance: `appearance.js`), its styles in `src/ui/css/` |
+| Fonts, text size and zoom | `src/ui/css/fonts.css` (made by `scripts/make-fonts.mjs`), `appearance.js` |
+| A colour, or the dark theme | write colours as `var(--c-rrggbb)` (the light value), never `#rrggbb`, then run `node scripts/make-theme.mjs` to write `src/ui/css/theme.css` with its dark value (`--convert` turns raw colours into that form). `tests/test_ui.mjs` fails on a raw colour or an out-of-date `theme.css`. The colours a user can change (`--ink-code`, `--rapid`…) are listed in `NAMED` in the script and `COLORS` in `appearance.js` |
 
 ## Files, settings and the program
 

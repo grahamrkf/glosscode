@@ -471,7 +471,7 @@ function drawEditor(){
   $("s-units").value = d.units || "inch"; $("s-about").value = d.about || ""; $("s-notes").value = d.notes || "";
   $("s-where").value = d.source==="shop" ? "shop" : "mine"; $("s-priv").checked = !!d.private;
   $("s-cats").innerHTML = [...new Set(LIB.map(e => e.category).filter(Boolean))].map(c => `<option value="${esc(c)}">`).join("");
-  $("s-machines").innerHTML = MACHINE_IDS.map(([id, label]) => `<label><input type="checkbox" value="${id}"${(d.machines || []).includes(id) ? " checked" : ""}${ro ? " disabled" : ""}> ${esc(label)} <small style="color:#999">${id}</small></label>`).join("");
+  $("s-machines").innerHTML = MACHINE_IDS.map(([id, label]) => `<label><input type="checkbox" value="${id}"${(d.machines || []).includes(id) ? " checked" : ""}${ro ? " disabled" : ""}> ${esc(label)} <small style="color:var(--c-999999)">${id}</small></label>`).join("");
   ["s-name", "s-long", "s-short", "s-prog", "s-cat", "s-tags", "s-about", "s-notes", "s-body"].forEach(id => $(id).readOnly = ro);
   ["s-units", "s-where", "s-priv", "s-scan", "s-add"].forEach(id => $(id).disabled = ro);
   $("s-body").value = d.body.join("\n");
@@ -491,7 +491,7 @@ function drawVars(){
     + `<td><input class="mono" data-f="default" value="${esc(defaultFor(a, draft.units || "inch"))}"${ro ? " readonly" : ""}></td>`
     + `<td><input data-f="desc" value="${esc(a.desc || "")}"${ro ? " readonly" : ""}></td>`
     + `<td>${ro ? "" : `<button data-del="${i}" title="Remove">✕</button>`}</td></tr>`).join("")
-    || `<tr><td colspan="8" style="color:#888;padding:8px 4px">No variables yet. Write #24 for X, #25 for Y and so on in the body, then <b>Add from body</b>.</td></tr>`;
+    || `<tr><td colspan="8" style="color:var(--c-888888);padding:8px 4px">No variables yet. Write #24 for X, #25 for Y and so on in the body, then <b>Add from body</b>.</td></tr>`;
 }
 function readEditor(){
   if (readOnly) return;

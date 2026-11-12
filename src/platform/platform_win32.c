@@ -336,3 +336,61 @@ int plat_clipboard_set(void *window, const char *text)
     free(w);
     return ok;
 }
+
+/* ---------- Fonts and the dark title bar ---------- */
+
+typedef struct { char *buf; size_t len, cap; } font_list;
+
+static int CALLBACK font_cb(const LOGFONTW *lf, const TEXTMETRICW *tm, DWORD type, LPARAM arg)
+{
+    (void)tm;
+    (void)type;
+    font_list *l = (font_list *)arg;
+    if (lf->lfFaceName[0] == L'@') return 1;   /* the sideways copy of an East Asian font */
+    char *name = to_utf8(lf->lfFaceName);
+    if (!name) return 1;
+    size_t n = strlen(name);
+    if (l->len + n + 2 > l->cap) {
+        size_t cap = (l->cap + n + 2) * 2;
+        char *b = realloc(l->buf, cap);
+        if (!b) { free(name); return 0; }
+        l->buf = b;
+        l->cap = cap;
+    }
+    memcpy(l->buf + l->len, name, n);
+    l->len += n;
+    l->buf[l->len++] = '\n';
+    l->buf[l->len] = 0;
+    free(name);
+    return 1;
+}
+
+char *plat_font_families(void)
+{
+    font_list l = { NULL, 0, 0 };
+    HDC dc = GetDC(NULL);
+    if (!dc) return NULL;
+    LOGFONTW lf;
+    memset(&lf, 0, sizeof lf);
+    lf.lfCharSet = DEFAULT_CHARSET;
+    EnumFontFamiliesExW(dc, &lf, (FONTENUMPROCW)font_cb, (LPARAM)&l, 0);
+    ReleaseDC(NULL, dc);
+    return l.buf;
+}
+
+/* DwmSetWindowAttribute(DWMWA_USE_IMMERSIVE_DARK_MODE), looked up at run time so the program needs no dwmapi
+   import: attribute 20 on Windows 10 20H1 and later, 19 on the builds before. */
+typedef HRESULT (WINAPI *dwm_set_fn)(HWND, DWORD, LPCVOID, DWORD);
+void plat_set_dark_frame(void *window, int dark)
+{
+    static dwm_set_fn set;
+    static int tried;
+    if (!tried) {
+        HMODULE m = LoadLibraryW(L"dwmapi.dll");
+        tried = 1;
+        if (m) set = (dwm_set_fn)(void (*)(void))GetProcAddress(m, "DwmSetWindowAttribute");
+    }
+    if (!set || !window) return;
+    BOOL on = dark ? TRUE : FALSE;
+    if (FAILED(set((HWND)window, 20, &on, sizeof on))) set((HWND)window, 19, &on, sizeof on);
+}

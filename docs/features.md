@@ -38,7 +38,7 @@ What GlossCode does now, and what may come later.
 - [x] View › Show: both lines, gloss only, or code only
 - [x] Menus: choices show a round dot, on/off settings a tick box; longer lists are submenus (View › Gloss words, View › Fold moves, Simulate › Toolpath)
 - [x] Toolpath Show button: rapid moves, moves after the selected line (grey, hidden, shown), cutter comp side, colour by move type or tool; highlighted while something is hidden
-- [x] View › Text size…: code and gloss text sizes and a zoom for the whole window (Ctrl+= / Ctrl+- / Ctrl+0); code and gloss in the fonts GlossCode ships (IBM Plex Mono and IBM Plex Sans)
+- [x] View › Appearance…: light, dark or system theme; code and gloss fonts (IBM Plex built in, then easy-to-read installed fonts, then every installed font) and sizes; a zoom for the whole window (Ctrl+= / Ctrl+- / Ctrl+0); colours for code, gloss, comments, N numbers and the four move types, kept per theme. View › Theme switches the theme. The window's title bar follows the theme
 - [x] Active-modes panel for the selected line, with a mark on modes set on that line
 - [x] Line colors: rapid (amber), feed (blue), arc (teal), cycle (magenta)
 - [x] Canned cycle guide (F1, Help menu, or "How G76 works…" in the side panel): a sketch of how the cycle moves, an example line with every word it takes (gloss above), and what each word does and whether it's required. A button starts a new line with that cycle
@@ -115,5 +115,5 @@ What GlossCode does now, and what may come later.
 - [ ] Autosave and a backup copy before each save
 - [ ] Print or export a listing with the gloss lines
 - [ ] An editor for the word dictionary
-- [ ] Dark theme and adjustable column width. Done: text size and zoom (View › Text size…)
+- [ ] Adjustable column width
 - [ ] Fast scrolling in very large files (100,000+ lines)

@@ -96,7 +96,7 @@ function drawInsert(){
   }).join("");
   const hidNote = hidden.length ? `<span>${hidden.join(" and ")} ${hidden.length > 1 ? "are" : "is"} hidden: this lathe has no ${hidden.map(L => L==="Y" ? "Y axis" : "live tooling (C axis)").join(" or ")}. File › Machine profiles… turns ${hidden.length > 1 ? "them" : "it"} on.</span>` : "";
   $("imain").innerHTML = `<h4><code>${code}</code>${esc(def.name)}<small>${en ? esc(en.words) + " · " : ""}${esc(DIALECT.label)}</small></h4>`
-    + `<div class="itop"><div class="csk">${cycleSketch(help.sketch, help.labels || {}, def)}</div><div class="side"><p class="about" style="margin:0">${esc(help.about || en?.desc || "")}</p>${hidNote}<span style="color:#888">Grey values are examples. Distances get a decimal point if you leave it off.</span></div></div>`
+    + `<div class="itop"><div class="csk">${cycleSketch(help.sketch, help.labels || {}, def)}</div><div class="side"><p class="about" style="margin:0">${esc(help.about || en?.desc || "")}</p>${hidNote}<span style="color:var(--c-888888)">Grey values are examples. Distances get a decimal point if you leave it off.</span></div></div>`
     + `<div class="cex" id="i-prev"></div>` + choice + `<div class="iform">${form}</div>`;
   $("imain").querySelectorAll('input[name="i-pick"]').forEach(x => x.onchange = () => { pick[code] = +x.value; drawInsert(); });
   update();

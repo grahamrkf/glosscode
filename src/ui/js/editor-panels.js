@@ -35,7 +35,7 @@ function showInfo(li, idx, warn){
 function varValues(li, idx, c){
   if (!isVarVal(c.g)) return "";
   const list = EXEC.vals?.[li + ":" + idx];
-  if (!list) return `<span style="color:#777">This line doesn't run in the simulation, so the value isn't known.</span>`;
+  if (!list) return `<span style="color:var(--c-777777)">This line doesn't run in the simulation, so the value isn't known.</span>`;
   const d = lineState[li]?.units==="mm" ? 3 : 4, shown = list.slice(0, 8).map(v => v==null ? "not set" : String(+v.toFixed(d)));
   return `<span>${list.length===1 ? "Works out to" : `Works out to ${list.length} values as it runs:`} <span class="k">${esc(shown.join(", "))}${list.length > 8 ? "…" : ""}</span>${list.includes(null) ? " (a variable used here was never set)" : ""}</span>`;
 }
@@ -77,7 +77,7 @@ function drawModes(){
       const c = word(w, st, lb==="Work offset" ? "wcs" : null);
       return esc(c.e) + (c.u ? `<small class="u">${esc(c.u)}</small>` : "");
     }).join(" ");
-    return `<span class="lb">${isNew ? '<span class="new">●</span> ' : ""}${lb}</span><span class="cd">${esc(code || "not set")}</span><span class="ew"${isNew?' style="color:#d13438"':""}>${en}</span>`;
+    return `<span class="lb">${isNew ? '<span class="new">●</span> ' : ""}${lb}</span><span class="cd">${esc(code || "not set")}</span><span class="ew"${isNew?' style="color:var(--c-d13438)"':""}>${en}</span>`;
   }).join("");
   drawVarPanel();
 }
@@ -102,11 +102,11 @@ function drawVarPanel(){
   const lab = li => /^N\d/.test(doc[li]?.[0] || "") ? doc[li][0] : "line " + (li+1);
   hd.innerHTML = `Variables at ${n} <span>start values feed the simulation</span>`;
   const f = v => v==null ? "empty" : fmt4(v);
-  box.innerHTML = `<span class="lb" style="color:#888">Name</span><span style="color:#888">Here</span><span style="color:#888">Start</span><span></span>` + keys.map(key => {
+  box.innerHTML = `<span class="lb" style="color:var(--c-888888)">Name</span><span style="color:var(--c-888888)">Here</span><span style="color:var(--c-888888)">Start</span><span></span>` + keys.map(key => {
     const u = U[key], v = varAt(u, k), seeded = key in tv || key in mv;
     const warn = u.early!=null && !seeded ? `<span class="vw" title="${esc(key)} is read at ${esc(lab(u.early))} before the program sets it${isCommonVar(key) ? ". It's a common variable, so it's probably set at the machine: enter the value it has there" : ""}.">⚠ unset at ${esc(lab(u.early))}</span>`
-      : u.set!=null ? `<span class="vw" style="color:#888" title="First set at ${esc(lab(u.set))}">set at ${esc(lab(u.set))}</span>`
-      : key in mv && !(key in tv) ? `<span class="vw" style="color:#7a5bc0" title="${esc(MACHINES[machineId].name)} keeps this value">machine<button data-vforget="${esc(key)}" title="Remove this value from ${esc(MACHINES[machineId].name)}">✕</button></span>` : `<span></span>`;
+      : u.set!=null ? `<span class="vw" style="color:var(--c-888888)" title="First set at ${esc(lab(u.set))}">set at ${esc(lab(u.set))}</span>`
+      : key in mv && !(key in tv) ? `<span class="vw" style="color:var(--c-7a5bc0)" title="${esc(MACHINES[machineId].name)} keeps this value">machine<button data-vforget="${esc(key)}" title="Remove this value from ${esc(MACHINES[machineId].name)}">✕</button></span>` : `<span></span>`;
     return `<span class="vn">${esc(key)}${isCommonVar(key) ? `<i title="Common variable: kept on the machine, shared by every program">common</i>` : ""}</span>`
       + `<span class="vv${v===undefined ? " none" : ""}" title="${v===undefined ? "Not set yet at this line" : ""}">${v===undefined ? "—" : esc(f(v))}</span>`
       + `<input data-var="${esc(key)}" value="${key in tv ? esc(fmt4(tv[key])) : ""}" placeholder="${key in mv ? esc(fmt4(mv[key])) : ""}" title="Start value: the simulation sets ${esc(key)} to this before the first line${key in mv ? ` (${esc(MACHINES[machineId].name)} has ${esc(fmt4(mv[key]))})` : ""}. Leave it empty to start it empty.">`

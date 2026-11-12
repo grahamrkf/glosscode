@@ -36,6 +36,9 @@
     // The clipboard's text (null when it holds none), and putting text on it (resolves true when it worked).
     clipboardText: function () { return call("gcClipboard", []); },
     setClipboardText: function (text) { return call("gcClipboard", [String(text)]); },
+    // The installed font family names, sorted; and drawing the title bar dark or light to match the theme.
+    fonts: function () { return call("gcFonts", []); },
+    setDark: function (dark) { return call("gcSetDark", [!!dark]); },
     quit: function () { return call("gcQuit", []); }
   };
   // This runs before the <html> element exists in WebView2, so nothing here may touch the page itself.

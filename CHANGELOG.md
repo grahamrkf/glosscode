@@ -2,6 +2,13 @@
 
 What changed in each GlossCode release. The newest release is at the top. Versions follow `MAJOR.MINOR.PATCH` (see [docs/releasing.md](docs/releasing.md)); while the version starts with `0.`, file formats may still change between releases.
 
+## Unreleased
+
+### Appearance
+- Dark theme. View › Theme picks Light, Dark or Same as the system (the default, which follows the system's setting as it changes). Every colour has a dark version, and the window's title bar turns dark with it on Windows 10 and 11 (and on Linux where the desktop theme has a dark version).
+- View › Text size… is now View › Appearance…: the theme, the code and gloss fonts with their sizes, the zoom, and colours. The font lists start with the built-in IBM Plex, then the easy-to-read fonts that are installed (Cascadia Mono, Consolas, JetBrains Mono, Atkinson Hyperlegible…), then every installed font. A chosen font that's missing a letter falls back to IBM Plex for it.
+- Colours for the code, gloss, comments, N numbers and the rapid, feed, arc and cycle moves (in the editor and the toolpath) can be changed, separately for the light and dark themes, with a button to go back to the theme's colour. All of it is remembered in settings.json.
+
 ## [0.4.0] - 2026-11-11
 
 ### Simulation
