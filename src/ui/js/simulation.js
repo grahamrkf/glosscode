@@ -1,4 +1,7 @@
-/* ---------- Toolpath and simulation: drawing, the Z timeline and playback ---------- */
+/* ---------- Toolpath and simulation: drawing, the Z timeline and playback ----------
+   run-program.js works out the moves (EXEC.segs) and the steps (EXEC.steps, one per line run); this file draws them:
+   the toolpath view (colours by motion or tool, zoom and pan), the Z-by-line timeline (X on a lathe) with its symbols,
+   and playback (play, step, stop at M00/M01 and block delete), keeping the editor's current line in step. */
 const KCOL = { rapid:"#e8a33d", feed:"#0f6cbd", arc:"#0e9384", cyc:"#c03d9a", engrave:"#8a939e" };
 const TCOL = ["#0f6cbd", "#c03d9a", "#0e9384", "#7a5bc0", "#b35c00", "#3b7d23"];
 function toolColor(t){   // the tool list is worked out once per run of the program, not once per move

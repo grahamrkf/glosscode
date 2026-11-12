@@ -1,3 +1,9 @@
+/* ---------- Reading a line of code into words ----------
+   splitBlocks(line) splits a line at its ';' end-of-block marks, and tokenize(block) splits one block into words
+   (N10, G00, X1., a comment, a macro statement), following the current control's block syntax (SYNTAX, below).
+   The core (src/core/gc_doc.c) splits files the same way when they are opened and saved; tests/test_tokens.c checks
+   that the two agree, so a change here needs the same change there. loadLines and load open the sample programs
+   (in a browser only). */
 // The block syntax of the current control (the dialect's blockSyntax). "fagor8060" (Fagor 8060/8065) reads ";" as a
 // comment to the end of the line, not an end-of-block mark; a $ or # statement (#CALL SUB1, $GOTO N10), a %L local
 // subroutine header, an LL call, an [NAME] label and an N10: label are one word each; XP1 (a word whose value is
@@ -162,5 +168,5 @@ function loadLines(src, expand){
   undoStack = []; redoStack = []; docVer = ++VER_SEQ;
   curLine = 0; foldAutoPending = true;
 }
-// Opens one of the mockup's sample programs (in the app there are none: they're a separate download).
+// Opens one of the sample programs in a browser (in the app there are none: they're a separate download).
 function load(name){ openSample(name); }

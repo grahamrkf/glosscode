@@ -1,5 +1,6 @@
 /* Reading and writing G-code text: line endings, ';' end-of-block marks, and splitting a block into
-   words. Mirrors splitBlocks() and tokenize() in the mockup. */
+   words. Must split words exactly as splitBlocks() and tokenize() in src/ui/js/reading.js do;
+   tests/test_tokens.c checks this on every test program. */
 #include "glosscode.h"
 #include "gc_util.h"
 
@@ -197,7 +198,7 @@ static char *fagor55_stmt(const char *s, size_t len, size_t from, size_t *end)
     return o;
 }
 
-/* ---------- Heidenhain Klartext (tokKlartext() in the mockup) ---------- */
+/* ---------- Heidenhain Klartext (tokKlartext() in src/ui/js/control-klartext.js) ---------- */
 
 static int kl_al(int c) { return gc_is_alpha(c) || c == '_'; }
 static int kl_tab(int c) { return c == ' ' || c == '\t'; }

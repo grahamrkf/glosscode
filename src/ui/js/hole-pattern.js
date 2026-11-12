@@ -22,7 +22,7 @@ function fmt(v){
   const d = holes.mm ? 3 : 4;
   return (Math.round(v * 10**d) / 10**d).toFixed(d).replace(/0+$/, "");   // 1.5000 → 1.5, 1.0000 → 1., always a decimal point
 }
-const fmtEn = v => fmt(v).replace(/\.$/, ".0");   // in sentences a whole number reads 3.0, like the English line
+const fmtEn = v => fmt(v).replace(/\.$/, ".0");   // in sentences a whole number reads 3.0, like the gloss line
 const scale = A => holes.dia && A==="X" ? 2 : 1;   // lathe X is written as a diameter
 
 function openHoles(){

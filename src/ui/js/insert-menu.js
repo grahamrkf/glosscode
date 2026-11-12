@@ -1,7 +1,7 @@
 /* ---------- Insert menu ----------
    Insert › Hole pattern opens the hole pattern tool. Insert › <category> opens a dialog for the canned
    cycles in that category: pick a cycle, see its sketch, fill in its words (required ones marked), and
-   check the line with its English before it goes in below the selected line. Categories come from the
+   check the line with its gloss before it goes in below the selected line. Categories come from the
    selected machine's cycle table, so a category with no cycles on that machine (live tooling on a lathe
    without it, roughing on a mill) isn't shown. Y and C words are hidden on lathes without a Y axis or
    live tooling. */
@@ -90,7 +90,7 @@ function drawInsert(){
     const off = r.need==="one" && r.set!==pick[code];
     const ex = help.words[r.L]?.[0] ?? EX_DEFAULT[r.L] ?? "1.";
     const lab = (def.labels || []).includes(r.L);
-    return `<span class="w${off ? " off" : ""}">${r.L}</span><span class="e${off ? " off" : ""}">${esc(englishPrefix(r.L, st))}</span>`
+    return `<span class="w${off ? " off" : ""}">${r.L}</span><span class="e${off ? " off" : ""}">${esc(glossPrefix(r.L, st))}</span>`
       + `<input data-l="${r.L}" value="${esc(v[r.L] || "")}" placeholder="${esc(ex)}"${lab ? ' list="i-nlist"' : ""}${off ? " disabled" : ""} inputmode="${lab ? "numeric" : "decimal"}" autocomplete="off">`
       + `<span class="${off ? "off" : ""}">${chip(r)}</span><span class="what${off ? " off" : ""}">${esc(what(r.L))}</span>`;
   }).join("");

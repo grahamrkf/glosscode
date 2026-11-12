@@ -1,4 +1,11 @@
-/* ---------- Dictionary and modes ---------- */
+/* ---------- The gloss: what each word means, and the modes in effect on each line ----------
+   word(t, st) gives one code word's gloss (its full or short word, unit and description) from the dictionary
+   (DICT.codes and DICT.address, with the control's own words from DICT.machineOverrides; see entry and
+   brandChain). applyModes and trackCarry carry the machine state from line to line (units, absolute or incremental,
+   feed mode, the active cycle…). translateAll() runs both over the whole program and fills view (each line's words
+   with their gloss) and lineState (the modes after each line), re-reading only what an edit changed. Also here:
+   the canned cycle guide's text (cycleHelp), Program › Sort words (buildColumns, sortWords) and the grey hint text
+   for missing words (hintItems). */
 // Where dictionary overrides come from, most specific first: the dialect itself, then (while a
 // dialect sets "inheritWords": true) the dialect it inherits.
 // Okuma's own language (no G54, LAP contours, V variables), on any Okuma control: okuma, okumau10l, okuma7000l, okumae100l
@@ -140,7 +147,7 @@ function trackCarry(toks, st){
     else if (lathe) st.pos[A] = st.pos[A]!=null ? st.pos[A] + val(ti) : null;   // U V W add to the position on a lathe
   }
 }
-// Numbers in the English line always show their decimal point, so X1. reads X1.0.
+// Numbers in the gloss line always show their decimal point, so X1. reads X1.0.
 // A distance word written with no decimal point (X1) is read the way the control reads it:
 // as the smallest increment, 0.0001 in or 0.001 mm on Fanuc-style controls.
 function fmtNum(L, raw, st){
@@ -455,7 +462,7 @@ function lineKind(li){
 
 /* ---------- Canned cycle help data (RULES.cycleHelp) ----------
    Base entries are Fanuc-style ("mill", "lathe"); "haas.lathe" and the like override them for one control.
-   Word entries are [example, what it does, English word]. */
+   Word entries are [example, what it does, gloss word]. */
 function cycleHelp(code){
   const type = mtype(), CH = RULES.cycleHelp || {};
   let b = MACHINES[machineId].brand; const seen = [];
@@ -553,8 +560,8 @@ function hintItems(li){
   }
   return out;
 }
-// The English word a hint fills in: RAD for an arc R, RPLN for a cycle R, ANGLE for Haas G76 A, and so on.
-function englishPrefix(L, st){ const w = word(L+"1.", st); return w.unk ? L : w.e.replace(/1\.0?$/, ""); }
+// The gloss word a hint fills in: RAD for an arc R, RPLN for a cycle R, ANGLE for Haas G76 A, and so on.
+function glossPrefix(L, st){ const w = word(L+"1.", st); return w.unk ? L : w.e.replace(/1\.0?$/, ""); }
 function hintMeaning(h){
   const cw = cycleWord(h.code, h.L); if (cw) return cw.what;
   if (DIALECT.wordHints?.[h.code]?.arc) return h.L==="R" ? "Arc radius" : `Distance from the start point to the arc center along ${{I:"X",J:"Y",K:"Z"}[h.L]}`;

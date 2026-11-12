@@ -1,3 +1,5 @@
+/* The helpers declared in gc_util.h: allocation that exits on failure, the growable string buffer gc_buf,
+   and numbers read and written the way JavaScript does (String(n), toFixed, parseFloat, parseInt). */
 #include "gc_util.h"
 #include "glosscode.h"
 

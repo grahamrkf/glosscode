@@ -1,0 +1,65 @@
+{
+  "dialect": {
+    "label": "Haas VF (1995 control)",
+    "inherits": "haas",
+    "verified": true,
+    "source": { "manual": "Haas VF-Series Operator's Manual 96-8000", "revision": "June 1995", "section": "Programming: address codes, G codes, canned cycles, M codes, subroutines" },
+    "mill": {
+      "callDepth": {"sub": 9, "macro": 4, "subAlarm": "307 Subroutine nesting too deep", "macroAlarm": "531 Macro nesting too deep", "source": "Haas VF 1995 manual PDF 209 (alarm 307), PDF 216 (alarm 531), PDF 132", "verified": false},
+      "modalGroups": {
+        "work offset": ["G54", "G55", "G56", "G57", "G58", "G59", "G110", "G111", "G112", "G113", "G114", "G115", "G116", "G117", "G118", "G119", "G120", "G121", "G122", "G123", "G124", "G125", "G126", "G127", "G128", "G129"],
+        "scaling": ["G50", "G51"],
+        "exact stop": ["G61", "G64"],
+        "rotation": ["G68", "G69"]
+      },
+      "cycles": {
+        "G73": { "name": "High-speed peck", "requires": ["Z", "R"], "choices": [["Q"], ["I", "J", "K"]], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G74": { "name": "Left-hand tap",   "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "speed": true, "startsSpindle": true },
+        "G83": { "name": "Peck drill",      "requires": ["Z", "R"], "choices": [["Q"], ["I", "J", "K"]], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G84": { "name": "Tap",             "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "speed": true, "startsSpindle": true },
+        "G87": { "name": "Bore, stop and jog out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G88": { "name": "Bore, dwell and jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+      },
+      "engrave": null,
+      "foreign": {
+        "M88":  { "severity": "warning", "text": "M88 (through-spindle coolant) isn't in the 1995 VF manual. Check that this machine has it." },
+        "M89":  { "severity": "warning", "text": "M89 (through-spindle coolant off) isn't in the 1995 VF manual. Check that this machine has it." },
+        "G93":  { "severity": "error",   "text": "The 1995 VF control has no inverse-time feed. F is always per minute." },
+        "G94":  { "severity": "info",    "text": "The 1995 VF control has no G94. F is always per minute, so it can be left out." },
+        "G95":  { "severity": "error",   "text": "The 1995 VF control has no feed per revolution. F is always per minute." },
+        "G96":  { "severity": "error",   "text": "The 1995 VF control has no constant surface speed. S is always RPM." },
+        "G97":  { "severity": "info",    "text": "The 1995 VF control has no G97. S is always RPM, so it can be left out." },
+        "G154": { "severity": "error",   "text": "The 1995 VF control has no G154. Its extra work offsets are G110 to G129." }
+      }
+    }
+  },
+  "words": {
+    "haas1995": {
+      "M97": { "words": "call.local", "short": "LSUB", "desc": "Local subprogram call" },
+      "M16": { "words": "tool.change", "short": "TCHG", "desc": "Tool change (same as M06)" },
+      "G77": { "words": "cycle.backbore", "short": "BKBR", "desc": "Back boring cycle" },
+      "G87": { "words": "cycle.bore.jog", "short": "BOREJOG", "desc": "Bore, stop the spindle, jog out by hand" },
+      "G88": { "words": "cycle.bore.dwelljog", "short": "BOREDJOG", "desc": "Bore, dwell, stop the spindle, jog out by hand" },
+      "G110": { "words": "work.7", "short": "WRK7", "desc": "Work offset 7" },
+      "G111": { "words": "work.8", "short": "WRK8", "desc": "Work offset 8" },
+      "G112": { "words": "work.9", "short": "WRK9", "desc": "Work offset 9" },
+      "G113": { "words": "work.10", "short": "WRK10", "desc": "Work offset 10" },
+      "G114": { "words": "work.11", "short": "WRK11", "desc": "Work offset 11" },
+      "G115": { "words": "work.12", "short": "WRK12", "desc": "Work offset 12" },
+      "G116": { "words": "work.13", "short": "WRK13", "desc": "Work offset 13" },
+      "G117": { "words": "work.14", "short": "WRK14", "desc": "Work offset 14" },
+      "G118": { "words": "work.15", "short": "WRK15", "desc": "Work offset 15" },
+      "G119": { "words": "work.16", "short": "WRK16", "desc": "Work offset 16" },
+      "G120": { "words": "work.17", "short": "WRK17", "desc": "Work offset 17" },
+      "G121": { "words": "work.18", "short": "WRK18", "desc": "Work offset 18" },
+      "G122": { "words": "work.19", "short": "WRK19", "desc": "Work offset 19" },
+      "G123": { "words": "work.20", "short": "WRK20", "desc": "Work offset 20" },
+      "G124": { "words": "work.21", "short": "WRK21", "desc": "Work offset 21" },
+      "G125": { "words": "work.22", "short": "WRK22", "desc": "Work offset 22" },
+      "G126": { "words": "work.23", "short": "WRK23", "desc": "Work offset 23" },
+      "G127": { "words": "work.24", "short": "WRK24", "desc": "Work offset 24" },
+      "G128": { "words": "work.25", "short": "WRK25", "desc": "Work offset 25" },
+      "G129": { "words": "work.26", "short": "WRK26", "desc": "Work offset 26" }
+    }
+  }
+}

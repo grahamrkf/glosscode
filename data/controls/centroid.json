@@ -1,0 +1,122 @@
+{
+  "dialect": {
+    "label": "Centroid CNC12",
+    "inherits": "fanuc",
+    "verified": true,
+    "source": { "manual": "Centroid CNC12 Mill, Lathe and Router Operator's Manuals", "revision": "v5.42 and later (lathe also checked against v3.16, v4.14 and v4.20)", "section": "Program codes, G codes and M codes chapters" },
+    "router": {},
+    "mill": {
+      "callDepth": {"total": 20, "totalAlarm": "508 Macro nesting too deep", "source": "Centroid CNC12: 20 levels (alarm 508)", "verified": false},
+      "modalGroups": {
+        "feed mode":   ["G93", "G94"],
+        "canned cycle":["G73", "G74", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G89"],
+        "exact stop":  ["G61", "G64"],
+        "macro modal": null, "polar": null, "speed mode": null
+      },
+      "programEnds": ["M02", "M99"],
+      "dwellNoDecimal": null,
+      "cycles": {
+        "G73": { "name": "High-speed peck", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+        "G74": { "name": "Left-hand tap",   "requires": ["Z", "R"], "optional": ["X", "Y", "F", "Q"], "meaning": { "Q": "the pitch, in rigid tapping" }, "feed": true, "spindle": true },
+        "G76": { "name": "Fine bore",       "requires": ["Z", "R"], "optional": ["X", "Y", "F", "Q"], "meaning": { "Q": "the pull-off distance" }, "feed": true, "spindle": true },
+        "G81": { "name": "Drill",           "requires": ["Z", "R"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+        "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+        "G83": { "name": "Peck drill",      "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+        "G84": { "name": "Tap",             "requires": ["Z", "R"], "optional": ["X", "Y", "F", "Q"], "meaning": { "Q": "the pitch, in rigid tapping" }, "feed": true, "spindle": true },
+        "G85": { "name": "Bore, feed out",  "requires": ["Z", "R"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true },
+        "G86": null, "G87": null, "G88": null,
+        "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F"], "feed": true, "spindle": true }
+      },
+      "foreign": {
+        "G95": { "severity": "error",   "text": "Centroid mills have no feed per revolution. F is always per minute; G94 only turns inverse time (G93) off." },
+        "G86": { "severity": "error",   "text": "Centroid mills have no G86. The boring cycles are G76, G85 and G89." },
+        "G87": { "severity": "error",   "text": "Centroid mills have no G87." },
+        "G88": { "severity": "error",   "text": "Centroid mills have no G88." },
+        "G96": { "severity": "error",   "text": "Centroid mills have no constant surface speed." },
+        "G66": { "severity": "error",   "text": "Centroid has no modal macro call (G66). Use G65." },
+        "M30": { "severity": "info",    "text": "On Centroid, M30 is a custom M code that does nothing unless the machine defines it. M02 ends and restarts the program." }
+      }
+    },
+    "lathe": {
+      "callDepth": {"total": 20, "totalAlarm": "508 Macro nesting too deep", "source": "Centroid CNC12: 20 levels (alarm 508)", "verified": false},
+      "programEnds": ["M02", "M99"],
+      "dwellNoDecimal": null,
+      "cycles": {
+        "G71": { "name": "OD/ID roughing", "requires": ["P", "Q"], "optional": ["D", "U", "W", "I", "K", "A", "F", "R", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Centroid takes the Fanuc two-line form or a one-line form with D as the depth of cut." },
+        "G72": { "name": "Face roughing",  "requires": ["P", "Q"], "optional": ["D", "U", "W", "I", "K", "A", "F", "R", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+        "G76": { "name": "Threading", "requires": ["X", "Z"], "choices": [["P", "Q"], ["K", "D"]], "optional": ["R", "U", "W", "A", "I", "F", "E"], "modal": false, "spindle": true, "leadF": true, "note": "Centroid takes the Fanuc two-line form (P Q) or a one-line form (K D A)." },
+        "G90": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F", "P", "L"], "feed": true, "spindle": true }
+      },
+      "foreign": {
+        "M30": { "severity": "info", "text": "On Centroid, M30 is a custom M code that does nothing unless the machine defines it. M02 ends and restarts the program." }
+      }
+    },
+    "plasma": {
+      "source": { "manual": "Centroid Acorn plasma notes (CNC12)", "section": "Plasma M codes (see docs/manual-reviews/plasma-hypertherm-tormach-centroid.md)" },
+      "process": { "name": "torch", "on": ["M61"], "off": ["M62"], "changes": ["M65"] },
+      "mConflicts": [["M61", "M62"]]
+    }
+  },
+  "words": {
+    "centroid.mill": {
+      "M02": { "words": "prog.restart", "short": "RESTART", "desc": "End and restart the program (homes Z, waits for Cycle Start)" },
+      "M30": { "words": "machine.custom.m30", "short": "MCUSTM30", "desc": "Custom M code: does nothing unless the machine defines it" },
+      "M10": { "words": "machine.clamp.on", "short": "MCLON", "desc": "Clamp (machine-defined output)" },
+      "M11": { "words": "machine.clamp.unclamp", "short": "MCLUNCL", "desc": "Unclamp (machine-defined output)" },
+      "M17": { "words": "tool.prepare", "short": "TPREP", "desc": "Prepare for a tool change" },
+      "M19": { "words": "spindle.orient", "short": "SORI", "desc": "Orient the spindle" },
+      "M25": { "words": "run.home.z", "short": "HOMEZ", "desc": "Move Z to its home position" },
+      "M39": { "words": "machine.air.drill", "short": "MAIRDRL", "desc": "Air drill" },
+      "M41": { "words": "spindle.gear.1", "short": "SG1", "desc": "Spindle gear range 1" },
+      "M42": { "words": "spindle.gear.2", "short": "SG2", "desc": "Spindle gear range 2" },
+      "M43": { "words": "spindle.gear.3", "short": "SG3", "desc": "Spindle gear range 3" },
+      "M91": { "words": "run.home.minus", "short": "HOMEMIN", "desc": "Home an axis to its minus limit" },
+      "M92": { "words": "run.home.plus", "short": "HOMEPLS", "desc": "Home an axis to its plus limit" },
+      "M93": { "words": "machine.motors.release", "short": "MMTRREL", "desc": "Release motor power" },
+      "M94": { "words": "machine.plc.on", "short": "MPLCON", "desc": "Turn a PLC bit on" },
+      "M95": { "words": "machine.plc.off", "short": "MPLCOFF", "desc": "Turn a PLC bit off" },
+      "M100": { "words": "machine.wait.off", "short": "MWAITOFF", "desc": "Wait for a PLC bit to go off" },
+      "M101": { "words": "machine.wait.on", "short": "MWAITON", "desc": "Wait for a PLC bit to go on" },
+      "G09": { "words": "run.exactstop", "short": "EXSTOP1", "desc": "Exact stop for this line (same as G04 P0.01)" },
+      "G10": { "words": "set.data", "short": "DATASET", "desc": "Set offsets or cycle settings from the program" },
+      "G22": { "words": "machine.limits.on", "short": "MLIMON", "desc": "Software travel envelope on" },
+      "G23": { "words": "machine.limits.off", "short": "MLIMOFF", "desc": "Software travel envelope off" },
+      "G51": { "words": "scale.on", "short": "SCLON", "desc": "Scaling or mirror on" },
+      "G52": { "words": "set.local", "short": "LOCAL", "desc": "Local coordinate shift" },
+      "G61": { "words": "set.exactstop", "short": "EXSTOP", "desc": "Exact stop mode" },
+      "G64": { "words": "set.blend", "short": "BLND", "desc": "Cutting mode (smoothing)" },
+      "G68": { "words": "set.rotate.on", "short": "ROTON", "desc": "Coordinate rotation on" },
+      "G69": { "words": "set.rotate.off", "short": "ROTOFF", "desc": "Coordinate rotation off" },
+      "G93": { "words": "set.invtime", "short": "INVT", "desc": "Inverse time feed" },
+      "G94": { "words": "set.fpm", "short": "FPM", "desc": "Inverse time off: feed per minute" }
+    },
+
+    "centroid.lathe": {
+      "M02": { "words": "prog.restart", "short": "RESTART", "desc": "End and restart the program (waits for Cycle Start)" },
+      "M30": { "words": "machine.custom.m30", "short": "MCUSTM30", "desc": "Custom M code: does nothing unless the machine defines it" },
+      "M19": { "words": "spindle.orient", "short": "SORI", "desc": "Orient the spindle" },
+      "M29": { "words": "set.rigidtap", "short": "TAPRIG", "desc": "Rigid tapping mode" },
+      "M41": { "words": "spindle.gear.1", "short": "SG1", "desc": "Spindle gear range 1" },
+      "M42": { "words": "spindle.gear.2", "short": "SG2", "desc": "Spindle gear range 2" },
+      "M43": { "words": "spindle.gear.3", "short": "SG3", "desc": "Spindle gear range 3" },
+      "M50": { "words": "axis.c.on", "short": "AXCON", "desc": "C axis on" },
+      "M51": { "words": "axis.c.off", "short": "AXCOFF", "desc": "C axis off" },
+      "M91": { "words": "run.home.minus", "short": "HOMEMIN", "desc": "Home an axis to its minus limit" },
+      "M92": { "words": "run.home.plus", "short": "HOMEPLS", "desc": "Home an axis to its plus limit" },
+      "M94": { "words": "machine.plc.on", "short": "MPLCON", "desc": "Turn a PLC bit on" },
+      "M95": { "words": "machine.plc.off", "short": "MPLCOFF", "desc": "Turn a PLC bit off" },
+      "G10": { "words": "set.data", "short": "DATASET", "desc": "Set offsets from the program" },
+      "G22": { "words": "machine.limits.on", "short": "MLIMON", "desc": "Software travel envelope on" },
+      "G23": { "words": "machine.limits.off", "short": "MLIMOFF", "desc": "Software travel envelope off" },
+      "G52": { "words": "set.local", "short": "LOCAL", "desc": "Local coordinate shift" },
+      "G61": { "words": "set.exactstop", "short": "EXSTOP", "desc": "Exact stop mode" },
+      "G64": { "words": "set.blend", "short": "BLND", "desc": "Cutting mode (smoothing)" }
+    },
+
+    "centroid.plasma": {
+      "M61": { "words": "torch.pierce", "short": "PLPRC", "desc": "Touch off the material and pierce: the cut starts (Acorn plasma)" },
+      "M62": { "words": "torch.up", "short": "PLUP", "desc": "Torch off and raise (Acorn plasma)" },
+      "M65": { "words": "torch.material", "short": "PLMAT", "desc": "Select a material profile (Acorn plasma)" }
+    }
+  }
+}

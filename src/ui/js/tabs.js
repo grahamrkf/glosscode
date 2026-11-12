@@ -7,7 +7,7 @@
    default machine for its extension (.nc, .MIN…) when one is set, and otherwise asks.
    In the program, window.GlossCodeNative (src/app/bridge.js) opens and saves files through the system
    dialogs and the core in C, which keeps every line that wasn't changed exactly as it was, and keeps the
-   recent files and defaults in settings.json in the settings folder. In a browser, the mockup's sample
+   recent files and defaults in settings.json in the settings folder. In a browser, the sample
    programs stand in for files and settings go to localStorage. The program has no sample programs:
    they're a separate download. */
 (() => {
@@ -353,7 +353,7 @@ async function missingRecent(r){
   if (res.path!==r.path){ SETTINGS.recent = SETTINGS.recent.filter(x => x.path!==r.path); saveSettings(); drawHome(); }
   await openNativeResult(res, r.machine);
 }
-// The mockup's sample programs (browser only). Without a machine, it's treated like a file never opened before.
+// The sample programs (browser only). Without a machine, it's treated like a file never opened before.
 async function openSample(name, machine){
   const f = FILES[name]; if (!f) return;
   const open = TABS.findIndex(t => t.sample && t.path===name);
@@ -492,13 +492,14 @@ window.markSaved = () => { const t = cur(); if (t){ t.savedVer = docVer; remembe
 window.nativeOpen = nativeOpen;
 window.nativeSave = nativeSave;
 
-// Start on the home page, then open the file named on the command line (or ?open=NAME in the mockup).
-(async () => {
+// Start on the home page, then open the file named on the command line (or ?open=NAME in a browser).
+// js/start.js calls it once every script has loaded, so the first program is drawn with every part of the page there.
+window.startTabs = async () => {
   try {
     await loadSettings();
     showActive();
     if (NATIVE){ const r = await NATIVE.startup(); if (r) await openNativeResult(r); }
     else { const q = new URLSearchParams(location.search).get("open"); if (q && FILES[q]) await openSample(q, FILES[q].machine); }
   } catch (e){ setMsg(String(e?.message || e), true); }
-})();
+};
 })();

@@ -1,0 +1,69 @@
+{
+  "dialect": {
+    "label": "Mazak EIA/ISO (Mazatrol M Plus, 640M, T-Plus, 640T, Matrix)",
+    "about": "On a lathe these are G code system A. Mazak lathes default to system B (parameter P9), which has its own control.",
+    "inherits": "fanuc",
+    "inheritWords": true,
+    "verified": false,
+    "lathe": {
+      "callDepth": {"total": 15, "macro": 4, "source": "Mazak C734 lathe manual: 15 levels in all, at most 4 of them macro calls", "verified": false},
+      "source": { "manual": "Mazak EIA/ISO Programming Manual C734PBT018E (Mazatrol T-Plus, Fusion 640T Nexus and other Mazatrol turning)", "section": "Chapters 3, 5, 8, 9 and 13: G code lists, numbers, dwell, M codes, fixed cycles, subprograms. Tables are G code system A, standard mode" },
+      "mPerBlock": 4,
+      "cycles": {
+        "G70": { "name": "Finish contour", "requires": ["P", "Q"], "optional": ["A", "F", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+        "G71": { "name": "OD/ID roughing", "requires": ["P", "Q"], "optional": ["A", "U", "W", "D", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Standard mode uses two blocks (G71 U R, then G71 A P Q U W F); T32 mode uses one block with D as the depth. A names the program that holds the finish shape." },
+        "G72": { "name": "Face roughing", "requires": ["P", "Q"], "optional": ["A", "U", "W", "D", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+        "G73": { "name": "Pattern repeat", "requires": ["P", "Q"], "optional": ["A", "U", "W", "I", "K", "D", "R", "F", "S", "T"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+        "G74": { "name": "Face peck or groove", "requires": ["Z"], "optional": ["X", "U", "W", "I", "K", "D", "P", "Q", "R", "F", "S", "T"], "meaning": {"Z": "the bottom of the peck"}, "modal": false, "feed": true, "spindle": true },
+        "G75": { "name": "OD/ID peck groove", "requires": ["X"], "optional": ["Z", "U", "W", "I", "K", "D", "P", "Q", "R", "F", "S", "T"], "meaning": {"X": "the groove bottom diameter"}, "modal": false, "feed": true, "spindle": true },
+        "G76": { "name": "Threading", "requires": ["X", "Z", "F"], "optional": ["U", "W", "P", "Q", "R", "I", "K", "D", "A", "E", "S", "T"], "modal": false, "spindle": true, "leadF": true, "note": "Standard mode uses two blocks (G76 P Q R, then G76 X Z R P Q F); T32 mode uses one block, G76 X Z I K D A F." }
+      }
+    },
+    "mill": {
+      "callDepth": {"total": 8, "macro": 4, "totalAlarm": "842", "macroAlarm": "842", "source": "Mazak C735 mill manual: 8 levels in all, at most 4 of them macro calls (alarm 842)", "verified": false},
+      "source": { "manual": "Mazak EIA/ISO Programming Manual C735PBT019E (Mazatrol M1, M2, M32, M Plus, Fusion 640M 5X/Nexus)", "revision": "2001", "section": "Chapters 3, 5, 8 and 13: G and M code lists, units, dwell, fixed cycles, subprograms" },
+      "modalGroups": {
+        "canned cycle":["G73", "G74", "G75", "G76", "G77", "G78", "G79", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"]
+      },
+      "cycles": {
+        "G73": { "name": "High-speed peck", "requires": ["Z", "Q", "R", "F"], "optional": ["X", "Y", "P", "D", "K", "I", "J", "L"], "feed": true, "spindle": true },
+        "G74": { "name": "Left-hand tap", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "D", "J", "H", "L"], "feed": true, "spindle": true },
+        "G75": { "name": "Boring", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "K", "I", "J", "L"], "feed": true, "spindle": true },
+        "G76": { "name": "Fine bore", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "J", "L"], "feed": true, "spindle": true },
+        "G77": { "name": "Back spot facing", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "E", "J", "L"], "feed": true, "spindle": true },
+        "G78": { "name": "Boring", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "K", "L"], "feed": true, "spindle": true },
+        "G79": { "name": "Boring", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "K", "E", "L"], "feed": true, "spindle": true },
+        "G81": { "name": "Drill", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "L"], "feed": true, "spindle": true },
+        "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "D", "I", "J", "L"], "feed": true, "spindle": true },
+        "G83": { "name": "Peck drill", "requires": ["Z", "Q", "R", "F"], "optional": ["X", "Y", "P", "D", "K", "I", "J", "L"], "feed": true, "spindle": true },
+        "G84": { "name": "Tap", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "D", "J", "H", "L"], "feed": true, "spindle": true },
+        "G85": { "name": "Ream", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "D", "E", "L"], "feed": true, "spindle": true },
+        "G86": { "name": "Bore, stop, rapid out", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "L"], "feed": true, "spindle": true },
+        "G87": { "name": "Back bore", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "Q", "P", "D", "J", "L"], "feed": true, "spindle": true },
+        "G88": { "name": "Bore, dwell, stop", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "L"], "feed": true, "spindle": true },
+        "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "F"], "optional": ["X", "Y", "P", "L"], "feed": true, "spindle": true }
+      }
+    }
+  },
+  "words": {
+    "mazak.mill": {
+      "G75": { "words": "cycle.bore", "short": "BORE", "desc": "Boring cycle (Mazak)" },
+      "G77": { "words": "cycle.backspot", "short": "BKSP", "desc": "Back spot facing cycle (Mazak)" },
+      "G78": { "words": "cycle.bore.2", "short": "BORE2", "desc": "Boring cycle (Mazak)" },
+      "G79": { "words": "cycle.bore.3", "short": "BORE3", "desc": "Boring cycle (Mazak)" },
+      "G85": { "words": "cycle.ream", "short": "REAM", "desc": "Reaming cycle (Mazak)" },
+      "G87": { "words": "cycle.backbore", "short": "BKBR", "desc": "Back boring cycle" },
+      "G88": { "words": "cycle.bore.dwellstop", "short": "BOREDSTP", "desc": "Boring cycle, dwell, spindle stop" },
+      "M07": { "words": "cool.mist", "short": "CMST", "desc": "Mist coolant on" },
+      "M09": { "words": "cool.off", "short": "COFF", "desc": "All coolant and air off (Mazak)" },
+      "M10": { "words": "tool.clamp", "short": "TCL", "desc": "Spindle tool clamp (Mazak)" },
+      "M11": { "words": "tool.unclamp", "short": "TUNCL", "desc": "Spindle tool unclamp (Mazak)" },
+      "M19": { "words": "spindle.orient", "short": "SORI", "desc": "Orient the spindle" },
+      "M48": { "words": "machine.overrides.on", "short": "MOVRON", "desc": "Overrides on" },
+      "M49": { "words": "machine.overrides.off", "short": "MOVROFF", "desc": "Overrides off" },
+      "M50": { "words": "machine.air.blast", "short": "MAIRBLST", "desc": "Air blast on (Mazak)" },
+      "M51": { "words": "cool.thru", "short": "CTHR", "desc": "Through-spindle coolant on (Mazak)" },
+      "M52": { "words": "cool.tap", "short": "CTAP", "desc": "Tapping coolant on (Mazak)" }
+    }
+  }
+}

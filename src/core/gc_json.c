@@ -1,3 +1,5 @@
+/* The JSON reader and writer declared in gc_json.h: a recursive-descent parser that keeps object keys in
+   the order written, and a writer that escapes strings the way JSON.stringify does. */
 #include "gc_json.h"
 #include "gc_util.h"
 

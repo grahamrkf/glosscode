@@ -1,4 +1,10 @@
-/* ---------- Running the program, for the toolpath and the timeline ---------- */
+/* ---------- Running the program, for the toolpath and the timeline ----------
+   class SimRun runs the program the way the machine would: in execution order, into subprogram calls and back,
+   through canned cycles, macro variables and loops. run() steps through the lines; step() reads one line
+   (readWords), applies its settings (millSetting) and makes its move. Each canned cycle is one method. The result
+   is EXEC: segs (straight moves with their kind: rapid, feed, arc, cycle) and steps (one per line run, with stops
+   and alarms), which simulation.js draws. Control-only cycles are added as SimRun methods in control-fagor.js,
+   control-okuma.js; Klartext has its own runner in control-klartext.js. interpret() is the entry point. */
 // How many straight moves draw an arc of sweep sw (radians): a full circle gets "full" of them, a part of one its share
 // (at least 2). Every arc used to get the full count, so a program of short arcs had 36 moves to draw and simulate for each.
 const arcSteps = (sw, full) => Math.max(2, Math.min(full, Math.ceil(Math.abs(sw)/(2*Math.PI)*full - 1e-9)));

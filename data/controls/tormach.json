@@ -1,0 +1,79 @@
+{
+  "dialect": {
+    "label": "Tormach PathPilot",
+    "inherits": "linuxcnc",
+    "inheritWords": true,
+    "verified": false,
+    "mill": {
+      "source": { "manual": "Tormach 1500MX Operator's Manual UM10811 (0423A), PCNC 1100 UM10349 (0525A), PCNC 440 UM10372 (0124A)", "section": "1500MX chapter 9, PCNC 1100 and 440 chapter 7" },
+      "cycles": {
+        "G84": { "name": "Tap, floating holder", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "speed": true, "startsSpindle": true },
+        "G88": { "name": "Bore, dwell, stop, jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+      },
+      "foreign": {
+        "G88": null,
+        "G76": { "severity": "error", "text": "Tormach mills have no G76. The 1500MX code table lists it as threading, copied from the lathe; use G33.1 or G84 instead." }
+      }
+    },
+    "lathe": {
+      "source": { "manual": "Tormach PathPilot User Guide for Lathes UM10751", "revision": "Dec. 2020, PathPilot 2.7.1", "section": "Programming, pp. 129 to 176" },
+      "modalGroups": {
+        "motion":        ["G00", "G01", "G02", "G03", "G33", "G76", "G80", "G84"],
+        "diameter mode": null
+      },
+      "toolChange": null,
+      "cycles": {
+        "G70": null, "G71": null, "G72": null,
+        "G84": { "name": "Tap, floating holder", "requires": ["Z", "R"], "optional": ["X", "P", "F"], "feed": true, "speed": true, "startsSpindle": true }
+      },
+      "foreign": {
+        "G08": { "severity": "error", "text": "PathPilot lathes are always in diameter mode (G07). There's no G08." },
+        "G70": { "severity": "error", "text": "PathPilot lathes have no G70 to G72 profile cycles." },
+        "G71": { "severity": "error", "text": "PathPilot lathes have no G70 to G72 profile cycles." },
+        "G72": { "severity": "error", "text": "PathPilot lathes have no G70 to G72 profile cycles." },
+        "G74": { "severity": "error", "text": "PathPilot lathes have no G74." },
+        "G87": { "severity": "error", "text": "PathPilot lathes have no G87." },
+        "G52": { "severity": "error", "text": "PathPilot lathes have no G52." },
+        "M06": { "severity": "info",  "text": "PathPilot lathes change tools with the T word alone (T0303). M06 isn't needed." }
+      }
+    },
+    "plasma": {
+      "source": { "manual": "Tormach PathPilot documentation, plasma section", "section": "Plasma G and M codes (see docs/manual-reviews/plasma-hypertherm-tormach-centroid.md)" },
+      "about": "G15 and G16 are the plasma probe and pierce codes here, not polar coordinates. M200 to M213 handle the torch and THC, but their single meanings aren't checked yet, so there are no cut on or cut off codes and the torch checks are off.",
+      "modalGroups": { "polar": null },
+      "foreign": { "G15": null, "G16": null }
+    }
+  },
+  "words": {
+    "tormach.mill": {
+      "G47": { "words": "cycle.engrave", "short": "ENGR", "desc": "Engrave text or a serial number (Z depth, R retract, P and Q size, D digits)" },
+      "G37": { "words": "tool.measure", "short": "TMEAS", "desc": "Measure the tool length automatically with the tool setter" },
+      "G88": { "words": "cycle.bore.jog", "short": "BOREJOG", "desc": "Boring cycle, dwell, spindle stop, jog out by hand" }
+    },
+
+    "tormach.plasma": {
+      "G15": { "words": "run.probe.height", "short": "PRBHT", "desc": "Probe for the material height (Tormach plasma)" },
+      "G16": { "words": "torch.pierce", "short": "PLPRC", "desc": "Pierce (Tormach plasma)" }
+    },
+
+    "tormach.lathe": {
+      "M10": { "words": "machine.collet.unclamp", "short": "MCOLUNCL", "desc": "Collet closer unclamp" },
+      "M11": { "words": "machine.collet.clamp", "short": "MCOLCL", "desc": "Collet closer clamp" },
+      "M07": { "words": "cool.mist", "short": "CMST", "desc": "Mist coolant on" },
+      "M61": { "words": "tool.set", "short": "TSET", "desc": "Set the current tool number without a tool change" },
+      "M48": { "words": "machine.overrides.on", "short": "MOVRON", "desc": "Speed and feed overrides on" },
+      "M49": { "words": "machine.overrides.off", "short": "MOVROFF", "desc": "Speed and feed overrides off" },
+      "G07": { "words": "set.diameter", "short": "DIA", "desc": "Lathe: X is a diameter" },
+      "G33": { "words": "run.thread", "short": "THD", "desc": "Spindle-synchronized move (K is the distance per turn)" },
+      "G90": { "words": "set.abs", "short": "ABS", "desc": "Absolute positions" },
+      "G91": { "words": "set.incr", "short": "INCR", "desc": "Incremental positions" },
+      "G92": { "words": "set.coords", "short": "SETC", "desc": "Shift the coordinates so the current point reads as given" },
+      "G94": { "words": "set.fpm", "short": "FPM", "desc": "Feed per minute" },
+      "G95": { "words": "set.fpr", "short": "FPR", "desc": "Feed per revolution" },
+      "G98": { "words": "cycle.return.init", "short": "RETINIT", "desc": "Cycle returns to the start level" },
+      "G99": { "words": "cycle.return.r", "short": "RETR", "desc": "Cycle returns to R" },
+      "G76": { "words": "cycle.thread", "short": "THDCY", "desc": "Threading cycle" },
+      "G84": { "words": "cycle.tap.float", "short": "TAPFLT", "desc": "Tapping cycle, floating holder; starts the spindle" }
+    }
+  }
+}

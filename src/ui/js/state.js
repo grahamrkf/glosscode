@@ -1,3 +1,13 @@
+/* ---------- Shared state and small helpers ----------
+   Loaded before every other script except data.js, samples.js and machines.js. It holds what many files share:
+   - $, showDialog, hideDialog, dialogKeys: finding elements and showing dialogs.
+   - The open tabs (TABS, activeTab, newTab) and the active tab's values: doc (the program as lines of words),
+     machineId, curLine, expanded, undoStack… read and write the active tab's object, so other files use them as
+     plain variables.
+   - View settings (style: full or short gloss words; showMode, colorBy) and the simulation's settings (simRapids,
+     simBD for block delete…), plus view and lineState, which gloss.js works out from doc.
+   - Small helpers used everywhere: esc (HTML-escape), pad2 (G1 to G01), sty and vw (a gloss word in the current
+     style), mtype (mill, lathe…). */
 // Dialogs. $ finds an element by id. showDialog shows a dialog (a .dim box in index.html) and moves the focus into
 // it; hideDialog hides it and gives the focus back to the editor. dialogKeys keeps a dialog's keys from reaching the
 // editor underneath, closes it on Escape, and passes any other key to onKey.

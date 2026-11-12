@@ -1,0 +1,58 @@
+{
+  "dialect": {
+    "label": "Mitsubishi M800/M80 (and M700/M70)",
+    "inherits": "fanuc",
+    "inheritWords": true,
+    "verified": false,
+    "lathe": {
+      "callDepth": {"total": 10, "macro": 4, "totalAlarm": "P230", "macroAlarm": "P230", "source": "Mitsubishi M800/M80: 10 levels in all, at most 4 macro (P230)", "verified": false},
+      "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Lathe System IB-1501275-U", "section": "G code lists 2, 4 and 6 (pp. 23-26), close to Fanuc system A; see docs/manual-reviews/mitsubishi-m800-m700.md" },
+      "modalGroups": {
+        "distance":  ["G190", "G191"]
+      },
+      "foreign": {
+        "G91": { "severity": "warning", "text": "On a Mitsubishi lathe with G code list 2, 4 or 6, incremental positions are G191 (or U and W); for G90/G91 pick the list 3, 5 or 7 control." }
+      }
+    },
+    "mill": {
+      "callDepth": {"total": 10, "macro": 4, "totalAlarm": "P230", "macroAlarm": "P230", "source": "Mitsubishi M800/M80: 10 levels in all, at most 4 macro (P230)", "verified": false},
+      "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Machining Center System IB-1501277", "revision": "P", "section": "G code list, dwell, fixed cycles, subprograms" },
+      "modalGroups": {
+        "canned cycle":["G73", "G74", "G75", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"]
+      },
+      "cycles": {
+        "G73": { "name": "High-speed peck", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+        "G74": { "name": "Left-hand tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "E", "Q", "P", "S", "L"], "feed": true, "spindle": true },
+        "G75": { "name": "Circle cutting", "requires": ["Z", "R"], "optional": ["X", "Y", "Q", "P", "F", "L"], "feed": true, "spindle": true },
+        "G76": { "name": "Fine bore", "requires": ["Z", "R"], "optional": ["X", "Y", "I", "J", "K", "F", "P", "L"], "feed": true, "spindle": true },
+        "G81": { "name": "Drill", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G83": { "name": "Peck drill", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G84": { "name": "Tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "E", "Q", "P", "S", "L"], "feed": true, "spindle": true },
+        "G85": { "name": "Bore, feed out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G86": { "name": "Bore, rapid out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+        "G87": { "name": "Back bore", "requires": ["Z", "R"], "optional": ["X", "Y", "I", "J", "K", "F", "L"], "feed": true, "spindle": true },
+        "G88": { "name": "Bore, dwell, stop", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+        "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+      }
+    }
+  },
+  "words": {
+    "mitsubishi.mill": {
+      "G12": { "words": "cycle.circle.cw", "short": "CIRCW", "desc": "Circular cutting, clockwise (Mitsubishi)" },
+      "G13": { "words": "cycle.circle.ccw", "short": "CIRCCW", "desc": "Circular cutting, counterclockwise (Mitsubishi)" },
+      "G75": { "words": "cycle.circle", "short": "CIRCYC", "desc": "Circle cutting cycle (Mitsubishi)" },
+      "G34": { "words": "pattern.boltcircle", "short": "PATBCIR", "desc": "Bolt hole circle pattern (Mitsubishi)" },
+      "G35": { "words": "pattern.line", "short": "PATLINE", "desc": "Holes on a line, pattern cycle (Mitsubishi)" },
+      "G36": { "words": "pattern.arc", "short": "PATARC", "desc": "Holes on an arc, pattern cycle (Mitsubishi)" },
+      "G187": { "words": "cycle.threadmill", "short": "THML", "desc": "Thread milling cycle (Mitsubishi)" }
+    },
+
+    "mitsubishi.lathe": {
+      "G14": { "words": "machine.balancecut.off", "short": "MBALOFF", "desc": "Balance cut off" },
+      "G15": { "words": "machine.balancecut.on", "short": "MBALON", "desc": "Balance cut on" },
+      "G190": { "words": "set.abs", "short": "ABS", "desc": "Absolute positions (G code lists 2, 4 and 6)" },
+      "G191": { "words": "set.incr", "short": "INCR", "desc": "Incremental positions (G code lists 2, 4 and 6)" }
+    }
+  }
+}

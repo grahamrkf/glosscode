@@ -4,7 +4,7 @@
    the download that matches this copy: the installer for an installed copy, the portable archive for a
    portable one. Release files follow the names in docs/releasing.md, so the right one can be picked by
    its ending. In the app, the platform file downloads the file to the Downloads folder, checks it against
-   SHA256SUMS.txt from the same release, and offers to run the installer; the mockup just opens the link.
+   SHA256SUMS.txt from the same release, and offers to run the installer; in a browser it just opens the link.
    APP_VERSION comes from the VERSION file at the repository root (data.js, written by scripts/make-ui-data.mjs). */
 (() => {
 const REPO = "grahamrkf/glosscode";

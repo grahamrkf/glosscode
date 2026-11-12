@@ -1,0 +1,15 @@
+{
+  "dialect": {
+    "label": "Okuma OSP-E100L",
+    "inherits": "okuma",
+    "inheritWords": true,
+    "source": "Okuma OSP-E100L Programming Manual 4283-E (LE33-011-R2), 2nd edition, Jan. 2000; see docs/manual-reviews/okuma-osp-e100l.md. The same lathe language as the P200L and U10L, so the Okuma lathe tables apply.",
+    "lathe": {}
+  },
+  "words": {
+    "okumae100l.lathe": {
+      "M98": { "words": "machine.tailstock.thrustlow", "short": "MTSTHRL", "desc": "Tailstock thrust low (Okuma, OSP-E100L; subprograms use CALL)" },
+      "M99": { "words": "machine.tailstock.thrusthigh", "short": "MTSTHRH", "desc": "Tailstock thrust high (Okuma, OSP-E100L; subprograms end with RTS)" }
+    }
+  }
+}

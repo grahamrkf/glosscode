@@ -77,6 +77,8 @@ The [browser demo](https://grahamrkf.github.io/glosscode/) runs the same screen 
 
 GlossCode is a small core in portable C with the screen in HTML and JavaScript, shown in a native webview (WebView2 on Windows, WebKitGTK on Linux). The same screen runs in a browser.
 
+- [CONTRIBUTING.md](CONTRIBUTING.md): getting started, the test loop and the rules for adding codes
+- [docs/where-to-change.md](docs/where-to-change.md): which file to change for the usual jobs
 - [docs/building.md](docs/building.md): building and testing on Windows and Linux
 - [docs/architecture.md](docs/architecture.md): how the parts fit together
 - [docs/machine-definitions.md](docs/machine-definitions.md): machine and control definition files
@@ -87,7 +89,7 @@ GlossCode is a small core in portable C with the screen in HTML and JavaScript, 
 | `src/core/`, `src/platform/` | The C core and the per-OS platform files |
 | `src/app/` | The program: webview window and bindings to the core |
 | `src/ui/` | The screen (HTML, CSS and JS) |
-| `data/` | Gloss dictionary, check rules, control tables and the built-in subprogram library |
+| `data/` | Gloss dictionary, check rules, one file per control (`data/controls/`) and the built-in subprogram library |
 | `examples/` | Sample programs (a separate download, not built into the program) |
 | `tests/` | Core tests, UI tests and golden files |
 

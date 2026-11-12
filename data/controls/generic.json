@@ -1,0 +1,12 @@
+{
+  "dialect": {
+    "label": "Generic",
+    "about": "For a program that isn't tied to one control: the common ISO (Fanuc-style) codes that most controls share.",
+    "inherits": "fanuc",
+    "inheritWords": true,
+    "mill": {},
+    "lathe": {},
+    "plasma": {},
+    "router": {}
+  }
+}

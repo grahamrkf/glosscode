@@ -1,4 +1,8 @@
-/* ---------- Menus ---------- */
+/* ---------- The menu bar, keyboard shortcuts and Save ----------
+   MENUS lists every menu and its items ({ label, fn, sc: shortcut, check, dis: when it's greyed out }); menuHTML and
+   showMenu draw them, popMenu shows a small menu under a button. The keydown handler on #app holds the editor's
+   keyboard shortcuts. setShow and setPressed switch the view; save() writes the program (lineText: one line's words
+   as text, the way Save writes them). To add a menu item, add it to MENUS and point fn at a function. */
 function setShow(m){
   if (editing) commit();
   showMode = m;

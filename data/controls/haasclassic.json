@@ -1,0 +1,21 @@
+{
+  "dialect": {
+    "label": "Haas mill (classic control, 2008 to 2016)",
+    "inherits": "haas",
+    "inheritWords": true,
+    "verified": true,
+    "source": { "manual": "Haas Mill Operator's Manual 96-8000", "revision": "Rev Y, Dec. 2009", "section": "G codes, M codes and settings (p. 129 on)" },
+    "mill": {
+      "cycles": {
+        "G87": { "name": "Bore, stop and jog out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G88": { "name": "Bore, dwell and jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+      }
+    }
+  },
+  "words": {
+    "haasclassic.mill": {
+      "G87": { "words": "cycle.bore.jog", "short": "BOREJOG", "desc": "Bore, stop the spindle, jog out by hand" },
+      "G88": { "words": "cycle.bore.dwelljog", "short": "BOREDJOG", "desc": "Bore, dwell, stop the spindle, jog out by hand" }
+    }
+  }
+}

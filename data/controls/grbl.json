@@ -1,0 +1,41 @@
+{
+  "dialect": {
+    "label": "GRBL 1.1",
+    "inherits": "linuxcnc",
+    "inheritWords": true,
+    "verified": true,
+    "source": { "manual": "GRBL v1.1 README (supported G codes) and grbl/gcode.c", "revision": "gnea/grbl master", "section": "List of Supported G-Codes in Grbl v1.1; the gc_execute_line parser" },
+    "router": {},
+    "mill": {
+      "mPerBlock": null,
+      "toolChange": null,
+      "cycles": { "G73": null, "G74": null, "G76": null, "G81": null, "G82": null, "G83": null, "G84": null, "G85": null, "G86": null, "G87": null, "G88": null, "G89": null },
+      "subCalls": { "M98": null, "G65": null },
+      "subReturn": [],
+      "foreign": {
+        "G73": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G74": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G76": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G81": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G82": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G83": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G84": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G85": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G86": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G87": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G88": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G89": { "severity": "error", "text": "GRBL has no canned cycles. The CAM or sender has to write the moves out (G80 is accepted)." },
+        "G41": { "severity": "error", "text": "GRBL has no cutter compensation; only G40 is accepted." },
+        "G42": { "severity": "error", "text": "GRBL has no cutter compensation; only G40 is accepted." },
+        "G43": { "severity": "error", "text": "GRBL has no G43 H. Its tool length offset is G43.1 Z (dynamic), cancelled by G49." },
+        "G64": { "severity": "error", "text": "GRBL accepts only G61 for path control." },
+        "G96": { "severity": "error", "text": "GRBL has no constant surface speed." },
+        "G95": { "severity": "error", "text": "GRBL has no feed per revolution (G93 and G94 only)." },
+        "M06": { "severity": "warning", "text": "GRBL has no M6 tool change. Most senders pause or strip it; check yours." },
+        "M98": { "severity": "error", "text": "GRBL has no subprograms (M98/M99)." },
+        "M99": { "severity": "error", "text": "GRBL has no subprograms (M98/M99)." },
+        "M01": { "severity": "info", "text": "GRBL accepts M1 but ignores it (optional stop isn't supported)." }
+      }
+    }
+  }
+}

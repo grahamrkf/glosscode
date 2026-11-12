@@ -1,0 +1,15 @@
+{
+  "dialect": {
+    "label": "Okuma OSP700L / OSP7000L",
+    "inherits": "okuma",
+    "inheritWords": true,
+    "source": "Okuma OSP7000L/OSP700L Programming 3812-E (1994); see docs/manual-reviews/okuma-osp7000l-u10l.md. Same tables as the Okuma lathe until the differences from the P200L/P300L are recorded.",
+    "lathe": {}
+  },
+  "words": {
+    "okuma7000l.lathe": {
+      "M98": { "words": "machine.tailstock.thrustlow", "short": "MTSTHRL", "desc": "Tailstock thrust low (Okuma, OSP700L/7000L; subprograms use CALL)" },
+      "M99": { "words": "machine.tailstock.thrusthigh", "short": "MTSTHRH", "desc": "Tailstock thrust high (Okuma, OSP700L/7000L; subprograms end with RTS)" }
+    }
+  }
+}

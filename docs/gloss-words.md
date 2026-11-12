@@ -1,6 +1,6 @@
 # Gloss words
 
-The gloss words come from a dictionary of consistent abbreviations, [`data/gcode-words.json`](../data/gcode-words.json). Each code has a full word and a short one. Pick between them under View › Gloss words.
+The gloss words come from a dictionary of consistent abbreviations: [`data/gcode-words.json`](../data/gcode-words.json) for the codes most controls share, and `words` in each control's file in [`data/controls/`](../data/controls/) for that control's own codes. Each code has a full word and a short one. Pick between them under View › Gloss words.
 
 ## Full words (the default)
 
