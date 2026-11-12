@@ -1,4 +1,8 @@
-/* ---------- Machine profiles ---------- */
+/* ---------- Machines: picking, the machine menu, Machine profiles and the browser's Open dialog ----------
+   useMachine(id) switches the active tab to another machine. The machine chip at the top right opens the machine
+   menu (openMachineMenu). openProfiles opens the Machine profiles window, where a user adds and edits their own
+   machines (name, control, limits, options); they're saved through window.saveMachines (tabs.js) to settings.
+   openDlg is the pretend Open dialog listing the sample programs, used only in a browser. saveAs is File › Save As. */
 function saveAs(){
   if (activeTab < 0) return;
   if (editing) commit();
@@ -217,7 +221,7 @@ $("p-save2").onclick = () => saveProfiles(false);
 $("p-cancel").onclick = $("p-x").onclick = () => { PDRAFT = null; pdlg.hidden = true; drawMachineChip(); };
 // Settings: the profiles and recent machines are kept in settings.json (see loadSettings).
 window.loadMachines = (machines, recent) => {
-  // Once saved, the list in settings is the whole list (so a deleted sample profile stays deleted in the mockup)
+  // Once saved, the list in settings is the whole list (so a deleted sample profile stays deleted in the browser demo)
   if (machines && typeof machines==="object" && !Array.isArray(machines)){
     for (const k of Object.keys(USER_DATA)) delete USER_DATA[k];
     Object.assign(USER_DATA, machines);

@@ -1,5 +1,5 @@
-/* A small JSON reader for the data files (dictionary, rules, library, machine profiles) and for
-   requests from the UI. Objects keep their keys in the order they were written, like JavaScript's. */
+/* A small JSON reader and writer, for the requests the UI sends (gc_api.c) and the files the program
+   keeps (settings.json, personal library files; see src/app/main.c). Objects keep their keys in the order they were written, like JavaScript's. */
 #ifndef GC_JSON_H
 #define GC_JSON_H
 

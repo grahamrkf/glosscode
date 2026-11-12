@@ -1,5 +1,5 @@
 /* Small helpers shared by the core: a growable string buffer and number formatting that matches
-   JavaScript's (the mockup is the reference for every string the core produces). Standard C only. */
+   JavaScript's String(n) and toFixed, so a number the core writes reads the same as one the UI writes. Standard C only. */
 #ifndef GC_UTIL_H
 #define GC_UTIL_H
 

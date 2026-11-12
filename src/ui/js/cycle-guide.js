@@ -1,6 +1,6 @@
 /* ---------- Canned cycle guide (F1) ----------
    One page per cycle in the selected machine's table: what it does, a rough sketch, an example line with
-   every word it takes (English above, G-code below), and what each word does. Text comes from
+   every word it takes (gloss above, code below), and what each word does. Text comes from
    RULES.cycleHelp; the word lists come from the dialect's cycles table, so they match the checks. */
 const cdlg = $("cdlg");
 let cSel = null;
@@ -49,7 +49,7 @@ function drawCycleHelp(){
     : r.need==="one" ? `<span class="need one" title="Use one of: ${esc(r.sets.map(s => s.join(" ")).join(" or "))}">One of ${esc(r.sets.map(s => s.join(" ")).join(" / "))}</span>` : `<span class="need opt">Optional</span>`;
   const table = `<table class="cwords"><thead><tr><th>Word</th><th>Gloss</th><th>Needed</th><th>What it does</th></tr></thead><tbody>${rows.map(r => {
     const w = r.L + (help.words[r.L]?.[0] ?? EX_DEFAULT[r.L] ?? "1."), c = word(w, st);
-    return `<tr><td class="w">${esc(r.L)}</td><td class="e">${esc(englishPrefix(r.L, st))}</td><td>${needChip(r)}</td><td>${esc(what(r.L))}</td></tr>`; }).join("")}</tbody></table>`;
+    return `<tr><td class="w">${esc(r.L)}</td><td class="e">${esc(glossPrefix(r.L, st))}</td><td>${needChip(r)}</td><td>${esc(what(r.L))}</td></tr>`; }).join("")}</tbody></table>`;
   main.innerHTML = `<h4><code>${code}</code>${esc(def.name)}<small>${en ? esc(en.words) + " · " : ""}${esc(DIALECT.label)}</small></h4>`
     + `<p class="about">${esc(help.about || en?.desc || "")}</p>`
     + `<div class="csk">${cycleSketch(help.sketch, help.labels || {}, def)}<div class="key"><span><i style="border-color:${SKC.rapid};border-top-style:dashed"></i>Rapid</span><span><i style="border-color:${SKC.feed}"></i>Feed</span><span><b style="color:${SKC.lab};font-family:var(--w-mono)">Z R Q</b> &nbsp;Words on the line</span><span style="max-width:160px;color:#888">A rough sketch, not to scale.</span></div></div>`

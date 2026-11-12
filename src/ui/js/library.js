@@ -27,7 +27,7 @@ const SOURCES = {
 };
 const fileOf = e => e.file || SOURCES[e.source].dir + SEP + e.id + ".json";
 const KINDS = { distance:"Distance", feed:"Feed", speed:"Speed", count:"Count", angle:"Angle", time:"Seconds" };
-// Which definition ids a mockup machine counts as. Haas mills extend Fanuc mills (docs/machine-definitions.md), so a
+// Which definition ids a machine counts as. Haas mills extend Fanuc mills (docs/machine-definitions.md), so a
 // subprogram written for fanuc.mill also works on haas.mill. Okuma is its own family.
 const EXTENDS = { haas:["fanuc"], generic:["fanuc"], okumau10l:["okuma"], okuma7000l:["okuma"], okumae100l:["okuma"] };
 const MACHINE_IDS = [["fanuc.mill", "Fanuc-style mill"], ["fanuc.lathe", "Fanuc-style lathe"], ["haas.mill", "Haas mill only"], ["haas.lathe", "Haas lathe only"], ["okuma.mill", "Okuma mill"], ["okuma.lathe", "Okuma lathe"]];
@@ -49,7 +49,7 @@ function libFor(toks){ if (!toks || !isG65(toks)) return null; const n = progOf(
 const callsIn = e => doc.filter(t => isG65(t) && progOf(t)===e.program).length;
 const defaultFor = (a, units) => a.default==null ? "" : typeof a.default==="object" ? (a.default[units] ?? "") : String(a.default);
 
-/* ---------- English for a G65 line ---------- */
+/* ---------- The gloss for a G65 line ---------- */
 function libWord(e, L, raw, f, st){
   const t = L + raw;
   if (L==="P") return { g:t, e:sty(e.word) || "O" + e.program, d:`Library subprogram O${e.program}: ${e.name}` };

@@ -42,7 +42,7 @@ function rebuildMachines(user = USER_DATA){
   for (const m of Object.values(MACHINES)) m.control = controlLabel(m.brand);
 }
 Object.assign(USER_DATA, /* samples */{
-  // The mockup's example user: the machines the sample programs were written for. The program starts with none.
+  // The browser demo's example user: the machines the sample programs were written for. The program starts with none.
   haas_vf2:       { ...MACHINE_LIBRARY.haas_vf2, eob:false },
   fanuc_0imf:     { name:"Fanuc 0i-MF mill",    type:"mill",  brand:"fanuc", travel:[24, 16, 18], rpm:10000, feed:800, tools:24, eob:false, macro:true },
   fanuc_0mc:      { name:"Fanuc 0-MC mill",     type:"mill",  brand:"fanuc", travel:[20, 14, 16], rpm:6000, feed:400, tools:16, eob:true, macro:false },

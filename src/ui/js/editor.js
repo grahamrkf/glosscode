@@ -188,7 +188,7 @@ function textGlossHTML(li){
     out.push(`<span class="gw${c.unk?" unk":""}${c.cs?" cs":""}${c.imp?" imp":""}${hit?" fhit":""}" data-wi="${i}">${esc(c.e)}${c.u ? `<small class="u">${esc(c.u)}</small>` : ""}</span>`);
   }
   const st = lineState[li] || newState();
-  for (const h of hintItems(li)) out.push(`<span class="gh" title="${esc(`${h.code} needs ${needsText(h)}: ${hintMeaning(h)}`)}">${h.alt ? "or " : ""}${esc(englishPrefix(h.L, st))}${style==="short" ? "" : ""}?</span>`);
+  for (const h of hintItems(li)) out.push(`<span class="gh" title="${esc(`${h.code} needs ${needsText(h)}: ${hintMeaning(h)}`)}">${h.alt ? "or " : ""}${esc(glossPrefix(h.L, st))}${style==="short" ? "" : ""}?</span>`);
   return out.join(" ");
 }
 // The words a line's problems name (the word, code or letter in the message), underlined in the problem's colour.
