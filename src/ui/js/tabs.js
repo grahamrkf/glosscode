@@ -408,7 +408,7 @@ function drawHome(){
       <div class="hacts"><button class="btn pri" data-act="new">New program…</button><button class="btn" data-act="open">Open…</button></div>
       <h3>Recent programs</h3>
       ${rec.length ? `<div class="rlist">${rec.map(r => ri(r)).join("")}</div>` : `<div class="none">Programs you open or save show up here, with the machine you used.</div>`}
-      ${samples.length ? `<h3>Sample programs <span style="font-weight:400;color:#888">(in this mockup only)</span></h3><div class="rlist">${samples.map(n => ri({ path:n, name:n, machine:FILES[n].machine }, true)).join("")}</div>` : ""}
+      ${samples.length ? `<h3>Sample programs <span style="font-weight:400;color:#888">(browser demo only)</span></h3><div class="rlist">${samples.map(n => ri({ path:n, name:n, machine:FILES[n].machine }, true)).join("")}</div>` : ""}
     </div>
     <div class="side2">
       <h3>Default machine by file type</h3>
