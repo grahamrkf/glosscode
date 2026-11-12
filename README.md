@@ -4,7 +4,7 @@
 
 GlossCode is a G-code editor that shows a gloss line in plain English above every line of code, with each code word lined up under its gloss word. It tracks active modes, colors rapid and feed moves, and expands subprogram calls inline.
 
-> **Status: early development.** The program opens and saves files on Windows and Linux through a small core in C, and its screen (with the gloss, checks and simulation) is [`src/ui/index.html`](src/ui/index.html). Downloads for Windows and Linux are on the [Releases page](https://github.com/grahamrkf/glosscode/releases), starting with 0.1.0, a preview. The screenshots below come from the mockup. To build it, see [`docs/building.md`](docs/building.md).
+> **Status: early development.** The program opens and saves files on Windows and Linux through a small core in C, and its screen (with the gloss, checks and simulation) is [`src/ui/index.html`](src/ui/index.html). Downloads for Windows and Linux are on the [Releases page](https://github.com/grahamrkf/glosscode/releases), starting with 0.1.0, a preview. The screenshots below come from the program. To build it, see [`docs/building.md`](docs/building.md).
 
 > **Check every program on the machine before you cut.** GlossCode is new and hasn't been widely tested, so it can miss real problems and flag code that's fine. Its tables for each control are only as good as the manuals behind them, and machine builders' options and settings can change what a code does. Before running a part, prove the program out on the machine itself: run it through the control's own graphics or simulation, then a dry run or single block with the feed override turned down.
 >
@@ -42,7 +42,7 @@ The gloss words come from a dictionary of consistent abbreviations ([`data/gcode
 |---|
 | ![Converting a Haas program for a Fanuc mill](docs/images/convert.png) |
 
-## Planned features
+## Features
 
 **Editing**
 - Menu bar (File, Edit, View, Insert, Program, Simulate), undo and redo, and Find that matches both code and gloss.
@@ -119,7 +119,7 @@ src/ui/data.js          Dictionary, rules, built-in library and version, written
 src/ui/samples.js       The sample programs, written from examples/ (browser only)
 assets/fonts/           The code and gloss fonts (IBM Plex, SIL Open Font License), embedded by scripts/make-fonts.mjs
 VERSION                 Current version number
-examples/               Sample programs used by the mockup (Haas, Fanuc and Okuma; BRACKET_0MC.nc ends lines with ;). Not built into the program; a separate download
+examples/               Sample programs (Haas, Fanuc and Okuma; BRACKET_0MC.nc ends lines with ;). Not built into the program; a separate download
 ```
 
 ## Try it in a browser
