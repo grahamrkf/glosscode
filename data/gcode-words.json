@@ -1,5 +1,5 @@
 {
-  "about": "The gloss dictionary. Each code has a full word ('words', the default style) and a short word ('short', the compact style). Full words are lower case and spelled out: a group, then the action, with a third part for less common codes. There is a fixed set of groups: run (moves and other things done on that line: run.rapid, run.feed, run.pause, run.home), set (modes that stay in effect: set.inch, set.abs, set.fpr, set.sfm, set.mirror.on), cycle (canned cycles and patterns: cycle.drill, cycle.peck, cycle.live.tap), call, flow, prog (program structure, messages and graphics), spindle, cool, tool, tlen, ccomp, work, axis, machine (builder extras such as chucks, tailstock, barriers, doors and outputs: machine.chuck.clamp, machine.tailstock.in), probe, thread, torch, param, pattern and scale. Options are the same words everywhere: on, off, fwd, rev, left, right, clamp, unclamp, in, out, select. The same meaning has the same full word on every control, so a code that means something else on one control gets a different word there. Short words come from the full word by one table: each group has a fixed core (S spindle, C coolant, T tool, TL tool length, TR cutter comp, WRK work offset, AX axis, M machine, PRB probe, TH thread, PL torch, Q parameter, PAT pattern; none for run, set, cycle, call, flow and prog), then an optional alternate (S2 second spindle, SL live tool, SG gear) and the option, each part 1 to 4 characters and the whole word 3 to 8 (SFWD, S2FWD, CON, TLON, TRL, WRK1, INCH, INCR, MTSIN). Two letters are used only for a standard abbreviation or a two-letter word: MM, XY, XZ, YZ, IF, DO. A code whose full word is not used by any code in the base (Fanuc-style) tables is control-specific, and the gloss row marks it. A word with a value is its name, a colon and the value in full words (tool:1, movx:-0.4215, incz:0.5, speed:2100, feed:16.0), with no unit after it; short words run the name and value together and show the unit (T1, iZ0.5, S2100 rpm). N numbers read as written (N10). A code whose meaning differs between machine types has 'mill' and 'lathe' entries. When codes share a gloss word, typing it gives the one marked 'preferred' (M30 for prog.end). Machine definition files can override any entry; an older file with a 'long' word still reads, using it as the full word. Each control's own words are in its file in data/controls/ ('words', keyed by the control id 'haas' or the id and machine type 'okuma.mill'; the more specific key wins), which scripts/make-ui-data.mjs joins into machineOverrides.",
+  "about": "The gloss dictionary. Each code has a full word ('words', the default style) and a short word ('short', the compact style). Full words are lower case and spelled out: a group, then the action, with a third part for less common codes. There is a fixed set of groups: run (moves and other things done on that line: run.rapid, run.feed, run.pause, run.home), set (modes that stay in effect: set.inch, set.abs, set.fpr, set.sfm, set.mirror.on), cycle (canned cycles and patterns: cycle.drill, cycle.peck, cycle.bore.dwell), call, flow, prog (program structure, messages and graphics), spindle, live (live tooling and the C axis on lathes: live.fwd, live.drill, live.c.on), cool, tool, tlen, ccomp, work (work.g54 for G54, work.p7 for an extra offset such as G154 P7), axis, machine (builder extras such as chucks, tailstock, barriers, doors and outputs: machine.chuck.clamp, machine.tailstock.advance), probe, thread, torch, param, pattern and scale. Each part holds one idea (cycle.bore.dwell, not cycle.boredwell); on and off always come last as their own part (axis.4.brake.on); opposites use fixed pairs everywhere: on/off, clamp/unclamp, advance/retract, fwd/rev, left/right, cw/ccw; direction and side come last (cycle.tap.left, cycle.pocket.circle.ccw); a code that acts on one block only ends in .once (set.corner.round.once). The same meaning has the same full word on every control, so a code that means something else on one control gets a different word there. Short words come from the full word by one table: each group has a fixed core (S spindle, C coolant, T tool, TL tool length, TR cutter comp, WRK work offset, AX axis, M machine, PRB probe, TH thread, PL torch, Q parameter, PAT pattern; none for run, set, cycle, call, flow and prog), then an optional alternate (S2 second spindle, SG gear; live tooling uses L) and the option, each part 1 to 4 characters and the whole word 3 to 8 (SFWD, S2FWD, CON, TLON, TRL, WRK54, INCH, INCR, MTSADV). Two letters are used only for a standard abbreviation or a two-letter word: MM, XY, XZ, YZ, IF, DO. A code whose full word is not used by any code in the base (Fanuc-style) tables is control-specific, and the gloss row marks it. A word with a value is its name, a colon and the value in full words (tool:1, movx:-0.4215, incz:0.5, speed:2100, feed:16.0), with no unit after it; short words run the name and value together and show the unit (T1, iZ0.5, S2100 rpm). N numbers read as written (N10). A code whose meaning differs between machine types has 'mill' and 'lathe' entries. When codes share a gloss word, typing it gives the one marked 'preferred' (M30 for prog.end). Machine definition files can override any entry; an older file with a 'long' word still reads, using it as the full word. Each control's own words are in its file in data/controls/ ('words', keyed by the control id 'haas' or the id and machine type 'okuma.mill'; the more specific key wins), which scripts/make-ui-data.mjs joins into machineOverrides.",
   "version": 1,
   "codes": {
     "G00": { "words": "run.rapid", "short": "RPD",   "desc": "Rapid move" },
@@ -13,7 +13,7 @@
     "G20": { "words": "set.inch", "short": "INCH",    "desc": "Inch units" },
     "G21": { "words": "set.mm", "short": "MM",    "desc": "Millimeter units" },
     "G28": { "words": "run.home", "short": "HOME",  "desc": "Return to machine home" },
-    "G30": { "words": "run.home2", "short": "HOME2",  "desc": "Return to a second reference point" },
+    "G30": { "words": "run.home.2nd", "short": "HOME2",  "desc": "Return to a second reference point" },
     "G32": { "lathe": { "words": "run.thread", "short": "THD", "desc": "Single thread cut" } },
     "G40": { "words": "ccomp.off", "short": "TROFF", "desc": "Cutter compensation off" },
     "G41": { "words": "ccomp.left", "short": "TRL",   "desc": "Cutter compensation left" },
@@ -26,37 +26,37 @@
     },
     "G50.shift": { "lathe": { "words": "set.coords", "short": "SETC", "desc": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)" } },
     "G53": { "words": "run.machine", "short": "MACH",   "desc": "Move in machine coordinates" },
-    "G54": { "words": "work.1", "short": "WRK1",    "desc": "Work offset 1" },
-    "G55": { "words": "work.2", "short": "WRK2",    "desc": "Work offset 2" },
-    "G56": { "words": "work.3", "short": "WRK3",    "desc": "Work offset 3" },
-    "G57": { "words": "work.4", "short": "WRK4",    "desc": "Work offset 4" },
-    "G58": { "words": "work.5", "short": "WRK5",    "desc": "Work offset 5" },
-    "G59": { "words": "work.6", "short": "WRK6",    "desc": "Work offset 6" },
+    "G54": { "words": "work.g54", "short": "WRK54",    "desc": "Work offset 1" },
+    "G55": { "words": "work.g55", "short": "WRK55",    "desc": "Work offset 2" },
+    "G56": { "words": "work.g56", "short": "WRK56",    "desc": "Work offset 3" },
+    "G57": { "words": "work.g57", "short": "WRK57",    "desc": "Work offset 4" },
+    "G58": { "words": "work.g58", "short": "WRK58",    "desc": "Work offset 5" },
+    "G59": { "words": "work.g59", "short": "WRK59",    "desc": "Work offset 6" },
     "G65": { "words": "call.macro", "short": "MAC",   "desc": "Call a macro subprogram, passing values to it" },
     "G70": { "lathe": { "words": "cycle.finish", "short": "FIN", "desc": "Finishing cycle" } },
     "G71": { "lathe": { "words": "cycle.rough", "short": "RUF", "desc": "OD/ID roughing cycle" } },
-    "G72": { "lathe": { "words": "cycle.facerough", "short": "FRUF", "desc": "Face roughing cycle" } },
+    "G72": { "lathe": { "words": "cycle.rough.face", "short": "FRUF", "desc": "Face roughing cycle" } },
     "G73": {
-      "mill":  { "words": "cycle.peckfast", "short": "PKHS", "desc": "High-speed peck drilling cycle" },
+      "mill":  { "words": "cycle.peck.fast", "short": "PKHS", "desc": "High-speed peck drilling cycle" },
       "lathe": { "words": "cycle.pathrough", "short": "PRUF", "desc": "Irregular-path roughing cycle" }
     },
     "G74": {
-      "mill":  { "words": "cycle.tapleft", "short": "TAPL", "desc": "Left-hand (reverse) tapping cycle" },
-      "lathe": { "words": "cycle.facegroove", "short": "FGRV", "desc": "Face grooving or peck drilling cycle" }
+      "mill":  { "words": "cycle.tap.left", "short": "TAPL", "desc": "Left-hand (reverse) tapping cycle" },
+      "lathe": { "words": "cycle.groove.face", "short": "FGRV", "desc": "Face grooving or peck drilling cycle" }
     },
     "G75": { "lathe": { "words": "cycle.groove", "short": "GRV", "desc": "OD/ID grooving cycle" } },
     "G76": {
-      "mill":  { "words": "cycle.finebore", "short": "FBOR", "desc": "Fine boring cycle" },
+      "mill":  { "words": "cycle.bore.fine", "short": "FBOR", "desc": "Fine boring cycle" },
       "lathe": { "words": "cycle.thread", "short": "THDCY",  "desc": "Threading cycle" }
     },
     "G80": { "words": "cycle.off", "short": "CYOFF", "desc": "Cancel canned cycle" },
     "G81": { "words": "cycle.drill", "short": "DRL",   "desc": "Drilling cycle" },
-    "G82": { "words": "cycle.spotdwell", "short": "SPDW",  "desc": "Spot drill cycle with dwell" },
+    "G82": { "words": "cycle.spot.dwell", "short": "SPDW",  "desc": "Spot drill cycle with dwell" },
     "G83": { "words": "cycle.peck", "short": "PECK",   "desc": "Peck drilling cycle" },
     "G84": { "words": "cycle.tap", "short": "TAP",   "desc": "Tapping cycle" },
     "G85": { "words": "cycle.bore", "short": "BORE",   "desc": "Boring cycle, feed out" },
-    "G86": { "words": "cycle.borestop", "short": "BORESTP",  "desc": "Boring cycle, spindle stop and rapid out" },
-    "G89": { "words": "cycle.boredwell", "short": "BOREDWL",  "desc": "Boring cycle with dwell" },
+    "G86": { "words": "cycle.bore.stop", "short": "BORESTP",  "desc": "Boring cycle, spindle stop and rapid out" },
+    "G89": { "words": "cycle.bore.dwell", "short": "BOREDWL",  "desc": "Boring cycle with dwell" },
     "G90": {
       "mill":  { "words": "set.abs", "short": "ABS",  "desc": "Absolute positions" },
       "lathe": { "words": "cycle.turn", "short": "TURN",  "desc": "OD/ID turning cycle" }

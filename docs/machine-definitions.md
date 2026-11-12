@@ -212,7 +212,7 @@ Help text is plain English and is the same in every layer unless a layer overrid
 
 ### Word order
 
-Program › Sort words puts each line's words in the order of `columns`, from first to last. The built-in order puts the most used words first: motion, canned cycles, cycle cancel and spindle speed mode (G96/G97), then X, Y, Z, the arc and cycle words, F, S, the spindle M-codes, the tool, coolant, then other G-codes, other M-codes, rare words and the comment. A word goes with the first entry that matches it, so a code listed in an earlier entry (M03 under Spindle) never reaches a later catch-all (M).
+Program › Sort addresses puts each line's words in the order of `columns`, from first to last. The built-in order puts the most used words first: motion, canned cycles, cycle cancel and spindle speed mode (G96/G97), then X, Y, Z, the arc and cycle words, F, S, the spindle M-codes, the tool, coolant, then other G-codes, other M-codes, rare words and the comment. A word goes with the first entry that matches it, so a code listed in an earlier entry (M03 under Spindle) never reaches a later catch-all (M).
 
 ```jsonc
 "columns": [
@@ -346,7 +346,7 @@ GlossCode doesn't pick a side quietly. An entry with a contradiction lists each 
                     "source": { "manual": "Haas Mill 96-8210", "revision": "V (2025)", "page": 444 } } },
   "decidedBy": "toolChanger" },       // an option in the profile settles it
 
-"G114": { "words": "work.11", "short": "W11",
+"G114": { "words": "work.p5", "short": "WRKP5",
   "readings": {
     "p5": { "desc": "Work offset 11 (G154 P5)", "source": { "revision": "V (2025)", "page": 397 } },
     "p3": { "desc": "Work offset 11 (G154 P3)", "source": { "revision": "V (2025)", "page": 396 } } },

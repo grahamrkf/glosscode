@@ -51,14 +51,14 @@ const MENUS = {
       R("Short words (SFWD)", () => style==="short", () => { style = "short"; render(); })
     ] },
     "-",
-    T("Run order numbers", () => runNums, () => { runNums = !runNums; render(); setMsg(runNums ? "Each line shows its run order number (grey, left): the block count as the program runs, counting subprogram lines on every call." : "Run order numbers are hidden."); }),
+    T("Block count", () => runNums, () => { runNums = !runNums; render(); setMsg(runNums ? "Block count shown: blocks run so far, counting subprogram lines on every call." : "Block count hidden."); }),
     T("Problems panel", () => probsOpen, () => toggleProblems(), "Ctrl+Shift+M"),
     "-",
-    { label:"Fold moves", sub:[
-      { label:"Fold all", fn:() => foldAll(true) },
-      { label:"Unfold all", fn:() => foldAll(false) },
+    { label:"Collapse moves", sub:[
+      { label:"Collapse all", fn:() => foldAll(true) },
+      { label:"Expand all", fn:() => foldAll(false) },
       "-",
-      T("Fold when a file opens", () => foldAuto, () => { foldAuto = !foldAuto; saveFoldPrefs(); setMsg(foldAuto ? "Opening a file folds the moves in sections too long for the window." : "Opening a file shows every line."); }),
+      T("Collapse when a file opens", () => foldAuto, () => { foldAuto = !foldAuto; saveFoldPrefs(); setMsg(foldAuto ? "Opening a file collapses long runs of moves." : "Opening a file shows every line."); }),
       "-", { grp:"Count G01 as a rapid at" },
       R("10× the cutting feed", () => foldFast===10, () => setFoldFast(10)),
       R("5× the cutting feed", () => foldFast===5, () => setFoldFast(5)),
@@ -78,14 +78,14 @@ const MENUS = {
   ],
   Insert: [],   // built by the Insert menu script below, since it follows the machine
   Program: [
-    { label:"Sort words on this line", fn:() => sortWords("line") },
-    { label:"Sort words in whole file", fn:() => sortWords("all") },
+    { label:"Sort addresses (this line)", fn:() => sortWords("line") },
+    { label:"Sort addresses (whole file)", fn:() => sortWords("all") },
     "-",
     { label:"Next problem", sc:"F8", fn:() => nextProblem(1) },
     { label:"Previous problem", sc:"Shift+F8", fn:() => nextProblem(-1) },
     "-",
     { label:"Renumber", fn:renumber },
-    T("Auto N on new lines", () => autoN, () => { autoN = !autoN; setMsg(autoN ? `New lines get the next free N number, counting by ${N_STEP}.` : "New lines get no N number."); }),
+    T("Auto sequence numbers", () => autoN, () => { autoN = !autoN; setMsg(autoN ? `New lines get the next free N number, counting by ${N_STEP}.` : "New lines get no N number."); }),
     "-",
     { label:"Show all subprograms", fn:() => { doc.forEach((t, i) => { if (callTarget(t)!=null || window.libFor?.(t)) expanded.add(i); }); render(); } },
     { label:"Hide all subprograms", fn:() => { expanded.clear(); render(); } }
@@ -106,7 +106,7 @@ const MENUS = {
   Help: [
     { label:"Canned cycle guide…", sc:"F1", fn:() => openCycleHelp(), doc:true },
     { label:"Keyboard shortcuts", fn:() => setMsg("Click a line to edit · ↑↓ line · Enter break line · Backspace at the start joins lines · Esc undo the line · Shift+↑↓ select lines · Ctrl+C/X/V copy, cut, paste · Ctrl+D duplicate · F1 cycle guide · F5 play · Ctrl+Z undo · Ctrl+F find · F8 next problem") },
-    { label:"About the dictionary", fn:() => setMsg("Words come from gcode-words.json plus the selected machine's file.") }
+    { label:"Gloss words…", fn:() => setMsg("Gloss words come from data/gcode-words.json and the control's file in data/controls/. docs/gloss-words.md explains how they're built.") }
   ]
 };
 const menubar = $("menubar");
@@ -243,6 +243,6 @@ function save(){
   if (editing) commit();
   if (window.GlossCodeNative) return nativeSave(false);
   const n = serialize().length;
-  setMsg(`Saved ${fileName} (${n} bytes). Only the code is written, with CRLF line endings${eobOn() ? " and ; at the end of every line" : ""}.`);
+  setMsg(`Saved ${fileName} (${n} bytes, CRLF${eobOn() ? ", ; line ends" : ""}).`);
   window.markSaved?.();
 }

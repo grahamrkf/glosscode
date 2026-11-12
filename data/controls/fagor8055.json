@@ -176,7 +176,7 @@
     "fagor8055.mill": {
       "G04": { "words": "run.pause", "short": "DWL", "desc": "Dwell for K hundredths of a second; alone, it stops block preparation" },
       "G05": { "words": "set.corner.round", "short": "CRNRND", "desc": "Controlled corner rounding (modal)" },
-      "G06": { "words": "set.arc.centerabs1", "short": "ARCCAB1", "desc": "Arc center in absolute, this block only" },
+      "G06": { "words": "set.arc.centerabs.once", "short": "ARCCAB1", "desc": "Arc center in absolute, this block only" },
       "G07": { "words": "set.corner.square", "short": "CRNSQ", "desc": "Square corner (modal)" },
       "G08": { "words": "run.arc.tangent", "short": "ARCTAN", "desc": "Arc tangent to the last path" },
       "G09": { "words": "run.arc.3point", "short": "ARC3PT", "desc": "Three-point arc" },
@@ -233,14 +233,14 @@
       "G78": { "words": "axis.slave.off", "short": "AXSLVOFF", "desc": "Cancel slaved axes" },
       "G79": { "words": "cycle.change", "short": "CYCHG", "desc": "Change the active cycle's parameters" },
       "G81": { "words": "cycle.drill", "short": "DRL", "desc": "Drilling cycle" },
-      "G82": { "words": "cycle.spotdwell", "short": "SPDW", "desc": "Drilling cycle with a dwell" },
+      "G82": { "words": "cycle.spot.dwell", "short": "SPDW", "desc": "Drilling cycle with a dwell" },
       "G83": { "words": "cycle.peck", "short": "PECK", "desc": "Deep-hole drilling, constant peck" },
       "G84": { "words": "cycle.tap", "short": "TAP", "desc": "Tapping cycle" },
       "G85": { "words": "cycle.ream", "short": "REAM", "desc": "Reaming cycle" },
       "G86": { "words": "cycle.bore", "short": "BORE", "desc": "Boring cycle" },
       "G87": { "words": "cycle.pocket.rect", "short": "PKTRECT", "desc": "Rectangular pocket cycle" },
       "G88": { "words": "cycle.pocket.circle", "short": "PKTCIR", "desc": "Circular pocket cycle" },
-      "G89": { "words": "cycle.boredwell", "short": "BOREDWL", "desc": "Boring cycle with a dwell" },
+      "G89": { "words": "cycle.bore.dwell", "short": "BOREDWL", "desc": "Boring cycle with a dwell" },
       "G92": { "words": "set.coords", "short": "SETC", "desc": "Coordinate preset, or with S the spindle speed limit" },
       "G93": { "words": "set.polar.origin", "short": "POLORG", "desc": "Preset the polar origin" },
       "G94": { "words": "set.fpm", "short": "FPM", "desc": "Feed per minute" },
@@ -255,7 +255,7 @@
       "G211": { "words": "cycle.threadmill.in", "short": "THMLIN", "desc": "Inside thread milling cycle" },
       "G212": { "words": "cycle.threadmill.out", "short": "THMLOUT", "desc": "Outside thread milling cycle" },
       "M19": { "words": "spindle.orient", "short": "SORI", "desc": "Spindle orientation (S is the angle)" },
-      "M45": { "words": "spindle.live.speed", "short": "SLSPD", "desc": "Live tool spindle (S is the speed; S0 stops it)" }
+      "M45": { "words": "live.speed", "short": "LSPD", "desc": "Live tool spindle (S is the speed; S0 stops it)" }
     },
 
     "fagor8055": {
@@ -292,7 +292,7 @@
       "G91": { "words": "set.incr", "short": "INCR", "desc": "Incremental positions" },
       "G04": { "words": "run.pause", "short": "DWL", "desc": "Dwell for K hundredths of a second; alone, it stops block preparation" },
       "G05": { "words": "set.corner.round", "short": "CRNRND", "desc": "Controlled corner rounding (modal)" },
-      "G06": { "words": "set.arc.centerabs1", "short": "ARCCAB1", "desc": "Arc center in absolute, this block only" },
+      "G06": { "words": "set.arc.centerabs.once", "short": "ARCCAB1", "desc": "Arc center in absolute, this block only" },
       "G07": { "words": "set.corner.square", "short": "CRNSQ", "desc": "Square corner (modal)" },
       "G08": { "words": "run.arc.tangent", "short": "ARCTAN", "desc": "Arc tangent to the last path" },
       "G09": { "words": "run.arc.3point", "short": "ARC3PT", "desc": "Three-point arc" },
@@ -301,7 +301,7 @@
       "G12": { "words": "set.mirror.y", "short": "MIRY", "desc": "Mirror image in Y" },
       "G13": { "words": "set.mirror.z", "short": "MIRZ", "desc": "Mirror image in Z" },
       "G14": { "words": "set.mirror.programmed", "short": "MIRPRG", "desc": "Mirror image in the programmed directions" },
-      "G15": { "words": "axis.c.on", "short": "AXCON", "desc": "C axis on (G15 R gives the radius for work on the side)" },
+      "G15": { "words": "live.c.on", "short": "AXCON", "desc": "C axis on (G15 R gives the radius for work on the side)" },
       "G16": { "words": "set.plane", "short": "PLN", "desc": "Plane from two axes (G16 ZC on the side, G16 XC on the face)" },
       "G17": { "words": "set.xy", "short": "XY", "desc": "XY plane" },
       "G18": { "words": "set.xz", "short": "XZ", "desc": "ZX plane, the usual plane on a lathe" },
@@ -362,7 +362,7 @@
       "G159": { "words": "work.table", "short": "WRKTBL", "desc": "Zero offset from the table (G159 N1 to N20)" },
       "G233": { "words": "thread.withdraw", "short": "THWDR", "desc": "How far the tool pulls back if a G33 thread is interrupted" },
       "M19": { "words": "spindle.orient", "short": "SORI", "desc": "Spindle orientation (S is the angle)" },
-      "M45": { "words": "spindle.live.speed", "short": "SLSPD", "desc": "Live tool spindle (S is the speed; S0 stops it)" }
+      "M45": { "words": "live.speed", "short": "LSPD", "desc": "Live tool spindle (S is the speed; S0 stops it)" }
     }
   },
   "cycleHelp": {

@@ -23,7 +23,7 @@ function useMachine(id){
     lineState = [];
   }
   window.tabMachineChanged?.(); render();
-  setMsg(`Machine: ${machineLabel(id)}. Words and checks now follow ${MACHINES[id].generic ? controlLabel(MACHINES[id].brand) : "its profile"}.${MACHINES[id].eob ? " Lines end with ; on this control." : ""}`);
+  setMsg(`Machine: ${machineLabel(id)}${MACHINES[id].eob ? " (lines end with ;)" : ""}.`);
 }
 // The user's profiles as saved: what's in USER_DATA, without the fields GlossCode works out.
 function persistMachines(){ window.saveMachines?.(); }
@@ -33,7 +33,7 @@ function addFromLibrary(id){
   const { lib, control, ...m } = MACHINES[id];
   USER_DATA[id] = { ...m, travel:[...m.travel], from:id };
   rebuildMachines(); persistMachines();
-  setMsg(`Added ${m.name} to your machines. Machine › Edit this machine… fills in what's missing.`);
+  setMsg(`Added ${m.name} to your machines.`);
   return id;
 }
 function newMachineId(){ let n = 1; while (MACHINES["m" + n] || PDRAFT?.data["m" + n]) n++; return "m" + n; }

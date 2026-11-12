@@ -43,7 +43,7 @@ eq(r.words[0][1], "run.rapid", "a generic router reads G00");
 // On the OSP-E100L (and every Okuma lathe) G30 is a skip cycle, and M99 is tailstock thrust high.
 r = A.run("N10 G30\nN20 M99", "gen.lathe.okumae100l", "words");
 eq(r.words[0][1], "cycle.skip", "G30 is the skip cycle on an Okuma lathe");
-eq(r.words[1][1], "machine.tailstock.thrusthigh", "M99 is tailstock thrust high on an OSP-E100L");
+eq(r.words[1][1], "machine.tailstock.thrust.high", "M99 is tailstock thrust high on an OSP-E100L");
 
 // X1 with no decimal point is the least increment on a Haas, and is flagged.
 r = A.run("N10 G20 G90\nN20 G00 X1 Y0.\nN30 M30", "gen.mill.haas", "words");

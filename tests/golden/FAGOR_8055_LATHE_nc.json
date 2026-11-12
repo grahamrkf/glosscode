@@ -1974,7 +1974,7 @@
     [
      {
       "g": "G82",
-      "e": "cycle.spotdwell",
+      "e": "cycle.spot.dwell",
       "d": "Spot drill cycle with dwell"
      },
      {
@@ -2218,7 +2218,7 @@
     [
      {
       "g": "G86",
-      "e": "cycle.borestop",
+      "e": "cycle.bore.stop",
       "d": "Boring cycle, spindle stop and rapid out"
      },
      {

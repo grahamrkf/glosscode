@@ -154,7 +154,7 @@ function insertCycle(thenHoles){
   expanded = new Set([...expanded].map(i => i > li ? i+1 : i));
   closeInsert();
   selectLine(li+1);
-  setMsg(`Added ${u.toks.join(" ")}.${thenHoles ? "" : " Ctrl+Z takes it back out."}`);
+  setMsg(`Added ${u.toks.join(" ")}.${thenHoles ? "" : " Ctrl+Z undoes."}`);
   if (thenHoles) openHoles();
 }
 

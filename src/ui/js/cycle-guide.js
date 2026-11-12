@@ -67,7 +67,7 @@ $("c-ins").onclick = () => {
   expanded = new Set([...expanded].map(i => i > curLine ? i+1 : i));
   curLine++;
   render(); scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`)); ed.focus({preventScroll:true}); showInfo(curLine, null);
-  setMsg(`Added ${words.join(" ")}. The grey words in its gloss are what it still needs: press Enter and type them.`);
+  setMsg(`Added ${words.join(" ")}. Grey gloss words still need values.`);
 };
 
 /* Sketches: plain SVG, 380×230. Mill cycles are a side section through the hole;

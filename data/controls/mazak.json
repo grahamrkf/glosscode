@@ -48,12 +48,12 @@
   "words": {
     "mazak.mill": {
       "G75": { "words": "cycle.bore", "short": "BORE", "desc": "Boring cycle (Mazak)" },
-      "G77": { "words": "cycle.backspot", "short": "BKSP", "desc": "Back spot facing cycle (Mazak)" },
+      "G77": { "words": "cycle.spot.back", "short": "BKSP", "desc": "Back spot facing cycle (Mazak)" },
       "G78": { "words": "cycle.bore.2", "short": "BORE2", "desc": "Boring cycle (Mazak)" },
       "G79": { "words": "cycle.bore.3", "short": "BORE3", "desc": "Boring cycle (Mazak)" },
       "G85": { "words": "cycle.ream", "short": "REAM", "desc": "Reaming cycle (Mazak)" },
-      "G87": { "words": "cycle.backbore", "short": "BKBR", "desc": "Back boring cycle" },
-      "G88": { "words": "cycle.bore.dwellstop", "short": "BOREDSTP", "desc": "Boring cycle, dwell, spindle stop" },
+      "G87": { "words": "cycle.bore.back", "short": "BKBR", "desc": "Back boring cycle" },
+      "G88": { "words": "cycle.bore.dwell.stop", "short": "BOREDSTP", "desc": "Boring cycle, dwell, spindle stop" },
       "M07": { "words": "cool.mist", "short": "CMST", "desc": "Mist coolant on" },
       "M09": { "words": "cool.off", "short": "COFF", "desc": "All coolant and air off (Mazak)" },
       "M10": { "words": "tool.clamp", "short": "TCL", "desc": "Spindle tool clamp (Mazak)" },

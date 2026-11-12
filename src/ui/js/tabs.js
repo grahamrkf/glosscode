@@ -280,7 +280,7 @@ async function newProgram(){
   const taken = new Set(TABS.map(tabName));
   let n = 1; while (taken.has(`Untitled-${n}.nc`)) n++;
   openProgram({ name:`Untitled-${n}.nc`, machine:id, src:[""] });
-  setMsg(`New program for ${MACHINES[id].name}. Type to add the first word. Save asks where to keep it.`);
+  setMsg(`New program for ${MACHINES[id].name}.`);
 }
 
 /* Opening files. In the program: the system Open dialog, or a path from the recent list. */
@@ -378,7 +378,7 @@ async function nativeSave(as){
   nf.raw = rawMap(lines.map(l => [l.tok, l.raw]));
   t.name = r.name; if (t===cur()) setTitle(r.name + " - GlossCode");
   remember(t); drawTabs();
-  setMsg(`Saved ${r.path} (${r.bytes} bytes)${eobOn() ? ", with ; at the end of every line" : ""}.`);
+  setMsg(`Saved ${r.path} (${r.bytes} bytes${eobOn() ? ", ; line ends" : ""}).`);
 }
 
 /* The home page. */

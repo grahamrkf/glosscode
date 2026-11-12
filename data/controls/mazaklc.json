@@ -57,9 +57,9 @@
       "G71": { "words": "set.mm", "short": "MM", "desc": "Millimeter units (system C)" },
       "G72": { "words": "cycle.finish", "short": "FIN", "desc": "Finishing cycle" },
       "G73": { "words": "cycle.rough", "short": "RUF", "desc": "OD/ID roughing cycle" },
-      "G74": { "words": "cycle.facerough", "short": "FRUF", "desc": "Face roughing cycle" },
+      "G74": { "words": "cycle.rough.face", "short": "FRUF", "desc": "Face roughing cycle" },
       "G75": { "words": "cycle.pathrough", "short": "PRUF", "desc": "Irregular-path roughing cycle" },
-      "G76": { "words": "cycle.facegroove", "short": "FGRV", "desc": "Face grooving or peck drilling cycle" },
+      "G76": { "words": "cycle.groove.face", "short": "FGRV", "desc": "Face grooving or peck drilling cycle" },
       "G77": { "words": "cycle.groove", "short": "GRV", "desc": "OD/ID grooving cycle" },
       "G78": { "words": "cycle.thread", "short": "THDCY", "desc": "Threading cycle" }
     }

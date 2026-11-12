@@ -1401,7 +1401,7 @@
      },
      {
       "g": "G72",
-      "e": "cycle.facerough",
+      "e": "cycle.rough.face",
       "d": "Face roughing cycle"
      },
      {

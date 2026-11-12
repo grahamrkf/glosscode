@@ -336,7 +336,7 @@
      },
      {
       "g": "G54",
-      "e": "work.1",
+      "e": "work.g54",
       "d": "Work offset 1"
      },
      {
@@ -592,7 +592,7 @@
      },
      {
       "g": "G73",
-      "e": "cycle.peckfast",
+      "e": "cycle.peck.fast",
       "d": "High-speed peck drilling cycle"
      },
      {
@@ -936,7 +936,7 @@
      },
      {
       "g": "G12",
-      "e": "cycle.pocket.circlecw",
+      "e": "cycle.pocket.circle.cw",
       "d": "Circular pocket, clockwise"
      },
      {
@@ -978,7 +978,7 @@
      },
      {
       "g": "G13",
-      "e": "cycle.pocket.circleccw",
+      "e": "cycle.pocket.circle.ccw",
       "d": "Circular pocket, counterclockwise"
      },
      {
@@ -1233,7 +1233,7 @@
      },
      {
       "g": "G54",
-      "e": "WRK1",
+      "e": "WRK54",
       "d": "Work offset 1"
      },
      {
@@ -2136,7 +2136,7 @@
      },
      {
       "g": "G54",
-      "e": "work.1",
+      "e": "work.g54",
       "d": "Work offset 1"
      },
      {
@@ -2395,7 +2395,7 @@
      },
      {
       "g": "G73",
-      "e": "cycle.peckfast",
+      "e": "cycle.peck.fast",
       "d": "High-speed peck drilling cycle"
      },
      {

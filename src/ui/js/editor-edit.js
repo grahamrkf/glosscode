@@ -49,7 +49,7 @@ function restore(s){
 function undo(){
   if (editing && !commit()) return;
   if (!undoStack.length){ setMsg("Nothing to undo"); return; }
-  redoStack.push(snap()); restore(undoStack.pop()); render(); setMsg(`Undone. ${undoStack.length} more step${undoStack.length===1?"":"s"} available.`);
+  redoStack.push(snap()); restore(undoStack.pop()); render(); setMsg(`Undone (${undoStack.length} more).`);
 }
 function redo(){
   if (editing && !commit()) return;
@@ -162,7 +162,7 @@ function pasteText(text, fromMenu){
     expanded = new Set([...expanded].filter(i => i < r[0] || i > r[1]).map(i => i > r[1] ? i + shift : i));
     curLine = r[0] + lines.length - 1;
     render(); scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`)); ed.focus({preventScroll:true}); showInfo(curLine, null);
-    setMsg(`Pasted ${lines.length} lines in place of lines ${r[0]+1}–${r[1]+1}. Ctrl+Z puts them back.`);
+    setMsg(`Pasted ${lines.length} lines over lines ${r[0]+1}–${r[1]+1}. Ctrl+Z undoes.`);
     return true;
   }
   const li = curLine, t = doc[li];
@@ -175,7 +175,7 @@ function pasteText(text, fromMenu){
   if (wasEmpty && eob) fileEob = true;
   curLine = (blank ? li : li+1) + lines.length - 1;
   render(); scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`)); ed.focus({preventScroll:true}); showInfo(curLine, null);
-  setMsg(`Pasted ${lines.length} lines${blank ? "" : " below line " + (li+1)}. Ctrl+Z takes them out again.`);
+  setMsg(`Pasted ${lines.length} lines${blank ? "" : " below line " + (li+1)}. Ctrl+Z undoes.`);
   return true;
 }
 /* The clipboard for the menus (right-click and Edit): a page can only reach the clipboard by itself during a key press
@@ -197,7 +197,7 @@ function clipWrite(t){
 }
 function pasteFromMenu(){
   clipRead().then(t => { if (!t) setMsg("The clipboard has no text to paste.", true); else pasteText(t, true); })
-    .catch(() => setMsg("GlossCode couldn't read the clipboard. Press Ctrl+V to paste.", true));
+    .catch(() => setMsg("Couldn't read the clipboard. Use Ctrl+V.", true));
 }
 ed.addEventListener("paste", e => {
   const t = e.clipboardData?.getData("text/plain");
@@ -255,14 +255,14 @@ function duplicateLines(){
   selAnchor = n > 1 ? b+1 : null; curLine = b + n;
   render(); scrollToLn(ed.querySelector(`.ln[data-key="m${curLine}"]`)); ed.focus({preventScroll:true});
   const hasN = copy.some(t => nOf(t)!=null);
-  setMsg(`Duplicated ${n===1 ? "line " + (a+1) : n + " lines"}. The copy is selected below the original.${hasN ? " Its N numbers repeat the original's: Program › Renumber gives it new ones." : ""}`);
+  setMsg(`Duplicated ${n===1 ? "line " + (a+1) : n + " lines"}${hasN ? " (N numbers repeat: Program › Renumber)" : ""}.`);
 }
 function copyFromMenu(cut){
   if (editing && !commit()) return;
   const t = copyText(), msg = copyMsg(cut ? "Cut" : "Copied");
   clipWrite(t).then(() => {
     if (cut) cutLines(); else setMsg(msg);
-  }).catch(() => setMsg(`GlossCode couldn't use the clipboard. Press Ctrl+${cut ? "X" : "C"} instead.`, true));
+  }).catch(() => setMsg(`Couldn't use the clipboard. Use Ctrl+${cut ? "X" : "C"}.`, true));
 }
 ed.addEventListener("copy", e => {
   if (editing?.line && editing.input.selectionStart===editing.input.selectionEnd){
@@ -343,13 +343,13 @@ document.addEventListener("keydown", e => { if (ctxEl && e.key==="Escape"){ e.st
 function deleteLine(){
   if (editing) editing = null;
   const r = selRange();
-  if (r){ pushUndo(); const n = r[1]-r[0]+1; removeLines(r[0], r[1]); render(); setMsg(`Deleted ${n} lines. Ctrl+Z brings them back.`); return; }
+  if (r){ pushUndo(); const n = r[1]-r[0]+1; removeLines(r[0], r[1]); render(); setMsg(`Deleted ${n} lines. Ctrl+Z undoes.`); return; }
   if (doc.length < 2) return;
   pushUndo();
   const li = curLine; const gone = doc[li].join(" ");
   doc.splice(li, 1);
   expanded = new Set([...expanded].filter(i => i!==li).map(i => i > li ? i-1 : i));
-  curLine = Math.min(li, doc.length-1); render(); setMsg(`Deleted "${gone}". Ctrl+Z brings it back.`);
+  curLine = Math.min(li, doc.length-1); render(); setMsg(`Deleted "${gone}". Ctrl+Z undoes.`);
 }
 function renumber(){
   if (editing && !commit()) return;
@@ -367,7 +367,7 @@ function renumber(){
     const w = "N"+n; if (old!=null) t[0] = w; else t.unshift(w);
     n += N_STEP; count++;
   }
-  render(); setMsg(`Renumbered ${count} lines by ${N_STEP}. Subprogram labels were left alone so their calls still work.`);
+  render(); setMsg(`Renumbered ${count} lines by ${N_STEP}. Subprogram labels kept.`);
 }
 
 /* ---------- Editing ----------

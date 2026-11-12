@@ -632,7 +632,7 @@ function callProgress(k, depth = 0){
   let a = k, b = k; while (a > 0 && deep(a-1)) a--; while (b < st.length-1 && deep(b+1)) b++;
   return (k - a + 1) / (b - a + 1);
 }
-const barTitle = key => callProgress(simK, key[0]==="x" ? 1 : 0)==null && foldScan().end[rowLi(key)] >= 0 ? "Running the folded moves" : "Running the subprogram this line calls";
+const barTitle = key => callProgress(simK, key[0]==="x" ? 1 : 0)==null && foldScan().end[rowLi(key)] >= 0 ? "Running the collapsed moves" : "Running the subprogram this line calls";
 // How far through what row "key" stands for step k is: a collapsed call (above), or a closed fold of moves, where it's
 // the share of the run of steps on the fold's lines (in the same call) that are done.
 function rowProgress(k, key){

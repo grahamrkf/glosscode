@@ -608,7 +608,7 @@
      },
      {
       "g": "G74",
-      "e": "cycle.facegroove",
+      "e": "cycle.groove.face",
       "d": "Grooving or drilling cycle on a face (Okuma)"
      },
      {
@@ -1885,7 +1885,7 @@
      },
      {
       "g": "G74",
-      "e": "cycle.facegroove",
+      "e": "cycle.groove.face",
       "d": "Face grooving or peck drilling cycle"
      },
      {

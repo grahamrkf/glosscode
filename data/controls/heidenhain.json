@@ -116,7 +116,7 @@
       "M118": { "words": "machine.handwheel.on", "short": "MHWON", "desc": "Handwheel overlay during the program" },
       "M120": { "words": "ccomp.lookahead", "short": "TRLKAH", "desc": "Look ahead LA blocks for radius compensation" },
       "M126": { "words": "axis.rotary.short", "short": "AXRSHRT", "desc": "Rotary axes take the shorter way" },
-      "M128": { "words": "tool.tcpm.on", "short": "TTCPMON", "desc": "Keep the tool tip position when tilting axes move" },
+      "M128": { "words": "tool.tcp.on", "short": "TTCPMON", "desc": "Keep the tool tip position when tilting axes move" },
       "M130": { "words": "run.untilted", "short": "UNTL", "desc": "Coordinates in this block are in the untilted system" },
       "M136": { "words": "set.fpr", "short": "FPR", "desc": "Feed in mm per revolution" },
       "M137": { "words": "set.fpm", "short": "FPM", "desc": "Feed in mm per minute again" },

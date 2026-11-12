@@ -75,7 +75,7 @@ Linux packages are not usually signed for direct downloads; `SHA256SUMS.txt` cov
 ## Making a release
 
 1. Update `VERSION` and add the version's section to `CHANGELOG.md` (`## [0.2.0] - <date>`), run `node scripts/make-ui-data.mjs`, and merge.
-2. Tag the merge commit: `git tag v0.2.0 && git push origin v0.2.0`.
+2. Tag the merge commit: `git tag v0.2.0 && git push origin v0.2.0`. Or, without pushing a tag, run the workflow by hand on `main` (Actions › Release › Run workflow): it drafts the release for `VERSION` the same way, and publishing the draft makes the tag on that commit.
 3. The release workflow (`.github/workflows/release.yml`) checks that the tag matches `VERSION`, builds and packages everything, writes `SHA256SUMS.txt`, and creates a **draft** release with the files attached and the changelog section as its notes (`scripts/release-notes.sh`). A version with a suffix (`0.2.0-beta.1`) is marked as a pre-release.
 4. Install and run each file on a clean Windows and Linux computer, then publish the draft. Publishing is what makes the update check see it.
 

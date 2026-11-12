@@ -25,10 +25,10 @@ const sameEntry = (a, b) => a && b && (a.label!=null ? a.label===b.label : a.lib
 /* Go to and back */
 function goToSub(li){
   const t = callTarget(doc[li]), rg = t!=null ? subRange(t) : null;
-  if (!rg){ if (window.libFor?.(doc[li])) { openBeside(li, true); return; } setMsg("This line doesn't call a subprogram in this file."); return; }
+  if (!rg){ if (window.libFor?.(doc[li])) { openBeside(li, true); return; } setMsg("This line calls no subprogram in this file."); return; }
   backStack.push({ li, label:doc[li][0] || "line " + (li + 1) }); if (backStack.length > MAX_BACK) backStack.shift();
   selectLine(rg[0]); drawBackBar();
-  setMsg(`At ${t}. Alt+← or the bar at the top goes back to line ${li + 1}.`);
+  setMsg(`At ${t}. Alt+← goes back to line ${li + 1}.`);
 }
 function goBack(){
   const b = backStack.pop(); if (!b) { setMsg("Nowhere to go back to."); return; }
@@ -46,7 +46,7 @@ $("bb-x").addEventListener("click", () => { backStack.length = 0; drawBackBar();
 // Opens the subprogram called on line li in the pane. From the program it starts a new trail; from a line in the
 // pane (deeper) it goes one level down, dropping any levels below that line's subprogram.
 function openBeside(li, fromProgram, level){
-  const e = entryFor(li); if (!e){ setMsg("This line doesn't call a subprogram GlossCode can show."); return; }
+  const e = entryFor(li); if (!e){ setMsg("No subprogram to show on this line."); return; }
   const tr = fromProgram ? [] : subPane.slice(0, (level ?? subPane.length - 1) + 1);
   if (sameEntry(tr.at(-1), e)) return drawSubPane();
   subPane = [...tr, e];
