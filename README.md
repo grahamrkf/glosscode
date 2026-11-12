@@ -124,7 +124,7 @@ examples/               Sample programs (Haas, Fanuc and Okuma; BRACKET_0MC.nc e
 
 ## Try it in a browser
 
-Open [`src/ui/index.html`](src/ui/index.html) in any browser. Open a sample program from the home page, click a line to edit its code, try the View menu (show one or both lines, full or short words), and use **▸ show N1000** to expand the subprogram. Press F1 on a canned cycle to see how it works. In a browser the sample programs are built in and Open shows a pretend file list; the program uses real files instead.
+Try it at **[grahamrkf.github.io/glosscode](https://grahamrkf.github.io/glosscode/)**, or open [`src/ui/index.html`](src/ui/index.html) from a copy of the repository. Open a sample program from the home page, click a line to edit its code, try the View menu (show one or both lines, full or short words, text size), and use **▸ show N1000** or **Beside** to see the subprogram. Press F5 to run the simulation. Press F1 on a canned cycle to see how it works. In a browser the sample programs are built in, Open shows a pretend file list and nothing is saved to your computer; the program uses real files instead.
 
 ## License
 

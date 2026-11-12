@@ -1,0 +1,43 @@
+# Publishes the program's screen (src/ui) to GitHub Pages as a demo that runs in a browser, with the
+# sample programs built in. Runs on every push to main that changes the screen or the logo.
+# Needs Settings › Pages › Source set to "GitHub Actions".
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ["src/ui/**", "assets/logo/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Publish demo
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Put the site together
+        run: |
+          mkdir -p _site/assets
+          cp -r src/ui/. _site/
+          cp -r assets/logo _site/assets/logo
+          # In the repository the page finds the logo two folders up; on the site it sits beside the page.
+          sed -i 's|"../../assets/logo/|"assets/logo/|' _site/index.html
+          grep -q '"assets/logo/glosscode.svg"' _site/index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
