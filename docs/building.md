@@ -51,12 +51,13 @@ ctest --test-dir build
 | Test | What it checks |
 |---|---|
 | `test_core` | Number formatting, the JSON reader, splitting lines into words, reading and writing files (line endings, `;`, Latin-1), the JSON interface, and 300 random programs that must not crash the reader or writer |
+| `test_tokens` | The core splits every program in `examples/` and `tests/cases/` into the same words as the UI (the words in `tests/golden/*.json`). If it fails after a change to `src/ui/js/reading.js` or `src/core/gc_doc.c`, make the same change in the other one |
 | `app_smoke` | The program itself: opens a sample through the app's functions, runs a core method, saves a copy with one line changed, and checks that nothing else in the file changed |
 
 Two more checks run the UI's JavaScript in Node (no browser needed); CI runs both:
 
 - `node scripts/make-goldens.mjs --check`: the files in `tests/golden/` record every word's gloss, unit and description, and every problem, for each program in `examples/` and `tests/cases/` on each machine (`tests/machines.json` says which machines each program runs on); `tests/golden/sim/` records every step and toolpath move the simulation makes of each. After changing the gloss, the checks, the simulation or the data files, run `node scripts/make-ui-data.mjs` (for data files) and then `node scripts/make-goldens.mjs` and look over the diff: it shows exactly what changed on screen.
-- `node tests/test_ui.mjs`: a few gloss and check cases on controls the samples don't cover.
+- `node tests/test_ui.mjs`: a few gloss and check cases on controls the samples don't cover, and a check that no two scripts define the same global name (they share one scope).
 
 ## Options when running
 
@@ -70,7 +71,7 @@ GlossCode.exe [--ui <file.html>] [--debug] [file]
 
 ## How the UI talks to the program
 
-In the program, `window.GlossCodeNative` is set before the page loads (`src/app/bridge.js`). The page checks for it: File › Open, Save and Save As then use the system dialogs, and the About window shows the real version and whether the copy is portable. In a browser it isn't there, and the mockup uses its sample files.
+In the program, `window.GlossCodeNative` is set before the page loads (`src/app/bridge.js`). The page checks for it: File › Open, Save and Save As then use the system dialogs, and the About window shows the real version and whether the copy is portable. In a browser it isn't there, and the page uses its sample files.
 
 | Function | What it does |
 |---|---|

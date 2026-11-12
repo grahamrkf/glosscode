@@ -49,7 +49,7 @@ The UI, data, icons, the packaging plan, the core and the program exist. Before 
 
 | | Item | Status |
 |---|---|---|
-| ✓ | UI design (the mockup), dictionary, rules, built-in library, sample programs | Done. The program's build leaves the sample programs out (`cmake/bundle-ui.cmake`); they're `GlossCode-<version>-examples.zip` |
+| ✓ | UI, dictionary, rules, built-in library, sample programs | Done. The program's build leaves the sample programs out (`cmake/bundle-ui.cmake`); they're `GlossCode-<version>-examples.zip` |
 | ✓ | App icon (`assets/logo/glosscode.ico`, PNGs) | Done |
 | ✓ | License (MIT) | Done |
 | ✓ | Where user files go, portable mode, single executable plan ([architecture.md](architecture.md#packaging)) | Written down |

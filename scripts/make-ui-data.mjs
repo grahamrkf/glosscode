@@ -16,7 +16,7 @@ if (!/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(version)) throw new Error(`VERSION
 
 // Each control's file holds what the page reads in three places: its dialect table (RULES.dialects.<id>), its gloss
 // words (DICT.machineOverrides["<id>"], ["<id>.mill"]…) and its canned cycle guide text (RULES.cycleHelp["<id>.lathe"]…).
-// "controls" in gcode-rules.json lists the files in the order the machine picker shows them.
+// "controls" in gcode-rules.json lists the files; RULES.dialects keeps that order.
 function withControls(){
   const words = json("data/gcode-words.json"), base = json("data/gcode-rules.json"), rules = {}, overrides = {};
   const files = new Set(readdirSync("data/controls").filter(f => f.endsWith(".json")));

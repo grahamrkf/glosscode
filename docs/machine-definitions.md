@@ -1,6 +1,12 @@
 # Machine definition files
 
-> **Status: proposal.** This describes how word definitions, canned cycles and check settings should be organized once there are many machines. Today they live in two shared files (`data/gcode-words.json` and `data/gcode-rules.json`); the migration plan is at the end.
+> **Status: mostly a design, partly built.** This page describes how word definitions, canned cycles and check settings should be organized once there are many machines.
+>
+> **What's built today:**
+> - One file per control in [`data/controls/`](../data/controls/) (`haas.json`, `okumau10l.json`…). Each holds the control's `dialect` (the tables the checks, simulation and Insert menu read), its own gloss `words` and its canned cycle guide text (`cycleHelp`). A control `inherits` another and overrides by key, as described under [Merging](#merging). The shared dictionary is `data/gcode-words.json` and the check messages are `rules` in `data/gcode-rules.json`. See [checks.md](checks.md#how-the-rules-and-control-files-are-laid-out).
+> - The machine picker, Generic machines and machine profiles; see [Picking a machine](#picking-a-machine-built-2026-11).
+>
+> **Not built yet:** the layered per-machine files with `extends`, the shop and personal machine folders, Export and Import, per-machine check settings and `lineRules`, contradictions with `readings`, and the GUI editor. The migration plan at the end says what comes next.
 
 ## Summary
 
@@ -144,8 +150,8 @@ What each section replaces today:
 |---|---|
 | `codes`, `addresses` | `gcode-words.json` `codes`, `address` and `machineOverrides` |
 | `numbers`, `modalGroups`, `mConflicts`, `programEnds`, `toolLength`, `toolChange`, `dwellWords`, `subCalls`, `subReturn`, `arcTolerance`, `feedPlausible`, `speedClamp`, `diameterX`, `blockSyntax`, `cycleRefZ`, `wordHints`, `wordMeaning`, `foreign`, `referenceOnly`, `keywords` | `gcode-rules.json` `dialects.<control>.<mill or lathe>` |
-| `cycles` | `dialects.<control>.<type>.cycles` and `cycleHelp`, joined into one entry per cycle |
-| `machine` | the mockup's `MACHINES` profiles |
+| `cycles` | the control file's `dialect.<type>.cycles` and `cycleHelp`, joined into one entry per cycle |
+| `machine` | the machine profiles in `settings.json` (`MACHINES` in `src/ui/js/machines.js`) |
 | `checks` | new (the severity override `checks.md` already promises) |
 
 Because each file is for one process, the `mill` / `lathe` sub-entries in today's dictionary go away: `G50` is scaling-off in `base.mill` and the RPM clamp in `base.lathe`.
@@ -407,7 +413,7 @@ There are 31 checks today. None of their logic needs to change per machine, and 
 
 | | Machine-specific? | Where it lives |
 |---|---|---|
-| The logic of each check (how to find a modal clash, an arc that doesn't close) | No | The core (`checks.c`; `checkProgram()` in the mockup) |
+| The logic of each check (how to find a modal clash, an arc that doesn't close) | No | The UI (`checkProgram()` in `src/ui/js/checks.js`) |
 | Title, message and explanation | No | `data/checks.json` in the app (renamed from the `rules` half of `gcode-rules.json`) |
 | On/off and severity | Yes | `checks` in the definition file |
 | The tables the checks read | Yes | The definition file |
@@ -450,11 +456,11 @@ Two limits keep it safe. It only writes to personal or shop files, so editing a 
 
 ## Migration
 
-1. Add the loader with merge and `extends` in the core, and a converter script that splits today's two files into `machines/base.*`, `machines/fanuc.*`, `machines/haas.*` and `machines/okuma.*`. Check that the resolved Haas, Fanuc and Okuma mill and lathe definitions match today's tables exactly.
-2. Move check titles and messages to `data/checks.json`, and point the mockup at the resolved definitions instead of `DICT` and `RULES` (the sync script embeds the resolved machines).
-3. Add the `machine` section in place of the mockup's `MACHINES` list, and the shop and personal folders. Today's sample profiles (Haas VF-2, Okuma M560-V…) become example machine profiles that extend a machine type, and **New machine profile…** gets the control tree, Generic entries, limits and option checkboxes.
+1. ~~Split the two shared files by control.~~ Done: `data/controls/<id>.json`, joined back into `DICT` and `RULES` by `scripts/make-ui-data.mjs`. Still to do: the loader with `extends` (in the UI's JavaScript, which now does all the reading), and splitting each control file by machine type.
+2. Move check titles and messages to `data/checks.json`, and point the UI at the resolved definitions instead of `DICT` and `RULES` (`make-ui-data.mjs` embeds the resolved machines).
+3. Add the `machine` section in place of the `MACHINES` list in `src/ui/js/machines.js`, and the shop and personal folders. Today's sample profiles (Haas VF-2, Okuma M560-V…) become example machine profiles that extend a machine type, and **New machine profile…** gets the control tree, Generic entries, limits and option checkboxes.
 4. Add `checks`, `lineRules` and the `process` table.
 5. The GUI editor.
 6. Thin `verified: false` bases for router, laser, plasma, waterjet and EDM, then brand layers as real programs arrive.
 
-Until step 1 lands, keep editing `data/gcode-words.json` and `data/gcode-rules.json` as today.
+Until then, edit a control's file in `data/controls/` (and the shared `data/gcode-words.json` for words every control has), then run `node scripts/make-ui-data.mjs`.

@@ -61,7 +61,7 @@ The UI is plain HTML, CSS and JavaScript loaded into the webview. It talks to th
 GlossCode ships as **one executable**. Nothing it needs to start sits beside it.
 
 - **The UI is embedded.** The HTML, CSS and JavaScript are compiled into the program (a generated C array, or a Windows resource) and served to the webview from memory.
-- **The built-in data is embedded.** `gcode-words.json`, `gcode-rules.json`, the built-in machine definitions and the built-in subprogram library are in `src/ui/data.js` (written by `scripts/make-ui-data.mjs`), which is joined into the page. They are read-only and are replaced by each release.
+- **The built-in data is embedded.** `gcode-words.json`, `gcode-rules.json`, the control files in `data/controls/` and the built-in subprogram library are in `src/ui/data.js` (written by `scripts/make-ui-data.mjs`), which is joined into the page. They are read-only and are replaced by each release.
 - **Windows**: build with `-static` so the MinGW runtime is inside the .exe, and use the webview library's built-in WebView2 loader so `WebView2Loader.dll` isn't needed. The WebView2 runtime itself comes with Windows 10 and 11.
 - **Linux**: the same single executable, linked against the system's GTK and WebKitGTK packages, which are listed as dependencies rather than bundled. An AppImage or distribution package can come later if needed.
 - A development flag (`--ui src/ui/index.html`) loads the UI page and its files from disk instead, so the page can be edited without a rebuild.
@@ -86,8 +86,10 @@ If a file named `portable` sits beside the .exe, GlossCode keeps settings, perso
 
 ## Data files
 
-- `data/gcode-words.json`: the base dictionary. Each code has a full word (`words`, such as `run.rapid`), a `short` word and a description. Codes that differ between machine types have `mill` and `lathe` entries.
-- `data/gcode-rules.json`: the checks' messages and severities, and per-control tables (Fanuc, Haas, Okuma; mill and lathe) that inherit from each other. The same tables drive the hint text for missing words (`wordHints` plus the cycle word lists), and `cycleHelp` holds the canned cycle guide's text.
-- Machine profiles (`machines/<id>.json`, see machine definitions below): name, control, dialect, mill or lathe, limits, brand codes, and `eob` (true when every line must end with `;`). The parser treats `;` as an end of block on every machine; the writer adds it when the profile says so.
-- The UI reads both from `src/ui/data.js`. After changing either (or `data/library/`, `examples/` or `VERSION`), run `node scripts/make-ui-data.mjs`; CI checks the files are up to date.
-- Machine definitions: per-machine JSON files built in layers (process base, control, model, shop machine) that hold the words, cycles and check settings for each machine. Proposed in [machine-definitions.md](machine-definitions.md).
+- `data/gcode-words.json`: the shared dictionary. Each code has a full word (`words`, such as `run.rapid`), a `short` word and a description. Codes that differ between machine types have `mill` and `lathe` entries.
+- `data/gcode-rules.json`: the checks' messages and severities (`rules`), the machine types, the file-type clues for the machine picker, the canned cycle guide's text for the Fanuc-style base, and `controls`, the list of control files.
+- `data/controls/<id>.json`: one file per control (`haas`, `okumau10l`, `fagor8055`…), each with its `dialect` (the tables the checks, the simulation and the Insert menu read; a control `inherits` another and overrides by key), its own gloss `words`, and its own `cycleHelp`. See [checks.md](checks.md#how-the-rules-and-control-files-are-laid-out).
+- `data/library/`: the built-in subprogram library.
+- Machines: the known machine models and the Generic machine for each type and control are in `src/ui/js/machines.js`; a user's own machine profiles are in `settings.json`. A profile names its control, machine type, limits, options and `eob` (true when every line must end with `;`). The parser treats `;` as an end of block on every machine; the writer adds it when the profile says so.
+- The UI reads all of this from `src/ui/data.js`. After changing any of it (or `examples/` or `VERSION`), run `node scripts/make-ui-data.mjs`; CI checks the files are up to date.
+- Layered per-machine definition files (process base, control, model, shop machine) are designed in [machine-definitions.md](machine-definitions.md) but not built yet.
