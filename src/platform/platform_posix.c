@@ -294,3 +294,59 @@ int plat_clipboard_set(void *window, const char *text)
     GTK.set(cb, text, -1);
     return 1;
 }
+
+/* ---------- Fonts and the dark title bar ----------
+   Through Pango and GTK, which the webview has loaded, looked up like the clipboard calls above. */
+
+typedef void *(*pango_map_fn)(void);
+typedef void (*pango_list_fn)(void *map, void ***families, int *n);
+typedef const char *(*pango_name_fn)(void *family);
+typedef void *(*gtk_settings_fn)(void);
+typedef void (*g_object_set_fn)(void *obj, const char *first, ...);
+
+char *plat_font_families(void)
+{
+    void *self = dlopen(NULL, RTLD_LAZY);
+    if (!self) return NULL;
+    pango_map_fn map_get;
+    pango_list_fn list;
+    pango_name_fn name;
+    g_free_fn gfree;
+    *(void **)&map_get = dlsym(self, "pango_cairo_font_map_get_default");
+    *(void **)&list = dlsym(self, "pango_font_map_list_families");
+    *(void **)&name = dlsym(self, "pango_font_family_get_name");
+    *(void **)&gfree = dlsym(self, "g_free");
+    void *map = map_get ? map_get() : NULL;
+    if (!map || !list || !name || !gfree) return NULL;
+    void **fam = NULL;
+    int n = 0;
+    list(map, &fam, &n);
+    size_t len = 0;
+    for (int i = 0; i < n; i++) len += strlen(name(fam[i])) + 1;
+    char *out = malloc(len + 1), *p = out;
+    if (out) {
+        for (int i = 0; i < n; i++) {
+            const char *s = name(fam[i]);
+            size_t k = strlen(s);
+            memcpy(p, s, k);
+            p += k;
+            *p++ = '\n';
+        }
+        *p = 0;
+    }
+    gfree(fam);
+    return out;
+}
+
+void plat_set_dark_frame(void *window, int dark)
+{
+    (void)window;
+    void *self = dlopen(NULL, RTLD_LAZY);
+    if (!self) return;
+    gtk_settings_fn get;
+    g_object_set_fn set;
+    *(void **)&get = dlsym(self, "gtk_settings_get_default");
+    *(void **)&set = dlsym(self, "g_object_set");
+    void *st = get ? get() : NULL;
+    if (st && set) set(st, "gtk-application-prefer-dark-theme", dark ? 1 : 0, (void *)0);
+}

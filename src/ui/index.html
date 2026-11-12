@@ -10,13 +10,14 @@
      what an earlier one defines. cmake/bundle-ui.cmake joins them back into one page for the program and
      leaves samples.js out. data.js and samples.js are written by scripts/make-ui-data.mjs. -->
 <link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/convert.css">
 <link rel="stylesheet" href="css/hole-pattern.css">
 <link rel="stylesheet" href="css/insert.css">
 <link rel="stylesheet" href="css/library.css">
 <link rel="stylesheet" href="css/about.css">
-<link rel="stylesheet" href="css/text-size.css">
+<link rel="stylesheet" href="css/appearance.css">
 </head>
 <body>
     <div class="app" id="app">
@@ -323,15 +324,19 @@
       </div>
 
       <div class="dim" id="tdlg" hidden>
-        <div class="dlg tdlg" role="dialog" aria-label="Text size">
-          <div class="tbar"><span class="ttl" style="padding-left:2px">Text size</span><span class="cap"><span id="t-x">&#x2715;</span></span></div>
+        <div class="dlg tdlg" role="dialog" aria-label="Appearance">
+          <div class="tbar"><span class="ttl" style="padding-left:2px">Appearance</span><span class="cap"><span id="t-x">&#x2715;</span></span></div>
           <div class="tsbody">
-            <label for="t-code">Code text</label><select id="t-code"></select>
-            <label for="t-gloss">Gloss text</label><select id="t-gloss"></select>
+            <label for="t-theme">Theme</label><select id="t-theme"><option value="system">Same as the system</option><option value="light">Light</option><option value="dark">Dark</option></select>
+            <label for="t-codeFont">Code font</label><span class="tsrow"><select id="t-codeFont" class="tsfont"></select><select id="t-code" aria-label="Code text size"></select></span>
+            <label for="t-glossFont">Gloss font</label><span class="tsrow"><select id="t-glossFont" class="tsfont"></select><select id="t-gloss" aria-label="Gloss text size"></select></span>
             <label for="t-zoom">Zoom (whole window)</label><select id="t-zoom"></select>
-            <p class="tsnote">Ctrl+= and Ctrl+- (or Ctrl+wheel) zoom in and out. Ctrl+0 goes back to 100%.</p>
+            <div class="tsprev" id="t-prev" aria-hidden="true"></div>
+            <div class="tshead" id="t-colhead">Colours</div>
+            <div class="tscols" id="t-cols"></div>
+            <p class="tsnote">Ctrl+= and Ctrl+- (or Ctrl+wheel) zoom in and out. Ctrl+0 goes back to 100%. Colours are kept separately for the light and dark themes.</p>
           </div>
-          <div class="foot tsfoot"><button class="btn" id="t-reset">Reset</button><span></span><button class="btn pri" id="t-close">Close</button></div>
+          <div class="foot tsfoot"><button class="btn" id="t-reset">Reset all</button><span></span><button class="btn pri" id="t-close">Close</button></div>
         </div>
       </div>
     </div>
@@ -363,7 +368,7 @@
 <script src="js/tabs.js"></script>
 <script src="js/convert.js"></script>
 <script src="js/about.js"></script>
-<script src="js/text-size.js"></script>
+<script src="js/appearance.js"></script>
 <script src="js/subprograms.js"></script>
 <script src="js/start.js"></script>
 </body>

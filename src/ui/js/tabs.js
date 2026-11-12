@@ -27,6 +27,7 @@ async function loadSettings(){
     window.loadDraftDismissed?.(o.draftDismissed);
     if (o.folding && typeof o.folding==="object") window.loadFoldPrefs?.(o.folding);
     if (o.text && typeof o.text==="object") window.loadTextPrefs?.(o.text);
+    if (o.appearance && typeof o.appearance==="object") window.loadLookPrefs?.(o.appearance);
     window.loadMachines?.(o.machines, o.recentMachines);
     SETTINGS.recent = Array.isArray(o.recent) ? o.recent.filter(r => r && typeof r.path==="string" && typeof r.name==="string").slice(0, MAX_RECENT) : [];
     SETTINGS.extDefaults = o.extDefaults && typeof o.extDefaults==="object" && !Array.isArray(o.extDefaults) ? { ...o.extDefaults } : {};
@@ -408,7 +409,7 @@ function drawHome(){
       <div class="hacts"><button class="btn pri" data-act="new">New program…</button><button class="btn" data-act="open">Open…</button></div>
       <h3>Recent programs</h3>
       ${rec.length ? `<div class="rlist">${rec.map(r => ri(r)).join("")}</div>` : `<div class="none">Programs you open or save show up here, with the machine you used.</div>`}
-      ${samples.length ? `<h3>Sample programs <span style="font-weight:400;color:#888">(browser demo only)</span></h3><div class="rlist">${samples.map(n => ri({ path:n, name:n, machine:FILES[n].machine }, true)).join("")}</div>` : ""}
+      ${samples.length ? `<h3>Sample programs <span style="font-weight:400;color:var(--c-888888)">(browser demo only)</span></h3><div class="rlist">${samples.map(n => ri({ path:n, name:n, machine:FILES[n].machine }, true)).join("")}</div>` : ""}
     </div>
     <div class="side2">
       <h3>Default machine by file type</h3>
@@ -481,6 +482,7 @@ window.saveTimelineModes = m => { SETTINGS.timeline = m; saveSettings(); };
 window.saveDraftDismissed = list => { SETTINGS.draftDismissed = list; saveSettings(); };
 window.saveFoldPrefs = p => { SETTINGS.folding = p; saveSettings(); };
 window.saveTextPrefs = p => { SETTINGS.text = p; saveSettings(); };
+window.saveLookPrefs = p => { SETTINGS.appearance = p; saveSettings(); };
 window.drawHome = drawHome;
 window.openSample = openSample;
 window.openProgram = openProgram;

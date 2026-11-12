@@ -513,6 +513,52 @@ static void bind_clipboard(const char *id, const char *req, void *arg)
     gc_json_free(a);
 }
 
+/* gcFonts(): the installed font family names, sorted, each once: ["Arial", "Cascadia Mono", ...]. */
+static int cmp_name(const void *a, const void *b)
+{
+    return strcmp(*(char *const *)a, *(char *const *)b);
+}
+static void bind_fonts(const char *id, const char *req, void *arg)
+{
+    (void)req;
+    (void)arg;
+    char *all = plat_font_families();
+    size_t n = 0;
+    for (const char *p = all; p && *p; p++) n += *p == '\n';
+    char **names = calloc(n + 1, sizeof *names);
+    size_t k = 0;
+    if (all && names)
+        for (char *p = all, *e; *p && (e = strchr(p, '\n')) != NULL; p = e + 1) {
+            *e = 0;
+            if (*p) names[k++] = p;
+        }
+    if (k) qsort(names, k, sizeof *names, cmp_name);
+    gc_buf b;
+    gc_buf_init(&b);
+    gc_buf_putc(&b, '[');
+    for (size_t i = 0, w = 0; i < k; i++) {
+        if (i && strcmp(names[i], names[i - 1]) == 0) continue;
+        if (w++) gc_buf_putc(&b, ',');
+        gc_buf_json_str(&b, names[i]);
+    }
+    gc_buf_putc(&b, ']');
+    reply(id, 1, gc_buf_str(&b));
+    gc_buf_free(&b);
+    free(names);
+    free(all);
+}
+
+/* gcSetDark(dark): the title bar and frame to match the app's light or dark theme. */
+static void bind_set_dark(const char *id, const char *req, void *arg)
+{
+    (void)arg;
+    gc_json *a = args_of(req);
+    const gc_json *v = gc_json_at(a, 0);
+    plat_set_dark_frame(webview_get_window(W), gc_json_truthy(v));
+    gc_json_free(a);
+    reply(id, 1, "null");
+}
+
 /* gcQuit(): closes the window (used by the smoke test, tests/app_smoke.html). */
 static void bind_quit(const char *id, const char *req, void *arg)
 {
@@ -636,6 +682,8 @@ int gc_main(int argc, char **argv)
     webview_bind(W, "gcOpenUrl", bind_open_url, NULL);
     webview_bind(W, "gcSetTitle", bind_set_title, NULL);
     webview_bind(W, "gcClipboard", bind_clipboard, NULL);
+    webview_bind(W, "gcFonts", bind_fonts, NULL);
+    webview_bind(W, "gcSetDark", bind_set_dark, NULL);
     webview_bind(W, "gcQuit", bind_quit, NULL);
     if (ui_url) webview_navigate(W, ui_url);
     else webview_set_html(W, (const char *)gc_find_resource("ui/index.html")->data);

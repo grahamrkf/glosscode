@@ -80,5 +80,20 @@ eq([e.boxes[0].h, e.boxes[0].tool], [0.1, 0.0625], "a G47 box is J tall, with th
 A.use("gen.mill.haas", "words");
 eq(["(1/4 END MILL)", "(.0625 ENGRAVER)", "(10MM DRILL)", "(#2 CENTER DRILL)"].map(c => A.toolDiameter([c], "inch")?.toFixed(4) ?? null), ["0.2500", "0.0625", "0.3937", null], "tool diameters from comments");
 
+// Colours: none written as #rrggbb outside css/theme.css, and theme.css matches scripts/make-theme.mjs.
+{
+  const T = await import("../scripts/make-theme.mjs");
+  const raw = [];
+  for (const p of T.sources()){
+    const kind = p.endsWith(".css") ? "css" : "js";
+    readFileSync(p, "utf8").split("\n").forEach((l, i) => {
+      if (kind==="js" && T.isCommentLine(l)) return;
+      for (const m of l.matchAll(T.RAW[kind])) raw.push(`${p.replace(/.*src\/ui\//, "")}:${i + 1} ${m[0]}`);
+    });
+  }
+  eq(raw, [], "no raw #rrggbb colours (run node scripts/make-theme.mjs --convert)");
+  eq(readFileSync(new URL("../src/ui/css/theme.css", import.meta.url), "utf8")===T.themeCss(), true, "css/theme.css is up to date (run node scripts/make-theme.mjs)");
+}
+
 if (failed){ console.error(`test_ui: ${failed} failed`); process.exit(1); }
 console.log("test_ui: all passed");

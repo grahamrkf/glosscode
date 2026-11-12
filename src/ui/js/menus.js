@@ -66,7 +66,12 @@ const MENUS = {
       R("Never (only G00)", () => foldFast===0, () => setFoldFast(0))
     ] },
     "-",
-    { label:"Text size…", fn:() => openTextSize() },
+    { label:"Theme", sub:[
+      R("Same as the system", () => lookTheme()==="system", () => setLookTheme("system")),
+      R("Light", () => lookTheme()==="light", () => setLookTheme("light")),
+      R("Dark", () => lookTheme()==="dark", () => setLookTheme("dark"))
+    ] },
+    { label:"Appearance…", fn:() => openAppearance() },
     { label:"Zoom in", sc:"Ctrl+=", fn:() => zoomStep(1) },
     { label:"Zoom out", sc:"Ctrl+-", fn:() => zoomStep(-1) },
     { label:"Actual size", sc:"Ctrl+0", fn:() => zoomStep(0) }
