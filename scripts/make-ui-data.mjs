@@ -1,6 +1,7 @@
 // Writes the UI's two data files from the files they come from, so the page never holds a copy of its own:
-//   src/ui/data.js     the dictionary (data/gcode-words.json), the rules (data/gcode-rules.json), the built-in
-//                      subprogram library (data/library/*.json) and the version (VERSION, for Help › About)
+//   src/ui/data.js     the dictionary (data/gcode-words.json), the rules (data/gcode-rules.json), each control's
+//                      own file (data/controls/<id>.json, joined into the two), the built-in subprogram library
+//                      (data/library/*.json) and the version (VERSION, for Help › About)
 //   src/ui/samples.js  the sample programs (examples/) and a shop's example library
 //                      (docs/subprogram-library/examples/*.json), which only the page opened in a browser shows:
 //                      the program's build leaves this file out (cmake/bundle-ui.cmake)
@@ -13,10 +14,34 @@ const libDir = (dir, source) => readdirSync(dir).filter(f => f.endsWith(".json")
 const version = readFileSync("VERSION", "utf8").trim();
 if (!/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(version)) throw new Error(`VERSION "${version}" isn't MAJOR.MINOR.PATCH`);
 
+// Each control's file holds what the page reads in three places: its dialect table (RULES.dialects.<id>), its gloss
+// words (DICT.machineOverrides["<id>"], ["<id>.mill"]…) and its canned cycle guide text (RULES.cycleHelp["<id>.lathe"]…).
+// "controls" in gcode-rules.json lists the files in the order the machine picker shows them.
+function withControls(){
+  const words = json("data/gcode-words.json"), base = json("data/gcode-rules.json"), rules = {}, overrides = {};
+  const files = new Set(readdirSync("data/controls").filter(f => f.endsWith(".json")));
+  for (const [k, v] of Object.entries(base)){
+    if (k !== "controls"){ rules[k] = v; continue; }
+    rules.dialects = {};
+    for (const id of v){
+      if (!files.delete(`${id}.json`)) throw new Error(`"controls" in data/gcode-rules.json names ${id}, but there's no data/controls/${id}.json`);
+      const c = json(`data/controls/${id}.json`);
+      const own = o => Object.keys(o || {}).every(key => key === id || key.startsWith(id + "."));
+      if (!own(c.words) || !own(c.cycleHelp)) throw new Error(`data/controls/${id}.json: words and cycleHelp keys must be "${id}" or "${id}.<type>"`);
+      rules.dialects[id] = c.dialect;
+      Object.assign(overrides, c.words);
+      Object.assign(base.cycleHelp, c.cycleHelp);
+    }
+  }
+  if (files.size) throw new Error(`Add ${[...files].map(f => f.replace(/\.json$/, "")).join(", ")} to "controls" in data/gcode-rules.json`);
+  return { DICT:{ ...words, machineOverrides:overrides }, RULES:rules };
+}
+const { DICT, RULES } = withControls();
+
 const head = what => `// ${what}\n// Written by scripts/make-ui-data.mjs: edit the files named there and run it, not this file.\n`;
 writeFileSync("src/ui/data.js", head("The UI's built-in data: dictionary, rules, built-in subprogram library and version.") + [
-  `const DICT = ${JSON.stringify(json("data/gcode-words.json"))};`,
-  `const RULES = ${JSON.stringify(json("data/gcode-rules.json"))};`,
+  `const DICT = ${JSON.stringify(DICT)};`,
+  `const RULES = ${JSON.stringify(RULES)};`,
   `const BUILTIN_LIBRARY = ${JSON.stringify(libDir("data/library", "builtin"))};`,
   `const APP_VERSION = ${JSON.stringify(version)};`, ""].join("\n"));
 

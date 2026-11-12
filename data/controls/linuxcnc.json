@@ -1,0 +1,141 @@
+{
+  "dialect": {
+    "label": "LinuxCNC (2.9)",
+    "inherits": "fanuc",
+    "verified": true,
+    "source": { "manual": "LinuxCNC Documentation V2.9.7", "revision": "22 Oct. 2025", "section": "Chapter 11 G-code Programming (11.4 to 11.8)" },
+    "router": {},
+    "mill": {
+      "callDepth": {"total": 10, "source": "LinuxCNC: 10 levels", "verified": false},
+      "numbers": { "noDecimal": "asWritten" },
+      "modalGroups": {
+        "motion":       ["G00", "G01", "G02", "G03", "G33", "G73", "G74", "G76", "G80", "G81", "G82", "G83", "G84", "G85", "G86", "G87", "G88", "G89"],
+        "canned cycle": null,
+        "tool length":  ["G43", "G49"],
+        "exact stop":   ["G61", "G64"],
+        "stroke check": null, "scaling": null, "macro modal": null, "rotation": null, "polar": null
+      },
+      "mPerBlock": 4,
+      "dwellWords": ["P"],
+      "dwellNoDecimal": null,
+      "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": null },
+      "cycles": {
+        "G73": { "name": "High-speed peck",  "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G74": { "name": "Left-hand tap, floating holder", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+        "G76": null,
+        "G81": { "name": "Drill",            "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G82": { "name": "Drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G83": { "name": "Peck drill",       "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G84": { "name": "Tap, floating holder", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "L"], "feed": true, "spindle": true },
+        "G85": { "name": "Bore, feed out",   "requires": ["Z", "R"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G86": { "name": "Bore, stop, rapid out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true },
+        "G87": null, "G88": null,
+        "G89": { "name": "Bore with dwell",  "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "L"], "feed": true, "spindle": true }
+      },
+      "wordHints": { "G43": null, "G44": null, "G41": null, "G42": null },
+      "foreign": {
+        "G76": { "severity": "error",   "text": "On LinuxCNC G76 is lathe threading (G76 P Z I J K in the ZX plane), not fine boring." },
+        "G87": { "severity": "warning", "text": "LinuxCNC accepts G87 but doesn't implement it, so what it does is undefined." },
+        "G88": { "severity": "warning", "text": "LinuxCNC accepts G88 but doesn't implement it, so what it does is undefined." },
+        "G44": { "severity": "error",   "text": "LinuxCNC has no G44. Use G43 with a negative offset, or G43.1." },
+        "G50": { "severity": "error",   "text": "LinuxCNC has no scaling (G50/G51)." },
+        "G51": { "severity": "error",   "text": "LinuxCNC has no scaling (G50/G51)." },
+        "G68": { "severity": "error",   "text": "LinuxCNC has no G68 rotation. Rotate with G10 L2 R on the work offset." },
+        "G69": { "severity": "error",   "text": "LinuxCNC has no G69. Rotation is set on the work offset with G10 L2 R." },
+        "G15": { "severity": "error",   "text": "LinuxCNC has no G15/G16 polar mode. Polar moves use @ for the distance and ^ for the angle." },
+        "G16": { "severity": "error",   "text": "LinuxCNC has no G15/G16 polar mode. Polar moves use @ for the distance and ^ for the angle." },
+        "G65": { "severity": "error",   "text": "LinuxCNC has no G65 macro call. Call a subroutine with O100 CALL [args]." },
+        "G66": { "severity": "error",   "text": "LinuxCNC has no modal macro call (G66)." },
+        "G67": { "severity": "error",   "text": "LinuxCNC has no G67." },
+        "G31": { "severity": "error",   "text": "LinuxCNC probes with G38.2 to G38.5, not G31." },
+        "G12": { "severity": "error",   "text": "LinuxCNC has no circular pocket cycle G12." },
+        "G13": { "severity": "error",   "text": "LinuxCNC has no circular pocket cycle G13." },
+        "M29": { "severity": "error",   "text": "LinuxCNC rigid taps with G33.1, not M29." }
+      }
+    },
+    "lathe": {
+      "callDepth": {"total": 10, "source": "LinuxCNC: 10 levels", "verified": false},
+      "numbers": { "noDecimal": "asWritten" },
+      "modalGroups": {
+        "motion":       ["G00", "G01", "G02", "G03", "G33", "G70", "G71", "G72", "G76", "G80"],
+        "distance":     ["G90", "G91"],
+        "feed mode":    ["G93", "G94", "G95"],
+        "cycle return": ["G98", "G99"],
+        "diameter mode":["G07", "G08"]
+      },
+      "mPerBlock": 4,
+      "dwellWords": ["P"],
+      "dwellNoDecimal": null,
+      "speedClamp": null,
+      "subCalls": { "M98": { "word": "P", "target": "program" }, "G65": null },
+      "cycles": {
+        "G90": null, "G92": null, "G94": null, "G73": null, "G74": null, "G75": null,
+        "G70": { "name": "Finish a profile", "requires": ["Q"], "meaning": { "Q": "the O-subroutine that holds the profile" }, "optional": ["X", "Z", "D", "E", "P"], "modal": false, "spindle": true },
+        "G71": { "name": "Rough a profile along Z", "requires": ["Q"], "meaning": { "Q": "the O-subroutine that holds the profile" }, "optional": ["X", "Z", "D", "I", "R"], "modal": false, "spindle": true },
+        "G72": { "name": "Rough a profile on the face", "requires": ["Q"], "meaning": { "Q": "the O-subroutine that holds the profile" }, "optional": ["X", "Z", "D", "I", "R"], "modal": false, "spindle": true },
+        "G76": { "name": "Threading", "requires": ["P", "Z", "I", "J", "K"], "meaning": { "P": "the thread pitch", "I": "the thread peak offset", "J": "the first cut depth", "K": "the full thread depth" }, "optional": ["R", "Q", "H", "E", "L"], "modal": false, "spindle": true }
+      },
+      "wordHints": { "G32": null, "G33": { "requires": ["Z", "K"] } },
+      "foreign": {
+        "G91": null,
+        "G32": { "severity": "error",   "text": "LinuxCNC has no G32. Cut a thread pass with G33 K (the pitch) or the G76 cycle." },
+        "G50": { "severity": "error",   "text": "LinuxCNC has no G50. Clamp the spindle speed in constant surface speed with G96 D." },
+        "G65": { "severity": "error",   "text": "LinuxCNC has no G65 macro call. Call a subroutine with O100 CALL [args]." },
+        "G98": { "severity": "info",    "text": "On LinuxCNC G98 is the canned-cycle return to the start level, not feed per minute (that's G94)." },
+        "G99": { "severity": "info",    "text": "On LinuxCNC G99 is the canned-cycle return to R, not feed per revolution (that's G95)." }
+      }
+    }
+  },
+  "words": {
+    "linuxcnc.lathe": {
+      "G90": { "words": "set.abs", "short": "ABS", "desc": "Absolute positions" },
+      "G91": { "words": "set.incr", "short": "INCR", "desc": "Incremental positions" },
+      "G92": { "words": "set.coords", "short": "SETC", "desc": "Shift the coordinates so the current point reads as given" },
+      "G94": { "words": "set.fpm", "short": "FPM", "desc": "Feed per minute" },
+      "G95": { "words": "set.fpr", "short": "FPR", "desc": "Feed per revolution" },
+      "G98": { "words": "cycle.return.init", "short": "RETINIT", "desc": "Cycle returns to the start level" },
+      "G99": { "words": "cycle.return.r", "short": "RETR", "desc": "Cycle returns to R" },
+      "G70": { "words": "cycle.finish", "short": "FIN", "desc": "Finish the profile in an O-subroutine" },
+      "G71": { "words": "cycle.rough", "short": "RUF", "desc": "Rough the profile along Z" },
+      "G72": { "words": "cycle.facerough", "short": "FRUF", "desc": "Rough the profile on the face" },
+      "G76": { "words": "cycle.thread", "short": "THDCY", "desc": "Threading cycle" }
+    },
+
+    "linuxcnc": {
+      "G43.1": { "words": "tlen.dynamic", "short": "TLDYN", "desc": "Dynamic tool length offset from the Z word" },
+      "G38.2": { "words": "run.probe", "short": "PROBE", "desc": "Probe toward the work, alarm if no contact" },
+      "M07": { "words": "cool.mist", "short": "CMST", "desc": "Mist coolant on" },
+      "G07": { "words": "set.diameter", "short": "DIA", "desc": "Lathe: X is a diameter" },
+      "G08": { "words": "set.radius", "short": "RAD", "desc": "Lathe: X is a radius" },
+      "G10": { "words": "set.data", "short": "DATASET", "desc": "Set offsets or tool data from the program" },
+      "G33": { "words": "run.thread", "short": "THD", "desc": "Spindle-synchronized move (K is the distance per turn)" },
+      "G52": { "words": "set.local", "short": "LOCAL", "desc": "Local coordinate shift" },
+      "G61": { "words": "set.exactstop", "short": "EXSTOP", "desc": "Exact path mode" },
+      "G64": { "words": "set.blend", "short": "BLND", "desc": "Path blending (P is the tolerance)" },
+      "G93": { "words": "set.invtime", "short": "INVT", "desc": "Inverse time feed" },
+      "M19": { "words": "spindle.orient", "short": "SORI", "desc": "Orient the spindle" },
+      "M48": { "words": "machine.overrides.on", "short": "MOVRON", "desc": "Speed and feed overrides on" },
+      "M49": { "words": "machine.overrides.off", "short": "MOVROFF", "desc": "Speed and feed overrides off" },
+      "M61": { "words": "tool.set", "short": "TSET", "desc": "Set the current tool number without a tool change" },
+      "M62": { "words": "machine.output.onsync", "short": "MOUTONS", "desc": "Digital output on, synced with motion" },
+      "M63": { "words": "machine.output.offsync", "short": "MOUTOFFS", "desc": "Digital output off, synced with motion" },
+      "M64": { "words": "machine.output.on", "short": "MOUTON", "desc": "Digital output on now" },
+      "M65": { "words": "machine.output.off", "short": "MOUTOFF", "desc": "Digital output off now" },
+      "M66": { "words": "machine.wait.input", "short": "MWAITIN", "desc": "Wait for an input" },
+      "M67": { "words": "machine.analog.sync", "short": "MAOSYNC", "desc": "Analog output, synced with motion" },
+      "M68": { "words": "machine.analog.out", "short": "MAOUT", "desc": "Analog output now" },
+      "M70": { "words": "set.modes.save", "short": "MDSSAVE", "desc": "Save the modal state" },
+      "M71": { "words": "set.modes.forget", "short": "MDSFRGT", "desc": "Discard the saved modal state" },
+      "M72": { "words": "set.modes.restore", "short": "MDSRSTO", "desc": "Restore the saved modal state" },
+      "M73": { "words": "set.modes.autorestore", "short": "MDSAREST", "desc": "Save the modal state and restore it when the subroutine returns" }
+    }
+  },
+  "cycleHelp": {
+    "linuxcnc.lathe": {
+      "G76": { "sketch": "thread", "about": "Cuts a whole thread in one line. Passes get shallower until the full depth K is reached. All the words are distances as written; there are no packed digit codes.", "labels": { "height": "K", "first": "J" }, "words": { "P": ["0.0625", "Thread pitch: the distance per turn.", "PITCH"], "Z": ["-1.", "Where the thread ends."], "I": ["-0.01", "Thread peak offset from the start X. Negative for an outside thread.", "PEAK"], "J": ["0.005", "Depth of the first cut.", "CUT1"], "K": ["0.04", "Full thread depth.", "THDDEPTH"], "R": ["1.5", "Depth degression: how fast the cuts get shallower.", "DEGRESS"], "Q": ["29.5", "Compound slide angle, in degrees.", "COMPOUND"], "H": ["1", "Number of spring passes.", "SPRING"], "E": ["0.05", "Taper distance at each end.", "TAPERLEN"], "L": ["3", "Which ends get the taper: 0 none, 1 entry, 2 exit, 3 both.", "TAPEREND"] } },
+      "G70": { "sketch": "finish", "about": "Finishes the profile in an O-subroutine named by Q, after roughing with G71 or G72.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0", "Starting offset from the profile.", "OFFSET"], "E": ["0", "Finishing pass offset.", "FINOFS"], "P": ["1", "Number of finishing passes.", "PASSES"] } },
+      "G71": { "sketch": "rough", "about": "Roughs along Z to the profile in an O-subroutine named by Q, leaving D for finishing.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0.01", "Finishing allowance left on the profile.", "ALLOW"], "I": ["0.05", "Depth of each roughing pass.", "CUTDEPTH"], "R": ["0.01", "Retract distance after each pass.", "RETRACT"] } },
+      "G72": { "sketch": "face-rough", "about": "Like G71, but roughs on the face, along X.", "words": { "Q": ["100", "The O-subroutine that holds the profile.", "PROFILE"], "X": ["1.", "Start X (the current X if left out)."], "Z": ["0.1", "Start Z (the current Z if left out)."], "D": ["0.01", "Finishing allowance left on the profile.", "ALLOW"], "I": ["0.05", "Depth of each roughing pass.", "CUTDEPTH"], "R": ["0.01", "Retract distance after each pass.", "RETRACT"] } }
+    }
+  }
+}

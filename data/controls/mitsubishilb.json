@@ -1,0 +1,48 @@
+{
+  "dialect": {
+    "label": "Mitsubishi M800/M80 lathe, G code list 3, 5 or 7",
+    "about": "A Mitsubishi lathe whose cmdtyp parameter picks G code list 3, 5 or 7, close to Fanuc system B: G33 threads, G77/G78/G79 cycles, G92 spindle clamp, G94/G95 feeds.",
+    "inherits": "mitsubishi",
+    "inheritWords": true,
+    "verified": false,
+    "lathe": {
+      "source": { "manual": "Mitsubishi M800/M80/E80/C80 Series Programming Manual, Lathe System IB-1501275-U", "section": "G code lists 3, 5 and 7 (pp. 23-26); see docs/manual-reviews/mitsubishi-m800-m700.md" },
+      "modalGroups": {
+        "motion":    ["G00", "G01", "G02", "G03", "G33", "G77", "G78", "G79"],
+        "distance":  ["G90", "G91"],
+        "feed mode": ["G94", "G95"]
+      },
+      "speedClamp": { "code": "G92", "word": "S" },
+      "cycles": {
+        "G90": null, "G92": null, "G94": null,
+        "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+        "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+        "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+      },
+      "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+      "foreign": {
+        "G91": null,
+        "G32": { "severity": "error", "text": "In G code system B threading is G33, not G32 (system A)." },
+        "G50": { "severity": "warning", "text": "In G code system B G92 sets coordinates and the spindle limit; G50 is system A." },
+        "G98": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." },
+        "G99": { "severity": "info", "text": "In G code system B G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." }
+      }
+    }
+  },
+  "words": {
+    "mitsubishilb.lathe": {
+      "G33": { "words": "run.thread", "short": "THD", "desc": "Single thread cut (systems B and C)" },
+      "G77": { "words": "cycle.turn", "short": "TURN", "desc": "OD/ID turning cycle" },
+      "G78": { "words": "cycle.thread", "short": "THDCY", "desc": "Threading cycle" },
+      "G79": { "words": "cycle.face", "short": "FACE", "desc": "End facing cycle" },
+      "G90": { "words": "set.abs", "short": "ABS", "desc": "Absolute positions" },
+      "G91": { "words": "set.incr", "short": "INCR", "desc": "Incremental positions" },
+      "G92": { "words": "set.smax", "short": "SMAX", "desc": "Clamp spindle to a max RPM (G50 in system A)" },
+      "G92.shift": { "words": "set.coords", "short": "SETC", "desc": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)" },
+      "G94": { "words": "set.fpm", "short": "FPM", "desc": "Feed per minute" },
+      "G95": { "words": "set.fpr", "short": "FPR", "desc": "Feed per revolution" },
+      "G98": { "words": "cycle.return.init", "short": "RETINIT", "desc": "Drilling cycle returns to the start level" },
+      "G99": { "words": "cycle.return.r", "short": "RETR", "desc": "Drilling cycle returns to the R level" }
+    }
+  }
+}

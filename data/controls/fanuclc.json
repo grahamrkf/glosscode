@@ -1,0 +1,67 @@
+{
+  "dialect": {
+    "label": "Fanuc lathe, G code system C",
+    "about": "A Fanuc lathe with parameter 3401 set to G code system C: as system B, but inch and metric are G70/G71, the repetitive cycles are G72 to G78 and the turning cycles G20/G21/G24.",
+    "inherits": "fanuc",
+    "inheritWords": true,
+    "verified": false,
+    "lathe": {
+      "source": { "manual": "FANUC Series 0i-MODEL F Operator's Manual, Lathe System B-64604EN-1/01 (and 0i-D B-64304EN-1/02)", "section": "G code list for systems A, B and C (pp. 12-15); see docs/manual-reviews/fanuc-lathe-and-series-0.md" },
+      "modalGroups": {
+        "motion":    ["G00", "G01", "G02", "G03", "G33", "G20", "G21", "G24"],
+        "distance":  ["G90", "G91"],
+        "feed mode": ["G94", "G95"],
+        "units":     ["G70", "G71"]
+      },
+      "unitCodes": { "inch": "G70", "mm": "G71" },
+      "cycleCatsByName": true,
+      "speedClamp": { "code": "G92", "word": "S" },
+      "cycles": {
+        "G70": null, "G71": null, "G90": null, "G92": null, "G94": null,
+        "G72": { "name": "Finish contour", "requires": ["P", "Q"], "optional": ["F", "S"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+        "G73": { "name": "OD/ID roughing", "requires": ["P", "Q"], "optional": ["U", "W", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true, "note": "Two-block format on most Fanuc controls; this table checks the second block." },
+        "G74": { "name": "Face roughing", "requires": ["P", "Q"], "optional": ["U", "W", "F", "S", "T", "R"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+        "G75": { "name": "Pattern repeat", "requires": ["P", "Q"], "optional": ["U", "W", "R", "F", "S", "T"], "labels": ["P", "Q"], "modal": false, "spindle": true },
+        "G76": { "name": "Face peck or groove", "requires": ["Z"], "optional": ["X", "U", "W", "P", "Q", "R", "F"], "meaning": {"Z": "the bottom of the peck"}, "modal": false, "feed": true, "spindle": true },
+        "G77": { "name": "OD/ID peck groove", "requires": ["X"], "optional": ["Z", "U", "W", "P", "Q", "R", "F"], "meaning": {"X": "the groove bottom diameter"}, "modal": false, "feed": true, "spindle": true },
+        "G78": { "name": "Threading", "requires": ["X", "Z", "P", "Q", "F"], "optional": ["R", "U", "W"], "modal": false, "spindle": true, "leadF": true },
+        "G20": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+        "G21": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+        "G24": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+      },
+      "wordHints": { "G32": null, "G33": { "requires": ["Z", "F"] } },
+      "foreign": {
+        "G91": null,
+        "G32": { "severity": "error", "text": "In G code system C threading is G33, not G32 (system A)." },
+        "G50": { "severity": "warning", "text": "In G code system C G92 sets coordinates and the spindle limit; G50 is system A." },
+        "G98": { "severity": "info", "text": "In G code system C G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." },
+        "G99": { "severity": "info", "text": "In G code system C G98/G99 pick the drilling cycle return level; feed per minute and per rev are G94/G95." }
+      }
+    }
+  },
+  "words": {
+    "fanuclc.lathe": {
+      "G33": { "words": "run.thread", "short": "THD", "desc": "Single thread cut (systems B and C)" },
+      "G90": { "words": "set.abs", "short": "ABS", "desc": "Absolute positions" },
+      "G91": { "words": "set.incr", "short": "INCR", "desc": "Incremental positions" },
+      "G92": { "words": "set.smax", "short": "SMAX", "desc": "Clamp spindle to a max RPM (G50 in system A)" },
+      "G92.shift": { "words": "set.coords", "short": "SETC", "desc": "Set the coordinates: the tool's current position becomes the X and Z on this line, shifting the zero (with G91, by the amounts given)" },
+      "G94": { "words": "set.fpm", "short": "FPM", "desc": "Feed per minute" },
+      "G95": { "words": "set.fpr", "short": "FPR", "desc": "Feed per revolution" },
+      "G98": { "words": "cycle.return.init", "short": "RETINIT", "desc": "Drilling cycle returns to the start level" },
+      "G99": { "words": "cycle.return.r", "short": "RETR", "desc": "Drilling cycle returns to the R level" },
+      "G20": { "words": "cycle.turn", "short": "TURN", "desc": "OD/ID turning cycle" },
+      "G21": { "words": "cycle.thread", "short": "THDCY", "desc": "Threading cycle" },
+      "G24": { "words": "cycle.face", "short": "FACE", "desc": "End facing cycle" },
+      "G70": { "words": "set.inch", "short": "INCH", "desc": "Inch units (system C)" },
+      "G71": { "words": "set.mm", "short": "MM", "desc": "Millimeter units (system C)" },
+      "G72": { "words": "cycle.finish", "short": "FIN", "desc": "Finishing cycle" },
+      "G73": { "words": "cycle.rough", "short": "RUF", "desc": "OD/ID roughing cycle" },
+      "G74": { "words": "cycle.facerough", "short": "FRUF", "desc": "Face roughing cycle" },
+      "G75": { "words": "cycle.pathrough", "short": "PRUF", "desc": "Irregular-path roughing cycle" },
+      "G76": { "words": "cycle.facegroove", "short": "FGRV", "desc": "Face grooving or peck drilling cycle" },
+      "G77": { "words": "cycle.groove", "short": "GRV", "desc": "OD/ID grooving cycle" },
+      "G78": { "words": "cycle.thread", "short": "THDCY", "desc": "Threading cycle" }
+    }
+  }
+}

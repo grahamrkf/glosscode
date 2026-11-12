@@ -1,0 +1,93 @@
+{
+  "dialect": {
+    "label": "Hurco WinMax NC (ISNC)",
+    "inherits": "fanuc",
+    "inheritWords": true,
+    "verified": true,
+    "source": { "manual": "Hurco WinMax Mill NC Programming 704-0116-310 Rev B and WinMax Mill Programming 704-0116-501 Rev D", "revision": "2010 (v8) and 2015 (v9.1/10.1)", "section": "NC programming: G code groups, canned cycles, subprograms, M codes (ISNC)" },
+    "lathe": {
+      "callDepth": {"total": 15, "source": "Hurco WinMax: 15 levels, calls and macros together", "verified": false},
+      "source": { "manual": "Hurco WinMax Lathe NC Programming v546NC", "revision": "Jan. 2018", "section": "Chapters 1 to 3: numbers, G code table 2-4 to 2-5, cycles 2-46 to 2-82, subprograms, M codes (ISNC only)" },
+      "numbers": { "noDecimal": "asWritten" },
+      "modalGroups": {
+        "motion":    ["G00", "G01", "G02", "G03", "G32", "G76", "G77", "G78", "G79"],
+        "distance":  ["G90", "G91"],
+        "feed mode": ["G93", "G94", "G95"],
+        "radius mode": ["G07", "G08"]
+      },
+      "cycles": {
+        "G90": null, "G92": null, "G94": null,
+        "G77": { "name": "OD/ID turning cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true },
+        "G78": { "name": "Thread cycle", "requires": ["X", "Z", "F"], "optional": ["U", "W", "R"], "spindle": true, "leadF": true },
+        "G79": { "name": "Facing cycle", "requires": ["X", "Z"], "optional": ["U", "W", "R", "F"], "feed": true, "spindle": true }
+      },
+      "foreign": {
+        "G91": null
+      }
+    },
+    "mill": {
+      "callDepth": {"total": 15, "source": "Hurco WinMax: 15 levels, calls and macros together", "verified": false},
+      "numbers": { "noDecimal": "asWritten" },
+      "modalGroups": {
+        "feed mode":  ["G93", "G94"],
+        "speed mode": null
+      },
+      "cycles": {
+        "G73": { "name": "High-speed peck", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+        "G74": { "name": "Left-hand tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "K", "L"], "feed": true, "spindle": true },
+        "G76": { "name": "Fine bore", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P", "K", "L"], "feed": true, "spindle": true },
+        "G81": { "name": "Drill", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+        "G82": { "name": "Spot drill with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+        "G83": { "name": "Peck drill", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+        "G84": { "name": "Tap", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "P", "K", "L"], "feed": true, "spindle": true, "speed": true },
+        "G85": { "name": "Bore, feed out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+        "G86": { "name": "Bore, rapid out", "requires": ["Z", "R"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+        "G87": { "name": "Back bore", "requires": ["Z", "R", "Q"], "optional": ["X", "Y", "F", "P", "K", "L"], "feed": true, "spindle": true },
+        "G88": { "name": "Bore, dwell, stop, jog out", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true },
+        "G89": { "name": "Bore with dwell", "requires": ["Z", "R", "P"], "optional": ["X", "Y", "F", "K", "L"], "feed": true, "spindle": true }
+      },
+      "foreign": {
+        "G95": { "severity": "error", "text": "Hurco mills have no feed per revolution. F is per minute (or inverse time with G93)." },
+        "G96": { "severity": "error", "text": "Hurco mills have no constant surface speed." },
+        "G97": { "severity": "info",  "text": "Hurco mills have no G97. S is always RPM, so it can be left out." }
+      }
+    }
+  },
+  "words": {
+    "hurco.mill": {
+      "M05": { "words": "spindle.off", "short": "SOFF", "desc": "Spindle stop; also turns the coolant off (Hurco)" },
+      "M07": { "words": "cool.mist", "short": "CMST", "desc": "Mist coolant on" },
+      "M10": { "words": "cool.both", "short": "CBOTH", "desc": "Mist and flood coolant on (Hurco)" },
+      "M12": { "words": "axis.rotary.clamp", "short": "AXRCL", "desc": "Rotary axis clamp (Hurco)" },
+      "M13": { "words": "axis.rotary.unclamp", "short": "AXRUNCL", "desc": "Rotary axis unclamp (Hurco)" },
+      "M21": { "words": "machine.lube", "short": "MLUBE", "desc": "Lubrication cycle (Hurco)" },
+      "M25": { "words": "run.home.ztc", "short": "HOMEZTC", "desc": "Move Z to tool-change height (Hurco)" }
+    },
+
+    "hurco.lathe": {
+      "G07": { "words": "set.radius", "short": "RAD", "desc": "X is a radius (Hurco)" },
+      "G08": { "words": "set.diameter", "short": "DIA", "desc": "X is a diameter, the default (Hurco)" },
+      "G77": { "words": "cycle.turn", "short": "TURN", "desc": "OD/ID turning cycle" },
+      "G78": { "words": "cycle.thread", "short": "THDCY", "desc": "Threading cycle" },
+      "G79": { "words": "cycle.face", "short": "FACE", "desc": "End facing cycle" },
+      "G90": { "words": "set.abs", "short": "ABS", "desc": "Absolute positions" },
+      "G91": { "words": "set.incr", "short": "INCR", "desc": "Incremental positions" },
+      "G92": { "words": "set.coords", "short": "SETC", "desc": "Set coordinates or the maximum spindle speed; also a threading cycle, like G78" },
+      "G94": { "words": "set.fpm", "short": "FPM", "desc": "Feed per minute" },
+      "G95": { "words": "set.fpr", "short": "FPR", "desc": "Feed per revolution" },
+      "G98": { "words": "cycle.return.init", "short": "RETINIT", "desc": "Cycle returns to the start level" },
+      "G99": { "words": "cycle.return.r", "short": "RETR", "desc": "Cycle returns to the retract level" },
+      "M12": { "words": "machine.turret.rev", "short": "MTURREV", "desc": "Index the turret in reverse (Hurco default)" },
+      "M13": { "words": "machine.turret.fwd", "short": "MTURFWD", "desc": "Index the turret forward (Hurco default)" },
+      "M33": { "words": "spindle.live.fwd", "short": "SLFWD", "desc": "Live tool forward (Hurco default)" },
+      "M34": { "words": "spindle.live.rev", "short": "SLREV", "desc": "Live tool reverse (Hurco default)" },
+      "M35": { "words": "spindle.live.off", "short": "SLOFF", "desc": "Live tool stop (Hurco default)" },
+      "M68": { "words": "machine.chuck.clamp", "short": "MCHKCL", "desc": "Close the chuck (Hurco default)" },
+      "M69": { "words": "machine.chuck.unclamp", "short": "MCHKUNCL", "desc": "Open the chuck (Hurco default)" },
+      "M78": { "words": "machine.quill.fwd", "short": "MQLFWD", "desc": "Tailstock quill forward (Hurco default)" },
+      "M79": { "words": "machine.quill.back", "short": "MQLBK", "desc": "Tailstock quill back (Hurco default)" },
+      "M130": { "words": "set.mode.turn", "short": "MDTURN", "desc": "Turning mode (Hurco default)" },
+      "M131": { "words": "set.mode.mill", "short": "MDMILL", "desc": "Milling mode (Hurco default)" }
+    }
+  }
+}

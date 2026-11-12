@@ -1,0 +1,27 @@
+{
+  "dialect": {
+    "label": "Fanuc Series 0 / 00 / 0-Mate",
+    "about": "The 1990s Fanuc Series 0 machining center control. It reads like the 0i-F mill but has no inverse time feed (G93), uses G150-G152 for normal direction control and G05 for high-speed cycle machining.",
+    "inherits": "fanuc",
+    "inheritWords": true,
+    "verified": false,
+    "mill": {
+      "callDepth": {"sub": 2, "subWithMacro": 4, "macro": 4, "subAlarm": "077", "macroAlarm": "077", "source": "Fanuc Series 0-M: 2 subprogram levels, 4 with the macro option, 4 macro levels", "verified": false},
+      "source": { "manual": "FANUC Series 0/00/0-Mate Operator's Manual, Machining Center B-61404E/08", "section": "G code list (pp. 28-31), dwell (p. 63), subprograms (p. 129); see docs/manual-reviews/fanuc-lathe-and-series-0.md" },
+      "modalGroups": {
+        "feed mode": ["G94", "G95"]
+      },
+      "foreign": {
+        "G93": { "severity": "error", "text": "The Fanuc Series 0 has no inverse time feed (G93)." }
+      }
+    }
+  },
+  "words": {
+    "fanuc0.mill": {
+      "G05": { "words": "cycle.highspeed", "short": "CYHS", "desc": "High-speed cycle machining" },
+      "G150": { "words": "tool.normal.off", "short": "TNOFF", "desc": "Normal direction control cancel" },
+      "G151": { "words": "tool.normal.left", "short": "TNL", "desc": "Normal direction control left" },
+      "G152": { "words": "tool.normal.right", "short": "TNR", "desc": "Normal direction control right" }
+    }
+  }
+}

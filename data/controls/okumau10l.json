@@ -1,0 +1,9 @@
+{
+  "dialect": {
+    "label": "Okuma OSP-U10L / OSP-U100L",
+    "inherits": "okuma",
+    "inheritWords": true,
+    "source": "Okuma OSP-U100L/U10L Programming Manual EEL3-101-R1 (1998); see docs/manual-reviews/okuma-osp7000l-u10l.md. Same tables as the Okuma lathe until the differences from the P200L/P300L are recorded.",
+    "lathe": {}
+  }
+}
