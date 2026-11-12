@@ -2,7 +2,7 @@
 
 What changed in each GlossCode release. The newest release is at the top. Versions follow `MAJOR.MINOR.PATCH` (see [docs/releasing.md](docs/releasing.md)); while the version starts with `0.`, file formats may still change between releases.
 
-## Unreleased
+## [0.5.0] - 2026-11-12
 
 ### Appearance
 - Dark theme. View › Theme picks Light, Dark or Same as the system (the default, which follows the system's setting as it changes). Every colour has a dark version, and the window's title bar turns dark with it on Windows 10 and 11 (and on Linux where the desktop theme has a dark version).
