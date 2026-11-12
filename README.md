@@ -67,7 +67,7 @@ Checked against programming manuals:
 - **Others**: LinuxCNC, Tormach PathPilot, GRBL, Centroid CNC12, Mazak EIA/ISO, Hurco WinMax (ISNC), Siemens SINUMERIK ISO mode
 - **First drafts, not yet verified**: Heidenhain TNC 640 Klartext, Hypertherm Phoenix/EDGE plasma
 
-How sure we are of each is in [docs/manual-reviews/control-confidence.md](docs/manual-reviews/control-confidence.md). **Any other control hasn't been checked against a manual.** GlossCode uses generic Fanuc-style rules for those, which may not match what your control does.
+How sure we are of each is in [docs/manual-reviews/control-confidence.md](docs/manual-reviews/control-confidence.md), and what each one doesn't handle yet or isn't sure of is listed in [docs/control-status.md](docs/control-status.md). **Any other control hasn't been checked against a manual.** GlossCode uses generic Fanuc-style rules for those, which may not match what your control does.
 
 ## Try it in a browser
 

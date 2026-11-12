@@ -14,6 +14,9 @@ What changed in each GlossCode release. The newest release is at the top. Versio
 - Work offsets use the code's own name: G54 to G59 read `work.g54` to `work.g59` (WRK54 to WRK59), and an extra offset reads `work.p7` (WRKP7) whether it's written G154 P7 or as its alias G116. G154's P used to read as a dwell.
 - A new `live` group holds live tooling and the C axis on lathes: `live.fwd`, `live.rev`, `live.off`, `live.brake.on`, the Okuma M-tool cycles (`live.drill`, `live.tap`, `live.thread.face`…) and the C axis (`live.c.on`, `live.c.join`, `live.xc.on`). Short words for the live tool lose the S (LFWD, LREV).
 
+### Docs
+- docs/control-status.md lists, for each control, what GlossCode doesn't handle yet and what it isn't sure of, with what's waiting for a manual. The README links to it.
+
 ### Wording
 - Status-line messages are one short sentence: "Undone (3 more).", "Pasted 4 lines below line 12. Ctrl+Z undoes.", "Saved PART.nc (2,310 bytes, CRLF)."
 - Menu items use shop terms: View › Block count (was Run order numbers), View › Collapse moves (was Fold moves), Program › Sort addresses, Program › Auto sequence numbers, Help › Gloss words….
