@@ -1,6 +1,7 @@
 // Checks of the UI's gloss and checks on a few controls that the sample programs don't cover, run with
 //   node tests/test_ui.mjs
 // (from the repo root; CI runs it next to the golden files check).
+import { readFileSync } from "node:fs";
 import { loadPage } from "./ui-page.mjs";
 
 const A = loadPage();
@@ -9,6 +10,26 @@ const eq = (got, want, what) => {
   if (JSON.stringify(got)===JSON.stringify(want)) return;
   failed++; console.error(`FAIL ${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
 };
+
+// The page's scripts share one global scope, so a name defined at the top of two files is a mistake: a second
+// function of the same name silently replaces the first for every file. (Two consts of one name already fail to load.)
+// What a file defines inside its own (() => { … })() is private to it and isn't counted.
+{
+  const files = [...readFileSync("src/ui/index.html", "utf8").matchAll(/<script src="([^"]+)"/g)].map(m => m[1]);
+  const where = new Map();
+  for (const f of files){
+    let inner = false;
+    for (const line of readFileSync("src/ui/" + f, "utf8").split("\n")){
+      if (/^\(\(\) => \{|^\(function/.test(line)) inner = true;
+      else if (/^\}\)\(\);/.test(line)) inner = false;
+      const m = !inner && line.match(/^(?:async\s+)?(?:function\*?|class|const|let|var)\s+([A-Za-z_$][\w$]*)/);
+      if (!m) continue;
+      if (where.has(m[1]) && where.get(m[1])!==f){ failed++; console.error(`FAIL ${m[1]} is defined at the top of both ${where.get(m[1])} and ${f}`); }
+      else where.set(m[1], f);
+    }
+  }
+  if (where.size < 300) { failed++; console.error(`FAIL only ${where.size} global names found: has the way the scripts are written changed?`); }
+}
 
 // The older Okuma lathe controls read Okuma's language: no G54 work offset, and G91 G50 Z-V1 is a zero shift.
 let r = A.run("N10 G50 S2000\nN20 G00 X2. Z0.1\nN30 G91 G50 Z-V1\nN40 M30", "gen.lathe.okumau10l", "words");

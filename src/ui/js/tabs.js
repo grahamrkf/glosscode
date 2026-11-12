@@ -492,13 +492,14 @@ window.markSaved = () => { const t = cur(); if (t){ t.savedVer = docVer; remembe
 window.nativeOpen = nativeOpen;
 window.nativeSave = nativeSave;
 
-// Start on the home page, then open the file named on the command line (or ?open=NAME in the mockup).
-(async () => {
+// Start on the home page, then open the file named on the command line (or ?open=NAME in a browser).
+// js/start.js calls it once every script has loaded, so the first program is drawn with every part of the page there.
+window.startTabs = async () => {
   try {
     await loadSettings();
     showActive();
     if (NATIVE){ const r = await NATIVE.startup(); if (r) await openNativeResult(r); }
     else { const q = new URLSearchParams(location.search).get("open"); if (q && FILES[q]) await openSample(q, FILES[q].machine); }
   } catch (e){ setMsg(String(e?.message || e), true); }
-})();
+};
 })();
