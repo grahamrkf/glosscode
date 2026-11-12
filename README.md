@@ -10,11 +10,11 @@ GlossCode is a G-code editor that shows a gloss line in plain English above ever
 >
 > **Supported controls.** The tables were checked against programming manuals for: Haas (NGC, classic and 1995 controls), Fanuc 0i-F/0i-D and Series 0, Okuma OSP mills and lathes (P300M, P200L, E100L, U10L and OSP700L), LinuxCNC, Tormach PathPilot, GRBL, Centroid CNC12, Mazak EIA/ISO, Hurco WinMax NC (ISNC), Mitsubishi M800/M80 mills and lathes and the M700/M70 M2/M0 format, Fanuc Custom Macro B expressions (from the 21i manual), Fagor 8055 mills and lathes, Fagor 8060/8065 mills and lathes (the lathe a first draft, still marked unverified), Heidenhain TNC 640 Klartext (a first draft, still marked unverified) Siemens SINUMERIK ISO mode, and Hypertherm Phoenix/EDGE plasma (still marked unverified). How sure we are of each is in [`docs/manual-reviews/control-confidence.md`](docs/manual-reviews/control-confidence.md). Some features of each are still unchecked; the reviews in [`docs/manual-reviews/`](docs/manual-reviews/) list them. **Any other control** (for example Heidenhain ISO programs, native Siemens programs, wire EDM, laser or waterjet) **hasn't been checked against a manual.** On those, GlossCode uses generic Fanuc-style rules, which may not match what your control does.
 
-![GlossCode editor mockup](docs/images/editor-overview.png)
+![The GlossCode editor](docs/images/editor-overview.png)
 
 ## What it looks like
 
-Each line of code has its gloss above it in small grey italics, and its N number in a column of its own:
+Each line of code has its gloss above it in small grey text, and its N number in a column of its own:
 
 ```
        spindle.fwd set.rpm speed:6000
@@ -26,41 +26,17 @@ N50    G43 H01 Z1.0 M08
 
 The gloss words come from a dictionary of consistent abbreviations ([`data/gcode-words.json`](data/gcode-words.json)). Each code has a full word and a short one. Full words (the default) name what the code does as a group, then the action, such as `run.rapid` (G00), `run.feed` (G01), `set.inch` (G20), `tlen.on` (G43) and `cycle.peck` (G83). There are 20 fixed groups: `run` is for moves and other things the machine does on that line, `set` for modes that stay in effect, `cycle` for canned cycles, `call` and `flow` for subprograms and jumps, `prog` for the program itself, and a feature name (`spindle`, `cool`, `tool`, `tlen`, `ccomp`, `work`, `probe`, `thread`, `torch` and others) for the rest. Short words are the compact style: 3 to 8 characters, made from the group's core letters, an optional alternate and the option (`SFWD` spindle forward, `S2FWD` on the second spindle, `CON` coolant on, `TLON`, `WRK1` for G54, `INCH` and `INCR`). Two letters are used only for a standard abbreviation or a two-letter word (`MM`, `XY`, `IF`, `DO`). Codes that only some controls have are underlined with dots. A word with a value is its name, a colon and the value in full words (`tool:1`, `toffset:01`, `movz:1.0`, `speed:6000`), and the name and value run together in short words (`T1`, `H01`, `Z1.0`, `S6000`). N numbers read as written (`N40`). Numbers always show their decimal point (`X1.` reads `X1.0`), and a distance written without one is shown the way the control reads it, so `X1` reads `X0.0001`. Full words leave the unit off (`speed:600`); the info panel says whether it's RPM or surface speed. Short words keep a small unit that follows the active modes, so `S600` reads `S600 rpm` under G97 and `S600 sfm` under G96.
 
-| Full words | Short words | Gloss only |
-|---|---|---|
-| ![Full words](docs/images/editor-overview.png) | ![Short words](docs/images/short-words.png) | ![Gloss only](docs/images/gloss-only.png) |
-
-| Simulation | Find |
+| Simulation | Problems panel |
 |---|---|
-| ![Simulation](docs/images/simulation.png) | ![Find](docs/images/find.png) |
+| ![Simulation partway through a program, with the run time](docs/images/simulation.png) | ![Problems panel with mistakes found on purpose](docs/images/problems.png) |
 
-| Problems panel | Lathe checks | Okuma mill |
-|---|---|---|
-| ![Problems panel](docs/images/problems.png) | ![Lathe checks](docs/images/lathe-checks.png) | ![Okuma mill](docs/images/okuma-mill.png) |
-
-| Expanded simulation view |
-|---|
-| ![Expanded simulation view](docs/images/simulation-expanded.png) |
-
-| Word hints | Canned cycle guide | End of block |
-|---|---|---|
-| ![Word hints](docs/images/word-hints.png) | ![Canned cycle guide](docs/images/cycle-guide.png) | ![End of block](docs/images/end-of-block.png) |
-
-| Home page | New program: pick a machine |
+| Lathe | Subprogram beside the program |
 |---|---|
-| ![Home page with recent programs](docs/images/home-page.png) | ![Choosing the machine for a new program](docs/images/machine-picker.png) |
+| ![A lathe program with the XZ toolpath and X timeline](docs/images/lathe.png) | ![A subprogram open in the pane beside the program](docs/images/subprogram-beside.png) |
 
-| Machine picker | Machine profiles | Open dialog |
-|---|---|---|
-| ![Machine picker](docs/images/machine-menu.png) | ![Machine profiles](docs/images/machine-profiles.png) | ![Open dialog](docs/images/native-open-dialog.png) |
-
-| Hole pattern: grid | Hole pattern: bolt circle | Holes inserted |
-|---|---|---|
-| ![Hole pattern grid](docs/images/hole-pattern-grid.png) | ![Hole pattern bolt circle](docs/images/hole-pattern-circle.png) | ![Holes inserted](docs/images/hole-pattern-inserted.png) |
-
-| Insert menu (lathe) | Insert a drilling cycle | Insert a roughing cycle |
-|---|---|---|
-| ![Insert menu](docs/images/insert-menu.png) | ![Insert a drilling cycle](docs/images/insert-cycle.png) | ![Insert a roughing cycle](docs/images/insert-cycle-lathe.png) |
+| Insert a canned cycle | New program: pick a machine |
+|---|---|
+| ![Insert a peck drilling cycle](docs/images/insert-cycle.png) | ![Choosing the machine for a new program](docs/images/machine-picker.png) |
 
 | Convert to another control |
 |---|
@@ -72,7 +48,7 @@ The gloss words come from a dictionary of consistent abbreviations ([`data/gcode
 - Menu bar (File, Edit, View, Insert, Program, Simulate), undo and redo, and Find that matches both code and gloss.
 - Starts on a home page with recent programs, New program and Open. Each open program gets a tab, and each tab remembers its machine and the selected line and word.
 - A new program asks which machine it's for. A file opened before reopens with the same machine; any other file uses the default machine for its extension (.nc, .MIN…) if one is set, and otherwise asks, with the controls the file looks written for (from its extension and its text: CALL and RTS mean Okuma, BEGIN PGM Klartext) suggested at the top.
-- The default layout shows each line as plain text, its N number in a column on the left and the gloss above it in small grey italics (`speed:2100 spindle.fwd` over `S2100 M03`). Click a line and type, as in any text editor; the gloss follows. In the older layouts (View › Layout) either line can be edited: View › Edit in switches between typing code (the default) and typing gloss. Typing gloss has autocomplete from the dictionary (type `cool` to get `cool.on`, `cool.off`, `cool.thru` and the other coolant words the machine has).
+- The default layout shows each line as plain text, its N number in a column on the left and the gloss above it in small grey text (`speed:2100 spindle.fwd` over `S2100 M03`). Click a line and type, as in any text editor; the gloss follows.
 - Keyboard editing by word: arrows move between words and lines, Enter edits and Enter again finishes, Space starts the next word, Shift+Enter breaks the line. Pasting a few lines or a whole program puts each line in its own row and each word in its own cell. Drag across lines (or Shift+↑↓) and right-click to copy, cut or duplicate them; Ctrl+D duplicates a section.
 - Grey hint text after a code shows the words it still needs (`G02` shows `R## or I## J##`). Click one to fill it in; picking R hides I and J.
 - A canned cycle guide (F1) with a sketch of each cycle, an example line, and what every word does.
