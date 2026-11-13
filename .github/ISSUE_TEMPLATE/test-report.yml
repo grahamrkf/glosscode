@@ -1,0 +1,51 @@
+name: Test report
+description: Tell us what a real machine did with a program, compared with what GlossCode showed.
+labels: ["needs-testing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing. Please **don't post whole shop programs**: real part programs belong to the shop that made them. A few lines that show the behaviour are plenty.
+
+        If an open issue already covers your control, you can comment there instead. They're listed in #114.
+  - type: input
+    id: control
+    attributes:
+      label: Control and machine
+      description: Control model and machine, for example "Haas NGC, VF-2" or "Okuma OSP-P300L, LB3000".
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: GlossCode version
+      description: Help › About shows it.
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: The lines of code
+      description: Only the few lines that show the behaviour.
+      render: gcode
+    validations:
+      required: true
+  - type: textarea
+    id: glosscode
+    attributes:
+      label: What GlossCode showed
+      description: Gloss words, problems, simulation or run time. A screenshot helps.
+    validations:
+      required: true
+  - type: textarea
+    id: machine
+    attributes:
+      label: What the machine did
+      description: In the control's graphics, a dry run or a real cut. Include any alarm number and message.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Settings or parameters that might matter, options the machine has.
