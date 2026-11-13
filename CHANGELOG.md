@@ -2,6 +2,13 @@
 
 What changed in each GlossCode release. The newest release is at the top. Versions follow `MAJOR.MINOR.PATCH` (see [docs/releasing.md](docs/releasing.md)); while the version starts with `0.`, file formats may still change between releases.
 
+## [Unreleased]
+
+### Web app and website
+- GlossCode runs in a browser as a web app (https://grahamrkf.github.io/glosscode/app/), for your own programs. Files are read and written by the same C core as the program, built as WebAssembly, so unchanged lines, line endings, `;` marks and Latin-1 files are kept just as the program keeps them. In Chrome and Edge, Save writes back to the file you opened, the recent list reopens files, and the app can be installed and open `.nc` files; in Firefox and Safari, Open reads a copy and Save downloads one. Settings, machine profiles and the subprogram library are kept in the browser. It works offline once opened.
+- The website has a landing page at /glosscode, the web app at /glosscode/app, the demo with sample programs at /glosscode/try (it used to be at /glosscode; old links go there), and download links with install instructions at /glosscode/download.
+- Each release has `GlossCode-<version>-web.zip`, the web app for running on your own web server.
+
 ## [0.5.0] - 2026-11-12
 
 ### Appearance

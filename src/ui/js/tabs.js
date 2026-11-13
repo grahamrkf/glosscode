@@ -492,6 +492,7 @@ window.saveConvertAnswers = () => saveSettings();
 window.tabMachineChanged = () => { const t = cur(); if (t?.path) remember(t); };
 window.markSaved = () => { const t = cur(); if (t){ t.savedVer = docVer; remember(t); drawTabs(); } };
 window.nativeOpen = nativeOpen;
+window.openFileResult = r => openNativeResult(r);   // the web app: a program opened with the installed app while it runs
 window.nativeSave = nativeSave;
 
 // Start on the home page, then open the file named on the command line (or ?open=NAME in a browser).

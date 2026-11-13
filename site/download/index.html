@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download GlossCode</title>
+<meta name="description" content="Download GlossCode for Windows or Linux, or the web app to run on your own server, and how to install each one.">
+<link rel="icon" href="../images/glosscode.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../site.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><img src="../images/glosscode.svg" alt="">GlossCode</a>
+    <nav class="links" aria-label="Site">
+      <a href="../app/">Web app</a>
+      <a href="../try/">Try it</a>
+      <a href="./" aria-current="page">Download</a>
+      <a href="../#docs">Docs</a>
+      <a href="https://github.com/grahamrkf/glosscode">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Download GlossCode</h1>
+      <p class="lead">The desktop program for Windows and Linux, and the web app to run on your own server. You don't need to download anything for the <a href="../app/">web app</a> on this site.</p>
+      <p id="rel-status">Looking up the newest release…</p>
+    </div>
+
+    <div class="dl">
+      <div class="card" id="windows">
+        <h3>Windows <span class="muted">Windows 10 or 11, 64-bit</span></h3>
+        <div class="files" data-files="windows"></div>
+        <ul>
+          <li><b>Installer</b> (<code>…-windows-x64-setup.exe</code>): run it. It installs for your own user account without administrator rights, adds GlossCode to the Start menu, and can open <code>.nc</code> files with GlossCode. Remove it in Settings › Apps.</li>
+          <li><b>Portable</b> (<code>…-windows-x64-portable.zip</code>): unzip it anywhere, a USB drive for example, and run <code>GlossCode.exe</code>. Its settings stay in a <code>GlossCode-data</code> folder beside it.</li>
+          <li>The program isn't signed yet, so Windows may show "Windows protected your PC" the first time. Click <b>More info</b>, then <b>Run anyway</b>.</li>
+          <li>It uses the Microsoft Edge WebView2 Runtime, which comes with Windows 10 and 11.</li>
+        </ul>
+      </div>
+
+      <div class="card" id="linux">
+        <h3>Linux <span class="muted">64-bit, glibc 2.35 or newer (Ubuntu 22.04, Debian 12, Fedora 36 and later)</span></h3>
+        <div class="files" data-files="linux"></div>
+        <ul>
+          <li><b>Debian, Ubuntu, Mint</b> (<code>.deb</code>): <pre><code>sudo apt install ./GlossCode-<span class="v">VERSION</span>-linux-amd64.deb</code></pre></li>
+          <li><b>Fedora</b> (<code>.rpm</code>): <pre><code>sudo dnf install ./GlossCode-<span class="v">VERSION</span>-linux-x86_64.rpm</code></pre> On openSUSE use <code>sudo zypper install</code> with the same file.</li>
+          <li>Both packages install the GTK 3 and WebKitGTK libraries they need, and add GlossCode to the applications menu.</li>
+          <li><b>Portable</b> (<code>.tar.gz</code>): unpack it and run <code>glosscode</code> in the folder. Its settings stay beside it. It needs GTK 3 and WebKitGTK 4.1 installed (on Debian or Ubuntu: <code>sudo apt install libgtk-3-0 libwebkit2gtk-4.1-0</code>).</li>
+        </ul>
+      </div>
+
+      <div class="card" id="web">
+        <h3>Web app for your own server</h3>
+        <div class="files" data-files="web"></div>
+        <p>The same web app as on this site, as plain files with no server code. Use it to keep GlossCode on a shop network or a computer without internet access.</p>
+        <ol>
+          <li>Unzip <code>GlossCode-<span class="v">VERSION</span>-web.zip</code> into a folder your web server serves (Apache, nginx, IIS, Caddy and so on). Any folder or address works, for example <code>https://server/glosscode/</code>.</li>
+          <li>Serve it over HTTPS. Browsers allow the file pickers and the offline copy only over HTTPS, or from <code>localhost</code>.</li>
+          <li>Make sure <code>.wasm</code> files are sent as <code>application/wasm</code> and <code>.webmanifest</code> as <code>application/manifest+json</code>. Most servers already do.</li>
+        </ol>
+        <p>To try it on one computer, run a small local server in the unzipped folder and open <code>http://localhost:8000/</code>:</p>
+        <pre><code>python3 -m http.server 8000</code></pre>
+        <p class="muted">Opening <code>index.html</code> straight from the folder (a <code>file://</code> address) doesn't work: browsers don't run WebAssembly or offline copies from local files.</p>
+      </div>
+
+      <div class="card" id="more">
+        <h3>Also in each release</h3>
+        <div class="files" data-files="more"></div>
+        <ul>
+          <li><b>Example programs</b> (<code>…-examples.zip</code>): sample programs for Haas, Fanuc and Okuma mills and lathes, and example subprogram library files.</li>
+          <li><b>SHA256SUMS.txt</b>: checksums of every file. On Linux: <code>sha256sum -c SHA256SUMS.txt --ignore-missing</code>. On Windows, in PowerShell: <code>Get-FileHash .\GlossCode-…-setup.exe</code>, and compare with the line in the file.</li>
+          <li>Older versions and release notes are on the <a href="https://github.com/grahamrkf/glosscode/releases">releases page</a>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>GlossCode · MIT License</span>
+    <a href="https://github.com/grahamrkf/glosscode">Source on GitHub</a>
+    <a href="https://github.com/grahamrkf/glosscode/releases">Releases</a>
+    <a href="https://github.com/grahamrkf/glosscode/issues">Report a problem</a>
+  </div>
+</footer>
+
+<script>
+/* The download buttons: the files of the newest published release, from the GitHub Releases API. Release
+   files follow the names in docs/releasing.md, so each is put in its section by its ending. Without the
+   API (offline, or GitHub limiting requests) each section links to the releases page instead. */
+(() => {
+  const REPO = "grahamrkf/glosscode", PAGE = `https://github.com/${REPO}/releases/latest`;
+  const KINDS = [
+    ["windows", /-windows-x64-setup\.exe$/i, "Installer (.exe)", true],
+    ["windows", /-windows-x64-portable\.zip$/i, "Portable (.zip)"],
+    ["linux", /-linux-amd64\.deb$/i, "Debian, Ubuntu (.deb)", true],
+    ["linux", /-linux-x86_64\.rpm$/i, "Fedora, openSUSE (.rpm)"],
+    ["linux", /-linux-x86_64-portable\.tar\.gz$/i, "Portable (.tar.gz)"],
+    ["web", /-web\.zip$/i, "Web app (.zip)", true],
+    ["more", /-examples\.zip$/i, "Example programs (.zip)"],
+    ["more", /^SHA256SUMS\.txt$/i, "SHA256SUMS.txt"]
+  ];
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" })[c]);
+  const box = k => document.querySelector(`[data-files="${k}"]`);
+  const status = document.getElementById("rel-status");
+  function fallback(text){
+    status.innerHTML = `${esc(text)} The files are on the <a href="${PAGE}">latest release page</a>.`;
+    for (const k of ["windows", "linux", "web", "more"]) box(k).innerHTML = `<a class="btn" href="${PAGE}">Open the release page</a>`;
+  }
+  fetch(`https://api.github.com/repos/${REPO}/releases/latest`, { headers:{ Accept:"application/vnd.github+json" } })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(rel => {
+      const v = String(rel.tag_name || "").replace(/^v/i, "");
+      const when = rel.published_at ? new Date(rel.published_at).toLocaleDateString(undefined, { year:"numeric", month:"long", day:"numeric" }) : "";
+      status.innerHTML = `Version <b>${esc(v)}</b>${when ? `, released ${esc(when)}` : ""}. <a href="${esc(rel.html_url)}">Release notes</a>`;
+      document.querySelectorAll(".v").forEach(s => { s.textContent = v; });
+      const seen = new Set();
+      for (const [k, re, label, pri] of KINDS){
+        const a = (rel.assets || []).find(x => re.test(x.name));
+        if (!a) continue;
+        seen.add(k);
+        box(k).insertAdjacentHTML("beforeend", `<a class="btn${pri ? " pri" : ""}" href="${esc(a.browser_download_url)}">${esc(label)} <small>${a.size < 1048576 ? Math.max(1, Math.round(a.size / 1024)) + " KB" : (a.size / 1048576).toFixed(1) + " MB"}</small></a>`);
+      }
+      for (const k of ["windows", "linux", "web", "more"]) if (!seen.has(k))
+        box(k).innerHTML = `<span class="muted">Not in this release yet. Check the <a href="https://github.com/${REPO}/releases">releases page</a>.</span>`;
+    })
+    .catch(() => fallback("Couldn't look up the newest release."));
+})();
+</script>
+</body>
+</html>

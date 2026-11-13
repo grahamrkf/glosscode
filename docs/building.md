@@ -46,6 +46,25 @@ cmake --build build
 ctest --test-dir build
 ```
 
+## The web app and the website
+
+The web app is the same screen (`src/ui/`) with `src/web/bridge-web.js` in place of the program's bridge, and the core built as WebAssembly (`src/web/core_wasm.c` plus `src/core/`). It needs clang and wasm-ld with the WASI C library. On Debian or Ubuntu 24.04:
+
+```
+sudo apt install clang lld wasi-libc libclang-rt-18-dev-wasm32
+scripts/build-wasm.sh build-web
+node scripts/build-site.mjs --wasm build-web/core.wasm --out _site
+```
+
+`_site/` is the whole website as GitHub Pages serves it: the landing page (`site/index.html`), `download/`, `app/` (the web app) and `try/` (the browser demo with the sample programs). Serve it with any local server (`python3 -m http.server -d _site`) and open `http://localhost:8000/app/`; a `file://` address doesn't work, since browsers won't load WebAssembly or a service worker from local files. `scripts/package-web.sh build-web/core.wasm dist` makes the self-host package, `GlossCode-<version>-web.zip`, holding only the web app.
+
+The web app's `GlossCodeNative` (below) works like the program's, with these differences:
+
+- Open and Save use the browser's file pickers. With the File System Access API (Chrome, Edge) Save writes back to the file opened, and the file handles are kept in IndexedDB so the recent list can reopen them (the browser asks again for permission after a restart). Without it (Firefox, Safari) Open reads a copy, Save downloads one, and the recent list reopens the copy kept in IndexedDB.
+- A browser gives no folder paths, so a file's "path" is its name, or `name (2)` when another file of that name is in the list. `platform` is `"web"` and `configDir` is `"this browser"`.
+- Settings and the personal subprogram library are kept in IndexedDB (database `glosscode-app`), not files. `/try` keeps its settings in localStorage, apart from the app's.
+- `sw.js` (a service worker) keeps every file of the app for offline use. `build-site.mjs` names its cache after the version and a hash of the files, so any change to the site is picked up the next time the app starts. `manifest.webmanifest` makes it installable and lets an installed copy open `.nc` files.
+
 ## Tests
 
 | Test | What it checks |
@@ -57,6 +76,7 @@ ctest --test-dir build
 Two more checks run the UI's JavaScript in Node (no browser needed); CI runs both:
 
 - `node scripts/make-goldens.mjs --check`: the files in `tests/golden/` record every word's gloss, unit and description, and every problem, for each program in `examples/` and `tests/cases/` on each machine (`tests/machines.json` says which machines each program runs on); `tests/golden/sim/` records every step and toolpath move the simulation makes of each. After changing the gloss, the checks, the simulation or the data files, run `node scripts/make-ui-data.mjs` (for data files) and then `node scripts/make-goldens.mjs` and look over the diff: it shows exactly what changed on screen.
+- `node tests/test_web.mjs _site`: the website in Chromium (Playwright): the pages load, every program in `examples/` and `tests/cases/` opened and saved in the web app comes back byte for byte, a changed block changes only its line, Latin-1 and `;` marks are kept, the recent list, settings and library survive a reload, the app starts offline, and Open and Save work without the File System Access API. Build `_site` first (above) and install Playwright (`npm install --no-save playwright` and `npx playwright install chromium`). CI runs it in the Web app job.
 - `node tests/test_ui.mjs`: a few gloss and check cases on controls the samples don't cover, and a check that no two scripts define the same global name (they share one scope).
 
 ## Options when running
@@ -71,7 +91,7 @@ GlossCode.exe [--ui <file.html>] [--debug] [file]
 
 ## How the UI talks to the program
 
-In the program, `window.GlossCodeNative` is set before the page loads (`src/app/bridge.js`). The page checks for it: File › Open, Save and Save As then use the system dialogs, and the About window shows the real version and whether the copy is portable. In a browser it isn't there, and the page uses its sample files.
+In the program, `window.GlossCodeNative` is set before the page loads (`src/app/bridge.js`; in the web app, `src/web/bridge-web.js`, see above). The page checks for it: File › Open, Save and Save As then use the system dialogs, and the About window shows the real version and whether the copy is portable. In a browser it isn't there, and the page uses its sample files.
 
 | Function | What it does |
 |---|---|
@@ -90,13 +110,14 @@ The UI's data comes from two files that `node scripts/make-ui-data.mjs` writes (
 
 ## Packages
 
-The release files ([releasing.md](releasing.md#release-files)) are made from a finished build by three scripts. CI runs them on every push, so each build's artifacts are the files a release would have, and the release workflow attaches them to a draft release.
+The release files ([releasing.md](releasing.md#release-files)) are made from a finished build by four scripts. CI runs them on every push, so each build's artifacts are the files a release would have, and the release workflow attaches them to a draft release.
 
 | Script | Makes | Needs |
 |---|---|---|
 | `scripts/package-linux.sh [build] [dist]` | `.deb`, `.rpm` and the portable `.tar.gz` | [nFPM](https://nfpm.goreleaser.com): `go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.48.0` |
 | `scripts/package-windows.ps1 [-Build build] [-Out dist]` | The installer and the portable `.zip` | [Inno Setup](https://jrsoftware.org/isinfo.php) 6.3 or later |
 | `scripts/package-examples.sh [dist]` | `GlossCode-<version>-examples.zip` | `zip` |
+| `scripts/package-web.sh <core.wasm> [dist]` | `GlossCode-<version>-web.zip`, the web app for your own server | Node and `zip`; `core.wasm` from `scripts/build-wasm.sh` |
 
 - On Linux, `cmake --install` puts the program in `bin/`, `glosscode.desktop` in `share/applications/`, the icons in `share/icons/hicolor/` and the license notices in `share/doc/glosscode/`; `packaging/linux/nfpm.yaml` makes both packages from those files. They depend on the distribution's GTK 3 and WebKitGTK 4.1, and the program needs glibc 2.35 or later (Ubuntu 22.04, Debian 12, Fedora 36 and newer).
 - On Windows, `packaging/windows/glosscode.iss` installs `GlossCode.exe` for the current user into `%LOCALAPPDATA%\Programs\GlossCode`, with a Start menu entry, an optional desktop shortcut, an optional **Open with** entry for `.nc` files, and an uninstaller that leaves the settings folder alone.

@@ -1,12 +1,27 @@
-# Publishes the program's screen (src/ui) to GitHub Pages as a demo that runs in a browser, with the
-# sample programs built in. Runs on every push to main that changes the screen or the logo.
-# Needs Settings › Pages › Source set to "GitHub Actions".
+# Publishes the website to GitHub Pages (https://grahamrkf.github.io/glosscode/), put together by
+# scripts/build-site.mjs:
+#   /glosscode/           landing page (site/index.html)
+#   /glosscode/app/       the web app: the program's screen with the core built as WebAssembly
+#   /glosscode/try/       the browser demo with the sample programs built in
+#   /glosscode/download/  desktop downloads (read from the newest release) and how to install them
+# Runs on every push to main that changes the site, the screen, the core or the logo. build.yml tests the
+# same site on every pull request. Needs Settings › Pages › Source set to "GitHub Actions".
 name: Pages
 
 on:
   push:
     branches: [main]
-    paths: ["src/ui/**", "assets/logo/**", ".github/workflows/pages.yml"]
+    paths:
+      - "site/**"
+      - "src/ui/**"
+      - "src/web/**"
+      - "src/core/**"
+      - "assets/logo/**"
+      - "docs/images/**"
+      - "VERSION"
+      - "scripts/build-site.mjs"
+      - "scripts/build-wasm.sh"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -20,21 +35,32 @@ concurrency:
 
 jobs:
   deploy:
-    name: Publish demo
-    runs-on: ubuntu-latest
+    name: Publish the website
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
-      - name: Put the site together
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install clang with the WASI C library
+        timeout-minutes: 10
         run: |
-          mkdir -p _site/assets
-          cp -r src/ui/. _site/
-          cp -r assets/logo _site/assets/logo
-          # In the repository the page finds the logo two folders up; on the site it sits beside the page.
-          sed -i 's|"../../assets/logo/|"assets/logo/|' _site/index.html
-          grep -q '"assets/logo/glosscode.svg"' _site/index.html
+          APT="-o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30"
+          for try in 1 2 3; do
+            if timeout 180 sudo apt-get $APT update &&
+               timeout 240 sudo apt-get $APT install -y --no-install-recommends clang lld wasi-libc libclang-rt-18-dev-wasm32; then
+              exit 0
+            fi
+            echo "apt try $try failed; retrying"; sleep 10
+          done
+          exit 1
+      - name: Build the core as WebAssembly
+        run: scripts/build-wasm.sh build-web
+      - name: Put the site together
+        run: node scripts/build-site.mjs --wasm build-web/core.wasm --out _site
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

@@ -4,7 +4,7 @@
 
 GlossCode is a G-code editor for CNC mills, lathes and plasma tables. Above every line of code it shows a gloss: a short plain-English reading of what the line does. It also checks the program for mistakes, tracks the active modes, and simulates the toolpath.
 
-**[Try it in your browser](https://grahamrkf.github.io/glosscode/)** · **[Download for Windows or Linux](https://github.com/grahamrkf/glosscode/releases)**
+**[Website](https://grahamrkf.github.io/glosscode/)** · **[Web app](https://grahamrkf.github.io/glosscode/app/)** · **[Try it with sample programs](https://grahamrkf.github.io/glosscode/try/)** · **[Download for Windows or Linux](https://grahamrkf.github.io/glosscode/download/)**
 
 ![The GlossCode editor](docs/images/editor-overview.png)
 
@@ -71,13 +71,15 @@ How sure we are of each is in [docs/manual-reviews/control-confidence.md](docs/m
 
 **Run one of these controls, or have its manual?** Each has an open [help-wanted issue](https://github.com/grahamrkf/glosscode/issues/114) listing what's uncertain and what to test. A short test report or a quote from a manual helps a lot.
 
-## Try it in a browser
+## In a browser
 
-The [browser demo](https://grahamrkf.github.io/glosscode/) runs the same screen as the program, with sample programs built in. Open a sample from the home page, click a line to edit it, press F5 to simulate, and F1 on a canned cycle to see how it works. In the browser, Open shows a pretend file list and nothing is saved to your computer.
+- **[Web app](https://grahamrkf.github.io/glosscode/app/)**: GlossCode in the browser, for your own programs. It opens and saves files on your computer, read and written by the same C core as the program (built as WebAssembly), so unchanged lines are kept byte for byte. In Chrome and Edge, Save writes back to the file you opened and the app can be installed and opens `.nc` files; in Firefox and Safari, Open reads a copy and Save downloads one. Settings, machine profiles and your subprogram library are kept in the browser. It works offline once opened, and nothing you open leaves your computer.
+- **[Try it](https://grahamrkf.github.io/glosscode/try/)**: the same screen with sample programs built in. Open a sample from the home page, click a line to edit it, press F5 to simulate, and F1 on a canned cycle to see how it works. Open shows a pretend file list and nothing is saved to your computer.
+- **Your own server**: each release has `GlossCode-<version>-web.zip`, the web app as plain files. Unzip it into any folder a web server serves over HTTPS; see the [download page](https://grahamrkf.github.io/glosscode/download/#web).
 
 ## For developers
 
-GlossCode is a small core in portable C with the screen in HTML and JavaScript, shown in a native webview (WebView2 on Windows, WebKitGTK on Linux). The same screen runs in a browser.
+GlossCode is a small core in portable C with the screen in HTML and JavaScript, shown in a native webview (WebView2 on Windows, WebKitGTK on Linux). The same screen runs in a browser, where the web app runs the core built as WebAssembly.
 
 - [CONTRIBUTING.md](CONTRIBUTING.md): getting started, the test loop and the rules for adding codes
 - [docs/where-to-change.md](docs/where-to-change.md): which file to change for the usual jobs
@@ -91,6 +93,7 @@ GlossCode is a small core in portable C with the screen in HTML and JavaScript, 
 | `src/core/`, `src/platform/` | The C core and the per-OS platform files |
 | `src/app/` | The program: webview window and bindings to the core |
 | `src/ui/` | The screen (HTML, CSS and JS) |
+| `src/web/`, `site/` | The web app's bridge and core build, and the website's landing and download pages |
 | `data/` | Gloss dictionary, check rules, one file per control (`data/controls/`) and the built-in subprogram library |
 | `examples/` | Sample programs (a separate download, not built into the program) |
 | `tests/` | Core tests, UI tests and golden files |

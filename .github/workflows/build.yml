@@ -6,6 +6,8 @@
 # - windows: the whole program with MinGW-w64 as one static GlossCode.exe, packaged as an installer
 #   and a portable .zip
 # - examples: the sample programs, which aren't built into the program, as their own .zip
+# - web: the core as WebAssembly, the website (scripts/build-site.mjs) tested in Chromium (tests/test_web.mjs),
+#   and the web app packaged for running on your own server as a .zip
 # Each packaging job uploads the release files (docs/releasing.md) as an artifact; release.yml calls
 # this workflow on a version tag and attaches them to a draft release.
 name: Build
@@ -174,5 +176,43 @@ jobs:
       - uses: actions/upload-artifact@v6
         with:
           name: release-examples
+          path: dist/*
+          if-no-files-found: error
+
+  web:
+    name: Web app
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install clang with the WASI C library
+        timeout-minutes: 10
+        run: |
+          APT="-o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30"
+          for try in 1 2 3; do
+            if timeout 180 sudo apt-get $APT update &&
+               timeout 240 sudo apt-get $APT install -y --no-install-recommends clang lld wasi-libc libclang-rt-18-dev-wasm32; then
+              exit 0
+            fi
+            echo "apt try $try failed; retrying"; sleep 10
+          done
+          exit 1
+      - name: Build the core as WebAssembly
+        run: scripts/build-wasm.sh build-web
+      - name: Build the website
+        run: node scripts/build-site.mjs --wasm build-web/core.wasm --out _site
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Test the website and the web app
+        run: node tests/test_web.mjs _site
+      - name: Package the web app
+        run: scripts/package-web.sh build-web/core.wasm dist
+      - uses: actions/upload-artifact@v6
+        with:
+          name: release-web
           path: dist/*
           if-no-files-found: error
