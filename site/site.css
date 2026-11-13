@@ -1,0 +1,88 @@
+/* The website's landing and download pages (site/). The app's own styles are in src/ui/css. */
+:root{
+  color-scheme:light;
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#1f2328; --muted:#5a6472; --line:#dde1e6;
+  --accent:#0f6cbd; --accent-ink:#ffffff; --accent-soft:#e6f0fa; --code-bg:#f0f2f5; --gloss:#7a8594;
+  --warn-bg:#fff6e0; --warn-line:#e8c86a;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    color-scheme:dark;
+    --bg:#16191d; --panel:#1f2329; --ink:#e6e8eb; --muted:#a2abb7; --line:#333a43;
+    --accent:#4f9fe8; --accent-ink:#0b1622; --accent-soft:#1c2c3d; --code-bg:#262b32; --gloss:#8b96a5;
+    --warn-bg:#2e2817; --warn-line:#6b5a25;
+  }
+}
+*{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+a{ color:var(--accent); }
+img{ max-width:100%; height:auto; display:block; }
+code, pre{ font-family:"IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size:.92em; }
+code{ background:var(--code-bg); padding:.1em .35em; border-radius:4px; }
+pre{ background:var(--code-bg); padding:12px 14px; border-radius:8px; overflow-x:auto; line-height:1.45; margin:.6em 0; }
+pre code{ background:none; padding:0; }
+.wrap{ max-width:1080px; margin:0 auto; padding:0 16px; }
+
+header.top{ background:var(--panel); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+header.top .wrap{ display:flex; align-items:center; gap:18px; min-height:56px; flex-wrap:wrap; }
+.brand{ display:flex; align-items:center; gap:10px; font-weight:650; font-size:18px; color:var(--ink); text-decoration:none; }
+.brand img{ width:28px; height:28px; }
+nav.links{ display:flex; gap:4px 16px; flex-wrap:wrap; margin-left:auto; }
+nav.links a{ color:var(--muted); text-decoration:none; font-size:15px; padding:4px 0; }
+nav.links a:hover, nav.links a[aria-current]{ color:var(--ink); }
+
+.hero{ padding:48px 0 28px; }
+.hero h1{ font-size:clamp(28px, 4.4vw, 42px); line-height:1.15; margin:0 0 14px; letter-spacing:-.01em; max-width:20ch; }
+.hero p.lead{ font-size:clamp(17px, 2vw, 19px); color:var(--muted); max-width:62ch; margin:0 0 22px; }
+.buttons{ display:flex; gap:10px; flex-wrap:wrap; }
+.btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:8px; border:1px solid var(--line); background:var(--panel);
+  color:var(--ink); text-decoration:none; font-weight:550; font-size:15px; }
+.btn:hover{ border-color:var(--accent); }
+.btn.pri{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+.btn small{ font-weight:400; opacity:.8; }
+
+.shot{ border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--panel); box-shadow:0 6px 24px rgba(0,0,0,.08); }
+figure{ margin:0; }
+figcaption{ color:var(--muted); font-size:14px; padding:8px 2px 0; }
+
+section{ padding:30px 0; }
+section h2{ font-size:24px; margin:0 0 14px; }
+section p{ max-width:70ch; }
+.grid{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.grid.pics{ grid-template-columns:repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.card{ background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+.card h3{ margin:0 0 6px; font-size:17px; }
+.card p{ margin:0; color:var(--muted); font-size:15px; }
+.card .btn{ margin-top:12px; }
+
+.gloss{ background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 16px; overflow-x:auto;
+  font-family:"IBM Plex Mono", ui-monospace, Consolas, monospace; font-size:15px; line-height:1.35; }
+.gloss .g{ color:var(--gloss); font-size:13px; padding-left:5.2em; }
+.gloss .c{ white-space:pre; margin-bottom:10px; }
+.gloss .c:last-child{ margin-bottom:0; }
+.gloss .n{ display:inline-block; width:5.2em; color:var(--muted); }
+
+table.ways{ width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; font-size:15px; }
+table.ways th, table.ways td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+table.ways tr:last-child td{ border-bottom:0; }
+table.ways th{ background:var(--code-bg); font-weight:600; }
+.scroll{ overflow-x:auto; }
+
+.note{ background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:10px; padding:12px 16px; }
+.note p{ margin:0; max-width:none; }
+ul.docs{ columns:2 260px; padding-left:18px; margin:0; }
+ul.docs li{ break-inside:avoid; margin-bottom:6px; }
+
+.dl{ display:grid; gap:16px; }
+.dl .card h3{ display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; }
+.dl .files{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 4px; }
+.dl .files .btn{ margin-top:0; }
+.dl ol, .dl ul{ margin:8px 0 0; padding-left:22px; }
+.dl li{ margin-bottom:4px; }
+.muted{ color:var(--muted); }
+#rel-status{ color:var(--muted); }
+
+footer{ border-top:1px solid var(--line); margin-top:30px; padding:22px 0 40px; color:var(--muted); font-size:14px; }
+footer .wrap{ display:flex; gap:8px 20px; flex-wrap:wrap; }
+footer a{ color:var(--muted); }

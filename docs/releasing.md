@@ -24,6 +24,7 @@ Every release has the same files, so the update check can pick the right one by 
 | `GlossCode-<version>-linux-x86_64.rpm` | Fedora and openSUSE package, with the same dependencies. |
 | `GlossCode-<version>-linux-x86_64-portable.tar.gz` | Linux portable copy, same layout as the Windows zip. Needs GTK 3 and WebKitGTK installed. |
 | `GlossCode-<version>-examples.zip` | Sample programs for Haas, Fanuc and Okuma mills and lathes (`examples/`) and example subprogram library files (`docs/subprogram-library/examples/`). They aren't part of the program, so they're a download of their own; the home page links to them. |
+| `GlossCode-<version>-web.zip` | The web app, to run on your own web server: unzip it into any folder served over HTTPS (`packaging/web-readme.txt` is its README). The same app is on the website at `/glosscode/app/`. |
 | `SHA256SUMS.txt` | SHA-256 checksum of every file above. |
 
 The release notes are the release's description on GitHub, and the About window shows them.
@@ -80,3 +81,8 @@ Linux packages are not usually signed for direct downloads; `SHA256SUMS.txt` cov
 4. Install and run each file on a clean Windows and Linux computer, then publish the draft. Publishing is what makes the update check see it.
 
 If the workflow fails, fix it on `main`, delete the tag (`git push origin :v0.2.0`, and any draft it made), and tag again.
+
+## The website
+
+The website (https://grahamrkf.github.io/glosscode/) is published by `.github/workflows/pages.yml` on every push to main that changes it, with no release needed: the landing page, the web app at `/app/`, the demo at `/try/`, and `/download/`, which reads the newest published release's files from the GitHub API, so it shows a new release as soon as it's published. A release made before the web zip existed can get it with Actions › Add web app to release (`.github/workflows/web-release-file.yml`), which builds the zip on main, attaches it to the release for `VERSION` and adds its line to `SHA256SUMS.txt`.
+

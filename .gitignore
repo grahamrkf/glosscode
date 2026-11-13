@@ -36,3 +36,8 @@ desktop.ini
 # Programming manuals and private machine definitions (never commit)
 /manuals/
 /machines/private/
+
+# Web app and website build output (scripts/build-wasm.sh, scripts/build-site.mjs)
+/build-web/
+/_site/
+node_modules/

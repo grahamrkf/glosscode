@@ -89,6 +89,16 @@ CI fails if `src/ui/data.js` or the golden files are out of date. See [building.
 | The sample programs | `examples/`, plus `SAMPLE_FILES` in `scripts/make-ui-data.mjs` (the machine each opens on) and `tests/machines.json` |
 | The version, installers and releases | `VERSION`; see [releasing.md](releasing.md) |
 
+## The web app and the website
+
+| To change | Look in |
+|---|---|
+| How the web app opens, saves and keeps files, settings and the library | [`src/web/bridge-web.js`](../src/web/bridge-web.js) |
+| What the core does in the browser | [`src/web/core_wasm.c`](../src/web/core_wasm.c) (built by `scripts/build-wasm.sh`) and `src/core/` as for the program |
+| Offline copy, install and file handling | [`src/web/sw.js`](../src/web/sw.js), [`src/web/manifest.webmanifest`](../src/web/manifest.webmanifest) |
+| The landing page and the download page | [`site/index.html`](../site/index.html), [`site/download/index.html`](../site/download/index.html), [`site/site.css`](../site/site.css) |
+| How the site is put together (`/app`, `/try`, pictures) | [`scripts/build-site.mjs`](../scripts/build-site.mjs); published by `.github/workflows/pages.yml` |
+
 ## The order the page loads in
 
 `src/ui/index.html` loads its scripts in a fixed order and they share one global scope: a file can use what an earlier file defines at its top level, and functions from any file once the page has started. `js/start.js` is last and starts the page. Some files keep their own names private inside `(() => { … })()` and hand out only what others need as `window.something`. `tests/test_ui.mjs` fails if two files define the same top-level name.

@@ -14,6 +14,8 @@ const adlg = $("adlg");
 const NATIVE = window.GlossCodeNative;   // set when running in the app; the app checks for a "portable" file beside itself
 const os = NATIVE ? NATIVE.platform : /Linux/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent) ? "linux" : "windows";
 const portable = NATIVE ? NATIVE.portable : new URLSearchParams(location.search).has("portable");
+// The web app (src/web/bridge-web.js) loads the newest version by itself, so it has no update check.
+const web = os === "web";
 // Which release files fit this copy, best first.
 const WANT = {
   windows: portable ? [[/-windows-x64-portable\.zip$/i, "Download portable (.zip)"]]
@@ -46,7 +48,7 @@ function showRelease(rel){
 }
 
 async function check(){
-  if (busy) return; busy = true;
+  if (busy || web) return; busy = true;
   $("a-check").disabled = true; status("Checking GitHub for a newer release…");
   $("a-dl").hidden = $("a-notes").hidden = true;
   try {
@@ -63,7 +65,12 @@ async function check(){
 function openAbout(){
   closeMenu?.();
   $("a-ver").textContent = APP_VERSION;
-  $("a-plat").textContent = `${os === "linux" ? "Linux" : "Windows"}, 64-bit, ${portable ? "portable" : "installed"}`;
+  $("a-plat").textContent = web ? (matchMedia("(display-mode: standalone)").matches ? "web app, installed" : "web app")
+    : `${os === "linux" ? "Linux" : "Windows"}, 64-bit, ${portable ? "portable" : "installed"}`;
+  if (web){
+    status("The web app updates itself: after a new release, it loads the newest version the next time it starts.");
+    $("a-check").hidden = $("a-auto").parentNode.hidden = true;
+  }
   $("a-site").href = SITE; $("a-site").textContent = SITE.replace(/^https:\/\//, "");
   $("a-rel").href = SITE + "/releases"; $("a-issues").href = SITE + "/issues";
   showDialog(adlg, $("a-close"));

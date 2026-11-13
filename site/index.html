@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GlossCode: G-code editor</title>
+<meta name="description" content="GlossCode is a G-code editor for CNC mills, lathes and plasma tables. It shows a plain-English gloss above every line of code, checks the program and simulates the toolpath.">
+<link rel="icon" href="images/glosscode.svg" type="image/svg+xml">
+<link rel="stylesheet" href="site.css">
+<script>
+  // The browser demo used to be at this address; its links (?open=SAMPLE.nc) now go to /try.
+  if (/[?&]open=/.test(location.search)) location.replace("try/" + location.search);
+</script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="images/glosscode.svg" alt="">GlossCode</a>
+    <nav class="links" aria-label="Site">
+      <a href="app/">Web app</a>
+      <a href="try/">Try it</a>
+      <a href="download/">Download</a>
+      <a href="#docs">Docs</a>
+      <a href="https://github.com/grahamrkf/glosscode">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="hero">
+      <h1>A G-code editor that reads each line back to you</h1>
+      <p class="lead">GlossCode is a G-code editor for CNC mills, lathes and plasma tables. Above every line of code it shows a gloss: a short plain-English reading of what the line does. It also checks the program for mistakes, tracks the active modes, and simulates the toolpath.</p>
+      <div class="buttons">
+        <a class="btn pri" href="app/">Open the web app</a>
+        <a class="btn" href="try/">Try it with sample programs</a>
+        <a class="btn" href="download/">Download for Windows or Linux</a>
+      </div>
+    </div>
+
+    <figure class="shot"><img src="images/editor-overview.png" width="1100" height="817" alt="The GlossCode editor with a gloss above each line of code, the toolpath and the active modes"></figure>
+
+    <section>
+      <h2>Code with its gloss</h2>
+      <p>Each line of code has its gloss above it in small grey text, and its N number in a column of its own. You edit the code as plain text, and the gloss follows as you type.</p>
+      <div class="gloss" aria-label="Example: code lines with their gloss">
+        <div class="g">spindle.fwd set.rpm speed:6000</div>
+        <div class="c"><span class="n">N40</span>M03 G97 S6000</div>
+        <div class="g">tlen.on toffset:01 movz:1.0 cool.on</div>
+        <div class="c"><span class="n">N50</span>G43 H01 Z1.0 M08</div>
+        <div class="g">run.feed movx:2.5 movy:-0.75 feed:16.0</div>
+        <div class="c"><span class="n">N60</span>G01 X2.5 Y-.75 F16.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What it does</h2>
+      <div class="grid">
+        <div class="card"><h3>Problems panel</h3><p>Checks the program as you type: canned cycles missing words, feeds with no F or the spindle off, missing decimal points, arcs that don't close, missing length offsets, and codes that mean something else on your control.</p></div>
+        <div class="card"><h3>Toolpath and simulation</h3><p>XY toolpath (XZ on a lathe) that follows subprogram calls. Playback stops at M00 and M01, can skip block delete lines, and works out the run time from the programmed feeds and speeds.</p></div>
+        <div class="card"><h3>Active modes</h3><p>Motion, units, plane, feed mode, spindle, coolant, tool and offsets for the selected line, and a timeline of Z by line (X on a lathe) in run order.</p></div>
+        <div class="card"><h3>Subprograms</h3><p>Calls expand inline or open in a pane beside the program. A subprogram library keeps reusable subprograms with named variables.</p></div>
+        <div class="card"><h3>Insert menu</h3><p>Canned cycles with a sketch and a box for each word, a hole pattern tool (grid or bolt circle), and a guide (F1) to how each cycle moves.</p></div>
+        <div class="card"><h3>Convert to another control</h3><p>Matches each code by meaning and checks the result by comparing toolpaths. Machine profiles hold your own machines' limits and options.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid pics">
+        <figure class="shot"><img src="images/simulation.png" width="1100" height="817" alt="Simulation partway through a program, with the run time" loading="lazy"></figure>
+        <figure class="shot"><img src="images/lathe.png" width="1100" height="817" alt="A lathe program with the XZ toolpath and X timeline" loading="lazy"></figure>
+        <figure class="shot"><img src="images/problems.png" width="1100" height="817" alt="The Problems panel listing mistakes in a program" loading="lazy"></figure>
+        <figure class="shot"><img src="images/convert.png" width="1100" height="817" alt="Converting a Haas program for a Fanuc mill" loading="lazy"></figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Controls</h2>
+      <p>Checked against programming manuals: Haas (NGC, classic and 1995 controls, mills and lathes), Fanuc (0i-F, 0i-D and Series 0, plus Custom Macro B), Okuma OSP (P300M, P200L, E100L, U10L and OSP700L), Mitsubishi (M800/M80 and M700/M70), Fagor (8055, 8060/8065), and LinuxCNC, Tormach PathPilot, GRBL, Centroid CNC12, Mazak EIA/ISO, Hurco WinMax (ISNC) and Siemens SINUMERIK ISO mode. Heidenhain TNC 640 Klartext and Hypertherm Phoenix/EDGE plasma are first drafts, not yet verified.</p>
+      <p>What each control doesn't handle yet is listed in <a href="https://github.com/grahamrkf/glosscode/blob/main/docs/control-status.md">control status</a>. Any other control gets generic Fanuc-style rules, which may not match what it does.</p>
+      <div class="note"><p><b>Check every program on the machine before you cut.</b> GlossCode is new and hasn't been widely tested. It can miss real problems and flag code that's fine. Prove each program out on the machine itself: run it through the control's own graphics, then a dry run or single block with the feed override turned down.</p></div>
+    </section>
+
+    <section>
+      <h2>Three ways to run it</h2>
+      <div class="scroll">
+        <table class="ways">
+          <thead><tr><th></th><th>Web app</th><th>Try it</th><th>Desktop program</th></tr></thead>
+          <tbody>
+            <tr><td>Where</td><td><a href="app/">In the browser</a>, nothing to install</td><td><a href="try/">In the browser</a></td><td><a href="download/">Windows or Linux</a></td></tr>
+            <tr><td>Your programs</td><td>Opens and saves files on your computer. In Chrome and Edge, Save writes back to the same file; in Firefox and Safari, Save downloads a copy</td><td>Sample programs only; nothing is saved</td><td>Opens and saves files with the system's own dialogs</td></tr>
+            <tr><td>Settings and machine profiles</td><td>Kept in this browser</td><td>Kept in this browser</td><td>Kept in your settings folder</td></tr>
+            <tr><td>Offline</td><td>Yes, once opened. Chrome and Edge can install it as an app that opens .nc files</td><td>No</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The web app runs the same screen and the same C core as the desktop program (built as WebAssembly), so a file you save is written exactly as the program writes it: unchanged lines byte for byte, the file's own line endings, <code>;</code> marks and encoding. Nothing you open leaves your computer.</p>
+    </section>
+
+    <section>
+      <h2>Run the web app on your own server</h2>
+      <p>Each release has a <code>GlossCode-&lt;version&gt;-web.zip</code>: the web app as plain files with no server code. Unzip it into any folder your web server serves. It needs HTTPS (or <code>localhost</code>) for the file pickers and the offline copy. To try it on your own computer:</p>
+      <pre><code>cd GlossCode-__GC_VERSION__-web
+python3 -m http.server 8000</code></pre>
+      <p>Then open <code>http://localhost:8000/</code>. More on the <a href="download/#web">download page</a>.</p>
+    </section>
+
+    <section id="docs">
+      <h2>Documentation</h2>
+      <ul class="docs">
+        <li><a href="https://github.com/grahamrkf/glosscode#readme">README</a>: what GlossCode is and how to start</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/docs/features.md">Features</a>: the full list, and what may come later</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/docs/checks.md">Checks</a>: what the Problems panel looks for</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/docs/gloss-words.md">Gloss words</a>: how the full and short words are built</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/docs/converting.md">Converting</a>: moving a program to another control</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/docs/subprogram-library.md">Subprogram library</a>: reusable subprograms with named variables</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/docs/control-status.md">Control status</a>: what each control doesn't handle yet</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/docs/machine-definitions.md">Machine definitions</a>: control and machine definition files</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/CONTRIBUTING.md">Contributing</a>: getting started, tests and the rules for adding codes</li>
+        <li><a href="https://github.com/grahamrkf/glosscode/blob/main/docs/building.md">Building</a>: building the program and the web app</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>GlossCode __GC_VERSION__ · MIT License</span>
+    <a href="https://github.com/grahamrkf/glosscode">Source on GitHub</a>
+    <a href="https://github.com/grahamrkf/glosscode/releases">Releases</a>
+    <a href="https://github.com/grahamrkf/glosscode/issues">Report a problem</a>
+  </div>
+</footer>
+</body>
+</html>
