@@ -1,0 +1,34 @@
+name: Control knowledge
+description: Tell us what a programming manual says, or share experience with a control.
+labels: ["needs-manual"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping. Please quote **only short passages** from manuals and never attach whole manuals. Don't post shop programs.
+
+        If an open issue already covers your control, you can comment there instead. They're listed in #114.
+  - type: input
+    id: control
+    attributes:
+      label: Control
+      description: Control model, for example "Fanuc 0i-F" or "Mazak Matrix EIA".
+    validations:
+      required: true
+  - type: input
+    id: manual
+    attributes:
+      label: Manual
+      description: Title, document number, edition or year, and page numbers. Leave empty if this is from experience.
+  - type: textarea
+    id: says
+    attributes:
+      label: What it says
+      description: What the manual says (a short quote) or what you know from running the control.
+    validations:
+      required: true
+  - type: textarea
+    id: glosscode
+    attributes:
+      label: What GlossCode does now
+      description: If you know, what GlossCode shows today and how it differs.

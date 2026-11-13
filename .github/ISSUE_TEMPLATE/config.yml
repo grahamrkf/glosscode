@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Help-wanted list
+    url: https://github.com/grahamrkf/glosscode/issues/114
+    about: Open questions for each control, and what to test.

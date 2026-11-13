@@ -69,6 +69,8 @@ Checked against programming manuals:
 
 How sure we are of each is in [docs/manual-reviews/control-confidence.md](docs/manual-reviews/control-confidence.md), and what each one doesn't handle yet or isn't sure of is listed in [docs/control-status.md](docs/control-status.md). **Any other control hasn't been checked against a manual.** GlossCode uses generic Fanuc-style rules for those, which may not match what your control does.
 
+**Run one of these controls, or have its manual?** Each has an open [help-wanted issue](https://github.com/grahamrkf/glosscode/issues/114) listing what's uncertain and what to test. A short test report or a quote from a manual helps a lot.
+
 ## Try it in a browser
 
 The [browser demo](https://grahamrkf.github.io/glosscode/) runs the same screen as the program, with sample programs built in. Open a sample from the home page, click a line to edit it, press F5 to simulate, and F1 on a canned cycle to see how it works. In the browser, Open shows a pretend file list and nothing is saved to your computer.

@@ -2,6 +2,8 @@
 
 Thanks for helping. This page covers how to get going and the few rules that keep GlossCode trustworthy at the machine.
 
+You don't have to write code to help. If you run one of the supported controls or have its manual, the [help-wanted issues](https://github.com/grahamrkf/glosscode/issues/114) list what's uncertain for each control. Use the **Test report** or **Control knowledge** form when you open an issue.
+
 ## Getting started
 
 1. **Try a change without building anything.** Open `src/ui/index.html` in a browser. It's the whole screen with the sample programs built in; `?open=POCKET_2X1.nc` opens one straight away. Almost everything you see (the gloss, the checks, the simulation, the menus) is the JavaScript in `src/ui/js/`.
